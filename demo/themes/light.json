@@ -1,0 +1,133 @@
+{
+  "Label": {
+    "color": "#222222",
+    "size": 13
+  },
+  "Button": {
+    "fill": "#E0E0E0",
+    "rounding": 6,
+    "min_width": 100,
+    "text_color": "#222222"
+  },
+  "TextField": {
+    "width": 200,
+    "height": 28
+  },
+  "ComboBox": {
+    "width": 200
+  },
+  "Slider": {
+    "width": 250
+  },
+  "Checkbox": {},
+  "Separator": {
+    "space": 6,
+    "color": "#CCCCCC"
+  },
+  "Column": {
+    "gap": 0,
+    "padding": 0
+  },
+  "Row": {
+    "gap": 0,
+    "padding": 0,
+    "align": "center"
+  },
+  "Tabs": {
+    "gap": 4
+  },
+  "Panel": {
+    "fill": "#EEEEEE",
+    "rounding": 8,
+    "padding": 12,
+    "stroke_width": 1,
+    "stroke_color": "#CCCCCC"
+  },
+  "Window": {
+    "default_width": 400,
+    "default_height": 300,
+    "resizable": true,
+    "movable": true,
+    "collapsible": true,
+    "title_bar": true,
+    "show_close": true,
+    "constrain": true,
+    "modal": false,
+    "fill": "#FFFFFF",
+    "stroke_width": 1,
+    "stroke_color": "#CCCCCC",
+    "padding": 8
+  },
+  "Hyperlink": {
+    "color": "#3366CC",
+    "underline": true
+  },
+  "Grid": {
+    "spacing_x": 8,
+    "spacing_y": 4
+  },
+  "ScrollArea": {
+    "axis": "vertical"
+  },
+  "FileDrop": {
+    "fill": "#EEEEEE",
+    "rounding": 8,
+    "stroke_width": 1,
+    "stroke_color": "#CCCCCC",
+    "highlight_color": "#3366CC22",
+    "padding": 16
+  },
+  "RadioGroup": {},
+  "Spinner": {
+    "color": "#3366CC",
+    "size": 24
+  },
+  "ColorPicker": {
+    "width": 160
+  },
+  "MenuBar": {},
+  "MenuItem": {},
+  "SubMenu": {},
+  "Notifications": {
+    "width": 300
+  },
+  "Tray": {},
+  "IconBar": {
+    "fill": "#F0F0F0",
+    "stroke_width": 0,
+    "stroke_color": "#CCCCCC"
+  },
+  "IconButton": {
+    "icon_size": 1.2,
+    "icon_color": "#444444"
+  },
+  "Caption": {
+    "color": "#888888",
+    "size": 11
+  },
+  "Indicator": {
+    "size": 8
+  },
+  "StatusBar": {
+    "height": 26,
+    "fill": "#E8E8E8",
+    "stroke_width": 1,
+    "stroke_color": "#CCCCCC",
+    "padding": 4
+  },
+  "Hover": {
+    "Button": { "fill_brighten": -0.08 },
+    "MenuItem": { "fill_brighten": -0.06 },
+    "IconButton": { "icon_brighten": 0.15 },
+    "Hyperlink": { "underline": true },
+    "ComboBox": { "fill_brighten": -0.04 },
+    "Checkbox": { "fill_brighten": -0.04 }
+  },
+  "Focus": {
+    "stroke_color": "#3366CC",
+    "stroke_width": 2
+  },
+  "Disabled": {
+    "opacity": 0.4
+  }
+}

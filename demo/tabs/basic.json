@@ -1,0 +1,176 @@
+{
+  "type": "Tab",
+  "id": "basic",
+  "title": "{{tab.basic}}",
+  "children": [
+    {
+      "type": "ScrollArea",
+      "axis": "vertical",
+      "max_height": 600,
+      "children": [
+        {
+          "type": "Column",
+          "gap": 10,
+          "padding": 16,
+          "children": [
+            {
+              "type": "Label",
+              "text": "{{label.basic_title}}",
+              "size": 20,
+              "bold": true
+            },
+            {
+              "type": "Label",
+              "text": "{{label.variants}}",
+              "size": 13,
+              "color": "#888888"
+            },
+            {
+              "type": "Separator",
+              "space": 10
+            },
+            {
+              "type": "Label",
+              "text": "{{label.simple_text}}",
+              "size": 14
+            },
+            {
+              "type": "Label",
+              "text": "{{label.colored_text}}",
+              "size": 14,
+              "color": "#66CCFF"
+            },
+            {
+              "type": "Label",
+              "text": "{{label.bold_text}}",
+              "size": 14,
+              "bold": true
+            },
+            {
+              "type": "Label",
+              "text": "{{label.italic_text}}",
+              "size": 14,
+              "italic": true
+            },
+            {
+              "type": "Label",
+              "text": "{{label.mono_text}}",
+              "size": 13,
+              "monospace": true
+            },
+            {
+              "type": "Separator",
+              "space": 10
+            },
+            {
+              "type": "Label",
+              "text": "{{label.buttons}}",
+              "size": 13,
+              "color": "#888888"
+            },
+            {
+              "type": "Row",
+              "gap": 8,
+              "align": "center",
+              "children": [
+                {
+                  "type": "Button",
+                  "text": "{{btn.primary}}",
+                  "action": "click",
+                  "target": "primary",
+                  "fill": "#3366CC",
+                  "rounding": 6,
+                  "min_width": 120,
+                  "tooltip": "{{tooltip.primary}}"
+                },
+                {
+                  "type": "Button",
+                  "text": "{{btn.danger}}",
+                  "action": "click",
+                  "target": "danger",
+                  "fill": "#CC3333",
+                  "rounding": 6,
+                  "min_width": 120,
+                  "tooltip": "{{tooltip.danger}}"
+                },
+                {
+                  "type": "Button",
+                  "text": "{{btn.success}}",
+                  "action": "click",
+                  "target": "success",
+                  "fill": "#00AA66",
+                  "rounding": 6,
+                  "min_width": 120,
+                  "tooltip": "{{tooltip.success}}"
+                }
+              ]
+            },
+            {
+              "type": "Row",
+              "gap": 8,
+              "align": "center",
+              "children": [
+                {
+                  "type": "Button",
+                  "text": "{{btn.default}}",
+                  "action": "click",
+                  "target": "default",
+                  "min_width": 120
+                },
+                {
+                  "type": "Button",
+                  "text": "{{btn.disabled}}",
+                  "enabled": false,
+                  "min_width": 120,
+                  "tooltip": "{{tooltip.disabled}}"
+                }
+              ]
+            },
+            {
+              "type": "Separator",
+              "space": 10
+            },
+            {
+              "type": "Label",
+              "text": "{{label.switches}}",
+              "size": 13,
+              "color": "#888888"
+            },
+            {
+              "type": "Checkbox",
+              "binding": "use_gpu",
+              "text": "{{chk.gpu}}"
+            },
+            {
+              "type": "Checkbox",
+              "binding": "auto_start",
+              "text": "{{chk.auto_start}}"
+            },
+            {
+              "type": "Separator",
+              "space": 10
+            },
+            {
+              "type": "Label",
+              "text": "{{label.text_input}}",
+              "size": 13,
+              "color": "#888888"
+            },
+            {
+              "type": "TextField",
+              "binding": "name",
+              "hint": "{{hint.name}}",
+              "width": 300
+            },
+            {
+              "type": "Button",
+              "text": "{{btn.greeting}}",
+              "action": "greeting",
+              "min_width": 180
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

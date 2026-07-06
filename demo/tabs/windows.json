@@ -1,0 +1,144 @@
+{
+  "type": "Tab",
+  "id": "windows",
+  "title": "{{tab.windows}}",
+  "children": [
+    {
+      "type": "Column",
+      "gap": 10,
+      "padding": 16,
+      "children": [
+        {
+          "type": "Label",
+          "text": "{{label.windows_title}}",
+          "size": 20,
+          "bold": true
+        },
+        {
+          "type": "Separator",
+          "space": 10
+        },
+        {
+          "type": "Label",
+          "text": "{{label.hyperlink}}",
+          "size": 13,
+          "color": "#888888"
+        },
+        {
+          "type": "Hyperlink",
+          "url": "https://github.com/devZu9/Rust4ui",
+          "color": "#66CCFF",
+          "tooltip": "{{tooltip.hyperlink}}"
+        },
+        {
+          "type": "Separator",
+          "space": 10
+        },
+        {
+          "type": "Label",
+          "text": "{{label.file_drop}}",
+          "size": 13,
+          "color": "#888888"
+        },
+        {
+          "type": "FileDrop",
+          "action": "file_dropped",
+          "accept": [
+            ".json",
+            ".txt",
+            ".mid",
+            ".wav",
+            ".png",
+            ".jpg"
+          ],
+          "multi": true,
+          "fill": "#1A1D23",
+          "rounding": 8,
+          "stroke_width": 1,
+          "stroke_color": "#333333",
+          "highlight_color": "#3366CC44",
+          "padding": 20,
+          "children": [
+            {
+              "type": "Column",
+              "gap": 8,
+              "align": "center",
+              "children": [
+                {
+                  "type": "Label",
+                  "text": "{{drop.hint}}",
+                  "size": 14,
+                  "color": "#888888"
+                },
+                {
+                  "type": "Label",
+                  "text": "JSON, TXT, MIDI, WAV, PNG, JPG",
+                  "size": 11,
+                  "monospace": true,
+                  "color": "#555555"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "Separator",
+          "space": 10
+        },
+        {
+          "type": "Label",
+          "text": "{{label.open_win}}",
+          "size": 13,
+          "color": "#888888"
+        },
+        {
+          "type": "Row",
+          "gap": 8,
+          "children": [
+            {
+              "type": "Button",
+              "text": "{{btn.open_window}}",
+              "action": "toggle_window",
+              "fill": "#3366CC",
+              "min_width": 180
+            },
+            {
+              "type": "Button",
+              "text": "{{btn.open_dialog}}",
+              "action": "toggle_dialog",
+              "fill": "#CC8800",
+              "min_width": 180
+            },
+            {
+              "type": "Button",
+              "text": "{{btn.open_custom}}",
+              "action": "toggle_custom_window",
+              "fill": "#8844CC",
+              "min_width": 180
+            }
+          ]
+        },
+        {
+          "type": "Row",
+          "gap": 16,
+          "children": [
+            {
+              "type": "Label",
+              "text": "{{label.win_state}}: {show_info_window}",
+              "size": 12,
+              "monospace": true,
+              "color": "#888888"
+            },
+            {
+              "type": "Label",
+              "text": "{{label.dlg_state}}: {show_dialog}",
+              "size": 12,
+              "monospace": true,
+              "color": "#888888"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

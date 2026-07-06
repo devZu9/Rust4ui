@@ -1,0 +1,66 @@
+{
+  "type": "Window",
+  "id": "info_window",
+  "title": "{{window.info}}",
+  "open": "show_info_window",
+  "default_width": 380,
+  "default_height": 240,
+  "resizable": true,
+  "movable": true,
+  "title_bar": true,
+  "show_close": true,
+  "children": [
+    {
+      "type": "Column",
+      "gap": 10,
+      "padding": 12,
+      "children": [
+        {
+          "type": "Label",
+          "text": "{{label.window_info}}",
+          "size": 14,
+          "bold": true
+        },
+        {
+          "type": "Separator",
+          "space": 6
+        },
+        {
+          "type": "Label",
+          "text": "{{label.window_desc}}",
+          "size": 13,
+          "wrap": true
+        },
+        {
+          "type": "Separator",
+          "space": 6
+        },
+        {
+          "type": "Label",
+          "text": "{{label.platform}}: Windows (egui 0.32)",
+          "size": 12,
+          "monospace": true,
+          "color": "#888888"
+        },
+        {
+          "type": "Label",
+          "text": "{{label.locale}}: {active_locale}",
+          "size": 12,
+          "monospace": true,
+          "color": "#888888"
+        },
+        {
+          "type": "Separator",
+          "space": 8
+        },
+        {
+          "type": "Button",
+          "text": "{{btn.close}}",
+          "action": "toggle_window",
+          "fill": "#CC3333",
+          "min_width": 100
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "type": "Column",
+  "gap": 0,
+  "padding": 0,
+  "children": [
+    { "$ref": "tabs/all.json" },
+    { "$ref": "windows/info_window.json" },
+    { "$ref": "windows/confirm_dialog.json" },
+    { "$ref": "windows/custom_panel.json" }
+  ]
+}

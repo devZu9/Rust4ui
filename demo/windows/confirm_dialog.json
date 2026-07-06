@@ -1,0 +1,50 @@
+{
+  "type": "Window",
+  "id": "confirm_dialog",
+  "title": "{{dialog.confirm}}",
+  "open": "show_dialog",
+  "modal": true,
+  "auto_sized": true,
+  "movable": false,
+  "resizable": false,
+  "collapsible": false,
+  "show_close": false,
+  "children": [
+    {
+      "type": "Column",
+      "gap": 12,
+      "padding": 16,
+      "children": [
+        {
+          "type": "Label",
+          "text": "{{dialog.message}}",
+          "size": 14,
+          "wrap": true
+        },
+        {
+          "type": "Separator",
+          "space": 6
+        },
+        {
+          "type": "Row",
+          "gap": 8,
+          "children": [
+            {
+              "type": "Button",
+              "text": "{{btn.ok}}",
+              "action": "confirm_ok",
+              "fill": "#00AA66",
+              "min_width": 100
+            },
+            {
+              "type": "Button",
+              "text": "{{btn.cancel}}",
+              "action": "confirm_cancel",
+              "min_width": 100
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

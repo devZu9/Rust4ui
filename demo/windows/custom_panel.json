@@ -1,0 +1,68 @@
+{
+  "type": "Window",
+  "id": "custom_panel",
+  "title": "",
+  "open": "show_custom_window",
+  "title_bar": false,
+  "show_close": false,
+  "default_width": 440,
+  "default_height": 280,
+  "anchor_h": "right",
+  "anchor_v": "top",
+  "anchor_x": -24,
+  "anchor_y": 48,
+  "fill": "#14161B",
+  "stroke_width": 1,
+  "stroke_color": "#8844CC44",
+  "children": [
+    {
+      "type": "Column",
+      "gap": 8,
+      "padding": 12,
+      "children": [
+        {
+          "type": "Row",
+          "gap": 6,
+          "children": [
+            {
+              "type": "Label",
+              "text": "{{custom.title}}",
+              "bold": true,
+              "size": 14,
+              "color": "#AA88DD"
+            },
+            {
+              "type": "Button",
+              "text": "✕",
+              "action": "toggle_custom_window",
+              "fill": "#8844CC",
+              "min_width": 28,
+              "tooltip": "{{tooltip.close_custom}}"
+            }
+          ]
+        },
+        {
+          "type": "Separator",
+          "space": 6
+        },
+        {
+          "type": "Label",
+          "text": "{{custom.desc}}",
+          "size": 13,
+          "wrap": true
+        },
+        {
+          "type": "Separator",
+          "space": 6
+        },
+        {
+          "type": "Label",
+          "text": "{{custom.note}}",
+          "size": 12,
+          "monospace": true,
+          "color": "#888888"
+        }
+      ]
+    }
+  ]
+}

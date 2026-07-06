@@ -1,0 +1,84 @@
+{
+  "type": "Tab",
+  "id": "i18n",
+  "title": "{{tab.i18n}}",
+  "children": [
+    {
+      "type": "Column",
+      "gap": 10,
+      "padding": 16,
+      "children": [
+        {
+          "type": "Label",
+          "text": "{{label.i18n_title}}",
+          "size": 20,
+          "bold": true
+        },
+        {
+          "type": "Separator",
+          "space": 10
+        },
+        {
+          "type": "Label",
+          "text": "{{label.select_lang}}",
+          "size": 13
+        },
+        {
+          "type": "ComboBox",
+          "binding": "active_locale",
+          "items": "locale_list",
+          "width": 200
+        },
+        {
+          "type": "Separator",
+          "space": 8
+        },
+        {
+          "type": "Label",
+          "text": "{{label.lang_current}}: {active_locale}",
+          "size": 13,
+          "monospace": true
+        },
+        {
+          "type": "Separator",
+          "space": 8
+        },
+        {
+          "type": "Label",
+          "text": "{{label.i18n_demo}}",
+          "size": 13,
+          "color": "#888888"
+        },
+        {
+          "type": "Label",
+          "text": "{{label.greeting}} {greeting_text}!",
+          "size": 16,
+          "bold": true
+        },
+        {
+          "type": "Separator",
+          "space": 8
+        },
+        {
+          "type": "Label",
+          "text": "{{label.plural}}",
+          "size": 13,
+          "color": "#888888"
+        },
+        {
+          "type": "Label",
+          "text": "{{files.count}}"
+        },
+        {
+          "type": "Slider",
+          "binding": "count",
+          "min": 0,
+          "max": 20,
+          "step": 1,
+          "width": 300,
+          "text": "{{label.count}}"
+        }
+      ]
+    }
+  ]
+}

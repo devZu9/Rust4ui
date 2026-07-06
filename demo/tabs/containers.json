@@ -1,0 +1,238 @@
+{
+  "type": "Tab",
+  "id": "containers",
+  "title": "{{tab.containers}}",
+  "children": [
+    {
+      "type": "ScrollArea",
+      "axis": "vertical",
+      "max_height": 600,
+      "children": [
+        {
+          "type": "Column",
+          "gap": 12,
+          "padding": 16,
+          "children": [
+            {
+              "type": "Label",
+              "text": "{{label.containers_title}}",
+              "size": 20,
+              "bold": true
+            },
+            {
+              "type": "Separator",
+              "space": 8
+            },
+            {
+              "type": "Label",
+              "text": "{{label.panel_title}}",
+              "size": 13,
+              "color": "#888888"
+            },
+            {
+              "type": "Panel",
+              "fill": "#1A1D23",
+              "rounding": 8,
+              "padding": 12,
+              "stroke_width": 1,
+              "stroke_color": "#333333",
+              "children": [
+                {
+                  "type": "Label",
+                  "text": "{{label.panel_card_title}}",
+                  "size": 14,
+                  "bold": true
+                },
+                {
+                  "type": "Label",
+                  "text": "{{label.panel_desc}}",
+                  "size": 12,
+                  "color": "#888888"
+                }
+              ]
+            },
+            {
+              "type": "Separator",
+              "space": 8
+            },
+            {
+              "type": "Label",
+              "text": "{{label.row_wrap}}",
+              "size": 13,
+              "color": "#888888"
+            },
+            {
+              "type": "Row",
+              "gap": 6,
+              "wrap": true,
+              "children": [
+                {
+                  "type": "Button",
+                  "text": "{{btn.item}} 1",
+                  "action": "click",
+                  "target": "item_1",
+                  "fill": "#2A2A33",
+                  "rounding": 12,
+                  "min_width": 70
+                },
+                {
+                  "type": "Button",
+                  "text": "{{btn.item}} 2",
+                  "action": "click",
+                  "target": "item_2",
+                  "fill": "#2A2A33",
+                  "rounding": 12,
+                  "min_width": 70
+                },
+                {
+                  "type": "Button",
+                  "text": "{{btn.item}} 3",
+                  "action": "click",
+                  "target": "item_3",
+                  "fill": "#2A2A33",
+                  "rounding": 12,
+                  "min_width": 70
+                },
+                {
+                  "type": "Button",
+                  "text": "{{btn.item}} 4",
+                  "action": "click",
+                  "target": "item_4",
+                  "fill": "#2A2A33",
+                  "rounding": 12,
+                  "min_width": 70
+                },
+                {
+                  "type": "Button",
+                  "text": "{{btn.item}} 5",
+                  "action": "click",
+                  "target": "item_5",
+                  "fill": "#2A2A33",
+                  "rounding": 12,
+                  "min_width": 70
+                },
+                {
+                  "type": "Button",
+                  "text": "{{btn.item}} 6",
+                  "action": "click",
+                  "target": "item_6",
+                  "fill": "#2A2A33",
+                  "rounding": 12,
+                  "min_width": 70
+                },
+                {
+                  "type": "Button",
+                  "text": "{{btn.item}} 7",
+                  "action": "click",
+                  "target": "item_7",
+                  "fill": "#2A2A33",
+                  "rounding": 12,
+                  "min_width": 70
+                },
+                {
+                  "type": "Button",
+                  "text": "{{btn.item}} 8",
+                  "action": "click",
+                  "target": "item_8",
+                  "fill": "#2A2A33",
+                  "rounding": 12,
+                  "min_width": 70
+                },
+                {
+                  "type": "Button",
+                  "text": "{{btn.item}} 9",
+                  "action": "click",
+                  "target": "item_9",
+                  "fill": "#2A2A33",
+                  "rounding": 12,
+                  "min_width": 70
+                },
+                {
+                  "type": "Button",
+                  "text": "{{btn.item}} 10",
+                  "action": "click",
+                  "target": "item_10",
+                  "fill": "#2A2A33",
+                  "rounding": 12,
+                  "min_width": 70
+                }
+              ]
+            },
+            {
+              "type": "Separator",
+              "space": 8
+            },
+            {
+              "type": "Label",
+              "text": "{{label.grid}}",
+              "size": 13,
+              "color": "#888888"
+            },
+            {
+              "type": "Grid",
+              "columns": 3,
+              "spacing_x": 12,
+              "spacing_y": 4,
+              "children": [
+                {
+                  "type": "Label",
+                  "text": "{{grid.col_a}}",
+                  "bold": true,
+                  "color": "#66CCFF"
+                },
+                {
+                  "type": "Label",
+                  "text": "{{grid.col_b}}",
+                  "bold": true,
+                  "color": "#66CCFF"
+                },
+                {
+                  "type": "Label",
+                  "text": "{{grid.col_c}}",
+                  "bold": true,
+                  "color": "#66CCFF"
+                },
+                {
+                  "type": "Label",
+                  "text": "{{grid.proj_a}}"
+                },
+                {
+                  "type": "Label",
+                  "text": "{{grid.stat_a}}"
+                },
+                {
+                  "type": "Label",
+                  "text": "{{grid.ver_a}}"
+                },
+                {
+                  "type": "Label",
+                  "text": "{{grid.proj_b}}"
+                },
+                {
+                  "type": "Label",
+                  "text": "{{grid.stat_b}}"
+                },
+                {
+                  "type": "Label",
+                  "text": "{{grid.ver_b}}"
+                },
+                {
+                  "type": "Label",
+                  "text": "{{grid.proj_c}}"
+                },
+                {
+                  "type": "Label",
+                  "text": "{{grid.stat_c}}"
+                },
+                {
+                  "type": "Label",
+                  "text": "{{grid.ver_c}}"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
