@@ -1,6 +1,6 @@
 # Roadmap — Rust4ui
 
-> JSON / EFx → UI → Rust. Быстрое прототипирование интерфейсов на egui.
+> JSON → UI → Rust. Быстрое прототипирование интерфейсов на egui.
 
 ---
 
@@ -29,8 +29,6 @@
   - [ ] ActionRegistry (функции по имени)
   - [ ] LocaleRegistry (загрузка locale-файлов, резолв `{{key}}`, `{expr}`-интерполяция из state)
   - [ ] Встроенные CLDR plural-правила (ru, en, de, fr, pl, uk, be, ja, zh, ko)
-  - [ ] Совместимость с EFx: единый словарь тегов и атрибутов
-  - [ ] `Rust4ui::from_efx()` — конструктор из EFx-шаблона
   - [ ] Обработка ошибок (оранжевые/красные заглушки вместо паники)
 - [ ] **Контейнеры**
   - [ ] `Column` — `ui.vertical()`
@@ -108,8 +106,7 @@
 - [ ] **Контейнеры**
   - [ ] `Row` с `wrap: true` — перенос элементов
 - [ ] **Code Generator** (feature `gen`)
-  - [ ] Парсер JSON → `efx!()`-код (режим по умолчанию)
-  - [ ] Парсер JSON → raw egui-код (опционально, `--format raw`)
+  - [ ] Парсер JSON → raw egui Rust-код
   - [ ] CLI-утилита `rust4ui-codegen`
 - [ ] **WidgetRegistry** — регистрация кастомных виджетов извне
   - [ ] `WidgetRegistry` + `register_widgets!` макрос
@@ -177,8 +174,7 @@
   - [ ] Drag & drop из палитры на холст
   - [ ] Inspector свойств выбранного элемента
 - [ ] **Экспорт**
-  - [ ] JSON → standalone .rs файл с `efx!()` (по умолчанию)
-  - [ ] JSON → standalone .rs файл с raw egui (опция)
+  - [ ] JSON → standalone .rs файл с raw egui
 - [ ] **Плагины (Rust-крейты)**
   - [ ] Регистрация кастомных тем
 

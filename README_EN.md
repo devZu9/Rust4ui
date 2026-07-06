@@ -2,7 +2,7 @@
 
 > 🌐 [Русская версия](README.md)
 
-> **Rust for UI** — build UI in Rust like Lego: JSON / EFx → live interface powered by egui. No recompilation between edits. Bake into Rust code for release.
+> **Rust for UI** — build UI in Rust like Lego: JSON → live interface powered by egui. No recompilation between edits. Bake into Rust code for release.
 
 > 🛠 Created as part of learning vibecoding on [OpenCode](https://opencode.ai/go?ref=DHSKBMGTK0)
 > ☕ If you find this project useful — [support the author](https://dalink.to/miska_moloka)
@@ -62,7 +62,6 @@ Done. Edit `ui.json` — UI updates instantly. No `cargo build` between changes.
 | Feature | Description |
 |---------|-------------|
 | **JSON → UI** | Write `ui.json` → see the window. No compilation step. |
-| **EFx compatibility** | Same widgets as `efx!()` — optional codegen for release |
 | **i18n** | Multi-language from day one: `{{key}}`, CLDR plural, runtime switching |
 | **Themes** | `theme.json` → colors, spacing, rounding. Hover/Focus/Disabled out of the box |
 | **Flexibility** | Any widget can be customized: `opacity`, `rounding`, `padding`, `margin`, `shadow`, `stroke` |
@@ -145,6 +144,12 @@ but also to stave off hunger from time to time.
 - 🚀 **OpenCode** — platform for vibecoding: https://opencode.ai/go?ref=DHSKBMGTK0
 
 Thank you for being here. 🙏
+
+---
+
+## Acknowledgements
+
+The author was inspired by the [EFx](https://github.com/ZhukMax/efx) project when designing the widget vocabulary. Tag names and basic attributes partially overlap — switching between projects is intuitive. There is no technical dependency on EFx.
 
 ---
 
