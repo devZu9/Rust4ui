@@ -1,4 +1,5 @@
 mod actions;
+pub mod border;
 pub mod contrast;
 mod locale;
 pub mod logger;
@@ -13,7 +14,7 @@ mod widgets;
 
 pub use actions::{ActionCtx, ActionRegistry};
 pub use locale::LocaleRegistry;
-pub use node::UiNode;
+pub use node::{strip_json_comments, UiNode};
 pub use ref_resolver::RefResolver;
 pub use renderer::{parse_margin, parse_padding, render_children, render_node, resolve_text, RenderCtx};
 pub use state::StateRegistry;

@@ -34,8 +34,7 @@
               "fill": "#1A1D23",
               "rounding": 8,
               "padding": 12,
-              "stroke_width": 1,
-              "stroke_color": "#333333",
+              "border": [1, "#333333"],
               "children": [
                 {
                   "type": "Label",

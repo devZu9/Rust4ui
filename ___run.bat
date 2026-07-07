@@ -13,4 +13,4 @@ if %errorlevel% neq 0 (
 echo.
 echo Zapusk...
 target\debug\rust4ui.exe
-pause
+rem pause

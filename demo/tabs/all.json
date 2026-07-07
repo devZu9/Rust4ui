@@ -6,6 +6,7 @@
     { "$ref": "input.json" },
     { "$ref": "containers.json" },
     { "$ref": "windows.json" },
-    { "$ref": "i18n.json" }
+    { "$ref": "i18n.json" },
+    { "$ref": "menus.json" }
   ]
 }

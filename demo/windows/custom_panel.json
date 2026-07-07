@@ -12,8 +12,7 @@
   "anchor_x": -24,
   "anchor_y": 48,
   "fill": "#14161B",
-  "stroke_width": 1,
-  "stroke_color": "#8844CC44",
+  "border": [1, "#8844CC44"],
   "children": [
     {
       "type": "Column",

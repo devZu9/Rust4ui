@@ -1,6 +1,63 @@
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
+/// Удаляет комментарии из JSON-строки:
+/// - `//` однострочные (удаляет от `//` до конца строки)
+/// - `/* */` блочные (удаляет от `/*` до `*/`).
+/// Не трогает `//` и `/*` внутри строковых литералов.
+pub fn strip_json_comments(raw: &str) -> String {
+    let mut out = String::with_capacity(raw.len());
+    let chars: Vec<char> = raw.chars().collect();
+    let len = chars.len();
+    let mut i = 0;
+
+    while i < len {
+        let c = chars[i];
+
+        // Строковый литерал — копируем как есть
+        if c == '"' {
+            out.push('"');
+            i += 1;
+            while i < len {
+                let sc = chars[i];
+                out.push(sc);
+                i += 1;
+                if sc == '\\' && i < len {
+                    out.push(chars[i]);
+                    i += 1;
+                } else if sc == '"' {
+                    break;
+                }
+            }
+            continue;
+        }
+
+        // Однострочный комментарий //
+        if c == '/' && i + 1 < len && chars[i + 1] == '/' {
+            i += 2;
+            while i < len && chars[i] != '\n' && chars[i] != '\r' {
+                i += 1;
+            }
+            continue;
+        }
+
+        // Блочный комментарий /* */
+        if c == '/' && i + 1 < len && chars[i + 1] == '*' {
+            i += 2;
+            while i + 1 < len && !(chars[i] == '*' && chars[i + 1] == '/') {
+                i += 1;
+            }
+            i += 2; // пропускаем */
+            continue;
+        }
+
+        out.push(c);
+        i += 1;
+    }
+
+    out
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UiNode {
     #[serde(rename = "type")]
@@ -13,7 +70,7 @@ pub struct UiNode {
 
 impl UiNode {
     pub fn from_json(json: &str) -> Result<Self, serde_json::Error> {
-        serde_json::from_str(json)
+        serde_json::from_str(&strip_json_comments(json))
     }
 
     pub fn from_value(value: &Value) -> Result<Self, serde_json::Error> {

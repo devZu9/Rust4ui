@@ -55,8 +55,7 @@
           "multi": true,
           "fill": "#1A1D23",
           "rounding": 8,
-          "stroke_width": 1,
-          "stroke_color": "#333333",
+          "border": [1, "#333333"],
           "highlight_color": "#3366CC44",
           "padding": 20,
           "children": [

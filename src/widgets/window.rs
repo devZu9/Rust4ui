@@ -1,3 +1,4 @@
+use crate::border::get_border;
 use crate::renderer::{attr_bool, attr_f64, attr_str, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
@@ -23,10 +24,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .and_then(crate::theme::parse_hex_color)
         .unwrap_or(egui::Color32::from_rgb(0x1E, 0x1E, 0x24));
 
-    let stroke_width = attr_f64(node, "stroke_width").unwrap_or(1.0);
-    let stroke_color = attr_str(node, "stroke_color")
-        .and_then(crate::theme::parse_hex_color)
-        .unwrap_or(egui::Color32::from_rgb(0x33, 0x33, 0x3A));
+    let border = get_border(node, &ctx.theme, "Window");
     let padding = attr_f64(node, "padding").unwrap_or(8.0);
 
     let anchor_h = attr_str(node, "anchor_h");
@@ -77,7 +75,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     let frame = egui::Frame::new()
         .fill(fill)
-        .stroke(egui::Stroke::new(stroke_width as f32, stroke_color))
+        .stroke(egui::Stroke::new(border.width, border.color))
         .inner_margin(egui::Margin::same(padding as i8));
 
     window.frame(frame).show(ui.ctx(), |ui| {

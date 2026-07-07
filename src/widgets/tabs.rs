@@ -1,3 +1,4 @@
+use crate::border::widget_border;
 use crate::renderer::{attr_bool, attr_f64, attr_str, get_padding, resolve_text, widget_margin, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
@@ -80,12 +81,16 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         }
     };
 
-    if pad != egui::Margin::ZERO {
-        egui::Frame::new()
+    let tab_response = if pad != egui::Margin::ZERO {
+        Some(egui::Frame::new()
             .inner_margin(pad)
-            .show(ui, render_content);
+            .show(ui, render_content))
     } else {
         render_content(ui);
+        None
+    };
+    if let Some(r) = tab_response {
+        widget_border(ui, r.response.rect, node, &ctx.theme, "Tabs", egui::CornerRadius::same(4));
     }
 }
 

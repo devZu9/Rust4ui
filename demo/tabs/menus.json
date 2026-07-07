@@ -1,0 +1,119 @@
+{
+  "type": "Tab",
+  "id": "menus",
+  "title": "{{tab.menus}}",
+  "children": [
+    {
+      "type": "ScrollArea",
+      "axis": "vertical",
+      "max_height": 600,
+      "children": [
+        {
+          "type": "Column",
+          "gap": 12,
+          "padding": 16,
+          "children": [
+            {
+              "type": "Label",
+              "text": "Меню и иконки",
+              "size": 20,
+              "bold": true
+            },
+            {
+              "type": "Separator",
+              "space": 8
+            },
+            {
+              "type": "Label",
+              "text": "Пример MenuBar (Файл / Правка / Помощь):",
+              "size": 13,
+              "color": "#888888"
+            },
+            {
+              "type": "MenuBar",
+              "children": [
+                {
+                  "type": "Menu",
+                  "text": "{{menu.file}}",
+                  "children": [
+                    { "type": "MenuItem", "text": "{{menu.new}}", "action": "click", "target": "menu_new" },
+                    { "type": "MenuItem", "text": "{{menu.open}}", "action": "click", "target": "menu_open" },
+                    { "type": "Separator" },
+                    { "type": "MenuItem", "text": "{{menu.export}}", "action": "click", "target": "menu_export" },
+                    { "type": "Separator" },
+                    { "type": "MenuItem", "text": "{{menu.exit}}", "action": "click", "target": "menu_exit" }
+                  ]
+                },
+                {
+                  "type": "Menu",
+                  "text": "{{menu.edit}}",
+                  "children": [
+                    { "type": "MenuItem", "text": "{{menu.undo}}", "action": "click", "target": "menu_undo" },
+                    { "type": "MenuItem", "text": "{{menu.redo}}", "action": "click", "target": "menu_redo" },
+                    { "type": "Separator" },
+                    { "type": "MenuItem", "text": "{{chk.gpu}}", "action": "click", "target": "menu_gpu" }
+                  ]
+                },
+                {
+                  "type": "Menu",
+                  "text": "{{menu.help}}",
+                  "children": [
+                    { "type": "MenuItem", "text": "{{menu.about}}", "action": "click", "target": "menu_about" }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Separator",
+              "space": 8
+            },
+            {
+              "type": "Label",
+              "text": "Горизонтальная панель иконок (IconBar horizontal):",
+              "size": 13,
+              "color": "#888888"
+            },
+            {
+              "type": "IconBar",
+              "direction": "horizontal",
+              "children": [
+                { "type": "IconButton", "icon": "save", "action": "click", "target": "icon_save", "tooltip": "{{tip.save_title}}" },
+                { "type": "IconButton", "icon": "copy", "action": "click", "target": "icon_copy", "tooltip": "Копировать" },
+                { "type": "IconButton", "icon": "paste", "action": "click", "target": "icon_paste", "tooltip": "Вставить" },
+                { "type": "IconButton", "icon": "settings", "action": "click", "target": "icon_settings", "tooltip": "Настройки" },
+                { "type": "IconButton", "icon": "help", "action": "click", "target": "icon_help", "tooltip": "{{tooltip.hyperlink}}" }
+              ]
+            },
+            {
+              "type": "Separator",
+              "space": 8
+            },
+            {
+              "type": "Label",
+              "text": "Вертикальная панель иконок (IconBar vertical):",
+              "size": 13,
+              "color": "#888888"
+            },
+            {
+              "type": "Row",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "IconBar",
+                  "direction": "vertical",
+                  "children": [
+                    { "type": "IconButton", "icon": "home", "action": "click", "target": "icon_home", "tooltip": "Главная" },
+                    { "type": "IconButton", "icon": "user", "action": "click", "target": "icon_user", "tooltip": "Пользователь" },
+                    { "type": "IconButton", "icon": "folder", "action": "click", "target": "icon_folder", "tooltip": "Папка" },
+                    { "type": "IconButton", "icon": "download", "action": "click", "target": "icon_download", "tooltip": "Скачать" },
+                    { "type": "IconButton", "icon": "upload", "action": "click", "target": "icon_upload", "tooltip": "Загрузить" }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

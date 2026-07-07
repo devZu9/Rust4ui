@@ -1,3 +1,4 @@
+use crate::strip_json_comments;
 use serde_json::Value;
 use std::collections::HashMap;
 use std::fs;
@@ -113,7 +114,7 @@ impl RefResolver {
             );
             ResolveError::Io(e)
         })?;
-        let parsed: Value = serde_json::from_str(&content).map_err(|e| {
+        let parsed: Value = serde_json::from_str(&strip_json_comments(&content)).map_err(|e| {
             log::error!(
                 "RefResolver: невалидный JSON в {}: {e}",
                 full_path.display()

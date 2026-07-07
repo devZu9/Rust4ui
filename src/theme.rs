@@ -99,7 +99,7 @@ impl Theme {
         let mut style = (*ctx.style()).clone();
         style.visuals.dark_mode = true;
 
-        let bg = self.color_or("bg_fill", egui::Color32::from_rgb(0x14, 0x16, 0x1B));
+        let bg = self.color_or("background", egui::Color32::from_rgb(0x14, 0x16, 0x1B));
         let panel = self.color_or("panel_fill", egui::Color32::from_rgb(0x1A, 0x1D, 0x23));
         let window = self.color_or("window_fill", egui::Color32::from_rgb(0x1E, 0x1E, 0x24));
         let text = self.color_or("text_primary", egui::Color32::from_rgb(0xE0, 0xE0, 0xE0));
@@ -108,7 +108,7 @@ impl Theme {
         style.visuals.panel_fill = panel;
         style.visuals.window_fill = window;
         style.visuals.window_stroke.color =
-            self.color_or("stroke_color", egui::Color32::from_rgb(0x33, 0x33, 0x3A));
+            self.color_or("border_color", egui::Color32::from_rgb(0x33, 0x33, 0x3A));
         style.visuals.window_stroke.width = 1.0;
         style.visuals.faint_bg_color = bg;
         style.visuals.extreme_bg_color = egui::Color32::from_rgb(0x0C, 0x0E, 0x12);
@@ -181,13 +181,13 @@ impl Theme {
 impl Default for Theme {
     fn default() -> Self {
         let mut colors = HashMap::new();
-        colors.insert("bg_fill".into(), "#14161B".into());
+        colors.insert("background".into(), "#14161B".into());
         colors.insert("panel_fill".into(), "#1A1D23".into());
         colors.insert("window_fill".into(), "#1E1E24".into());
         colors.insert("text_primary".into(), "#E0E0E0".into());
         colors.insert("text_dim".into(), "#888888".into());
         colors.insert("link_color".into(), "#66CCFF".into());
-        colors.insert("stroke_color".into(), "#33333A".into());
+        colors.insert("border_color".into(), "#33333A".into());
         colors.insert("accent".into(), "#3366CC".into());
         colors.insert("success".into(), "#00AA66".into());
         colors.insert("danger".into(), "#CC3333".into());
@@ -202,7 +202,7 @@ impl Default for Theme {
         widget.insert("TextField".into(), serde_json::json!({
             "width": 200.0,
             "height": 28.0,
-            "bg_fill": "#1C1E24",
+            "background": "#1C1E24",
             "inner_margin": 4.0,
             "rounding": 4.0,
             "text_color": "#E0E0E0",
@@ -218,7 +218,7 @@ impl Default for Theme {
         widget.insert("ComboBox".into(), serde_json::json!({
             "width": 200.0,
             "height": 32.0,
-            "bg_fill": "#2A2A33",
+            "background": "#2A2A33",
             "inner_pad_h": 10.0,
             "rounding": 4.0,
             "popup_bg": "#1C1E24",
@@ -254,8 +254,7 @@ impl Default for Theme {
             "fill": "#1A1D23",
             "rounding": 8.0,
             "padding": 12.0,
-            "stroke_width": 1.0,
-            "stroke_color": "#333333"
+            "border": [1, "#333333"]
         }));
         widget.insert("Label".into(), serde_json::json!({
             "size": 14.0,
@@ -275,8 +274,7 @@ impl Default for Theme {
             "default_width": 400.0,
             "default_height": 300.0,
             "fill": "#1E1E24",
-            "stroke_width": 1.0,
-            "stroke_color": "#33333A",
+            "border": [1, "#33333A"],
             "padding": 8.0
         }));
         widget.insert("Spinner".into(), serde_json::json!({
@@ -286,8 +284,7 @@ impl Default for Theme {
         widget.insert("FileDrop".into(), serde_json::json!({
             "fill": "#1A1D23",
             "rounding": 8.0,
-            "stroke_width": 1.0,
-            "stroke_color": "#333333",
+            "border": [1, "#333333"],
             "padding": 16.0
         }));
 
@@ -350,9 +347,9 @@ mod tests {
     #[test]
     fn test_default_theme_is_dark() {
         let theme = Theme::default();
-        assert!(theme.colors.contains_key("bg_fill"));
+        assert!(theme.colors.contains_key("background"));
         assert_eq!(
-            theme.color("bg_fill"),
+            theme.color("background"),
             Some(egui::Color32::from_rgb(0x14, 0x16, 0x1B))
         );
         assert!(theme.colors.contains_key("text_primary"));

@@ -1,3 +1,4 @@
+use crate::strip_json_comments;
 use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
@@ -28,7 +29,7 @@ impl LocaleRegistry {
     }
 
     pub fn load_str(&mut self, lang: &str, json: &str) -> Result<(), Box<dyn std::error::Error>> {
-        let parsed: serde_json::Value = serde_json::from_str(json)?;
+        let parsed: serde_json::Value = serde_json::from_str(&strip_json_comments(json))?;
 
         let translations = if let Some(tr) = parsed.get("translations") {
             tr

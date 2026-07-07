@@ -1,3 +1,4 @@
+use crate::border::{draw_border, get_border};
 use crate::renderer::{attr_bool, attr_f64, attr_str, get_padding, resolve_text, widget_margin, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
@@ -26,9 +27,11 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     }
 
     let min_height = ctx.theme.w_f64("TextField", "height", 28.0) as f32;
-    let bg = ctx.theme.w_color("TextField", "bg_fill", egui::Color32::from_rgb(0x1C, 0x1E, 0x24));
+    let bg = ctx.theme.w_color("TextField", "background", egui::Color32::from_rgb(0x1C, 0x1E, 0x24));
     let rounding = ctx.theme.w_f64("TextField", "rounding", 4.0) as u8;
     let pad = get_padding(node, &ctx.theme, "TextField", egui::Margin::symmetric(0, 2));
+    let valign = ctx.theme.w_str2(node, "TextField", "valign")
+        .unwrap_or_else(|| "center".to_string());
 
     let (pad_l, pad_r, pad_t, pad_b) = (pad.left as f32, pad.right as f32, pad.top as f32, pad.bottom as f32);
 
@@ -51,33 +54,46 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         egui::TextEdit::singleline(&mut value)
             .password(true)
             .hint_text(hint)
-            .desired_width(width as f32)
             .font(egui::TextStyle::Body)
     } else if multiline {
         egui::TextEdit::multiline(&mut value)
             .hint_text(hint)
-            .desired_width(width as f32)
             .desired_rows(4)
             .font(egui::TextStyle::Body)
     } else {
         egui::TextEdit::singleline(&mut value)
             .hint_text(hint)
-            .desired_width(width as f32)
             .font(egui::TextStyle::Body)
     };
-    text_edit = text_edit.margin(pad).frame(true).background_color(bg);
+    let border = get_border(node, &ctx.theme, "TextField");
+
+    text_edit = text_edit.margin(egui::Margin::ZERO).frame(false);
 
     let radius = egui::CornerRadius::same(rounding);
-    let w = &mut ui.style_mut().visuals.widgets;
-    let prev = (w.inactive.corner_radius, w.hovered.corner_radius, w.active.corner_radius);
-    w.inactive.corner_radius = radius;
-    w.hovered.corner_radius = radius;
-    w.active.corner_radius = radius;
-    let resp = ui.add_sized(egui::vec2(field_w, field_h), text_edit);
-    let w = &mut ui.style_mut().visuals.widgets;
-    w.inactive.corner_radius = prev.0;
-    w.hovered.corner_radius = prev.1;
-    w.active.corner_radius = prev.2;
+    let (rect, rect_resp) = ui.allocate_exact_size(egui::vec2(field_w, field_h), egui::Sense::click());
+    let fill = if rect_resp.hovered() { bg.linear_multiply(1.2) } else { bg };
+    ui.painter().rect_filled(rect, radius, fill);
+
+    let avail_h = field_h - pad_t - pad_b;
+    let content_y = match valign.as_str() {
+        "bottom" => rect.top() + pad_t + (avail_h - font_h),
+        "center" => rect.top() + pad_t + (avail_h - font_h) / 2.0,
+        _ => rect.top() + pad_t,
+    };
+    let content_rect = egui::Rect::from_min_max(
+        egui::pos2(rect.left() + pad_l, content_y),
+        egui::pos2(rect.right() - pad_r, content_y + font_h),
+    );
+
+    let mut child_ui = ui.new_child(
+        egui::UiBuilder::new()
+            .max_rect(content_rect)
+            .layout(egui::Layout::left_to_right(egui::Align::Center)),
+    );
+    let resp = child_ui.add(text_edit);
+    drop(child_ui);
+
+    draw_border(ui, rect, radius, &border);
 
     if resp.changed() {
         ctx.state.set_string(&binding, value);
@@ -108,12 +124,14 @@ fn render_number(
         .unwrap_or(0);
 
     let min_height = ctx.theme.w_f64("TextField", "height", 28.0) as f32;
-    let bg = ctx.theme.w_color("TextField", "bg_fill", egui::Color32::from_rgb(0x1C, 0x1E, 0x24));
+    let bg = ctx.theme.w_color("TextField", "background", egui::Color32::from_rgb(0x1C, 0x1E, 0x24));
     let stepper_bg = ctx
         .theme
         .w_color("TextField", "stepper_bg", egui::Color32::from_rgb(0x33, 0x33, 0x44));
     let pad = get_padding(node, &ctx.theme, "TextField", egui::Margin::symmetric(0, 2));
     let rounding = ctx.theme.w_f64("TextField", "rounding", 4.0) as u8;
+    let valign = ctx.theme.w_str2(node, "TextField", "valign")
+        .unwrap_or_else(|| "center".to_string());
 
     let (pad_l, pad_r, pad_t, pad_b) = (pad.left as f32, pad.right as f32, pad.top as f32, pad.bottom as f32);
 
@@ -133,6 +151,7 @@ fn render_number(
     let num_value = ctx.state.get_f64(binding).unwrap_or(0.0);
     let fmt_value = format!("{:.decimals$}", num_value, decimals = decimals);
     let mut text_value = fmt_value.clone();
+    let border = get_border(node, &ctx.theme, "TextField");
 
     let (rect, rect_resp) = ui.allocate_exact_size(egui::vec2(field_w, field_h), egui::Sense::click());
 
@@ -142,17 +161,18 @@ fn render_number(
         bg
     };
 
-    ui.painter().rect(
-        rect,
-        egui::CornerRadius::same(rounding as u8),
-        fill,
-        (1.0, egui::Color32::from_rgb(0x44, 0x44, 0x55)),
-        egui::StrokeKind::Inside,
-    );
+    ui.painter().rect_filled(rect, egui::CornerRadius::same(rounding as u8), fill);
+    draw_border(ui, rect, egui::CornerRadius::same(rounding as u8), &border);
 
+    let avail_h = field_h - pad_t - pad_b;
+    let content_y = match valign.as_str() {
+        "bottom" => rect.top() + pad_t + (avail_h - font_h),
+        "center" => rect.top() + pad_t + (avail_h - font_h) / 2.0,
+        _ => rect.top() + pad_t,
+    };
     let content = egui::Rect::from_min_max(
-        egui::pos2(rect.min.x + pad_l, rect.min.y + pad_t),
-        egui::pos2(rect.max.x - pad_r, rect.max.y - pad_b),
+        egui::pos2(rect.min.x + pad_l, content_y),
+        egui::pos2(rect.max.x - pad_r, content_y + font_h),
     );
 
     let text_changed;
@@ -166,7 +186,7 @@ fn render_number(
         );
         let te = egui::TextEdit::singleline(&mut text_value)
             .font(egui::TextStyle::Body)
-            .margin(pad)
+            .margin(egui::Margin::ZERO)
             .frame(false);
         let edit_r = child_ui.add_sized(
             egui::vec2((content.size().x - 20.0).max(0.0), content.size().y),

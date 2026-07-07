@@ -1,4 +1,4 @@
-use rust4ui::{LocaleRegistry, RefResolver, Validator};
+use rust4ui::{strip_json_comments, LocaleRegistry, RefResolver, Validator};
 use std::path::Path;
 
 #[test]
@@ -9,7 +9,7 @@ fn test_load_demo_ui() {
 
     let content = std::fs::read_to_string(&ui_path).expect("Не удалось прочитать ui.json");
     let root: serde_json::Value =
-        serde_json::from_str(&content).expect("ui.json должен быть валидным JSON");
+        serde_json::from_str(&strip_json_comments(&content)).expect("ui.json должен быть валидным JSON");
 
     let mut resolver = RefResolver::new();
     let resolved = resolver

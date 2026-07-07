@@ -1,3 +1,4 @@
+use crate::border::widget_border;
 use crate::renderer::{attr_str, get_padding, resolve_text, widget_margin, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
@@ -25,12 +26,16 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         }
     };
 
-    if pad != egui::Margin::ZERO {
-        egui::Frame::new()
+    let response = if pad != egui::Margin::ZERO {
+        Some(egui::Frame::new()
             .inner_margin(pad)
-            .show(ui, do_checkbox);
+            .show(ui, do_checkbox))
     } else {
         do_checkbox(ui);
+        None
+    };
+    if let Some(r) = response {
+        widget_border(ui, r.response.rect, node, &ctx.theme, "Checkbox", egui::CornerRadius::same(4));
     }
 }
 

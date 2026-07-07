@@ -1,3 +1,4 @@
+use crate::strip_json_comments;
 use std::collections::HashMap;
 
 #[derive(Debug, Clone, PartialEq)]
@@ -121,7 +122,7 @@ impl StateRegistry {
     }
 
     pub fn from_json(json: &str) -> Result<Self, serde_json::Error> {
-        let parsed: serde_json::Value = serde_json::from_str(json)?;
+        let parsed: serde_json::Value = serde_json::from_str(&strip_json_comments(json))?;
         let mut state = Self::new();
         if let serde_json::Value::Object(map) = parsed {
             for (key, val) in map {

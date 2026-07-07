@@ -101,7 +101,7 @@ mod tests {
         assert!(!theme.colors.is_empty());
 
         let bg = theme
-            .color("bg_fill")
+            .color("background")
             .unwrap_or(egui::Color32::from_rgb(0x14, 0x16, 0x1B));
         let text = theme
             .color("text_primary")

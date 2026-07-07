@@ -1,3 +1,4 @@
+use crate::border::widget_border;
 use crate::renderer::{attr_bool, attr_f64, get_padding, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
@@ -29,18 +30,22 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let layout = egui::Layout::left_to_right(egui::Align::TOP).with_main_wrap(wrap);
     let pad = get_padding(node, &ctx.theme, "Row", egui::Margin::ZERO);
 
-    if pad == egui::Margin::ZERO {
+    let response = if pad == egui::Margin::ZERO {
         ui.with_layout(layout, |ui| {
             render_row_children(ui, node, ctx, gap as f32);
         });
+        None
     } else {
-        egui::Frame::new()
+        Some(egui::Frame::new()
             .inner_margin(pad)
             .show(ui, |ui| {
                 ui.with_layout(layout, |ui| {
                     render_row_children(ui, node, ctx, gap as f32);
                 });
-            });
+            }))
+    };
+    if let Some(r) = response {
+        widget_border(ui, r.response.rect, node, &ctx.theme, "Row", egui::CornerRadius::same(4));
     }
 }
 

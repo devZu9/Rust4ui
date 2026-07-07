@@ -1,3 +1,4 @@
+use crate::border::{draw_border, get_border};
 use crate::renderer::{attr_f64, attr_str, get_padding, widget_margin, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
@@ -34,32 +35,45 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let current = items.get(selected).cloned().unwrap_or_default();
 
     let text_fg = ctx.theme.w_color("ComboBox", "text_color", egui::Color32::from_rgb(0xE0, 0xE0, 0xE0));
-    let bg = ctx.theme.w_color("ComboBox", "bg_fill", egui::Color32::from_rgb(0x2A, 0x2A, 0x33));
+    let bg = ctx.theme.w_color("ComboBox", "background", egui::Color32::from_rgb(0x2A, 0x2A, 0x33));
     let sel_bg = ctx.theme.w_color("ComboBox", "sel_bg", egui::Color32::from_rgba_unmultiplied(0x33, 0x66, 0xCC, 0x66));
     let popup_bg = ctx.theme.w_color("ComboBox", "popup_bg", egui::Color32::from_rgb(0x1C, 0x1E, 0x24));
     let height = ctx.theme.w_f64("ComboBox", "height", 32.0) as f32;
     let rounding = ctx.theme.w_f64("ComboBox", "rounding", 4.0) as u8;
     let inner_pad = get_padding(node, &ctx.theme, "ComboBox", egui::Margin::symmetric(10, 0));
-    let pad_h = inner_pad.left.max(inner_pad.right) as f32;
-    let stroke = ctx.theme.w_color("ComboBox", "stroke_color", egui::Color32::from_rgb(0x44, 0x44, 0x55));
+    let (pad_l, pad_r, pad_t, pad_b) = (inner_pad.left as f32, inner_pad.right as f32, inner_pad.top as f32, inner_pad.bottom as f32);
+    let border = get_border(node, &ctx.theme, "ComboBox");
+
+    let font_h = ui
+        .painter()
+        .layout_no_wrap(
+            "A".into(),
+            egui::FontId::proportional(14.0),
+            egui::Color32::WHITE,
+        )
+        .size()
+        .y;
+
+    let combo_w = (width as f32).max(20.0 + pad_l + pad_r);
+    let combo_h = (height as f32).max(font_h + pad_t + pad_b);
 
     let open_key = format!("__combo_open_{binding}");
     let is_open = ctx.state.get_bool(&open_key).unwrap_or(false);
 
     let (rect, resp) = ui.allocate_exact_size(
-        egui::vec2(width as f32, height),
+        egui::vec2(combo_w, combo_h),
         egui::Sense::click(),
     );
 
     ui.painter().rect_filled(rect, egui::CornerRadius::same(rounding), bg);
-    ui.painter().rect_stroke(rect, egui::CornerRadius::same(rounding), egui::Stroke::new(1.0, stroke), egui::StrokeKind::Inside);
+    draw_border(ui, rect, egui::CornerRadius::same(rounding), &border);
 
-    let text_pos = egui::pos2(rect.left() + pad_h, rect.center().y);
+    let text_pos = egui::pos2(rect.left() + pad_l, rect.center().y);
     ui.painter().text(text_pos, egui::Align2::LEFT_CENTER, &current, egui::FontId::proportional(14.0), text_fg);
 
     // Рисуем треугольник вместо иконки Phosphor (надежнее, чем шрифтовые codepoint'ы)
     let arrow_size = 4.0;
-    let arrow_right = rect.right() - pad_h;
+    let arrow_right = rect.right() - pad_r;
     let arrow_center = rect.center().y;
     if is_open {
         // Треугольник вверх: вершина вверх, основание внизу
@@ -96,13 +110,14 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
             .constrain(true);
 
         area.show(ui.ctx(), |ui| {
+            let popup_border = get_border(node, &ctx.theme, "ComboBox");
             let frame = egui::Frame::new()
                 .fill(popup_bg)
                 .corner_radius(egui::CornerRadius::same(rounding))
-                .stroke(egui::Stroke::new(1.0, stroke));
+                .stroke(egui::Stroke::new(popup_border.width, popup_border.color));
 
             frame.show(ui, |ui| {
-                ui.set_min_width(width as f32);
+                ui.set_min_width(combo_w);
                 for (i, item) in items.iter().enumerate() {
                     let is_sel = selected == i;
                     let item_color = if is_sel { egui::Color32::WHITE } else { text_fg };
@@ -110,7 +125,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
                     let item_bg = if is_sel { sel_bg } else { bg };
 
                     let item_resp = ui.add(
-                        egui::Button::new(item_text).fill(item_bg).min_size(egui::vec2(width as f32, 24.0)),
+                        egui::Button::new(item_text).fill(item_bg).min_size(egui::vec2(combo_w, 24.0)),
                     );
 
                     if item_resp.clicked() {

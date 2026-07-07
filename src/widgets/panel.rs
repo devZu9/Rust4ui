@@ -1,3 +1,4 @@
+use crate::border::get_border;
 use crate::renderer::{attr_f64, attr_str, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
@@ -8,17 +9,13 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     let rounding = attr_f64(node, "rounding").unwrap_or(8.0);
     let padding = attr_f64(node, "padding").unwrap_or(12.0);
-    let stroke_width = attr_f64(node, "stroke_width").unwrap_or(1.0);
-
-    let stroke_color = attr_str(node, "stroke_color")
-        .and_then(crate::theme::parse_hex_color)
-        .unwrap_or(egui::Color32::from_rgb(0x33, 0x33, 0x33));
+    let border = get_border(node, &ctx.theme, "Panel");
 
     let frame = egui::Frame::new()
         .fill(fill)
         .corner_radius(egui::CornerRadius::same(rounding as u8))
         .inner_margin(egui::Margin::same(padding as i8))
-        .stroke(egui::Stroke::new(stroke_width as f32, stroke_color));
+        .stroke(egui::Stroke::new(border.width, border.color));
 
     frame.show(ui, |ui| {
         if let Some(children) = node.get("children").and_then(|v| v.as_array()) {

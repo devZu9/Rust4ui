@@ -16,18 +16,14 @@
             {
               "type": "Label",
               "text": "{{label.basic_title}}",
-              "size": 25,
+              "size": 35,
               "bold": true
             },
             {
               "type": "Label",
               "text": "{{label.variants}}",
-              "size": 15,
+              "size": 25,
               "color": "#888888"
-            },
-            {
-              "type": "Separator",
-              "space": 10
             },
             {
               "type": "Label",

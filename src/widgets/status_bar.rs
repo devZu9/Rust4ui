@@ -1,3 +1,4 @@
+use crate::border::get_border;
 use crate::renderer::{attr_f64, attr_str, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
@@ -9,10 +10,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .and_then(crate::theme::parse_hex_color)
         .unwrap_or(egui::Color32::from_rgb(0x18, 0x18, 0x1D));
 
-    let stroke_width = attr_f64(node, "stroke_width").unwrap_or(1.0);
-    let stroke_color = attr_str(node, "stroke_color")
-        .and_then(crate::theme::parse_hex_color)
-        .unwrap_or(egui::Color32::from_rgb(0x2A, 0x2A, 0x30));
+    let border = get_border(node, &ctx.theme, "StatusBar");
 
     let children = match node.get("children").and_then(|v| v.as_array()) {
         Some(c) => c,
@@ -25,10 +23,10 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         ui.allocate_exact_size(egui::vec2(available.x, height as f32), egui::Sense::hover());
 
     ui.painter().rect_filled(rect, 0.0, fill);
-    if stroke_width > 0.0 {
+    if border.is_visible() {
         ui.painter().line_segment(
             [rect.left_top(), rect.right_top()],
-            (stroke_width as f32, stroke_color),
+            (border.width, border.color),
         );
     }
 

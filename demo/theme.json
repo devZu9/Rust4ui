@@ -18,14 +18,19 @@
   },
   "TextField": {
     "width": 200,
-    "height": 35,
+    "height": 78,
     "rounding": 65,
+//    "valign": "bottom",
+    "border": [8, "#303030", "dash", 15, 7],
     "padding": [15, 25],
-    "bg_fill": "#000000",
+    "background": "#000000",
     "margin": 0
   },
   "ComboBox": {
     "width": 200,
+    "height": 18,
+    "rounding": 65,
+    "padding": [15, 25],
     "margin": 0
   },
   "Slider": {
@@ -58,8 +63,7 @@
     "fill": "#1A1D23",
     "rounding": 8,
     "padding": [5, 10, 15, 5],
-    "stroke_width": 1,
-    "stroke_color": "#333333"
+    "border": [1, "#333333"]
   },
   "Window": {
     "default_width": 400,
@@ -72,8 +76,7 @@
     "constrain": true,
     "modal": false,
     "fill": "#1E1E24",
-    "stroke_width": 1,
-    "stroke_color": "#33333A",
+    "border": [1, "#33333A"],
     "padding": 8
   },
   "Hyperlink": {
@@ -91,8 +94,8 @@
   "FileDrop": {
     "fill": "#1A1D23",
     "rounding": 8,
-    "stroke_width": 1,
-    "stroke_color": "#333333",
+    "border": [1, "#333333"],
+
     "highlight_color": "#3366CC44",
     "padding": 16
   },
@@ -115,8 +118,7 @@
   "Tray": {},
   "IconBar": {
     "fill": "#1C1C22",
-    "stroke_width": 0,
-    "stroke_color": "#333333"
+    "border": 0
   },
   "IconButton": {
     "icon_size": 1.2,
@@ -134,8 +136,7 @@
   "StatusBar": {
     "height": 26,
     "fill": "#18181D",
-    "stroke_width": 1,
-    "stroke_color": "#2A2A30",
+    "border": [1, "#2A2A30"],
     "padding": 4
   },
   "Hover": {
@@ -147,8 +148,8 @@
     "Checkbox": { "fill_brighten": 0.04 }
   },
   "Focus": {
-    "stroke_color": "#6699FF",
-    "stroke_width": 2
+    "border_color": "#6699FF",
+    "border_width": 2
   },
   "Disabled": {
     "opacity": 0.4,

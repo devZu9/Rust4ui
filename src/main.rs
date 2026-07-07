@@ -1,4 +1,4 @@
-use rust4ui::{render_node, LocaleRegistry, RefResolver, RenderCtx, StateRegistry, Theme};
+use rust4ui::{render_node, strip_json_comments, LocaleRegistry, RefResolver, RenderCtx, StateRegistry, Theme};
 use std::path::Path;
 use std::path::PathBuf;
 use std::sync::Arc;
@@ -25,7 +25,7 @@ fn load_theme(base: &Path) -> Theme {
                 return theme;
             }
         };
-        let parsed: serde_json::Value = match serde_json::from_str(&content) {
+        let parsed: serde_json::Value = match serde_json::from_str(&strip_json_comments(&content)) {
             Ok(v) => v,
             Err(e) => {
                 log::error!("theme.json невалидный JSON: {e}");
@@ -103,7 +103,7 @@ impl DemoApp {
             let content =
                 std::fs::read_to_string(&ui_path).expect("Не удалось прочитать demo/ui.json");
             let root: serde_json::Value =
-                serde_json::from_str(&content).expect("demo/ui.json невалидный JSON");
+                serde_json::from_str(&strip_json_comments(&content)).expect("demo/ui.json невалидный JSON");
             let mut resolver = RefResolver::new();
             resolver
                 .resolve(&root, &base.join("demo"))
@@ -246,7 +246,7 @@ impl DemoApp {
     fn reload_ui_tree(&mut self) {
         let ui_path = self.base.join("demo").join("ui.json");
         match std::fs::read_to_string(&ui_path) {
-            Ok(content) => match serde_json::from_str::<serde_json::Value>(&content) {
+            Ok(content) => match serde_json::from_str::<serde_json::Value>(&strip_json_comments(&content)) {
                 Ok(root) => {
                     let mut resolver = RefResolver::new();
                     match resolver.resolve(&root, &self.base.join("demo")) {
