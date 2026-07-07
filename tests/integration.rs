@@ -64,7 +64,7 @@ fn test_load_theme() {
         .join("theme.json");
     assert!(path.exists());
     let content = std::fs::read_to_string(&path).unwrap();
-    let parsed: serde_json::Value = serde_json::from_str(&content).unwrap();
+    let parsed: serde_json::Value = serde_json::from_str(&strip_json_comments(&content)).unwrap();
     let obj = parsed.as_object().expect("theme.json должен быть объектом");
     assert!(obj.len() > 10, "theme.json должен иметь > 10 секций виджетов");
     assert!(obj.contains_key("Label"), "Должна быть секция Label");

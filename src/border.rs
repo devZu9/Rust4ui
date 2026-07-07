@@ -14,6 +14,7 @@ pub struct BorderStyle {
     pub border_type: BorderType,
     pub gap: f32,
     pub seg_len: f32,
+    pub round_cap: bool,
 }
 
 impl BorderStyle {
@@ -72,7 +73,14 @@ pub fn get_border(node: &serde_json::Value, theme: &Theme, widget: &str) -> Bord
         .or_else(|| theme_shorthand_seg_len(theme, widget))
         .unwrap_or(default_seg as f64) as f32;
 
-    BorderStyle { width: w, color: c, border_type: t, gap: g, seg_len: s }
+    let rc = node.get("border_seg_cap")
+        .and_then(|v| v.as_bool())
+        .or_else(|| theme.widget.get(widget)
+            .and_then(|w| w.get("border_seg_cap"))
+            .and_then(|v| v.as_bool()))
+        .unwrap_or(true);
+
+    BorderStyle { width: w, color: c, border_type: t, gap: g, seg_len: s, round_cap: rc }
 }
 
 // -- shorthand border: [width] / [width, "#color"] / [width, "#color", "type"] --
@@ -199,7 +207,8 @@ fn draw_pattern(
     border: &BorderStyle,
     is_dash: bool,
 ) {
-    let pts = rounded_rect_perimeter(rect, rounding, 12);
+    let arc_steps = 24;
+    let pts = rounded_rect_perimeter(rect, rounding, arc_steps);
     if pts.len() < 2 { return; }
 
     let seg_len = border.seg_len;
@@ -216,25 +225,72 @@ fn draw_pattern(
 
     let stroke = egui::Stroke::new(border.width, border.color);
 
-    // Adjust step so it divides perimeter evenly — no gap/overlap at junction
+    // Подогнанный шаг — все gap'ы и стык одинаковы
     let n = (total / step).round().max(1.0) as usize;
     let adjusted_step = total / n as f32;
     let half = seg_len * 0.5;
 
     for i in 0..n {
-        let center = (i as f32 + 0.5) * adjusted_step; // start from half-step to avoid junction
+        let center = (i as f32 + 0.5) * adjusted_step;
         let start = (center - half).max(0.0);
         let end = (center + half).min(total);
 
         if is_dash {
-            let p1 = point_at_dist(&pts, &dists, start);
-            let p2 = point_at_dist(&pts, &dists, end);
-            ui.painter().line_segment([p1, p2], stroke);
+            let dash_pts = points_along(&pts, &dists, start, end);
+            if dash_pts.len() >= 2 {
+                for w in dash_pts.windows(2) {
+                    ui.painter().line_segment([w[0], w[1]], stroke);
+                }
+            }
+            if border.round_cap {
+                let r = border.width * 0.5;
+                if r > 0.0 && dash_pts.len() >= 2 {
+                    ui.painter().circle_filled(dash_pts[0], r, border.color);
+                    ui.painter().circle_filled(dash_pts[dash_pts.len() - 1], r, border.color);
+                }
+            }
         } else {
             let p = point_at_dist(&pts, &dists, center);
             ui.painter().circle_filled(p, border.width.max(1.5) * 0.5, border.color);
         }
     }
+}
+
+/// Возвращает все точки из pts чья дистанция ∈ (d_start, d_end),
+/// плюс интерполированные точки на границах.
+fn points_along(pts: &[egui::Pos2], dists: &[f32], d_start: f32, d_end: f32) -> Vec<egui::Pos2> {
+    let mut result = Vec::new();
+    if d_end <= d_start || pts.len() < 2 { return result; }
+
+    let start_i = find_index(dists, d_start);
+    let end_i = find_index(dists, d_end);
+
+    result.push(point_at_dist(pts, dists, d_start));
+
+    for idx in (start_i + 1)..=end_i {
+        if idx > 0 && idx < pts.len() {
+            result.push(pts[idx]);
+        }
+    }
+
+    if dists.len() > 1 {
+        let last_end = point_at_dist(pts, dists, d_end);
+        let last = result.last().copied().unwrap_or(last_end);
+        let dist = last.distance(last_end);
+        if dist > 0.5 {
+            result.push(last_end);
+        }
+    }
+
+    result
+}
+
+fn find_index(dists: &[f32], d: f32) -> usize {
+    if d <= dists[0] { return 0; }
+    let last = dists.len() - 1;
+    if d >= dists[last] { return last; }
+    let i = dists.binary_search_by(|&v| v.partial_cmp(&d).unwrap()).unwrap_or_else(|i| i);
+    i.min(last)
 }
 
 fn rounded_rect_perimeter(rect: egui::Rect, rounding: egui::CornerRadius, n: usize) -> Vec<egui::Pos2> {

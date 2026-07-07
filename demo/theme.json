@@ -19,9 +19,9 @@
   "TextField": {
     "width": 200,
     "height": 78,
-    "rounding": 65,
-//    "valign": "bottom",
-    "border": [8, "#303030", "dash", 15, 7],
+    "rounding": 40,
+    "border": [8, "#303030", "dash", 17, 25],
+    "border_seg_cap": false,
     "padding": [15, 25],
     "background": "#000000",
     "margin": 0
