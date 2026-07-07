@@ -23,23 +23,26 @@
         {
           "type": "Row",
           "gap": 6,
-          "children": [
-            {
-              "type": "Label",
-              "text": "{{custom.title}}",
-              "bold": true,
-              "size": 14,
-              "color": "#AA88DD"
-            },
-            {
-              "type": "Button",
-              "text": "✕",
-              "action": "toggle_custom_window",
-              "fill": "#8844CC",
-              "min_width": 28,
-              "tooltip": "{{tooltip.close_custom}}"
-            }
-          ]
+              "children": [
+                {
+                  "type": "Label",
+                  "text": "{{custom.title}}",
+                  "bold": true,
+                  "size": 14,
+                  "color": "#AA88DD"
+                },
+                {
+                  "type": "Spacer"
+                },
+                {
+                  "type": "Button",
+                  "text": "×",
+                  "action": "toggle_custom_window",
+                  "fill": "#8844CC",
+                  "min_width": 28,
+                  "tooltip": "{{tooltip.close_custom}}"
+                }
+              ]
         },
         {
           "type": "Separator",

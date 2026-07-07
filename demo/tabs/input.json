@@ -21,6 +21,28 @@
             },
             {
               "type": "Label",
+              "text": "{{label.text_input}}",
+              "size": 13,
+              "color": "#888888"
+            },
+            {
+              "type": "TextField",
+              "binding": "name",
+              "hint": "{{hint.name}}",
+              "width": 300
+            },
+            {
+              "type": "Button",
+              "text": "{{btn.greeting}}",
+              "action": "greeting",
+              "min_width": 180
+            },
+            {
+              "type": "Separator",
+              "space": 10
+            },
+            {
+              "type": "Label",
               "text": "{{label.combo}}",
               "size": 13,
               "color": "#888888"
@@ -36,18 +58,31 @@
               "space": 8
             },
             {
-              "type": "Label",
-              "text": "{{label.volume}}: {volume}%",
-              "size": 13
-            },
-            {
-              "type": "Slider",
-              "binding": "volume",
-              "min": 0,
-              "max": 100,
-              "step": 1,
-              "width": 300,
-              "text": "{{label.volume}}"
+              "type": "Row",
+              "gap": 6,
+              "align": "center",
+              "children": [
+                {
+                  "type": "Label",
+                  "text": "{{label.volume}}:",
+                  "size": 14
+                },
+                {
+                  "type": "Label",
+                  "text": "{volume}%",
+                  "size": 14,
+                  "monospace": true,
+                  "color": "#66CCFF"
+                },
+                {
+                  "type": "Slider",
+                  "binding": "volume",
+                  "min": 0,
+                  "max": 100,
+                  "step": 1,
+                  "width": 160
+                }
+              ]
             },
             {
               "type": "Separator",
@@ -109,6 +144,22 @@
               "size": 13,
               "monospace": true,
               "color": "#AAAAAA"
+            },
+            {
+              "type": "Separator",
+              "space": 8
+            },
+            {
+              "type": "Label",
+              "text": "Поле пароля (mode=password):",
+              "size": 13,
+              "color": "#888888"
+            },
+            {
+              "type": "TextField",
+              "binding": "password",
+              "mode": "password",
+              "width": 300
             },
             {
               "type": "Separator",

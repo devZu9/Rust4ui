@@ -1,0 +1,19 @@
+[2026-07-06T21:44:06.722 INFO  rust4ui] Rust4ui v0.1.0 — запуск
+[2026-07-06T21:44:07.008 INFO  rust4ui] Phosphor-шрифт загружен для иконок
+[2026-07-06T21:44:07.009 INFO  rust4ui] Загрузка UI из demo/ui.json...
+[2026-07-06T21:44:07.010 INFO  rust4ui::ref_resolver] RefResolver: начинаю резолвинг в C:\_dev\Rust4ui\demo
+[2026-07-06T21:44:07.011 INFO  rust4ui::ref_resolver] RefResolver: загружаю C:\_dev\Rust4ui\demo\tabs/all.json
+[2026-07-06T21:44:07.012 INFO  rust4ui::ref_resolver] RefResolver: загружаю C:\_dev\Rust4ui\demo\tabs\basic.json
+[2026-07-06T21:44:07.014 INFO  rust4ui::ref_resolver] RefResolver: загружаю C:\_dev\Rust4ui\demo\tabs\input.json
+[2026-07-06T21:44:07.015 INFO  rust4ui::ref_resolver] RefResolver: загружаю C:\_dev\Rust4ui\demo\tabs\containers.json
+[2026-07-06T21:44:07.016 INFO  rust4ui::ref_resolver] RefResolver: загружаю C:\_dev\Rust4ui\demo\tabs\windows.json
+[2026-07-06T21:44:07.016 INFO  rust4ui::ref_resolver] RefResolver: загружаю C:\_dev\Rust4ui\demo\tabs\i18n.json
+[2026-07-06T21:44:07.016 INFO  rust4ui::ref_resolver] RefResolver: загружаю C:\_dev\Rust4ui\demo\windows/info_window.json
+[2026-07-06T21:44:07.017 INFO  rust4ui::ref_resolver] RefResolver: загружаю C:\_dev\Rust4ui\demo\windows/confirm_dialog.json
+[2026-07-06T21:44:07.017 INFO  rust4ui::ref_resolver] RefResolver: загружаю C:\_dev\Rust4ui\demo\windows/custom_panel.json
+[2026-07-06T21:44:07.018 INFO  rust4ui] Загрузка локалей...
+[2026-07-06T21:44:07.018 INFO  rust4ui::locale] LocaleRegistry: загружено 137 ключей для 'ru'
+[2026-07-06T21:44:07.019 INFO  rust4ui::locale] LocaleRegistry: загружено 136 ключей для 'en'
+[2026-07-06T21:44:07.020 INFO  rust4ui] Тема загружена из demo/theme.json (32 секций)
+[2026-07-06T21:44:07.020 INFO  rust4ui] Регистрация действий...
+[2026-07-06T21:44:07.020 INFO  rust4ui] Демо-приложение готово

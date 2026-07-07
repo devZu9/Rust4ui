@@ -1,28 +1,44 @@
 {
+  "global": {
+    "item_spacing_x": 8,
+    "item_spacing_y": 10
+  },
   "Label": {
     "color": "#CCCCCC",
-    "size": 13
+    "size": 14,
+    "margin": 0
   },
-  "Button": {
+    "Button": {
     "fill": "#303030",
-    "rounding": 6,
-    "min_width": 100,
-    "text_color": "#E0E0E0"
+    "rounding": 25,
+    "min_width": 190,
+    "text_color": "#E0E0E0",
+    "padding": [15],
+    "margin": 0
   },
   "TextField": {
     "width": 200,
-    "height": 28
+    "height": 35,
+    "rounding": 65,
+    "padding": [15, 25],
+    "bg_fill": "#000000",
+    "margin": 0
   },
   "ComboBox": {
-    "width": 200
+    "width": 200,
+    "margin": 0
   },
   "Slider": {
-    "width": 250
+    "width": 250,
+    "margin": 0
   },
-  "Checkbox": {},
+  "Checkbox": {
+    "margin": 0
+  },
   "Separator": {
     "space": 6,
-    "color": "#333333"
+    "color": "#333333",
+    "margin": 0
   },
   "Column": {
     "gap": 0,
@@ -34,12 +50,14 @@
     "align": "center"
   },
   "Tabs": {
-    "gap": 4
+    "gap": 4,
+    "margin": 0,
+    "tab_padding": 10
   },
   "Panel": {
     "fill": "#1A1D23",
     "rounding": 8,
-    "padding": 12,
+    "padding": [5, 10, 15, 5],
     "stroke_width": 1,
     "stroke_color": "#333333"
   },
@@ -60,7 +78,8 @@
   },
   "Hyperlink": {
     "color": "#66CCFF",
-    "underline": true
+    "underline": true,
+    "margin": 0
   },
   "Grid": {
     "spacing_x": 8,
@@ -77,7 +96,9 @@
     "highlight_color": "#3366CC44",
     "padding": 16
   },
-  "RadioGroup": {},
+  "RadioGroup": {
+    "margin": 0
+  },
   "Spinner": {
     "color": "#66CCFF",
     "size": 24
@@ -99,11 +120,13 @@
   },
   "IconButton": {
     "icon_size": 1.2,
-    "icon_color": "#CCCCCC"
+    "icon_color": "#CCCCCC",
+    "margin": 0
   },
   "Caption": {
     "color": "#888888",
-    "size": 11
+    "size": 11,
+    "margin": 0
   },
   "Indicator": {
     "size": 8

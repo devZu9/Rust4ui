@@ -164,69 +164,116 @@
             },
             {
               "type": "Label",
-              "text": "{{label.grid}}",
+              "text": "Колонки 50/50 (Row columns=2):",
               "size": 13,
               "color": "#888888"
             },
             {
-              "type": "Grid",
-              "columns": 3,
-              "spacing_x": 12,
-              "spacing_y": 4,
+              "type": "Row",
+              "columns": 2,
               "children": [
                 {
-                  "type": "Label",
-                  "text": "{{grid.col_a}}",
-                  "bold": true,
-                  "color": "#66CCFF"
+                  "type": "Panel",
+                  "fill": "#1A1D23",
+                  "rounding": 8,
+                  "padding": 12,
+                  "children": [
+                    {
+                      "type": "Label",
+                      "text": "Левая панель (50%)",
+                      "size": 14,
+                      "bold": true
+                    },
+                    {
+                      "type": "Label",
+                      "text": "Сюда можно поместить любой контент: поля, кнопки, списки.",
+                      "size": 12,
+                      "color": "#888888"
+                    }
+                  ]
                 },
                 {
-                  "type": "Label",
-                  "text": "{{grid.col_b}}",
-                  "bold": true,
-                  "color": "#66CCFF"
+                  "type": "Panel",
+                  "fill": "#1C1E24",
+                  "rounding": 8,
+                  "padding": 12,
+                  "children": [
+                    {
+                      "type": "Label",
+                      "text": "Правая панель (50%)",
+                      "size": 14,
+                      "bold": true
+                    },
+                    {
+                      "type": "TextField",
+                      "binding": "name",
+                      "width": 140
+                    },
+                    {
+                      "type": "Button",
+                      "text": "{{btn.greeting}}",
+                      "action": "greeting",
+                      "min_width": 120
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "Separator",
+              "space": 8
+            },
+            {
+              "type": "Label",
+              "text": "Таблицы (без сетки / с сеткой):",
+              "size": 13,
+              "color": "#888888"
+            },
+            {
+              "type": "Row",
+              "columns": 2,
+              "children": [
+                {
+                  "type": "Grid",
+                  "columns": 3,
+                  "spacing_x": 12,
+                  "spacing_y": 4,
+                  "striped": false,
+                  "children": [
+                    {"type": "Label", "text": "{{grid.col_a}}", "bold": true, "color": "#66CCFF"},
+                    {"type": "Label", "text": "{{grid.col_b}}", "bold": true, "color": "#66CCFF"},
+                    {"type": "Label", "text": "{{grid.col_c}}", "bold": true, "color": "#66CCFF"},
+                    {"type": "Label", "text": "{{grid.proj_a}}"},
+                    {"type": "Label", "text": "{{grid.stat_a}}"},
+                    {"type": "Label", "text": "{{grid.ver_a}}"},
+                    {"type": "Label", "text": "{{grid.proj_b}}"},
+                    {"type": "Label", "text": "{{grid.stat_b}}"},
+                    {"type": "Label", "text": "{{grid.ver_b}}"}
+                  ]
                 },
                 {
-                  "type": "Label",
-                  "text": "{{grid.col_c}}",
-                  "bold": true,
-                  "color": "#66CCFF"
-                },
-                {
-                  "type": "Label",
-                  "text": "{{grid.proj_a}}"
-                },
-                {
-                  "type": "Label",
-                  "text": "{{grid.stat_a}}"
-                },
-                {
-                  "type": "Label",
-                  "text": "{{grid.ver_a}}"
-                },
-                {
-                  "type": "Label",
-                  "text": "{{grid.proj_b}}"
-                },
-                {
-                  "type": "Label",
-                  "text": "{{grid.stat_b}}"
-                },
-                {
-                  "type": "Label",
-                  "text": "{{grid.ver_b}}"
-                },
-                {
-                  "type": "Label",
-                  "text": "{{grid.proj_c}}"
-                },
-                {
-                  "type": "Label",
-                  "text": "{{grid.stat_c}}"
-                },
-                {
-                  "type": "Label",
-                  "text": "{{grid.ver_c}}"
+                  "type": "Grid",
+                  "columns": 3,
+                  "spacing_x": 12,
+                  "spacing_y": 4,
+                  "striped": true,
+                  "children": [
+                    {"type": "Label", "text": "{{grid.col_a}}", "bold": true, "color": "#66CCFF"},
+                    {"type": "Label", "text": "{{grid.col_b}}", "bold": true, "color": "#66CCFF"},
+                    {"type": "Label", "text": "{{grid.col_c}}", "bold": true, "color": "#66CCFF"},
+                    {"type": "Label", "text": "{{grid.proj_a}}"},
+                    {"type": "Label", "text": "{{grid.stat_a}}"},
+                    {"type": "Label", "text": "{{grid.ver_a}}"},
+                    {"type": "Label", "text": "{{grid.proj_b}}"},
+                    {"type": "Label", "text": "{{grid.stat_b}}"},
+                    {"type": "Label", "text": "{{grid.ver_b}}"},
+                    {"type": "Label", "text": "{{grid.proj_c}}"},
+                    {"type": "Label", "text": "{{grid.stat_c}}"},
+                    {"type": "Label", "text": "{{grid.ver_c}}"},
+                    {"type": "Label", "text": "Rust4ui"},
+                    {"type": "Label", "text": "Готово"},
+                    {"type": "Label", "text": "0.2"}
+                  ]
                 }
               ]
             }

@@ -24,12 +24,13 @@
           "size": 13,
           "color": "#888888"
         },
-        {
-          "type": "Hyperlink",
-          "url": "https://github.com/devZu9/Rust4ui",
-          "color": "#66CCFF",
-          "tooltip": "{{tooltip.hyperlink}}"
-        },
+            {
+              "type": "Hyperlink",
+              "url": "https://github.com/devZu9/Rust4ui",
+              "text": "GitHub: Rust4ui",
+              "color": "#66CCFF",
+              "tooltip": "{{tooltip.hyperlink}}"
+            },
         {
           "type": "Separator",
           "space": 10

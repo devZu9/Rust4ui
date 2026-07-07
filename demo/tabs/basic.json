@@ -16,13 +16,13 @@
             {
               "type": "Label",
               "text": "{{label.basic_title}}",
-              "size": 20,
+              "size": 25,
               "bold": true
             },
             {
               "type": "Label",
               "text": "{{label.variants}}",
-              "size": 13,
+              "size": 15,
               "color": "#888888"
             },
             {
@@ -79,8 +79,6 @@
                   "action": "click",
                   "target": "primary",
                   "fill": "#3366CC",
-                  "rounding": 6,
-                  "min_width": 120,
                   "tooltip": "{{tooltip.primary}}"
                 },
                 {
@@ -89,8 +87,6 @@
                   "action": "click",
                   "target": "danger",
                   "fill": "#CC3333",
-                  "rounding": 6,
-                  "min_width": 120,
                   "tooltip": "{{tooltip.danger}}"
                 },
                 {
@@ -99,29 +95,55 @@
                   "action": "click",
                   "target": "success",
                   "fill": "#00AA66",
-                  "rounding": 6,
-                  "min_width": 120,
                   "tooltip": "{{tooltip.success}}"
                 }
-              ]
+               ]
+           },
+           {
+          "type": "Row",
+          "gap": 8,
+          "align": "center",
+          "children": [
+            {
+              "type": "Button",
+              "text": "По центру",
+              "action": "click",
+              "target": "align_center",
+              "fill": "#555566"
             },
             {
-              "type": "Row",
-              "gap": 8,
-              "align": "center",
+              "type": "Button",
+              "text": "Слева",
+              "action": "click",
+              "target": "align_left",
+              "fill": "#555566",
+              "align": "left"
+            },
+            {
+              "type": "Button",
+              "text": "Справа",
+              "action": "click",
+              "target": "align_right",
+              "fill": "#555566",
+              "align": "right"
+            }
+          ]
+        },
+        {
+          "type": "Row",
+          "gap": 8,
+          "align": "center",
               "children": [
                 {
                   "type": "Button",
                   "text": "{{btn.default}}",
                   "action": "click",
-                  "target": "default",
-                  "min_width": 120
+                  "target": "default"
                 },
                 {
                   "type": "Button",
                   "text": "{{btn.disabled}}",
                   "enabled": false,
-                  "min_width": 120,
                   "tooltip": "{{tooltip.disabled}}"
                 }
               ]
@@ -152,21 +174,18 @@
             },
             {
               "type": "Label",
-              "text": "{{label.text_input}}",
+              "text": "Тема (RadioGroup):",
               "size": 13,
               "color": "#888888"
             },
             {
-              "type": "TextField",
-              "binding": "name",
-              "hint": "{{hint.name}}",
-              "width": 300
-            },
-            {
-              "type": "Button",
-              "text": "{{btn.greeting}}",
-              "action": "greeting",
-              "min_width": 180
+              "type": "RadioGroup",
+              "binding": "app_theme",
+              "options": [
+                {"value": 0, "text": "{{radio.dark}}"},
+                {"value": 1, "text": "{{radio.light}}"},
+                {"value": 2, "text": "{{radio.auto}}"}
+              ]
             }
           ]
         }
