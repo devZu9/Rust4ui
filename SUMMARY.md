@@ -23,11 +23,20 @@ UI собирается как конструктор из трёх слоёв:
 - **i18n с первого дня** — `{{key}}` из `locales/*.json`, плюрализация (CLDR), runtime-переключение языка
 - **StateRegistry** — привязка данных к UI (`binding` в JSON → переменная в Rust)
 - **ActionRegistry** — функции по имени из JSON (`action` → Rust-коллбэк)
+- **Padding border-box** — `N`, `[N]`, `[V,H]`, `[T,R,B,L]` — раздвигает элемент, текст внутри
+- **Hot-reload** — все файлы в `demo/` (theme.json + tabs + windows) через file watcher
+- **text_align** — left/center/right для TextField и Button
 - **Обработка ошибок** — никогда не паникует, все ошибки видны в UI (оранжевые/красные заглушки)
+
+## Текущие ограничения
+
+- Row `align` — зарезервирован, всегда прижат к верху
+- `margin` — только верхний отступ через `add_space`
+- Live-reload — только директория `demo/`, не весь проект
 
 ## Виджеты
 
-Column, Row, Label, Button, TextField, Checkbox, RadioGroup, Slider, ComboBox, Separator, FileDrop, Spinner, Shortcut, ColorPicker, Indicator, IconBar, IconButton, Caption, StatusBar, Tabs/Tab, Panel, ScrollArea, Window, Hyperlink, Image, Grid, MenuBar, Menu, MenuItem, SubMenu, Notifications, Tray, DataTable.
+Column, Row, Label, Button, TextField, Checkbox, RadioGroup, Slider, ComboBox, Separator, Spacer, FileDrop, Spinner, Shortcut, ColorPicker, Indicator, IconBar, IconButton, Caption, StatusBar, Tabs/Tab, Panel, ScrollArea, Window, Hyperlink, Image, Grid, MenuBar, Menu, MenuItem, SubMenu, Notifications, Tray, DataTable.
 
 ## Лицензия
 

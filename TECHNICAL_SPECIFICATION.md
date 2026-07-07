@@ -150,7 +150,7 @@ render(root_node)
 | `gap` | float | 0 | Отступ между элементами |
 | `padding` | float | 0 | Внутренний отступ |
 | `wrap` | bool | false | Переносить элементы на новую строку |
-| `align` | string | `"center"` | Выравнивание по вертикали: `"top"`, `"center"`, `"bottom"` |
+| `align` | string | `"top"` | Зарезервировано. Всегда прижат к верху по поперечной оси |
 | `children` | array | `[]` | Дочерние элементы |
 
 ```json
@@ -383,8 +383,11 @@ data/settings.json → windows.confirm_dialog.h → 200.0
 | `type` | string | — | `"Button"` |
 | `text` | string | `""` | Текст кнопки (поддерживает `{{key}}`-ссылку на locale) |
 | `fill` | color | из темы | Цвет фона |
-| `rounding` | float | из темы | Скругление |
+| `height` | float | из темы | Минимальная высота (padding расширяет сверху) |
 | `min_width` | float | из темы | Минимальная ширина |
+| `padding` | float/array | из темы | Внутренний отступ (border-box: добавляется к min_width/height) |
+| `align` | string | `"left"` | Выравнивание текста: `"left"`, `"center"`, `"right"` |
+| `rounding` | float | из темы | Скругление |
 | `action` | string | — | Имя действия при клике |
 | `target` | string | — | Доп. параметр для действия |
 | `enabled` | bool | true | Доступна ли кнопка |
@@ -411,6 +414,11 @@ data/settings.json → windows.confirm_dialog.h → 200.0
 | `binding` | string | — | Ключ в StateRegistry |
 | `hint` | string | `""` | Подсказка в пустом поле |
 | `width` | float | из темы | Ширина |
+| `height` | float | из темы | Минимальная высота (padding расширяет сверху) |
+| `padding` | float/array | из темы | Внутренний отступ (border-box: field_h = max(height, font_h + padding)) |
+| `text_align` | string | `"left"` | Выравнивание текста: `"left"`, `"center"`, `"right"` |
+| `bg_fill` | color | из темы | Цвет заливки поля |
+| `rounding` | float | из темы | Скругление углов |
 | `multiline` | bool | false | Многострочный |
 
 **Режимы (mode):**
@@ -836,7 +844,7 @@ data/settings.json → windows.confirm_dialog.h → 200.0
 | `shadow` | string | `"none"` | Тень: `"none"`, `"small"`, `"medium"`, `"large"` |
 | `rounding` | float / array | из темы | Скругление углов (см. ниже) |
 | `padding` | float / array | из темы | Внутренний отступ (см. ниже) |
-| `margin` | float / array | из темы | Внешний отступ (см. ниже) |
+| `margin` | float / array | из темы | Внешний отступ (только верхний, через add_space) |
 
 **Per-side атрибуты:**
 
@@ -855,14 +863,18 @@ data/settings.json → windows.confirm_dialog.h → 200.0
 | `margin_bottom` | `margin-bottom` |
 | `margin_left` | `margin-left` |
 
-**Shorthand (CSS-порядок: top → right → bottom → left, по часовой):**
+**Shorthand:**
 
 ```
-1 значение:   [t]            → все стороны
-2 значения:   [tb, lr]       → верх/низ, лево/право
-3 значения:   [t, lr, b]     → верх, лево/право, низ
-4 значения:   [t, r, b, l]   → все (по часовой)
+1 значение (number): N           → все стороны одинаково
+1 значение (array): [N]          → все стороны одинаково
+2 значения: [V, H]               → вертикаль, горизонталь
+4 значения: [T, R, B, L]         → top, right, bottom, left
 ```
+
+**Примечание:** `padding` во всех виджетах работает как border-box:
+padding добавляется к указанному размеру, а не вычитается из него.
+`field_h = max(specified_height, content_height + pad_top + pad_bottom)`.
 
 **Примеры:**
 

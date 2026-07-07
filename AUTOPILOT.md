@@ -226,3 +226,81 @@
 - [ ] **7.4** `cargo fmt` — форматирование
 - [ ] **7.5** `git push` — запушено на GitHub
 - [ ] **7.6** Доложить пользователю: «Готово. Проект собран, тесты пройдены, запушен.»
+
+---
+
+## Фаза 8 — Lessons Learned / Исправления
+
+Этот раздел документирует проблемы, обнаруженные и исправленные в ходе разработки,
+чтобы не наступать на те же грабли в будущем.
+
+### 8.1 Button: sizing
+
+- **Не делай:** `let size = vec2(min_width, height); allocate_exact_size(size, ...)`
+  — padding не расширяет кнопку, только ужимает текст внутри.
+- **Делай:** измерь текст через `layout_no_wrap`, вычисли размер как
+  `max(min_width, text_width + pad_left + pad_right)` и
+  `max(min_height, text_height + pad_top + pad_bottom)`.
+- **`height` — минимальная высота**, не точная.
+
+### 8.2 Button: рендер
+
+- **Не делай:** `egui::Button` внутри `allocate_ui_with_layout` или `with_layout`
+  — sub-UI ломает baseline всех следующих виджетов → stair-step эффект.
+- **Делай:** кастомный painter: `ui.painter().rect_filled()` + `galley()`.
+
+### 8.3 Row: `align`
+
+- **Не делай:** `Layout::left_to_right(align_from_node)` в `with_layout`.
+  `Align::Center` заставляет egui центрировать детей в доступной высоте,
+  `min_rect()` включает сдвиг → Column резервирует лишнее место.
+- **Делай:** всегда `Layout::left_to_right(Align::TOP)`.
+  Если нужно вертикальное центрирование — измерь высоту детей и сделай
+  ручной оффсет, без `Align::Center` в Layout.
+
+### 8.4 TextField: padding
+
+- **Не делай:** `Frame::new().fill(bg).inner_margin(pad).show(ui, |ui| ui.add(text_edit))`
+  — `inner_margin` = content-box, padding расширяет Frame наружу.
+  Также не делай ручной `painter().rect_filled()` + `ui.put()` —
+  ломается интерактивность и hover.
+- **Делай:** `TextEdit::margin(pad).frame(true).background_color(bg)`
+  в `ui.add_sized(vec2, text_edit)`. Egui сам рисует фон, контур, hover, focus.
+
+### 8.5 TextField: rounding
+
+- **Не делай:** override `widgets.noninteractive.corner_radius` —
+  TextEdit использует `ui.style().interact(&response)`, который возвращает
+  `widgets.inactive`/`hovered`/`active`.
+- **Делай:** переопределяй все три:
+  ```rust
+  let w = &mut ui.style_mut().visuals.widgets;
+  let prev = (w.inactive.corner_radius, w.hovered.corner_radius, w.active.corner_radius);
+  w.inactive.corner_radius = radius;
+  w.hovered.corner_radius = radius;
+  w.active.corner_radius = radius;
+  // add_sized(...)
+  (w.inactive.corner_radius, w.hovered.corner_radius, w.active.corner_radius) = prev;
+  ```
+
+### 8.6 Hot-reload
+
+- **Не делай:** file watcher на один файл (`demo/theme.json`).
+- **Делай:** watcher на всю директорию с `RecursiveMode::Recursive`.
+  При изменении — перечитывай UI-дерево через новый `RefResolver` + тему.
+
+### 8.7 Theme: merge, не replace
+
+- **Не делай:** `theme.widget.insert(widget, theme_json_section)`
+  — пользователь указал только `width`/`height`/`margin`, остальные ключи
+  из дефолтной темы (bg_fill, inner_margin, rounding) потеряны.
+- **Делай:** merge атрибутов: для каждого ключа в theme.json —
+  вставка/обновление одного ключа, а не замена всей секции.
+  Либо в коде хардкодь явные дефолты для недостающих ключей.
+
+### 8.8 Формат padding/margin
+
+- Единый формат: `N`, `[N]`, `[V, H]`, `[T, R, B, L]`.
+- Никаких `padding_h`/`padding_v` — путает разработчика.
+- `get_padding_hv()` — мёртвый код, не создавай.
+- `parse_margin()` парсит padding → называй `parse_padding()`.
