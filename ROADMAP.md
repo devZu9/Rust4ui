@@ -13,7 +13,7 @@
 ---
 
 <details open>
-<summary><strong>v0.5 — Инструменты</strong></summary>
+<summary><strong>v0.* — Инструменты</strong></summary>
 
 - [ ] **GUI-редактор (ранняя версия)**
   - [ ] Просмотр ui.json с живым превью
@@ -27,7 +27,7 @@
 </details>
 
 <details>
-<summary><strong>v0.4 — Полировка</strong></summary>
+<summary><strong>v0.* — Полировка</strong></summary>
 
 - [ ] **Table**
   
@@ -58,7 +58,7 @@
 </details>
 
 <details>
-<summary><strong>v0.3 — Продвинутые виджеты</strong></summary>
+<summary><strong>v0.* — Продвинутые виджеты</strong></summary>
 
 - [ ] `Image` — загрузка и отображение
 
