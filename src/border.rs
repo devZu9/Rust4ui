@@ -7,6 +7,13 @@ pub enum BorderType {
     Dot,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum BorderPosition {
+    Inside,
+    Center,
+    Outside,
+}
+
 #[derive(Debug, Clone, Copy)]
 pub struct BorderStyle {
     pub width: f32,
@@ -15,6 +22,7 @@ pub struct BorderStyle {
     pub gap: f32,
     pub seg_len: f32,
     pub round_cap: bool,
+    pub position: BorderPosition,
 }
 
 impl BorderStyle {
@@ -80,7 +88,15 @@ pub fn get_border(node: &serde_json::Value, theme: &Theme, widget: &str) -> Bord
             .and_then(|v| v.as_bool()))
         .unwrap_or(true);
 
-    BorderStyle { width: w, color: c, border_type: t, gap: g, seg_len: s, round_cap: rc }
+    let bp = node.get("border_position")
+        .and_then(|v| v.as_str())
+        .or_else(|| theme.widget.get(widget)
+            .and_then(|w| w.get("border_position"))
+            .and_then(|v| v.as_str()))
+        .and_then(parse_border_position)
+        .unwrap_or(BorderPosition::Inside);
+
+    BorderStyle { width: w, color: c, border_type: t, gap: g, seg_len: s, round_cap: rc, position: bp }
 }
 
 // -- shorthand border: [width] / [width, "#color"] / [width, "#color", "type"] --
@@ -165,6 +181,15 @@ fn node_str<'a>(node: &'a serde_json::Value, key: &str) -> Option<&'a str> {
     node.get(key)?.as_str()
 }
 
+fn parse_border_position(s: &str) -> Option<BorderPosition> {
+    match s {
+        "inside" => Some(BorderPosition::Inside),
+        "center" => Some(BorderPosition::Center),
+        "outside" => Some(BorderPosition::Outside),
+        _ => None,
+    }
+}
+
 fn parse_border_type(s: &str) -> Option<BorderType> {
     match s {
         "solid" => Some(BorderType::Solid),
@@ -185,17 +210,25 @@ pub fn draw_border(
 
     match border.border_type {
         BorderType::Solid => {
+            let kind = match border.position {
+                BorderPosition::Inside => egui::StrokeKind::Inside,
+                BorderPosition::Center => egui::StrokeKind::Middle,
+                BorderPosition::Outside => egui::StrokeKind::Outside,
+            };
             ui.painter().rect_stroke(
                 rect, rounding,
                 egui::Stroke::new(border.width, border.color),
-                egui::StrokeKind::Inside,
+                kind,
             );
         }
-        BorderType::Dash => {
-            draw_pattern(ui, rect, rounding, border, true);
-        }
-        BorderType::Dot => {
-            draw_pattern(ui, rect, rounding, border, false);
+        BorderType::Dash | BorderType::Dot => {
+            let inset = match border.position {
+                BorderPosition::Inside => border.width * 0.5,
+                BorderPosition::Center => 0.0,
+                BorderPosition::Outside => -border.width * 0.5,
+            };
+            let r = rect.shrink(inset);
+            draw_pattern(ui, r, rounding, border, border.border_type == BorderType::Dash);
         }
     }
 }
@@ -226,14 +259,12 @@ fn draw_pattern(
     let stroke = egui::Stroke::new(border.width, border.color);
 
     // Подогнанный шаг — все gap'ы и стык одинаковы
-    let n = (total / step).round().max(1.0) as usize;
+    let n = (total / step).floor().max(1.0) as usize;
     let adjusted_step = total / n as f32;
-    let half = seg_len * 0.5;
 
     for i in 0..n {
-        let center = (i as f32 + 0.5) * adjusted_step;
-        let start = (center - half).max(0.0);
-        let end = (center + half).min(total);
+        let start = i as f32 * adjusted_step;
+        let end = (start + seg_len).min(total);
 
         if is_dash {
             let dash_pts = points_along(&pts, &dists, start, end);
@@ -250,7 +281,7 @@ fn draw_pattern(
                 }
             }
         } else {
-            let p = point_at_dist(&pts, &dists, center);
+            let p = point_at_dist(&pts, &dists, start + seg_len * 0.5);
             ui.painter().circle_filled(p, border.width.max(1.5) * 0.5, border.color);
         }
     }
@@ -289,7 +320,7 @@ fn find_index(dists: &[f32], d: f32) -> usize {
     if d <= dists[0] { return 0; }
     let last = dists.len() - 1;
     if d >= dists[last] { return last; }
-    let i = dists.binary_search_by(|&v| v.partial_cmp(&d).unwrap()).unwrap_or_else(|i| i);
+    let i = dists.binary_search_by(|&v| v.partial_cmp(&d).unwrap()).unwrap_or_else(|i| i.saturating_sub(1));
     i.min(last)
 }
 
@@ -350,7 +381,7 @@ fn point_at_dist(pts: &[egui::Pos2], dists: &[f32], d: f32) -> egui::Pos2 {
     };
     let edge_start = dists[i];
     let edge_len = dists[i + 1] - edge_start;
-    if edge_len <= 0.0 { return pts[i]; }
+    if edge_len <= 0.001 { return pts[i]; }
     let t = ((d - edge_start) / edge_len).clamp(0.0, 1.0);
     egui::pos2(pts[i].x + (pts[i + 1].x - pts[i].x) * t, pts[i].y + (pts[i + 1].y - pts[i].y) * t)
 }

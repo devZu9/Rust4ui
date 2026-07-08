@@ -29,7 +29,7 @@
               "type": "TextField",
               "binding": "name",
               "hint": "{{hint.name}}",
-              "width": 156
+              "width": 250
             },
             {
               "type": "Button",

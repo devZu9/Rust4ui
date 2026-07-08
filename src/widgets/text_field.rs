@@ -46,7 +46,12 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .y;
 
     let field_w = (width as f32).max(20.0 + pad_l + pad_r);
-    let field_h = min_height.max(font_h + pad_t + pad_b);
+    let field_h = if multiline {
+        let rows = attr_f64(node, "desired_rows").unwrap_or(4.0);
+        min_height.max(font_h * rows as f32 + pad_t + pad_b)
+    } else {
+        min_height.max(font_h + pad_t + pad_b)
+    };
 
     let mut value = ctx.state.get_string(&binding).unwrap_or("").to_string();
 
@@ -58,7 +63,6 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     } else if multiline {
         egui::TextEdit::multiline(&mut value)
             .hint_text(hint)
-            .desired_rows(4)
             .font(egui::TextStyle::Body)
     } else {
         egui::TextEdit::singleline(&mut value)
@@ -67,34 +71,22 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     };
     let border = get_border(node, &ctx.theme, "TextField");
 
-    text_edit = text_edit.margin(egui::Margin::ZERO).frame(false);
+    text_edit = text_edit.frame(true).background_color(bg);
 
     let radius = egui::CornerRadius::same(rounding);
-    let (rect, rect_resp) = ui.allocate_exact_size(egui::vec2(field_w, field_h), egui::Sense::click());
-    let fill = if rect_resp.hovered() { bg.linear_multiply(1.2) } else { bg };
-    ui.painter().rect_filled(rect, radius, fill);
 
-    let avail_h = field_h - pad_t - pad_b;
-    let content_y = match valign.as_str() {
-        "bottom" => rect.top() + pad_t + (avail_h - font_h),
-        "center" => rect.top() + pad_t + (avail_h - font_h) / 2.0,
-        _ => rect.top() + pad_t,
-    };
-    let content_rect = egui::Rect::from_min_max(
-        egui::pos2(rect.left() + pad_l, content_y),
-        egui::pos2(rect.right() - pad_r, content_y + font_h),
-    );
+    text_edit = text_edit.margin(pad);
 
-    let mut child_ui = ui.new_child(
-        egui::UiBuilder::new()
-            .max_rect(content_rect)
-            .layout(egui::Layout::left_to_right(egui::Align::Center)),
-    );
-    let resp = child_ui.add(text_edit);
-    drop(child_ui);
-
-    draw_border(ui, rect, radius, &border);
-
+    let w = &mut ui.style_mut().visuals.widgets;
+    let prev = (w.inactive.corner_radius, w.hovered.corner_radius, w.active.corner_radius);
+    w.inactive.corner_radius = radius;
+    w.hovered.corner_radius = radius;
+    w.active.corner_radius = radius;
+    let resp = ui.add_sized(egui::vec2(field_w, field_h), text_edit);
+    (ui.style_mut().visuals.widgets.inactive.corner_radius,
+     ui.style_mut().visuals.widgets.hovered.corner_radius,
+     ui.style_mut().visuals.widgets.active.corner_radius) = prev;
+    draw_border(ui, resp.rect, radius, &border);
     if resp.changed() {
         ctx.state.set_string(&binding, value);
     }

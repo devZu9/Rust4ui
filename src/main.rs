@@ -55,11 +55,9 @@ fn load_phosphor_font(egui_ctx: &egui::Context) {
         fonts
             .font_data
             .insert("phosphor".into(), Arc::new(egui::FontData::from_owned(data)));
-        fonts
-            .families
-            .entry(egui::FontFamily::Proportional)
-            .or_default()
-            .insert(0, "phosphor".into());
+        if let Some(proportional) = fonts.families.get_mut(&egui::FontFamily::Proportional) {
+            proportional.push("phosphor".into());
+        }
         egui_ctx.set_fonts(fonts);
         log::info!("Phosphor-шрифт загружен для иконок");
     } else {

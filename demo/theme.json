@@ -18,10 +18,11 @@
   },
   "TextField": {
     "width": 200,
-    "height": 78,
+    "height": 48,
     "rounding": 40,
-    "border": [8, "#303030", "dash", 17, 25],
-    "border_seg_cap": false,
+    "border": [5, "#303030", "dash", 9],
+    "border_position": "center",
+    "border_seg_cap": true,
     "padding": [15, 25],
     "background": "#000000",
     "margin": 0

@@ -1,0 +1,28 @@
+{
+  "type": "Tab",
+  "id": "dash",
+  "title": "{{tab.dash}}",
+  "children": [
+                {
+              "type": "Separator",
+              "space": 8
+            },
+            {
+              "type": "Label",
+              "text": "{{label.multiline}}",
+              "size": 13,
+              "color": "#888888"
+            },
+            {
+              "type": "TextField",
+              "binding": "description",
+              "width": 400,
+	      "fixed": true,
+              "multiline": true
+            },
+            {
+              "type": "Separator",
+              "space": 10
+            }
+  ]
+}
