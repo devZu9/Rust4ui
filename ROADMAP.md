@@ -6,12 +6,9 @@
 
 ## Легенда
 
-| Метка | Статус |
-|-------|--------|
-| 🟢 Ready | Реализовано |
-| 🟡 In Progress | В разработке |
-| 🟠 Planned | Запланировано |
-| ⚪ Backlog | Будет рассмотрено |
+| Метка  | 🟢 Ready    | 🟡 In_Progress | 🟠 Planned    | ⚪ Backlog          |
+| ------ | ----------- | -------------- | ------------- | ------------------ |
+| Статус | Реализовано | В__разработке  | Запланировано | Будет__рассмотрено |
 
 ---
 
@@ -33,20 +30,28 @@
 <summary><strong>v0.4 — Полировка</strong></summary>
 
 - [ ] **Table**
+  
   - [ ] `<DataTable>` на базе egui_extras::TableBuilder
   - [ ] Сортировка колонок
+
 - [ ] **Валидация JSON при старте**
+  
   - [ ] Проверка, что все binding есть в state
   - [ ] Проверка, что все action зарегистрированы
   - [ ] Визуальный отчёт об ошибках
+
 - [ ] **10 встроенных тем**
+
 - [ ] **System Tray** (фича `tray`)
+  
   - [ ] Иконка в трее + контекстное меню
   - [ ] Динамическая смена иконки + анимация
   - [ ] Windows (Shell), macOS (NSStatusBar), Linux (libappindicator)
+
 - [ ] Бенчмарки производительности
 
 - [x] **Live-reload** 🟢 *(07.07.2026)*
+  
   - [x] File watcher (notify crate) на всю `demo/` директорию
   - [x] Авто-перезагрузка UI-дерева + темы
 
@@ -56,20 +61,28 @@
 <summary><strong>v0.3 — Продвинутые виджеты</strong></summary>
 
 - [ ] `Image` — загрузка и отображение
+
 - [ ] `ProgressBar` — индикатор прогресса
+
 - [ ] **Темы**
+  
   - [ ] `themes/nord.json`
   - [ ] `themes/gruvbox.json`
+
 - [ ] **Локали**
+  
   - [ ] `locales/fr.json` — французский
   - [ ] `locales/pl.json` — польский (с plural-правилами)
   - [ ] `locales/uk.json` — украинский (с plural-правилами)
 
 - [x] **Виджеты** 🟢 *(06.07.2026)*
+  
   - [x] `Hyperlink`
   - [x] `Grid`
   - [x] `Window`
+
 - [x] **Layout** 🟢 *(07.07.2026)*
+  
   - [x] `Padding` / `Margin` на любом контейнере
   - [x] `align` для Column (left/center/right)
 
@@ -79,34 +92,56 @@
 <summary><strong>v0.2 — Расширение возможностей (текущая)</strong></summary>
 
 - [ ] **Code Generator** (feature `gen`)
+  
   - [ ] Парсер JSON → raw egui Rust-код
   - [ ] CLI-утилита `rust4ui-codegen`
+
 - [ ] **WidgetRegistry** — регистрация кастомных виджетов извне
+  
   - [ ] `WidgetRegistry` + `register_widgets!` макрос
+
 - [ ] **Локали**
+  
   - [ ] `locales/de.json` — немецкий
+
 - [ ] `examples/simple` — минимальный: 3 виджета, 1 action, 1 binding
 
+- [ ] **ScrollBar стилизация** — толщина, цвет, отступы (из SESSIONS.md)
+- [ ] **ScrollArea: отступ текста от рамки** — сейчас текст обрезается строго по рамке, нужен внутренний padding
+- [ ] **Кастомизированная рамка (Custom Frame)** — hover/focus с настройкой цвета, формы, толщины через тему; замена `frame(true)` под свою систему
+
 - [x] **Виджеты** 🟢 *(06.07.2026)*
+  
   - [x] `ComboBox`
   - [x] `Slider`
   - [x] `ScrollArea`
   - [x] `Tabs` / `Tab`
   - [x] `Panel`
   - [x] `Window`
+
 - [x] **Контейнеры** 🟢 *(06.07.2026)*
+  
   - [x] `Row` с `wrap: true`
+
 - [x] **Меню и навигация** 🟢 *(06.07.2026)*
+  
   - [x] Контекстное меню
   - [x] MenuBar + Menu
   - [x] Toast & Notifications
+
 - [x] **Темы** 🟢 *(06.07.2026)*
+  
   - [x] `themes/dj_green.json`
+
 - [x] **Border-система** 🟢 *(07.07.2026)*
+  
   - [x] `border.rs` — solid/dash/dot, gap, seg_len, shorthand
   - [x] `border_seg_cap`, `border_position`
+
 - [x] **JSON-комментарии** 🟢 *(07.07.2026)*
+
 - [x] **Multiline fixed** 🟢 *(09.07.2026)*
+  
   - [x] `allocate_ui_at_rect(rect, ScrollArea.show(...))` — ScrollArea внутри rect
   - [x] Фон и бордюр едины, hover/focus работают
 
