@@ -15,11 +15,99 @@
 
 ---
 
-## v0.1 — MVP (Ядро)
+<details open>
+<summary><strong>v0.5 — Инструменты</strong></summary>
 
-Цель: JSON → живой UI в egui-окне.
+- [ ] **GUI-редактор (ранняя версия)**
+  - [ ] Просмотр ui.json с живым превью
+  - [ ] Drag & drop из палитры на холст
+  - [ ] Inspector свойств выбранного элемента
+- [ ] **Экспорт**
+  - [ ] JSON → standalone .rs файл с raw egui
+- [ ] **Плагины (Rust-крейты)**
+  - [ ] Регистрация кастомных тем
 
-**🔴 Ближайшие задачи (прямо сейчас):** базовая реализация UiNode + парсер JSON, Theme, StateRegistry, ActionRegistry, Renderer, LocaleRegistry, публикация на [crates.io](https://crates.io).
+</details>
+
+<details>
+<summary><strong>v0.4 — Полировка</strong></summary>
+
+- [x] **Live-reload** 🟢
+  - [x] File watcher (notify crate) на всю `demo/` директорию 🟢
+  - [x] Авто-перезагрузка UI-дерева + темы 🟢
+- [ ] **Table**
+  - [ ] `<DataTable>` на базе egui_extras::TableBuilder
+  - [ ] Сортировка колонок
+- [ ] **Валидация JSON при старте**
+  - [ ] Проверка, что все binding есть в state
+  - [ ] Проверка, что все action зарегистрированы
+  - [ ] Визуальный отчёт об ошибках
+- [ ] **10 встроенных тем**
+- [ ] **System Tray** (фича `tray`)
+  - [ ] Иконка в трее + контекстное меню (MenuItem, Checkbox, RadioGroup, SubMenu)
+  - [ ] Динамическая смена иконки + анимация
+  - [ ] Windows (Shell), macOS (NSStatusBar), Linux (libappindicator)
+- [ ] Бенчмарки производительности
+
+</details>
+
+<details>
+<summary><strong>v0.3 — Продвинутые виджеты</strong></summary>
+
+- [x] **Виджеты** 🟢
+  - [x] `Hyperlink` 🟢
+  - [x] `Grid` 🟢
+  - [x] `Window` 🟢
+  - [ ] `Image` — загрузка и отображение
+  - [ ] `ProgressBar` — индикатор прогресса
+- [x] **Layout** 🟢
+  - [x] `Padding` / `Margin` на любом контейнере 🟢
+  - [x] `align` для Column (left/center/right) 🟢
+- [ ] **Темы**
+  - [ ] `themes/nord.json`
+  - [ ] `themes/gruvbox.json`
+- [ ] **Локали**
+  - [ ] `locales/fr.json` — французский
+  - [ ] `locales/pl.json` — польский (с plural-правилами)
+  - [ ] `locales/uk.json` — украинский (с plural-правилами)
+
+</details>
+
+<details open>
+<summary><strong>v0.2 — Расширение возможностей (текущая)</strong></summary>
+
+- [x] **Виджеты** 🟢
+  - [x] `ComboBox` 🟢
+  - [x] `Slider` 🟢
+  - [x] `ScrollArea` 🟢
+  - [x] `Tabs` / `Tab` 🟢
+  - [x] `Panel` 🟢
+  - [x] `Window` 🟢
+- [x] **Контейнеры** 🟢
+  - [x] `Row` с `wrap: true` 🟢
+- [x] **Border-система** 🟢
+  - [x] `border.rs` — solid/dash/dot, gap, seg_len, shorthand 🟢
+  - [x] `border_seg_cap`, `border_position` 🟢
+- [x] **Меню и навигация** 🟢
+  - [x] Контекстное меню 🟢
+  - [x] MenuBar + Menu 🟢
+  - [x] Toast & Notifications 🟢
+- [x] **Темы** 🟢
+  - [x] `themes/dj_green.json` 🟢
+- [x] **JSON-комментарии** 🟢
+- [x] **Multiline fixed** 🟢
+- [ ] **Code Generator** (feature `gen`)
+  - [ ] Парсер JSON → raw egui Rust-код
+  - [ ] CLI-утилита `rust4ui-codegen`
+- [ ] **WidgetRegistry** — регистрация кастомных виджетов извне
+  - [ ] `WidgetRegistry` + `register_widgets!` макрос
+- [ ] **Локали**
+  - [ ] `locales/de.json` — немецкий
+
+</details>
+
+<details>
+<summary><strong>v0.1 — MVP (Ядро)</strong></summary>
 
 - [x] **Ядро рендерера** 🟢
   - [x] Базовый тип `UiNode` + парсинг JSON 🟢
@@ -81,99 +169,7 @@
 - [x] **OpenCode-скиллы** 🟢
 - [x] Документация README.md + ТЗ 🟢
 
----
-
-## v0.2 — Расширение возможностей
-
-- [x] **Виджеты** 🟢
-  - [x] `ComboBox` 🟢
-  - [x] `Slider` 🟢
-  - [x] `ScrollArea` 🟢
-  - [x] `Tabs` / `Tab` 🟢
-  - [x] `Panel` 🟢
-  - [x] `Window` 🟢
-- [x] **Контейнеры** 🟢
-  - [x] `Row` с `wrap: true` 🟢
-- [ ] **Code Generator** (feature `gen`)
-  - [ ] Парсер JSON → raw egui Rust-код
-  - [ ] CLI-утилита `rust4ui-codegen`
-- [ ] **WidgetRegistry** — регистрация кастомных виджетов извне
-  - [ ] `WidgetRegistry` + `register_widgets!` макрос
-- [x] **Меню и навигация** 🟢
-  - [x] Контекстное меню 🟢
-  - [x] MenuBar + Menu 🟢
-  - [x] Toast & Notifications 🟢
-- [x] **Темы** 🟢
-  - [x] `themes/dj_green.json` 🟢
-- [ ] **Локали**
-  - [ ] `locales/de.json` — немецкий
-
----
-
-## v0.3 — Продвинутые виджеты
-
-- [x] **Виджеты** 🟢
-  - [x] `Hyperlink` 🟢
-  - [x] `Grid` 🟢
-  - [x] `Window` 🟢
-  - [ ] `Image` — загрузка и отображение
-  - [ ] `ProgressBar` — индикатор прогресса
-- [x] **Layout** 🟢
-  - [x] `Padding` / `Margin` на любом контейнере 🟢
-  - [x] `align` для Column (left/center/right) 🟢
-- [ ] **Темы**
-  - [ ] `themes/nord.json`
-  - [ ] `themes/gruvbox.json`
-- [ ] **Локали**
-  - [ ] `locales/fr.json` — французский
-  - [ ] `locales/pl.json` — польский (с plural-правилами)
-  - [ ] `locales/uk.json` — украинский (с plural-правилами)
-
----
-
-## v0.4 — Полировка
-
-- [x] **Live-reload** 🟢
-  - [x] File watcher (notify crate) на всю `demo/` директорию 🟢
-  - [x] Авто-перезагрузка UI-дерева + темы 🟢
-- [ ] **Table**
-  - [ ] `<DataTable>` на базе egui_extras::TableBuilder
-  - [ ] Сортировка колонок
-- [ ] **Валидация JSON при старте**
-  - [ ] Проверка, что все binding есть в state
-  - [ ] Проверка, что все action зарегистрированы
-  - [ ] Визуальный отчёт об ошибках
-- [ ] **10 встроенных тем**
-- [ ] **System Tray** (фича `tray`)
-  - [ ] Иконка в трее + контекстное меню (MenuItem, Checkbox, RadioGroup, SubMenu)
-  - [ ] Динамическая смена иконки + анимация
-  - [ ] Windows (Shell), macOS (NSStatusBar), Linux (libappindicator)
-- [ ] Бенчмарки производительности
-
----
-
-## v0.5 — Инструменты
-
-- [ ] **GUI-редактор (ранняя версия)**
-  - [ ] Просмотр ui.json с живым превью
-  - [ ] Drag & drop из палитры на холст
-  - [ ] Inspector свойств выбранного элемента
-- [ ] **Экспорт**
-  - [ ] JSON → standalone .rs файл с raw egui
-- [ ] **Плагины (Rust-крейты)**
-  - [ ] Регистрация кастомных тем
-
----
-
-## v1.0 — Стабильный релиз
-
-- [ ] Стабильное API (semver 1.0)
-- [ ] Полное покрытие тестами
-- [ ] CI/CD (GitHub Actions)
-- [ ] 20+ встроенных тем
-- [ ] Документация на docs.rs
-- [ ] Примеры для eframe, bevy_egui, winit+wgpu
-- [ ] WASM-поддержка
+</details>
 
 ---
 
