@@ -1,7 +1,6 @@
 # Changelog
 
-<details open>
-<summary><strong>[0.2.1] — multiline fixed</strong></summary>
+## [0.2.1]
 
 ### Исправлено
 - **Multiline TextField с фиксированной высотой (fixed=true)** — долгая проблема, на решение которой ушло почти два дня многочисленных итераций. Поле multiline расширялось вниз при добавлении строк, не имея возможности зафиксировать высоту и включить прокрутку. Каждая попытка внедрить ScrollArea ломала визуал: фон и рамка «ехали» отдельно от текста, hover/focus переставали работать, ширина поля растягивалась на всё окно.
@@ -16,10 +15,7 @@
 
   Ключевое отличие от неудачных попыток: ScrollArea обёрнут в `allocate_ui_at_rect`, а не напрямую вызван после `allocate_exact_size`, что исключает разрыв между фоном и областью прокрутки.
 
-</details>
-
-<details>
-<summary><strong>[0.2.0] — border-система, JSON-комментарии, valign</strong></summary>
+## [0.2.0]
 
 ### Добавлено
 - **Border-система** — единый модуль `border.rs` с solid/dash/dot, gap, seg_len, border_seg_cap, border_position, shorthand-массивы, theme-поддержка
@@ -42,10 +38,7 @@
 - **`stroke_width` / `stroke_color` → `border` / `border_width` / `border_color`** — удалены полностью
 - **Phosphor-шрифт** — отключён как основной (конец стека), только для PUA-иконок
 
-</details>
-
-<details>
-<summary><strong>[0.1.0] — MVP</strong></summary>
+## [0.1.0]
 
 ### Исправлено
 - **Button: устранён stair-step эффект** — переписан рендер с `egui::Button` на кастомный `painter().rect_filled()` + `galley`.
@@ -71,5 +64,3 @@
 - **Контур TextField** — 1px `#444455`.
 - **Hover-подсветка TextField** — `bg.linear_multiply(1.2)`.
 - **CHANGELOG.md** — этот файл.
-
-</details>
