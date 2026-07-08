@@ -69,24 +69,45 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
             .hint_text(hint)
             .font(egui::TextStyle::Body)
     };
+    let fixed = attr_bool(node, "fixed").unwrap_or(true);
     let border = get_border(node, &ctx.theme, "TextField");
-
-    text_edit = text_edit.frame(true).background_color(bg);
-
     let radius = egui::CornerRadius::same(rounding);
-
-    text_edit = text_edit.margin(pad);
+    let scroll_id = egui::Id::new(format!("__scroll_{binding}"));
 
     let w = &mut ui.style_mut().visuals.widgets;
     let prev = (w.inactive.corner_radius, w.hovered.corner_radius, w.active.corner_radius);
     w.inactive.corner_radius = radius;
     w.hovered.corner_radius = radius;
     w.active.corner_radius = radius;
-    let resp = ui.add_sized(egui::vec2(field_w, field_h), text_edit);
+
+    let (resp, border_rect) = if multiline && fixed {
+        let (rect, _) = ui.allocate_exact_size(egui::vec2(field_w, field_h), egui::Sense::click());
+        ui.painter().rect_filled(rect, radius, bg);
+        let inner_resp = ui.allocate_ui_at_rect(rect, |ui| {
+            egui::ScrollArea::vertical()
+                .id_source(scroll_id)
+                .max_height(field_h)
+                .auto_shrink([false; 2])
+                .show(ui, |ui| {
+                    ui.add(text_edit.frame(false).margin(pad).desired_width(field_w))
+                })
+                .inner
+        }).inner;
+        if inner_resp.has_focus() {
+            ui.painter().rect_stroke(rect, radius, egui::Stroke::new(2.0, egui::Color32::from_rgb(0x66, 0x99, 0xFF)), egui::StrokeKind::Inside);
+        }
+        (inner_resp, rect)
+    } else {
+        let te = text_edit.frame(true).background_color(bg).margin(pad);
+        let r = ui.add_sized(egui::vec2(field_w, field_h), te);
+        let rr = r.rect;
+        (r, rr)
+    };
+
     (ui.style_mut().visuals.widgets.inactive.corner_radius,
      ui.style_mut().visuals.widgets.hovered.corner_radius,
      ui.style_mut().visuals.widgets.active.corner_radius) = prev;
-    draw_border(ui, resp.rect, radius, &border);
+    draw_border(ui, border_rect, radius, &border);
     if resp.changed() {
         ctx.state.set_string(&binding, value);
     }
