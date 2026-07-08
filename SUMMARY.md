@@ -9,7 +9,7 @@ UI собирается как конструктор из трёх слоёв:
 | Слой | Формат | Описание |
 |------|--------|----------|
 | `ui.json` | JSON | Структура и виджеты (Column, Row, Button, Tabs, ...) |
-| `theme.json` | JSON | Цвета, отступы, скругления |
+| `theme.json` | JSON | Цвета, отступы, скругления, обводки |
 | actions | Rust-код | Логика: обработчики кликов, связь с данными |
 
 ## Два режима рендеринга
@@ -19,6 +19,10 @@ UI собирается как конструктор из трёх слоёв:
 
 ## Ключевые фичи
 
+- **Border-система** — solid/dash/dot, gap, seg_len, `border_position`, `border_seg_cap`, shorthand-массивы `[width, color, type, gap, seg_len]`, поддержка тем
+- **JSON-комментарии** — `//` и `/* */` во всех загрузчиках
+- **valign для TextField** — top / center / bottom
+- **Multiline fixed** — фиксированная высота с прокруткой (`fixed: true`/`false`)
 - **Дизайн-словарь** — имена виджетов вдохновлены проектом [EFx](https://github.com/ZhukMax/efx), но технической зависимости нет
 - **i18n с первого дня** — `{{key}}` из `locales/*.json`, плюрализация (CLDR), runtime-переключение языка
 - **StateRegistry** — привязка данных к UI (`binding` в JSON → переменная в Rust)
@@ -36,7 +40,18 @@ UI собирается как конструктор из трёх слоёв:
 
 ## Виджеты
 
-Column, Row, Label, Button, TextField, Checkbox, RadioGroup, Slider, ComboBox, Separator, Spacer, FileDrop, Spinner, Shortcut, ColorPicker, Indicator, IconBar, IconButton, Caption, StatusBar, Tabs/Tab, Panel, ScrollArea, Window, Hyperlink, Image, Grid, MenuBar, Menu, MenuItem, SubMenu, Notifications, Tray, DataTable.
+Column, Row, Label, Button, TextField (text/password/number/multiline), Checkbox, RadioGroup, Slider, ComboBox, Separator, Spacer, FileDrop, Spinner, Shortcut, ColorPicker, Indicator, IconBar, IconButton, Caption, StatusBar, Tabs/Tab, Panel, ScrollArea, Window, Hyperlink, Image, Grid, MenuBar, Menu, MenuItem, SubMenu, Notifications, Tray, DataTable.
+
+## Документация
+
+| Файл | О чём |
+|------|-------|
+| `ROADMAP.md` | План развития (v0.1 → v0.2 → v0.*) |
+| `CHANGELOG.md` | История изменений по версиям |
+| `SESSIONS.md` | Логи сессий с описанием попыток и решений |
+| `AGENTS.md` | Инструкции для ИИ-ассистентов |
+| `TECHNICAL_SPECIFICATION.md` | Полная техническая спецификация |
+| `.opencode/skills/session-log/SKILL.md` | Скилл ведения сессий |
 
 ## Лицензия
 
