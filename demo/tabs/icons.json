@@ -1,0 +1,601 @@
+{
+  "type": "Tab",
+  "id": "icons",
+  "title": "{{tab.icons}}",
+  "children": [
+    {
+      "type": "ScrollArea",
+      "axis": "vertical",
+      "max_height": 600,
+      "children": [
+        {
+          "type": "Column",
+          "gap": 2,
+          "padding": 8,
+          "children": [
+            {
+              "type": "Label",
+              "text": "Все 1512 иконок Phosphor",
+              "size": 16,
+              "bold": true
+            },
+            {
+              "type": "Separator",
+              "space": 8
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "                              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            },
+            {
+              "type": "Label",
+              "text": "              ",
+              "size": 18,
+              "color": "#CCCCCC"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

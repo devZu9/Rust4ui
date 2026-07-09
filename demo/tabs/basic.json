@@ -71,6 +71,7 @@
               "children": [
                 {
                   "type": "Button",
+                  "icon": "floppy-disk",
                   "text": "{{btn.primary}}",
                   "action": "click",
                   "target": "primary",
@@ -79,6 +80,7 @@
                 },
                 {
                   "type": "Button",
+                  "icon": "x-circle",
                   "text": "{{btn.danger}}",
                   "action": "click",
                   "target": "danger",
@@ -87,6 +89,7 @@
                 },
                 {
                   "type": "Button",
+                  "icon": "check",
                   "text": "{{btn.success}}",
                   "action": "click",
                   "target": "success",

@@ -11,3 +11,12 @@ Cargo.lock
 .DS_Store
 Thumbs.db
 
+# Полная коллекция Phosphor Icons (SVG, PNG, шрифты) ~200 MB
+# Скачать: https://github.com/phosphor-icons/phosphor-icons
+/icons/phosphor-icons/
+# Временные скрипты
+__fix_icons.py
+
+# mdBook generated output
+/docs/book/
+

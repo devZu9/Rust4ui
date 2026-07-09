@@ -1,4 +1,5 @@
 use crate::actions::ActionRegistry;
+use crate::icons::IconRegistry;
 use crate::locale::LocaleRegistry;
 use crate::state::StateRegistry;
 use crate::theme::Theme;
@@ -8,6 +9,7 @@ pub struct RenderCtx {
     pub state: StateRegistry,
     pub actions: ActionRegistry,
     pub locale: LocaleRegistry,
+    pub icons: IconRegistry,
 }
 
 impl RenderCtx {
@@ -17,6 +19,7 @@ impl RenderCtx {
             state: StateRegistry::new(),
             actions: ActionRegistry::new(),
             locale: LocaleRegistry::default(),
+            icons: IconRegistry::new(),
         }
     }
 

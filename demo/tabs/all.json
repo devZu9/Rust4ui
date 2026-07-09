@@ -8,6 +8,6 @@
     { "$ref": "windows.json" },
     { "$ref": "i18n.json" },
     { "$ref": "menus.json" },
-    { "$ref": "dash.json" }
+    { "$ref": "icons.json" }
   ]
 }

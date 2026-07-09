@@ -5,10 +5,15 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     widget_margin(ui, &ctx.theme, "Button");
 
     let raw_text = attr_str(node, "text").unwrap_or("");
-    let text = resolve_text(raw_text, ctx);
+    let icon_name = attr_str(node, "icon");
+    let text = if let Some(icon) = icon_name.and_then(|n| ctx.icons.resolve(n)) {
+        format!("{}  {}", icon, resolve_text(raw_text, ctx))
+    } else {
+        resolve_text(raw_text, ctx)
+    };
 
-    if raw_text.is_empty() {
-        log::warn!("Button: отсутствует атрибут 'text'");
+    if raw_text.is_empty() && icon_name.is_none() {
+        log::warn!("Button: отсутствует атрибут 'text' и 'icon'");
     }
 
     let enabled = attr_bool(node, "enabled").unwrap_or(true);
@@ -55,8 +60,15 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let size = egui::vec2(desired_w, desired_h);
     let (rect, resp) = ui.allocate_exact_size(size, egui::Sense::click());
 
-    let bg = if resp.hovered() {
-        ctx.theme.w_color("Button", "hover_fill", egui::Color32::from_rgb(0x44, 0x44, 0x55))
+    let bg = if resp.hovered() && resp.is_pointer_button_down_on() {
+        attr_str(node, "click_fill")
+            .and_then(crate::theme::parse_hex_color)
+            .or_else(|| ctx.theme.w_color_opt("Button", "click_fill"))
+            .unwrap_or_else(|| ctx.theme.w_color("Button", "hover_fill", egui::Color32::from_rgb(0x44, 0x44, 0x55)))
+    } else if resp.hovered() {
+        attr_str(node, "hover_fill")
+            .and_then(crate::theme::parse_hex_color)
+            .unwrap_or_else(|| ctx.theme.w_color("Button", "hover_fill", egui::Color32::from_rgb(0x44, 0x44, 0x55)))
     } else if resp.has_focus() {
         ctx.theme.w_color("Button", "focus_fill", egui::Color32::from_rgb(0x33, 0x44, 0x66))
     } else {
@@ -64,10 +76,28 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     };
 
     let actual_fill = if enabled { bg } else { egui::Color32::from_gray(60) };
-    let actual_text = if enabled { text_color } else { egui::Color32::from_gray(100) };
+    let actual_text = if enabled {
+        if resp.hovered() && resp.is_pointer_button_down_on() {
+            attr_str(node, "click_text_color")
+                .and_then(crate::theme::parse_hex_color)
+                .or_else(|| ctx.theme.w_color_opt("Button", "click_text_color"))
+                .unwrap_or(text_color)
+        } else if resp.hovered() {
+            attr_str(node, "hover_text_color")
+                .and_then(crate::theme::parse_hex_color)
+                .unwrap_or(text_color)
+        } else {
+            text_color
+        }
+    } else {
+        egui::Color32::from_gray(100)
+    };
 
-    ui.painter().rect_filled(rect, egui::CornerRadius::same(rounding as u8), actual_fill);
-    draw_border(ui, rect, egui::CornerRadius::same(rounding as u8), &border);
+    let rounding_cr = egui::CornerRadius::same(rounding as u8);
+    let shadow = crate::border::get_shadow(node, &ctx.theme, "Button");
+    crate::border::draw_shadow(ui, rect, rounding_cr, &shadow);
+    ui.painter().rect_filled(rect, rounding_cr, actual_fill);
+    draw_border(ui, rect, rounding_cr, &border);
 
     let inner = egui::Rect::from_min_max(
         egui::pos2(rect.left() + pad_l, rect.top() + pad_t),

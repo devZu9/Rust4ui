@@ -61,6 +61,7 @@ impl DemoApp {
             state,
             actions: rust4ui::ActionRegistry::new(),
             locale,
+            icons: rust4ui::IconRegistry::new(),
         };
 
         let actions = &mut ctx.actions;

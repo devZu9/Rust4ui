@@ -153,6 +153,7 @@ impl DemoApp {
             state,
             actions: rust4ui::ActionRegistry::new(),
             locale,
+            icons: rust4ui::IconRegistry::new(),
         };
 
         log::info!("Регистрация действий...");

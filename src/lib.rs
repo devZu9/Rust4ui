@@ -1,6 +1,7 @@
 mod actions;
 pub mod border;
 pub mod contrast;
+pub mod icons;
 mod locale;
 pub mod logger;
 mod node;
@@ -13,6 +14,7 @@ mod validator;
 mod widgets;
 
 pub use actions::{ActionCtx, ActionRegistry};
+pub use icons::IconRegistry;
 pub use locale::LocaleRegistry;
 pub use node::{strip_json_comments, UiNode};
 pub use ref_resolver::RefResolver;

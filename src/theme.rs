@@ -82,6 +82,14 @@ impl Theme {
             .unwrap_or(default)
     }
 
+    pub fn w_color_opt(&self, widget: &str, key: &str) -> Option<egui::Color32> {
+        self.widget
+            .get(widget)
+            .and_then(|v| v.get(key))
+            .and_then(|v| v.as_str())
+            .and_then(parse_hex_color)
+    }
+
     pub fn w_str2(&self, node: &serde_json::Value, widget: &str, key: &str) -> Option<String> {
         node.get(key)
             .and_then(|v| v.as_str())

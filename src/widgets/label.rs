@@ -5,7 +5,12 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &RenderCtx) {
     widget_margin(ui, &ctx.theme, "Label");
 
     let raw_text = attr_str(node, "text").unwrap_or("");
-    let text = resolve_text(raw_text, ctx);
+    let icon_name = attr_str(node, "icon");
+    let text = if let Some(icon) = icon_name.and_then(|n| ctx.icons.resolve(n)) {
+        format!("{} {}", icon, resolve_text(raw_text, ctx))
+    } else {
+        resolve_text(raw_text, ctx)
+    };
 
     let size = attr_f64(node, "size").unwrap_or(13.0);
     let bold = attr_bool(node, "bold").unwrap_or(false);

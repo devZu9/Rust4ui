@@ -35,6 +35,30 @@ impl BorderStyle {
     }
 }
 
+/// Парсит тень из узла и темы.
+/// Возвращает (offset_x, offset_y, blur, color).
+pub fn get_shadow(node: &serde_json::Value, _theme: &Theme, _widget: &str) -> (f32, f32, f32, egui::Color32) {
+    let offset_x = node.get("shadow_offset_x")
+        .and_then(|v| v.as_f64()).unwrap_or(2.0) as f32;
+    let offset_y = node.get("shadow_offset_y")
+        .and_then(|v| v.as_f64()).unwrap_or(2.0) as f32;
+    let blur = node.get("shadow_blur")
+        .and_then(|v| v.as_f64()).unwrap_or(4.0) as f32;
+    let color = node.get("shadow_color")
+        .and_then(|v| v.as_str())
+        .and_then(crate::theme::parse_hex_color)
+        .unwrap_or_else(|| egui::Color32::from_rgba_premultiplied(0, 0, 0, 40));
+    (offset_x, offset_y, blur, color)
+}
+
+/// Рисует тень под прямоугольником.
+pub fn draw_shadow(ui: &egui::Ui, rect: egui::Rect, rounding: egui::CornerRadius, shadow: &(f32, f32, f32, egui::Color32)) {
+    let (off_x, off_y, _blur, color) = *shadow;
+    if color.a() == 0 { return; }
+    let shadow_rect = rect.translate(egui::vec2(off_x, off_y));
+    ui.painter().rect_filled(shadow_rect, rounding, color);
+}
+
 /// Парсит border из узла и темы.
 /// Приоритет: 1. явные ключи на узле  2. border-массив на узле
 ///            3. явные ключи в теме    4. border-массив в теме   5. дефолт (0)

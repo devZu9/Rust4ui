@@ -1,0 +1,10 @@
+[book]
+title = "Rust4ui"
+authors = []
+language = "ru"
+
+[output.html]
+preferred-dark-theme = "ayu"
+git-repository-url = "https://github.com/ZhukMax/Rust4ui"
+edit-url-template = "https://github.com/ZhukMax/Rust4ui/edit/main/docs/src/{path}"
+site-url = "/Rust4ui/"

@@ -33,6 +33,7 @@
             },
             {
               "type": "Button",
+              "icon": "pencil-simple",
               "text": "{{btn.greeting}}",
               "action": "greeting",
               "min_width": 180
@@ -171,6 +172,7 @@
               "children": [
                 {
                   "type": "Button",
+                  "icon": "check",
                   "text": "{{btn.apply}}",
                   "action": "apply",
                   "fill": "#3366CC",
@@ -178,6 +180,7 @@
                 },
                 {
                   "type": "Button",
+                  "icon": "arrows-clockwise",
                   "text": "{{btn.reset}}",
                   "action": "reset",
                   "min_width": 120

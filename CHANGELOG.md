@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.3.0] — 2026-07-09
+
+### Добавлено
+- **IconRegistry** — 1512 иконок Phosphor, `resolve()` / `resolve_glyph()`, вкомпилирован в бинарь
+- **icon_size** — атрибут для IconButton, size для MenuItem (+ тема)
+- **Hover/Click-стейты** — `hover_fill`, `click_fill`, `hover_text_color`, `click_text_color` на Button и IconButton
+- **Тени** — `shadow_offset_x/y`, `shadow_blur`, `shadow_color` на Button
+- **Галерея иконок** — отдельная вкладка со всеми 1512 иконками (через Label, без тормозов)
+- **Документация mdBook** — 14 глав, `___docs.bat`, поиск, навигация
+
+### Изменено
+- `icons/phosphor.ttf` заменён на официальный из коллекции Phosphor Icons (2024)
+- `icons/icons.json` перегенерирован — все 1512 Codepoint'ов соответствуют TTF
+- `icons/phosphor-icons/` добавлен в `.gitignore`
+- IconButton — упрощён рендер, hover/click-фон рисуется поверх кнопки
+
+### Исправлено
+- Ключ локали `tab.icons` отсутствовал в `en.json`
+- `AGENTS.md` — добавлено правило «Локали-ключи — во все файлы»
+
 ## [0.2.1]
 
 ### Исправлено

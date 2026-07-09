@@ -1,6 +1,39 @@
 # Sessions — логи сессий
 
-## Сессия 09.07 — multiline fixed
+## Сессия 09.07 — v0.3 иконки и документация
+- 2026-07-09 (10:35) - начата
+- 2026-07-09 (12:49) - завершена
+
+**Задача:** интеграция Phosphor-иконок — отображение иконок из `phosphor.ttf`, система иконок (IconButton, IconBar, иконки в элементах), решение вопросов по шрифту.
+
+### Статус
+- [x] IconRegistry — парсинг icons.json, резолв имени → codepoint
+- [x] IconRegistry вкомпилирован в бинарь (include_str!)
+- [x] RenderCtx.icons доступен всем виджетам
+- [x] IconButton — иконки отображаются (глифы, не текст)
+- [x] Button + icon — глиф перед текстом
+- [x] Label + icon — глиф перед текстом
+- [x] MenuItem + icon — глиф перед текстом
+- [x] Demo: иконки на MenuBar (новый/открыть/экспорт/отмена)
+- [x] Demo: иконки на кнопках (primary/danger/success)
+- [x] Demo: иконки на Apply/Reset/Greeting
+- [x] 5 unit-тестов IconRegistry
+- [x] Phosphor TTF заменён на официальный (Fonts/regular/Phosphor.ttf)
+- [x] icons.json перегенерирован — 1512 реальных иконок Phosphor (38 KB)
+- [x] icons/phosphor-icons/ добавлен в .gitignore
+- [x] Demo — все иконки обновлены на реальные Phosphor-имена
+- [x] IconRegistry — тест на все 1512, тест на 60+ common иконок
+- [x] Отдельная вкладка «Иконки» со всеми 1512 иконками Phosphor (со скроллом)
+- [ ] SVG-текстуры (SVGs/, SVGs Flat/) — отложено, помечено в коде
+- [ ] IconBar anchor (start/center/end) — отложено
+- [ ] Separator в IconBar — отложено
+- [ ] Иконки в меню при наведении — баг MenuBar (см. ROADMAP)
+
+---
+
+## Сессия 06.07 — multiline fixed
+- 2026-07-06 (11:07) - начата
+- 2026-07-09 (02:02) - завершена
 
 **Задача:** починить `fixed` для многострочного TextField (фиксированная высота + прокрутка при переполнении).
 
