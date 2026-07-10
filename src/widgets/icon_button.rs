@@ -56,7 +56,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let (pad_l, pad_r, pad_t, pad_b) = (pad.left as f32, pad.right as f32, pad.top as f32, pad.bottom as f32);
 
     let button_width = (maket.size().x + pad_l + pad_r).max(button_size);
-    let button_height = (maket.size().y + pad_t + pad_b).max(button_size);
+    let button_height = (icon_size + pad_t + pad_b).max(button_size);
 
     let size = egui::vec2(button_width, button_height);
     let (rect, resp) = ui.allocate_exact_size(size, egui::Sense::click());
