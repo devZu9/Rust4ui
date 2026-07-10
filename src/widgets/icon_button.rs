@@ -7,7 +7,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let raw_text = attr_str(node, "text").unwrap_or("");
     let icon_name = attr_str(node, "icon");
     let text = if let Some(icon) = icon_name.and_then(|n| ctx.icons.resolve(n)) {
-        format!("{} ", icon)
+        format!("{}", icon)
     } else {
         resolve_text(raw_text, ctx)
     };
@@ -17,9 +17,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     }
 
     let enabled = attr_bool(node, "enabled").unwrap_or(true);
-    let min_width = attr_f64(node, "min_width")
-        .unwrap_or_else(|| ctx.theme.w_f64("IconButton", "min_width", 100.0));
-    let min_height = ctx.theme.w_f64("IconButton", "height", 28.0) as f32;
+    let icon_width = attr_f64(node, "width")
+        .unwrap_or_else(|| ctx.theme.w_f64("IconButton", "width", 36.0)) as f32;
 
     let fill = attr_str(node, "fill")
         .and_then(crate::theme::parse_hex_color)
@@ -54,10 +53,10 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     let (pad_l, pad_r, pad_t, pad_b) = (pad.left as f32, pad.right as f32, pad.top as f32, pad.bottom as f32);
 
-    let desired_w = (maket.size().x + pad_l + pad_r).max(min_width as f32);
-    let desired_h = (maket.size().y + pad_t + pad_b).max(min_height);
+    let button_width = (maket.size().x + pad_l + pad_r).max(icon_width);
+    let button_height = (maket.size().y + pad_t + pad_b).max(icon_width);
 
-    let size = egui::vec2(desired_w, desired_h);
+    let size = egui::vec2(button_width, button_height);
     let (rect, resp) = ui.allocate_exact_size(size, egui::Sense::click());
 
     let bg = if resp.hovered() && resp.is_pointer_button_down_on() {
