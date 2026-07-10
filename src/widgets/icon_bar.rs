@@ -21,7 +21,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         draw_border(ui, rect, egui::CornerRadius::ZERO, &border);
 
         let inner = rect.shrink(4.0);
-        ui.scope_builder(egui::UiBuilder::new().max_rect(inner), |ui| {
+        let layout = egui::Layout::left_to_right(egui::Align::Center);
+        ui.scope_builder(egui::UiBuilder::new().max_rect(inner).layout(layout), |ui| {
             render_children(ui, node, ctx);
         });
     } else {
@@ -31,7 +32,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         draw_border(ui, rect, egui::CornerRadius::ZERO, &border);
 
         let inner = rect.shrink(4.0);
-        ui.scope_builder(egui::UiBuilder::new().max_rect(inner), |ui| {
+        let layout = egui::Layout::top_down(egui::Align::Center);
+        ui.scope_builder(egui::UiBuilder::new().max_rect(inner).layout(layout), |ui| {
             render_children(ui, node, ctx);
         });
     }

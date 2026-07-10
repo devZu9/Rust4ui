@@ -46,7 +46,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     };
     let valign = egui::Align::Center;
 
-    let galley = ui.painter().layout_no_wrap(
+    let maket = ui.painter().layout_no_wrap(
         text.clone(),
         egui::FontId::proportional(14.0),
         text_color,
@@ -54,8 +54,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     let (pad_l, pad_r, pad_t, pad_b) = (pad.left as f32, pad.right as f32, pad.top as f32, pad.bottom as f32);
 
-    let desired_w = (galley.size().x + pad_l + pad_r).max(min_width as f32);
-    let desired_h = (galley.size().y + pad_t + pad_b).max(min_height);
+    let desired_w = (maket.size().x + pad_l + pad_r).max(min_width as f32);
+    let desired_h = (maket.size().y + pad_t + pad_b).max(min_height);
 
     let size = egui::vec2(desired_w, desired_h);
     let (rect, resp) = ui.allocate_exact_size(size, egui::Sense::click());
@@ -103,11 +103,11 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         egui::pos2(rect.left() + pad_l, rect.top() + pad_t),
         egui::pos2(rect.right() - pad_r, rect.bottom() - pad_b),
     );
-    let text_x = halign.align_size_within_range(galley.size().x, inner.x_range()).min;
-    let text_y = valign.align_size_within_range(galley.size().y, inner.y_range()).min;
+    let text_x = halign.align_size_within_range(maket.size().x, inner.x_range()).min;
+    let text_y = valign.align_size_within_range(maket.size().y, inner.y_range()).min;
     let text_pos = egui::pos2(text_x, text_y);
 
-    ui.painter().galley(text_pos, galley, actual_text);
+    ui.painter().galley(text_pos, maket, actual_text);
 
     if let Some(tip) = &tooltip_text {
         if !tip.is_empty() {

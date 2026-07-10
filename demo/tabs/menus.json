@@ -15,7 +15,7 @@
           "children": [
             {
               "type": "Label",
-              "text": "Меню и иконки",
+              "text": "Меню",
               "size": 20,
               "bold": true
             },

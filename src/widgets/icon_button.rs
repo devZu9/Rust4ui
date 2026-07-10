@@ -1,57 +1,127 @@
-use crate::renderer::{attr_bool, attr_f64, attr_str, resolve_text, widget_margin, RenderCtx};
+use crate::border::{draw_border, get_border};
+use crate::renderer::{attr_bool, attr_f64, attr_str, get_padding, resolve_text, widget_margin, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
     widget_margin(ui, &ctx.theme, "IconButton");
-    let action_name = attr_str(node, "action");
-    let target = attr_str(node, "target").unwrap_or("");
-    let enabled = attr_bool(node, "enabled").unwrap_or(true);
 
-    let tooltip = attr_str(node, "tooltip").map(|t| resolve_text(t, ctx));
-
-    let icon_name = attr_str(node, "icon").unwrap_or("");
-    let icon_glyph = if !icon_name.is_empty() {
-        ctx.icons.resolve_glyph(icon_name)
+    let raw_text = attr_str(node, "text").unwrap_or("");
+    let icon_name = attr_str(node, "icon");
+    let text = if let Some(icon) = icon_name.and_then(|n| ctx.icons.resolve(n)) {
+        format!("{}  {}", icon, resolve_text(raw_text, ctx))
     } else {
-        "⬡".to_string()
+        resolve_text(raw_text, ctx)
     };
-    let icon_color = attr_str(node, "icon_color")
-        .and_then(crate::theme::parse_hex_color)
-        .unwrap_or(egui::Color32::from_rgb(0xCC, 0xCC, 0xCC));
-    let icon_size = attr_f64(node, "icon_size")
-        .unwrap_or_else(|| ctx.theme.w_f64("IconButton", "icon_size", 18.0)) as f32;
 
-    let button = egui::Button::new(
-        egui::RichText::new(&icon_glyph).size(icon_size).color(icon_color)
-    )
-        .fill(egui::Color32::TRANSPARENT)
-        .min_size(egui::vec2(36.0, 32.0));
-
-    let resp = ui.add_enabled(enabled, button);
-
-    if resp.hovered() && !resp.is_pointer_button_down_on() {
-        let hover_fill = attr_str(node, "hover_fill")
-            .and_then(crate::theme::parse_hex_color)
-            .or_else(|| ctx.theme.w_color_opt("IconButton", "hover_fill"))
-            .unwrap_or(egui::Color32::from_rgba_premultiplied(0x44, 0x44, 0x55, 0x40));
-        ui.painter().rect_filled(resp.rect, egui::CornerRadius::same(4), hover_fill);
-    } else if resp.is_pointer_button_down_on() {
-        let click_fill = attr_str(node, "click_fill")
-            .and_then(crate::theme::parse_hex_color)
-            .or_else(|| ctx.theme.w_color_opt("IconButton", "click_fill"))
-            .unwrap_or(egui::Color32::from_rgba_premultiplied(0x33, 0x33, 0x44, 0x60));
-        ui.painter().rect_filled(resp.rect, egui::CornerRadius::same(4), click_fill);
+    if raw_text.is_empty() && icon_name.is_none() {
+        log::warn!("IconButton: отсутствует атрибут 'text' и 'icon'");
     }
 
-    if let Some(tip) = &tooltip {
-        resp.clone().on_hover_text(tip.as_str());
+    let enabled = attr_bool(node, "enabled").unwrap_or(true);
+    let min_width = attr_f64(node, "min_width")
+        .unwrap_or_else(|| ctx.theme.w_f64("IconButton", "min_width", 100.0));
+    let min_height = ctx.theme.w_f64("IconButton", "height", 28.0) as f32;
+
+    let fill = attr_str(node, "fill")
+        .and_then(crate::theme::parse_hex_color)
+        .unwrap_or_else(|| ctx.theme.w_color("IconButton", "fill", egui::Color32::from_rgb(0x30, 0x30, 0x30)));
+
+    let rounding = attr_f64(node, "rounding")
+        .unwrap_or_else(|| ctx.theme.w_f64("IconButton", "rounding", 6.0));
+
+    let border = get_border(node, &ctx.theme, "IconButton");
+
+    let tooltip_text = attr_str(node, "tooltip").map(|t| resolve_text(t, ctx));
+    let align = attr_str(node, "align").unwrap_or("center");
+
+    let pad = get_padding(node, &ctx.theme, "IconButton", egui::Margin::symmetric(16, 4));
+
+    let text_color = attr_str(node, "text_color")
+        .and_then(crate::theme::parse_hex_color)
+        .unwrap_or_else(|| ctx.theme.w_color("IconButton", "text_color", egui::Color32::from_rgb(0xE0, 0xE0, 0xE0)));
+
+    let halign = match align {
+        "left" => egui::Align::LEFT,
+        "right" => egui::Align::RIGHT,
+        _ => egui::Align::Center,
+    };
+    let valign = egui::Align::Center;
+
+    let maket = ui.painter().layout_no_wrap(
+        text.clone(),
+        egui::FontId::proportional(14.0),
+        text_color,
+    );
+
+    let (pad_l, pad_r, pad_t, pad_b) = (pad.left as f32, pad.right as f32, pad.top as f32, pad.bottom as f32);
+
+    let desired_w = (maket.size().x + pad_l + pad_r).max(min_width as f32);
+    let desired_h = (maket.size().y + pad_t + pad_b).max(min_height);
+
+    let size = egui::vec2(desired_w, desired_h);
+    let (rect, resp) = ui.allocate_exact_size(size, egui::Sense::click());
+
+    let bg = if resp.hovered() && resp.is_pointer_button_down_on() {
+        attr_str(node, "click_fill")
+            .and_then(crate::theme::parse_hex_color)
+            .or_else(|| ctx.theme.w_color_opt("IconButton", "click_fill"))
+            .unwrap_or_else(|| ctx.theme.w_color("IconButton", "hover_fill", egui::Color32::from_rgb(0x44, 0x44, 0x55)))
+    } else if resp.hovered() {
+        attr_str(node, "hover_fill")
+            .and_then(crate::theme::parse_hex_color)
+            .unwrap_or_else(|| ctx.theme.w_color("IconButton", "hover_fill", egui::Color32::from_rgb(0x44, 0x44, 0x55)))
+    } else if resp.has_focus() {
+        ctx.theme.w_color("IconButton", "focus_fill", egui::Color32::from_rgb(0x33, 0x44, 0x66))
+    } else {
+        fill
+    };
+
+    let actual_fill = if enabled { bg } else { egui::Color32::from_gray(60) };
+    let actual_text = if enabled {
+        if resp.hovered() && resp.is_pointer_button_down_on() {
+            attr_str(node, "click_text_color")
+                .and_then(crate::theme::parse_hex_color)
+                .or_else(|| ctx.theme.w_color_opt("IconButton", "click_text_color"))
+                .unwrap_or(text_color)
+        } else if resp.hovered() {
+            attr_str(node, "hover_text_color")
+                .and_then(crate::theme::parse_hex_color)
+                .unwrap_or(text_color)
+        } else {
+            text_color
+        }
+    } else {
+        egui::Color32::from_gray(100)
+    };
+
+    let rounding_cr = egui::CornerRadius::same(rounding as u8);
+    let shadow = crate::border::get_shadow(node, &ctx.theme, "IconButton");
+    crate::border::draw_shadow(ui, rect, rounding_cr, &shadow);
+    ui.painter().rect_filled(rect, rounding_cr, actual_fill);
+    draw_border(ui, rect, rounding_cr, &border);
+
+    let inner = egui::Rect::from_min_max(
+        egui::pos2(rect.left() + pad_l, rect.top() + pad_t),
+        egui::pos2(rect.right() - pad_r, rect.bottom() - pad_b),
+    );
+    let text_x = halign.align_size_within_range(maket.size().x, inner.x_range()).min;
+    let text_y = valign.align_size_within_range(maket.size().y, inner.y_range()).min;
+    let text_pos = egui::pos2(text_x, text_y);
+
+    ui.painter().galley(text_pos, maket, actual_text);
+
+    if let Some(tip) = &tooltip_text {
+        if !tip.is_empty() {
+            resp.clone().on_hover_text(tip.as_str());
+        }
     }
 
     if resp.clicked() && enabled {
-        if let Some(action) = action_name {
+        if let Some(action_name) = attr_str(node, "action") {
+            let target = attr_str(node, "target").unwrap_or("");
             let mut action_ctx = crate::actions::ActionCtx::new()
                 .with_target(target)
                 .with_state(&ctx.state);
-            ctx.actions.invoke(action, &mut action_ctx);
+            ctx.actions.invoke(action_name, &mut action_ctx);
             ctx.state = action_ctx.state;
         }
     }

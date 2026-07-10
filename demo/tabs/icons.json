@@ -10,12 +10,12 @@
       "children": [
         {
           "type": "Column",
-          "gap": 2,
+          "gap": 4,
           "padding": 8,
           "children": [
             {
               "type": "Label",
-              "text": "Все 1512 иконок Phosphor",
+              "text": "Иконки Phosphor",
               "size": 16,
               "bold": true
             },
@@ -24,574 +24,361 @@
               "space": 8
             },
             {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "                              ",
-              "size": 18,
-              "color": "#CCCCCC"
-            },
-            {
-              "type": "Label",
-              "text": "              ",
-              "size": 18,
-              "color": "#CCCCCC"
+              "type": "Row",
+              "gap": 4,
+              "wrap": true,
+              "children": [
+                {
+                  "type": "IconButton",
+                  "icon": "floppy-disk",
+                  "action": "click",
+                  "target": "gallery_floppy-disk",
+                  "tooltip": "floppy-disk"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "trash-simple",
+                  "action": "click",
+                  "target": "gallery_trash-simple",
+                  "tooltip": "trash-simple"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "gear-six",
+                  "action": "click",
+                  "target": "gallery_gear-six",
+                  "tooltip": "gear-six"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "magnifying-glass",
+                  "action": "click",
+                  "target": "gallery_magnifying-glass",
+                  "tooltip": "magnifying-glass"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "folder-simple",
+                  "action": "click",
+                  "target": "gallery_folder-simple",
+                  "tooltip": "folder-simple"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "file",
+                  "action": "click",
+                  "target": "gallery_file",
+                  "tooltip": "file"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "play",
+                  "action": "click",
+                  "target": "gallery_play",
+                  "tooltip": "play"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "pause",
+                  "action": "click",
+                  "target": "gallery_pause",
+                  "tooltip": "pause"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "stop-circle",
+                  "action": "click",
+                  "target": "gallery_stop-circle",
+                  "tooltip": "stop-circle"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "microphone",
+                  "action": "click",
+                  "target": "gallery_microphone",
+                  "tooltip": "microphone"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "speaker-high",
+                  "action": "click",
+                  "target": "gallery_speaker-high",
+                  "tooltip": "speaker-high"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "speaker-none",
+                  "action": "click",
+                  "target": "gallery_speaker-none",
+                  "tooltip": "speaker-none"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "info",
+                  "action": "click",
+                  "target": "gallery_info",
+                  "tooltip": "info"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "warning",
+                  "action": "click",
+                  "target": "gallery_warning",
+                  "tooltip": "warning"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "x-circle",
+                  "action": "click",
+                  "target": "gallery_x-circle",
+                  "tooltip": "x-circle"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "check",
+                  "action": "click",
+                  "target": "gallery_check",
+                  "tooltip": "check"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "plus",
+                  "action": "click",
+                  "target": "gallery_plus",
+                  "tooltip": "plus"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "minus",
+                  "action": "click",
+                  "target": "gallery_minus",
+                  "tooltip": "minus"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "arrows-clockwise",
+                  "action": "click",
+                  "target": "gallery_arrows-clockwise",
+                  "tooltip": "arrows-clockwise"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "arrow-counter-clockwise",
+                  "action": "click",
+                  "target": "gallery_arrow-counter-clockwise",
+                  "tooltip": "arrow-counter-clockwise"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "arrow-clockwise",
+                  "action": "click",
+                  "target": "gallery_arrow-clockwise",
+                  "tooltip": "arrow-clockwise"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "copy-simple",
+                  "action": "click",
+                  "target": "gallery_copy-simple",
+                  "tooltip": "copy-simple"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "clipboard-text",
+                  "action": "click",
+                  "target": "gallery_clipboard-text",
+                  "tooltip": "clipboard-text"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "scissors",
+                  "action": "click",
+                  "target": "gallery_scissors",
+                  "tooltip": "scissors"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "pencil-simple",
+                  "action": "click",
+                  "target": "gallery_pencil-simple",
+                  "tooltip": "pencil-simple"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "house-simple",
+                  "action": "click",
+                  "target": "gallery_house-simple",
+                  "tooltip": "house-simple"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "user",
+                  "action": "click",
+                  "target": "gallery_user",
+                  "tooltip": "user"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "lock-simple",
+                  "action": "click",
+                  "target": "gallery_lock-simple",
+                  "tooltip": "lock-simple"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "lock-simple-open",
+                  "action": "click",
+                  "target": "gallery_lock-simple-open",
+                  "tooltip": "lock-simple-open"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "link-simple",
+                  "action": "click",
+                  "target": "gallery_link-simple",
+                  "tooltip": "link-simple"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "download-simple",
+                  "action": "click",
+                  "target": "gallery_download-simple",
+                  "tooltip": "download-simple"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "upload-simple",
+                  "action": "click",
+                  "target": "gallery_upload-simple",
+                  "tooltip": "upload-simple"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "x",
+                  "action": "click",
+                  "target": "gallery_x",
+                  "tooltip": "x"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "list",
+                  "action": "click",
+                  "target": "gallery_list",
+                  "tooltip": "list"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "question",
+                  "action": "click",
+                  "target": "gallery_question",
+                  "tooltip": "question"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "spinner-gap",
+                  "action": "click",
+                  "target": "gallery_spinner-gap",
+                  "tooltip": "spinner-gap"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "caret-up",
+                  "action": "click",
+                  "target": "gallery_caret-up",
+                  "tooltip": "caret-up"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "caret-down",
+                  "action": "click",
+                  "target": "gallery_caret-down",
+                  "tooltip": "caret-down"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "caret-left",
+                  "action": "click",
+                  "target": "gallery_caret-left",
+                  "tooltip": "caret-left"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "caret-right",
+                  "action": "click",
+                  "target": "gallery_caret-right",
+                  "tooltip": "caret-right"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "caret-double-up",
+                  "action": "click",
+                  "target": "gallery_caret-double-up",
+                  "tooltip": "caret-double-up"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "caret-double-down",
+                  "action": "click",
+                  "target": "gallery_caret-double-down",
+                  "tooltip": "caret-double-down"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "sun",
+                  "action": "click",
+                  "target": "gallery_sun",
+                  "tooltip": "sun"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "moon",
+                  "action": "click",
+                  "target": "gallery_moon",
+                  "tooltip": "moon"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "star",
+                  "action": "click",
+                  "target": "gallery_star",
+                  "tooltip": "star"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "heart",
+                  "action": "click",
+                  "target": "gallery_heart",
+                  "tooltip": "heart"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "bell",
+                  "action": "click",
+                  "target": "gallery_bell",
+                  "tooltip": "bell"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "clock",
+                  "action": "click",
+                  "target": "gallery_clock",
+                  "tooltip": "clock"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "eye",
+                  "action": "click",
+                  "target": "gallery_eye",
+                  "tooltip": "eye"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "cloud",
+                  "action": "click",
+                  "target": "gallery_cloud",
+                  "tooltip": "cloud"
+                }
+              ]
             }
           ]
         }

@@ -144,6 +144,15 @@
                   "text": "{{btn.disabled}}",
                   "enabled": false,
                   "tooltip": "{{tooltip.disabled}}"
+                },
+                {
+                  "type": "Button",
+                  "icon": "floppy-disk"
+                },
+                {
+                  "type": "IconButton",
+                  "icon": "floppy-disk",
+                  "tooltip": "IconButton test"
                 }
               ]
             },
