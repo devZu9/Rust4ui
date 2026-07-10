@@ -2,7 +2,6 @@
 
 ## Сессия 09.07 — v0.3 иконки и документация
 - 2026-07-09 (10:35) - начата
-- 2026-07-09 (12:49) - завершена
 
 **Задача:** интеграция Phosphor-иконок — отображение иконок из `phosphor.ttf`, система иконок (IconButton, IconBar, иконки в элементах), решение вопросов по шрифту.
 
@@ -31,6 +30,13 @@
 - [x] text_field.rs: deprecated API обновлён (scope_builder, id_salt)
 - [x] text_field.rs: убран лишний `mut`, `valign` → `_valign`
 - [x] plural_key, render_context_menu, Notification — `#[allow(dead_code)]`
+
+### 11.07 — IconButton: button_size, icon_size, height fix
+- [x] Устранён дубликат `IconButton` в theme.json (слияние + icon_color)
+- [x] `width` → `button_size` (переименование, точный размер кнопки)
+- [x] `icon_size` вынесен из хардкода 14.0 в атрибут + fallback через тему
+- [x] Высота кнопки считается от `icon_size`, а не от `maket.size().y` (убран line-height бонус)
+- [x] Дефолтный padding `symmetric(16, 4)` → `symmetric(0, 0)`
 
 ---
 
