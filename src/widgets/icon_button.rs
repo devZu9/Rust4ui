@@ -45,9 +45,11 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     };
     let valign = egui::Align::Center;
 
+    let icon_size = attr_f64(node, "icon_size")
+        .unwrap_or_else(|| ctx.theme.w_f64("IconButton", "icon_size", 14.0)) as f32;
     let maket = ui.painter().layout_no_wrap(
         text.clone(),
-        egui::FontId::proportional(14.0),
+        egui::FontId::proportional(icon_size),
         text_color,
     );
 

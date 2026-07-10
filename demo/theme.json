@@ -17,8 +17,9 @@
     "margin": 0
   },
   "IconButton": {
-    "button_size": 15,
-    "padding": [0, 15],
+    "button_size": 32,
+    "padding": [0],
+    "icon_size": 32,
     "margin": 0,
     "icon_color": "#CCCCCC"
   },
