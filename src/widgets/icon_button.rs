@@ -32,7 +32,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let tooltip_text = attr_str(node, "tooltip").map(|t| resolve_text(t, ctx));
     let align = attr_str(node, "align").unwrap_or("center");
 
-    let pad = get_padding(node, &ctx.theme, "IconButton", egui::Margin::symmetric(16, 4));
+    let pad = get_padding(node, &ctx.theme, "IconButton", egui::Margin::symmetric(0, 0));
 
     let text_color = attr_str(node, "text_color")
         .and_then(crate::theme::parse_hex_color)
