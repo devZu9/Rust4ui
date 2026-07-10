@@ -17,9 +17,10 @@
     "margin": 0
   },
   "IconButton": {
-    "width": 36,
-    "padding": [0],
-    "margin": 0
+    "button_size": 15,
+    "padding": [0, 15],
+    "margin": 0,
+    "icon_color": "#CCCCCC"
   },
   "TextField": {
     "width": 200,
@@ -125,11 +126,6 @@
   "IconBar": {
     "fill": "#1C1C22",
     "border": 0
-  },
-  "IconButton": {
-    "icon_size": 1.2,
-    "icon_color": "#CCCCCC",
-    "margin": 0
   },
   "Caption": {
     "color": "#888888",

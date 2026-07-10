@@ -17,8 +17,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     }
 
     let enabled = attr_bool(node, "enabled").unwrap_or(true);
-    let icon_width = attr_f64(node, "width")
-        .unwrap_or_else(|| ctx.theme.w_f64("IconButton", "width", 36.0)) as f32;
+    let button_size = attr_f64(node, "button_size")
+        .unwrap_or_else(|| ctx.theme.w_f64("IconButton", "button_size", 24.0)) as f32;
 
     let fill = attr_str(node, "fill")
         .and_then(crate::theme::parse_hex_color)
@@ -53,8 +53,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     let (pad_l, pad_r, pad_t, pad_b) = (pad.left as f32, pad.right as f32, pad.top as f32, pad.bottom as f32);
 
-    let button_width = (maket.size().x + pad_l + pad_r).max(icon_width);
-    let button_height = (maket.size().y + pad_t + pad_b).max(icon_width);
+    let button_width = (maket.size().x + pad_l + pad_r).max(button_size);
+    let button_height = (maket.size().y + pad_t + pad_b).max(button_size);
 
     let size = egui::vec2(button_width, button_height);
     let (rect, resp) = ui.allocate_exact_size(size, egui::Sense::click());
