@@ -50,6 +50,7 @@ pub fn plural_form(lang: &str, n: f64) -> &'static str {
     }
 }
 
+#[allow(dead_code)]
 pub fn plural_key(lang: &str, key: &str, n: f64) -> String {
     format!("{key}.{}.{lang}", plural_form(lang, n), lang = lang)
 }

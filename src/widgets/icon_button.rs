@@ -7,7 +7,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let raw_text = attr_str(node, "text").unwrap_or("");
     let icon_name = attr_str(node, "icon");
     let text = if let Some(icon) = icon_name.and_then(|n| ctx.icons.resolve(n)) {
-        format!("{}  {}", icon, resolve_text(raw_text, ctx))
+        format!("{} ", icon)
     } else {
         resolve_text(raw_text, ctx)
     };
@@ -137,3 +137,4 @@ mod tests {
         assert_eq!(attr_str(&json, "icon"), Some("save"));
     }
 }
+  

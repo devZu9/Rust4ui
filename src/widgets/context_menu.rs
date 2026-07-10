@@ -1,5 +1,6 @@
 use crate::renderer::RenderCtx;
 
+#[allow(dead_code)]
 pub fn render_context_menu(
     _ui: &mut egui::Ui,
     node: &serde_json::Value,

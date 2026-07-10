@@ -30,7 +30,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let bg = ctx.theme.w_color("TextField", "background", egui::Color32::from_rgb(0x1C, 0x1E, 0x24));
     let rounding = ctx.theme.w_f64("TextField", "rounding", 4.0) as u8;
     let pad = get_padding(node, &ctx.theme, "TextField", egui::Margin::symmetric(0, 2));
-    let valign = ctx.theme.w_str2(node, "TextField", "valign")
+    let _valign = ctx.theme.w_str2(node, "TextField", "valign")
         .unwrap_or_else(|| "center".to_string());
 
     let (pad_l, pad_r, pad_t, pad_b) = (pad.left as f32, pad.right as f32, pad.top as f32, pad.bottom as f32);
@@ -55,7 +55,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     let mut value = ctx.state.get_string(&binding).unwrap_or("").to_string();
 
-    let mut text_edit: egui::TextEdit = if password {
+    let text_edit: egui::TextEdit = if password {
         egui::TextEdit::singleline(&mut value)
             .password(true)
             .hint_text(hint)
@@ -83,9 +83,9 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let (resp, border_rect) = if multiline && fixed {
         let (rect, _) = ui.allocate_exact_size(egui::vec2(field_w, field_h), egui::Sense::click());
         ui.painter().rect_filled(rect, radius, bg);
-        let inner_resp = ui.allocate_ui_at_rect(rect, |ui| {
+        let inner_resp = ui.scope_builder(egui::UiBuilder::new().max_rect(rect), |ui| {
             egui::ScrollArea::vertical()
-                .id_source(scroll_id)
+                .id_salt(scroll_id)
                 .max_height(field_h)
                 .auto_shrink([false; 2])
                 .show(ui, |ui| {

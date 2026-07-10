@@ -1,6 +1,7 @@
 use crate::renderer::{attr_f64, attr_str, RenderCtx};
 
 #[derive(Clone)]
+#[allow(dead_code)]
 pub struct Notification {
     pub text: String,
     pub level: String,

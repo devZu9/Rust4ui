@@ -28,6 +28,9 @@
 - [ ] IconBar anchor (start/center/end) — отложено
 - [ ] Separator в IconBar — отложено
 - [ ] Иконки в меню при наведении — баг MenuBar (см. ROADMAP)
+- [x] text_field.rs: deprecated API обновлён (scope_builder, id_salt)
+- [x] text_field.rs: убран лишний `mut`, `valign` → `_valign`
+- [x] plural_key, render_context_menu, Notification — `#[allow(dead_code)]`
 
 ---
 
