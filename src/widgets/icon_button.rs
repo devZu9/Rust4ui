@@ -34,9 +34,9 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let pad = get_padding(node, &ctx.theme, "IconButton", egui::Margin::symmetric(0, 0));
     let margin = get_margin(node, &ctx.theme, "IconButton");
 
-    let text_color = attr_str(node, "text_color")
+    let color = attr_str(node, "color")
         .and_then(crate::theme::parse_hex_color)
-        .unwrap_or_else(|| ctx.theme.w_color("IconButton", "text_color", egui::Color32::from_rgb(0xE0, 0xE0, 0xE0)));
+        .unwrap_or_else(|| ctx.theme.w_color("IconButton", "color", egui::Color32::from_rgb(0xE0, 0xE0, 0xE0)));
 
     let halign = match align {
         "left" => egui::Align::LEFT,
@@ -50,7 +50,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let maket = ui.painter().layout_no_wrap(
         text.clone(),
         egui::FontId::proportional(icon_size),
-        text_color,
+        color,
     );
 
     let (pad_l, pad_r, pad_t, pad_b) = (pad.left as f32, pad.right as f32, pad.top as f32, pad.bottom as f32);
@@ -88,16 +88,16 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let actual_fill = if enabled { bg } else { egui::Color32::from_gray(60) };
     let actual_text = if enabled {
         if resp.hovered() && resp.is_pointer_button_down_on() {
-            attr_str(node, "click_text_color")
+            attr_str(node, "click_color")
                 .and_then(crate::theme::parse_hex_color)
-                .or_else(|| ctx.theme.w_color_opt("IconButton", "click_text_color"))
-                .unwrap_or(text_color)
+                .or_else(|| ctx.theme.w_color_opt("IconButton", "click_color"))
+                .unwrap_or(color)
         } else if resp.hovered() {
-            attr_str(node, "hover_text_color")
+            attr_str(node, "hover_color")
                 .and_then(crate::theme::parse_hex_color)
-                .unwrap_or(text_color)
+                .unwrap_or(color)
         } else {
-            text_color
+            color
         }
     } else {
         egui::Color32::from_gray(100)

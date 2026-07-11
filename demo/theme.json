@@ -18,9 +18,11 @@
   },
   "IconButton": {
     "button_size": 20,
-    "padding": [5, 30, 30, 5],
-    "icon_size": 30,
+    "rounding": 15,
+    "padding": [5, 25, 25, 5],
+    "icon_size": 25,
   //  "margin": [3],
+    "border": [3],
     "icon_color": "#CCCCCC"
   },
   "TextField": {
