@@ -54,17 +54,17 @@ pub fn render_node(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut Render
         .unwrap_or("unknown");
 
     match node_type {
-        "Label" => with_margin(ui, node, ctx, "Label", |ui, node, ctx| crate::widgets::label::render(ui, node, ctx)),
-        "Button" => with_margin(ui, node, ctx, "Button", |ui, node, ctx| crate::widgets::button::render(ui, node, ctx)),
-        "TextField" => with_margin(ui, node, ctx, "TextField", |ui, node, ctx| crate::widgets::text_field::render(ui, node, ctx)),
-        "Checkbox" => with_margin(ui, node, ctx, "Checkbox", |ui, node, ctx| crate::widgets::checkbox::render(ui, node, ctx)),
-        "Separator" => with_margin(ui, node, ctx, "Separator", |ui, node, ctx| crate::widgets::separator::render(ui, node, ctx)),
+        "Label" => crate::widgets::label::render(ui, node, ctx),
+        "Button" => crate::widgets::button::render(ui, node, ctx),
+        "TextField" => crate::widgets::text_field::render(ui, node, ctx),
+        "Checkbox" => crate::widgets::checkbox::render(ui, node, ctx),
+        "Separator" => crate::widgets::separator::render(ui, node, ctx),
         "Column" => crate::widgets::column::render(ui, node, ctx),
         "Row" => crate::widgets::row::render(ui, node, ctx),
-        "RadioGroup" => with_margin(ui, node, ctx, "RadioGroup", |ui, node, ctx| crate::widgets::radio_group::render(ui, node, ctx)),
-        "Slider" => with_margin(ui, node, ctx, "Slider", |ui, node, ctx| crate::widgets::slider::render(ui, node, ctx)),
-        "ComboBox" => with_margin(ui, node, ctx, "ComboBox", |ui, node, ctx| crate::widgets::combo_box::render(ui, node, ctx)),
-        "Tabs" => with_margin(ui, node, ctx, "Tabs", |ui, node, ctx| crate::widgets::tabs::render(ui, node, ctx)),
+        "RadioGroup" => crate::widgets::radio_group::render(ui, node, ctx),
+        "Slider" => crate::widgets::slider::render(ui, node, ctx),
+        "ComboBox" => crate::widgets::combo_box::render(ui, node, ctx),
+        "Tabs" => crate::widgets::tabs::render(ui, node, ctx),
         "Panel" => crate::widgets::panel::render(ui, node, ctx),
         "ScrollArea" => crate::widgets::scroll_area::render(ui, node, ctx),
         "Window" => crate::widgets::window::render(ui, node, ctx),
@@ -75,10 +75,10 @@ pub fn render_node(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut Render
         "Indicator" => crate::widgets::indicator::render(ui, node, ctx),
         "StatusBar" => crate::widgets::status_bar::render(ui, node, ctx),
         "IconBar" => crate::widgets::icon_bar::render(ui, node, ctx),
-        "IconButton" => with_margin(ui, node, ctx, "IconButton", |ui, node, ctx| crate::widgets::icon_button::render(ui, node, ctx)),
-        "Caption" => with_margin(ui, node, ctx, "Caption", |ui, node, ctx| crate::widgets::caption::render(ui, node, ctx)),
+        "IconButton" => crate::widgets::icon_button::render(ui, node, ctx),
+        "Caption" => crate::widgets::caption::render(ui, node, ctx),
         "Grid" => crate::widgets::grid::render(ui, node, ctx),
-        "Hyperlink" => with_margin(ui, node, ctx, "Hyperlink", |ui, node, ctx| crate::widgets::hyperlink::render(ui, node, ctx)),
+        "Hyperlink" => crate::widgets::hyperlink::render(ui, node, ctx),
         "Notifications" => crate::widgets::notifications::render(ui, node, ctx),
         "MenuItem" => crate::widgets::menu_item::render(ui, node, ctx),
         "SubMenu" => crate::widgets::sub_menu::render(ui, node, ctx),
@@ -98,17 +98,6 @@ pub fn render_node(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut Render
                     .color(egui::Color32::from_rgb(0xFF, 0x88, 0x00)),
             );
         }
-    }
-}
-
-fn with_margin(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx, widget_type: &str, f: impl FnOnce(&mut egui::Ui, &serde_json::Value, &mut RenderCtx)) {
-    let m = get_margin(node, &ctx.theme, widget_type);
-    if m == egui::Margin::ZERO {
-        f(ui, node, ctx);
-    } else {
-        egui::Frame::new().outer_margin(m).show(ui, |ui| {
-            f(ui, node, ctx);
-        });
     }
 }
 

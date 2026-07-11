@@ -20,7 +20,7 @@
     "button_size": 20,
     "padding": [5, 30, 30, 5],
     "icon_size": 20,
-    "margin": 0,
+//    "margin": [5],
     "icon_color": "#CCCCCC"
   },
   "TextField": {

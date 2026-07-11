@@ -1,5 +1,5 @@
 use crate::border::{draw_border, get_border};
-use crate::renderer::{attr_bool, attr_f64, attr_str, get_padding, resolve_text, RenderCtx};
+use crate::renderer::{attr_bool, attr_f64, attr_str, get_margin, get_padding, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
 
@@ -33,6 +33,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let align = attr_str(node, "align").unwrap_or("center");
 
     let pad = get_padding(node, &ctx.theme, "Button", egui::Margin::symmetric(16, 4));
+    let margin = get_margin(node, &ctx.theme, "Button");
 
     let text_color = attr_str(node, "text_color")
         .and_then(crate::theme::parse_hex_color)
@@ -56,8 +57,17 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let desired_w = (maket.size().x + pad_l + pad_r).max(min_width as f32);
     let desired_h = (maket.size().y + pad_t + pad_b).max(min_height);
 
-    let size = egui::vec2(desired_w, desired_h);
+    let (m_l, m_r, m_t, m_b) = (margin.left as f32, margin.right as f32, margin.top as f32, margin.bottom as f32);
+    let total_w = desired_w + m_l + m_r;
+    let total_h = desired_h + m_t + m_b;
+
+    let size = egui::vec2(total_w, total_h);
     let (rect, resp) = ui.allocate_exact_size(size, egui::Sense::click());
+
+    let content_rect = egui::Rect::from_min_max(
+        egui::pos2(rect.min.x + m_l, rect.min.y + m_t),
+        egui::pos2(rect.max.x - m_r, rect.max.y - m_b),
+    );
 
     let bg = if resp.hovered() && resp.is_pointer_button_down_on() {
         attr_str(node, "click_fill")
@@ -94,13 +104,13 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     let rounding_cr = egui::CornerRadius::same(rounding as u8);
     let shadow = crate::border::get_shadow(node, &ctx.theme, "Button");
-    crate::border::draw_shadow(ui, rect, rounding_cr, &shadow);
-    ui.painter().rect_filled(rect, rounding_cr, actual_fill);
-    draw_border(ui, rect, rounding_cr, &border);
+    crate::border::draw_shadow(ui, content_rect, rounding_cr, &shadow);
+    ui.painter().rect_filled(content_rect, rounding_cr, actual_fill);
+    draw_border(ui, content_rect, rounding_cr, &border);
 
     let inner = egui::Rect::from_min_max(
-        egui::pos2(rect.left() + pad_l, rect.top() + pad_t),
-        egui::pos2(rect.right() - pad_r, rect.bottom() - pad_b),
+        egui::pos2(content_rect.left() + pad_l, content_rect.top() + pad_t),
+        egui::pos2(content_rect.right() - pad_r, content_rect.bottom() - pad_b),
     );
     let text_x = halign.align_size_within_range(maket.size().x, inner.x_range()).min;
     let text_y = valign.align_size_within_range(maket.size().y, inner.y_range()).min;
