@@ -185,12 +185,19 @@
 
 ## Margin
 
-Отступ сверху от виджета до следующего. Указывается числом или массивом (как padding):
+Внешний отступ вокруг виджета со всех четырёх сторон. Указывается так же, как padding:
+
+- число: `4` — 4px со всех сторон
+- массив [2]: `[v, h]` — v вертикаль, h горизонталь
+- массив [4]: `[top, right, bottom, left]`
 
 ```json
-"Button": { "margin": 4 }
-"Button": { "margin": [0, 4, 0, 4] }
+"IconButton": { "margin": 4 }
+"Button": { "margin": [5, 10] }
+"Label": { "margin": [2, 4, 6, 8] }
 ```
+
+Margin суммируется с gap: `margin(right) + gap + margin(left)`.
 
 ## Padding
 

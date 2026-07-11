@@ -3,11 +3,13 @@
 ## Сессия 09.07 — v0.3 иконки и документация
 - 2026-07-09 (10:35) - начата
 
-**Задача:** интеграция Phosphor-иконок — отображение иконок из `phosphor.ttf`, система иконок (IconButton, IconBar, иконки в элементах), решение вопросов по шрифту.
+**Задача:** интеграция Phosphor-иконок, IconButton/Button система, gap/gap_row, универсальные марджины.
 
 ### Статус
-- [x] Устранён дубликат `IconButton` в theme.json (слияние + icon_color)
-- [x] `width` → `button_size` (переименование, точный размер кнопки)
+- [x] **Универсальные марджины** — IconButton + Button, per-widget, без Frame (не ломает wrap), `get_margin()`
+- [x] **Row: item_spacing = ZERO, gap_row** — только явный gap, вертикальный отступ между wrapped-строками
+- [x] **Устранён дубликат `IconButton` в theme.json** (слияние + icon_color)
+- [x] **`width` → `button_size`** (переименование, точный размер кнопки)
 - [x] `icon_size` вынесен из хардкода 14.0 в атрибут + fallback через тему
 - [x] Высота кнопки считается от `icon_size`, а не от `maket.size().y` (убран line-height бонус)
 - [x] Дефолтный padding `symmetric(16, 4)` → `symmetric(0, 0)`
