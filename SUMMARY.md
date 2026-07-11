@@ -19,7 +19,7 @@ UI собирается как конструктор из трёх слоёв:
 
 ## Ключевые фичи
 
-- **Border-система** — solid/dash/dot, gap, seg_len, `border_position`, `border_seg_cap`, shorthand-массивы `[width, color, type, gap, seg_len]`, поддержка тем
+- **Border-система** — solid/dash/dot, gap, seg_len, `border_position`, `border_seg_cap`, shorthand-массивы `[width, color, type, gap, seg_len]`, `border_hover`/`border_click`, поддержка тем
 - **JSON-комментарии** — `//` и `/* */` во всех загрузчиках
 - **valign для TextField** — top / center / bottom
 - **Multiline fixed** — фиксированная высота с прокруткой (`fixed: true`/`false`)
@@ -35,7 +35,7 @@ UI собирается как конструктор из трёх слоёв:
 ## Текущие ограничения
 
 - Row `align` — зарезервирован, всегда прижат к верху
-- `margin` — только верхний отступ через `add_space`
+- `margin` — внешний отступ со всех сторон через `get_margin()` (число, [V,H], [T,R,B,L])
 - Live-reload — только директория `demo/`, не весь проект
 
 ## Виджеты

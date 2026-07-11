@@ -2,7 +2,14 @@
 
 ## [0.3.1] — 2026-07-11
 
+### Добавлено
+- **`border_hover` / `border_click`** — state-зависимые границы на всех виджетах (IconButton, Button, TextField, Column, Row, Label, Checkbox, RadioGroup, Tabs)
+- **`get_margin()`** — универсальная утилита чтения margin (атрибут → тема → 0)
+- **`gap_row`** — вертикальный отступ между wrapped-строками в Row
+
 ### Изменено
+- **`border` → `get_state_border()`** — единая функция выбора hover/click/base border
+- **`widget_border`** — добавлены параметры `resp` и `enabled` (state-зависимые границы на 6 виджетах)
 - **`icon_color` → `color`** — в IconButton (атрибут + ключ темы), `hover_text_color` → `hover_color`, `click_text_color` → `click_color`
 - **`parse_hex_color`** — добавлена поддержка `#RGB` / `#RGBA`
 - **Button** — добавлен `margin` (по аналогии с IconButton)
@@ -10,16 +17,13 @@
 - **`galley()` → `galley_with_override_text_color()`** — починен цвет иконки при hover/click
 - **ZhukMax → devZu9** — git config, Cargo.toml, docs, история git переписана
 
-### Добавлено
-- **`get_margin()`** — универсальная утилита чтения margin (атрибут → тема → 0)
-- **`gap_row`** — вертикальный отступ между wrapped-строками в Row
-
 ### Исправлено
+- **`border_hover` / `border_click` не работали** — теперь задействуют `get_state_border()` на всех виджетах
 - **`hover_color`/`click_color` из темы** — не работали из-за `galley()` (заменял только placeholder-цвета вместо всех)
 - **Высота IconButton** — `maket.size().y` → `icon_size` (убран line-height бонус от шрифта)
 - **Дефолтный padding IconButton** — `symmetric(16, 4)` → `symmetric(0, 0)`
 
-### Добавлено
+## [0.3.0] — 2026-07-09
 - **IconRegistry** — 1512 иконок Phosphor, `resolve()` / `resolve_glyph()`, вкомпилирован в бинарь
 - **icon_size** — атрибут для IconButton, size для MenuItem (+ тема)
 - **Hover/Click-стейты** — `hover_fill`, `click_fill`, `hover_text_color`, `click_text_color` на Button и IconButton

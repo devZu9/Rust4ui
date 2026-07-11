@@ -6,6 +6,7 @@
 **Задача:** интеграция Phosphor-иконок, IconButton/Button система, gap/gap_row, универсальные марджины, hover_color/click_color, git-чистка.
 
 ### Статус
+- [x] **`border_hover` / `border_click`** — get_state_border(), widget_border + resp, на всех виджетах с border
 - [x] **`galley` → `galley_with_override_text_color`** — hover_color/click_color теперь перекрашивают иконку
 - [x] **`color`, `hover_color`, `click_color`** — переименовано, `parse_hex_color` поддерживает #RGB/#RGBA
 - [x] **ZhukMax вычищен** — git config, Cargo.toml, docs, вся история переписана
