@@ -1,4 +1,4 @@
-use crate::border::{apply_state_border, draw_border, get_border};
+use crate::border::{draw_border, get_state_border};
 use crate::renderer::{attr_bool, attr_f64, attr_str, get_margin, get_padding, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
@@ -26,7 +26,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let rounding = attr_f64(node, "rounding")
         .unwrap_or_else(|| ctx.theme.w_f64("IconButton", "rounding", 6.0));
 
-    let base_border = get_border(node, &ctx.theme, "IconButton");
+
 
     let tooltip_text = attr_str(node, "tooltip").map(|t| resolve_text(t, ctx));
     let align = attr_str(node, "align").unwrap_or("center");
@@ -104,13 +104,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         egui::Color32::from_gray(100)
     };
 
-    let border = if enabled && resp.hovered() && resp.is_pointer_button_down_on() {
-        apply_state_border(node, &ctx.theme, "IconButton", "click", &base_border)
-    } else if enabled && resp.hovered() {
-        apply_state_border(node, &ctx.theme, "IconButton", "hover", &base_border)
-    } else {
-        base_border
-    };
+    let border = get_state_border(node, &ctx.theme, "IconButton", &resp, enabled);
 
     let rounding_cr = egui::CornerRadius::same(rounding as u8);
     let shadow = crate::border::get_shadow(node, &ctx.theme, "IconButton");

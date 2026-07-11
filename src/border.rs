@@ -149,6 +149,21 @@ pub fn apply_state_border(node: &serde_json::Value, theme: &Theme, widget: &str,
     r
 }
 
+/// Единый entry point для state-зависимого бордера.
+/// Выбирает border_hover / border_click / border по resp.
+pub fn get_state_border(node: &serde_json::Value, theme: &Theme, widget: &str,
+                        resp: &egui::Response, enabled: bool) -> BorderStyle {
+    let base = get_border(node, theme, widget);
+    if !enabled { return base; }
+    if resp.hovered() && resp.is_pointer_button_down_on() {
+        apply_state_border(node, theme, widget, "click", &base)
+    } else if resp.hovered() {
+        apply_state_border(node, theme, widget, "hover", &base)
+    } else {
+        base
+    }
+}
+
 // -- shorthand border: [width] / [width, "#color"] / [width, "#color", "type"] --
 
 fn shorthand_width(node: &serde_json::Value) -> Option<f64> {
