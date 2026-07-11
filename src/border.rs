@@ -459,7 +459,13 @@ pub fn widget_border(
     theme: &Theme,
     widget: &str,
     rounding: egui::CornerRadius,
+    resp: Option<&egui::Response>,
+    enabled: bool,
 ) {
-    let border = get_border(node, theme, widget);
+    let border = if let Some(r) = resp {
+        get_state_border(node, theme, widget, r, enabled)
+    } else {
+        get_border(node, theme, widget)
+    };
     draw_border(ui, rect, rounding, &border);
 }

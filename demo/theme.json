@@ -38,6 +38,7 @@
     "border_seg_cap": true,
     "padding": [15, 25],
     "background": "#000000",
+    "border_hover": [4, "#FF0", "dot", 4, 1],
     "margin": 0
   },
   "ComboBox": {

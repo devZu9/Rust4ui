@@ -19,7 +19,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
                 });
             }
         });
-    widget_border(ui, response.response.rect, node, &ctx.theme, "Column", egui::CornerRadius::same(4));
+    widget_border(ui, response.response.rect, node, &ctx.theme, "Column", egui::CornerRadius::same(4), Some(&response.response), true);
 }
 
 fn render_with_gap(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx, gap: f32) {

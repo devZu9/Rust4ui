@@ -54,7 +54,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
             }))
     };
     if let Some(r) = response {
-        widget_border(ui, r.response.rect, node, &ctx.theme, "Row", egui::CornerRadius::same(4));
+        widget_border(ui, r.response.rect, node, &ctx.theme, "Row", egui::CornerRadius::same(4), Some(&r.response), true);
     }
 }
 
