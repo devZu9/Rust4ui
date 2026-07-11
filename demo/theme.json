@@ -22,8 +22,10 @@
     "padding": [5, 25, 25, 5],
     "icon_size": 25,
   //  "margin": [3],
-    "border": [3],
-    "icon_color": "#CCCCCC"
+    "color": "#FFAFF0",
+    "hover_color": "#FCFCFC",
+    "click_color": "#000000",
+    "border": [3]
   },
   "TextField": {
     "width": 200,

@@ -318,6 +318,17 @@ pub fn parse_hex_color(hex: &str) -> Option<egui::Color32> {
         let b = u8::from_str_radix(&hex[4..6], 16).ok()?;
         let a = u8::from_str_radix(&hex[6..8], 16).ok()?;
         Some(egui::Color32::from_rgba_unmultiplied(r, g, b, a))
+    } else if hex.len() == 3 {
+        let r = u8::from_str_radix(&hex[0..1], 16).ok()? * 17;
+        let g = u8::from_str_radix(&hex[1..2], 16).ok()? * 17;
+        let b = u8::from_str_radix(&hex[2..3], 16).ok()? * 17;
+        Some(egui::Color32::from_rgb(r, g, b))
+    } else if hex.len() == 4 {
+        let r = u8::from_str_radix(&hex[0..1], 16).ok()? * 17;
+        let g = u8::from_str_radix(&hex[1..2], 16).ok()? * 17;
+        let b = u8::from_str_radix(&hex[2..3], 16).ok()? * 17;
+        let a = u8::from_str_radix(&hex[3..4], 16).ok()? * 17;
+        Some(egui::Color32::from_rgba_unmultiplied(r, g, b, a))
     } else {
         None
     }
@@ -378,6 +389,14 @@ mod tests {
             Some(egui::Color32::from_rgba_unmultiplied(
                 0x33, 0x66, 0xCC, 0x44
             ))
+        );
+        assert_eq!(
+            parse_hex_color("#FFF"),
+            Some(egui::Color32::from_rgb(0xFF, 0xFF, 0xFF))
+        );
+        assert_eq!(
+            parse_hex_color("#F0A"),
+            Some(egui::Color32::from_rgb(0xFF, 0x00, 0xAA))
         );
         assert_eq!(parse_hex_color("invalid"), None);
     }

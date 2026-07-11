@@ -95,6 +95,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         } else if resp.hovered() {
             attr_str(node, "hover_color")
                 .and_then(crate::theme::parse_hex_color)
+                .or_else(|| ctx.theme.w_color_opt("IconButton", "hover_color"))
                 .unwrap_or(color)
         } else {
             color
