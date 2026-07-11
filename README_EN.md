@@ -149,7 +149,7 @@ Thank you for being here. 🙏
 
 ## Acknowledgements
 
-The author was inspired by the [EFx](https://github.com/ZhukMax/efx) project when designing the widget vocabulary. Tag names and basic attributes partially overlap — switching between projects is intuitive. There is no technical dependency on EFx.
+The author was inspired by the third-party [EFx](https://github.com/ZhukMax/efx) project. There is no technical dependency on EFx — the EFx project is not related to Rust4ui.
 
 ---
 

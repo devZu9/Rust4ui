@@ -4,7 +4,7 @@ version = "0.3.0"
 edition = "2021"
 description = "JSON to UI — rapid prototyping and UI assembly on egui"
 license = "MIT"
-repository = "https://github.com/ZhukMax/rust4ui"
+repository = "https://github.com/devZu9/rust4ui"
 
 [dependencies]
 egui = "0.32"

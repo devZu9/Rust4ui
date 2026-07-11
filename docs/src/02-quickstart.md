@@ -3,7 +3,7 @@
 ## Установка и запуск
 
 ```bash
-git clone https://github.com/ZhukMax/rust4ui.git
+git clone https://github.com/devZu9/rust4ui.git
 cd rust4ui
 cargo run
 ```
