@@ -1,8 +1,7 @@
 use crate::border::widget_border;
-use crate::renderer::{attr_bool, attr_f64, attr_str, get_padding, resolve_text, widget_margin, RenderCtx};
+use crate::renderer::{attr_bool, attr_f64, attr_str, get_padding, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
-    widget_margin(ui, &ctx.theme, "Tabs");
     let active_binding = attr_str(node, "active").unwrap_or("__tab_active");
     let gap = attr_f64(node, "gap")
         .unwrap_or_else(|| ctx.theme.w_f64("Tabs", "gap", 4.0));

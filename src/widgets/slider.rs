@@ -1,7 +1,6 @@
-use crate::renderer::{attr_f64, attr_str, widget_margin, RenderCtx};
+use crate::renderer::{attr_f64, attr_str, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
-    widget_margin(ui, &ctx.theme, "Slider");
 
     let binding = match attr_str(node, "binding") {
         Some(key) => key.to_string(),

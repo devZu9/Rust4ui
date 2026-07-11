@@ -1,8 +1,7 @@
 use crate::border::widget_border;
-use crate::renderer::{attr_str, get_padding, resolve_text, widget_margin, RenderCtx};
+use crate::renderer::{attr_str, get_padding, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
-    widget_margin(ui, &ctx.theme, "Checkbox");
 
     let binding = match attr_str(node, "binding") {
         Some(key) => key.to_string(),

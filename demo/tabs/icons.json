@@ -32,7 +32,6 @@
                 {
                   "type": "IconButton",
                   "icon": "floppy-disk",
-		  // "icon_size": 20,
                   "action": "click",
                   "target": "gallery_floppy-disk",
                   "tooltip": "floppy-disk"

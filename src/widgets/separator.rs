@@ -1,7 +1,6 @@
-use crate::renderer::{attr_f64, widget_margin, RenderCtx};
+use crate::renderer::{attr_f64, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &RenderCtx) {
-    widget_margin(ui, &ctx.theme, "Separator");
     let space = attr_f64(node, "space").unwrap_or(6.0);
     ui.add_space(space as f32);
     ui.separator();

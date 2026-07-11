@@ -1,8 +1,7 @@
 use crate::border::{draw_border, get_border};
-use crate::renderer::{attr_f64, attr_str, get_padding, widget_margin, RenderCtx};
+use crate::renderer::{attr_f64, attr_str, get_padding, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
-    widget_margin(ui, &ctx.theme, "ComboBox");
 
     let binding = match attr_str(node, "binding") {
         Some(key) => key.to_string(),

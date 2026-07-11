@@ -1,7 +1,6 @@
-use crate::renderer::{attr_bool, attr_f64, attr_str, resolve_text, widget_margin, RenderCtx};
+use crate::renderer::{attr_bool, attr_f64, attr_str, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &RenderCtx) {
-    widget_margin(ui, &ctx.theme, "Caption");
     let text = attr_str(node, "text")
         .map(|t| resolve_text(t, ctx))
         .unwrap_or_default();
