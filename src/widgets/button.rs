@@ -1,4 +1,4 @@
-use crate::border::{draw_border, get_border};
+use crate::border::{draw_border, get_state_border};
 use crate::renderer::{attr_bool, attr_f64, attr_str, get_margin, get_padding, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
@@ -26,8 +26,6 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     let rounding = attr_f64(node, "rounding")
         .unwrap_or_else(|| ctx.theme.w_f64("Button", "rounding", 6.0));
-
-    let border = get_border(node, &ctx.theme, "Button");
 
     let tooltip_text = attr_str(node, "tooltip").map(|t| resolve_text(t, ctx));
     let align = attr_str(node, "align").unwrap_or("center");
@@ -63,6 +61,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     let size = egui::vec2(total_w, total_h);
     let (rect, resp) = ui.allocate_exact_size(size, egui::Sense::click());
+    let border = get_state_border(node, &ctx.theme, "Button", &resp, enabled);
 
     let content_rect = egui::Rect::from_min_max(
         egui::pos2(rect.min.x + m_l, rect.min.y + m_t),

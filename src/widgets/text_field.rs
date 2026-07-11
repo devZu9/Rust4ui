@@ -1,4 +1,4 @@
-use crate::border::{draw_border, get_border};
+use crate::border::{draw_border, get_state_border};
 use crate::renderer::{attr_bool, attr_f64, attr_str, get_padding, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
@@ -69,7 +69,6 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
             .font(egui::TextStyle::Body)
     };
     let fixed = attr_bool(node, "fixed").unwrap_or(true);
-    let border = get_border(node, &ctx.theme, "TextField");
     let radius = egui::CornerRadius::same(rounding);
     let scroll_id = egui::Id::new(format!("__scroll_{binding}"));
 
@@ -102,6 +101,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         let rr = r.rect;
         (r, rr)
     };
+    let border = get_state_border(node, &ctx.theme, "TextField", &resp, true);
 
     (ui.style_mut().visuals.widgets.inactive.corner_radius,
      ui.style_mut().visuals.widgets.hovered.corner_radius,
@@ -163,9 +163,9 @@ fn render_number(
     let num_value = ctx.state.get_f64(binding).unwrap_or(0.0);
     let fmt_value = format!("{:.decimals$}", num_value, decimals = decimals);
     let mut text_value = fmt_value.clone();
-    let border = get_border(node, &ctx.theme, "TextField");
 
     let (rect, rect_resp) = ui.allocate_exact_size(egui::vec2(field_w, field_h), egui::Sense::click());
+    let border = get_state_border(node, &ctx.theme, "TextField", &rect_resp, true);
 
     let fill = if rect_resp.hovered() {
         bg.linear_multiply(1.2)
