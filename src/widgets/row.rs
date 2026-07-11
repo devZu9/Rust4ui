@@ -3,6 +3,7 @@ use crate::renderer::{attr_bool, attr_f64, get_padding, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
     let gap = attr_f64(node, "gap").unwrap_or(0.0);
+    let gap_row = attr_f64(node, "gap_row").unwrap_or(0.0);
     let wrap = attr_bool(node, "wrap").unwrap_or(false);
     let columns = attr_f64(node, "columns").map(|c| c as usize);
     if let Some(ncols) = columns {
@@ -34,7 +35,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         ui.scope_builder(
             egui::UiBuilder::new().layout(layout),
             |ui| {
-                ui.style_mut().spacing.item_spacing = egui::Vec2::ZERO;
+                ui.style_mut().spacing.item_spacing = egui::vec2(0.0, gap_row as f32);
                 render_row_children(ui, node, ctx, gap as f32);
             },
         );
@@ -46,7 +47,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
                 ui.scope_builder(
                     egui::UiBuilder::new().layout(layout),
                     |ui| {
-                        ui.style_mut().spacing.item_spacing = egui::Vec2::ZERO;
+                        ui.style_mut().spacing.item_spacing = egui::vec2(0.0, gap_row as f32);
                         render_row_children(ui, node, ctx, gap as f32);
                     },
                 );
