@@ -31,17 +31,25 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let pad = get_padding(node, &ctx.theme, "Row", egui::Margin::ZERO);
 
     let response = if pad == egui::Margin::ZERO {
-        ui.with_layout(layout, |ui| {
-            render_row_children(ui, node, ctx, gap as f32);
-        });
+        ui.scope_builder(
+            egui::UiBuilder::new().layout(layout),
+            |ui| {
+                ui.style_mut().spacing.item_spacing = egui::Vec2::ZERO;
+                render_row_children(ui, node, ctx, gap as f32);
+            },
+        );
         None
     } else {
         Some(egui::Frame::new()
             .inner_margin(pad)
             .show(ui, |ui| {
-                ui.with_layout(layout, |ui| {
-                    render_row_children(ui, node, ctx, gap as f32);
-                });
+                ui.scope_builder(
+                    egui::UiBuilder::new().layout(layout),
+                    |ui| {
+                        ui.style_mut().spacing.item_spacing = egui::Vec2::ZERO;
+                        render_row_children(ui, node, ctx, gap as f32);
+                    },
+                );
             }))
     };
     if let Some(r) = response {
