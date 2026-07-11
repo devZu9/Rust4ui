@@ -94,6 +94,7 @@ pub enum BorderPosition { Inside, Center, Outside }
 ## Виджеты с поддержкой border
 
 - `Button` — рамка вокруг кнопки
+- `IconButton` — рамка вокруг кнопки-иконки
 - `TextField` — рамка вокруг поля ввода
 - `ComboBox` — рамка вокруг выпадающего списка
 - `Panel` — рамка панели
@@ -105,6 +106,24 @@ pub enum BorderPosition { Inside, Center, Outside }
 - `Tabs` — рамка вокруг контента
 - `Checkbox` — если указан padding
 - `RadioGroup` — если указан padding
+
+## State-зависимые границы (border_hover / border_click)
+
+Граница может меняться при наведении и нажатии. Атрибуты `border_hover` и `border_click` используют тот же формат, что и `border`:
+
+```json
+{
+  "type": "Button",
+  "text": "Наведи",
+  "border": [2, "#444466"],
+  "border_hover": [2, "#88AAFF"],
+  "border_click": [2, "#FF8844", "dash", 4]
+}
+```
+
+Если атрибут не указан — используется базовый `border` для всех состояний.
+
+Работает на: Button, IconButton, TextField, Column, Row, Label, Checkbox, RadioGroup, Tabs.
 
 ## Примеры
 

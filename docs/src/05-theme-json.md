@@ -30,12 +30,13 @@
     "rounding": 6,
     "padding": [5, 10, 15, 5],
     "margin": 0,
-    "text_color": "#E0E0E0",
+    "color": "#E0E0E0",
     "hover_fill": "#444455",
-    "hover_text_color": "#FFFFFF",
+    "hover_color": "#FFFFFF",
     "click_fill": "#555566",
-    "click_text_color": "#FFFFFF",
-    "focus_fill": "#334466"
+    "click_color": "#FFFFFF",
+    "focus_fill": "#334466",
+    "border_hover": [3, "#88AAFF"]
   },
   "TextField": {
     "width": 200,
@@ -122,9 +123,15 @@
     "margin": 0
   },
   "IconButton": {
-    "icon_size": 18,
+    "button_size": 20,
+    "icon_size": 14,
+    "color": "#CCCCCC",
+    "fill": "transparent",
     "hover_fill": "rgba(68,68,85,0.25)",
-    "click_fill": "rgba(85,85,102,0.4)"
+    "hover_color": "#FFFFFF",
+    "click_fill": "rgba(85,85,102,0.4)",
+    "click_color": "#888888",
+    "border_hover": [2, "#88AAFF"]
   },
   "MenuItem": {
     "size": 12

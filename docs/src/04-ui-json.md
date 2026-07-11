@@ -56,20 +56,19 @@
 | `target` | string | `""` | Строка цели для экшена |
 | `enabled` | bool | `true` | Активна/отключена |
 | `fill` | string | #303030 | Цвет фона |
-| `text_color` | string | #E0E0E0 | Цвет текста |
+| `color` | string | #E0E0E0 | Цвет текста/иконки |
 | `min_width` | number | 100.0 | Минимальная ширина |
 | `rounding` | number | 6.0 | Скругление углов |
 | `align` | string | `"center"` | Выравнивание текста: left/center/right |
 | `tooltip` | string | — | Подсказка при наведении |
 | `padding` | number/[2]/[4] | [16,4] | Внутренний отступ |
 | `hover_fill` | string | — | Цвет фона при наведении |
-| `hover_text_color` | string | — | Цвет текста при наведении |
+| `hover_color` | string | — | Цвет текста/иконки при наведении |
 | `click_fill` | string | — | Цвет фона при нажатии |
-| `click_text_color` | string | — | Цвет текста при нажатии |
-| `border_width` | number | 0 | Толщина рамки |
-| `border_color` | string | — | Цвет рамки |
-| `border_type` | string | `"solid"` | Тип рамки: solid/dash/dot |
-| `border` | array | — | Шорткат рамки: [width, "#color", "type"] |
+| `click_color` | string | — | Цвет текста/иконки при нажатии |
+| `border` | array | — | Шорткат рамки: [width, "#color", "type", gap, seg_len] |
+| `border_hover` | array | — | Рамка при наведении (тот же формат) |
+| `border_click` | array | — | Рамка при нажатии |
 | `shadow_offset_x` | number | 2.0 | Смещение тени по X |
 | `shadow_offset_y` | number | 2.0 | Смещение тени по Y |
 | `shadow_blur` | number | 4.0 | Размытие тени |
@@ -494,6 +493,10 @@
 | `tooltip` | string | — | Подсказка |
 | `hover_fill` | string | rgba(68,68,85,0.25) | Цвет фона при наведении |
 | `click_fill` | string | — | Цвет фона при нажатии |
+| `hover_color` | string | — | Цвет иконки при наведении |
+| `click_color` | string | — | Цвет иконки при нажатии |
+| `border_hover` | array | — | Рамка при наведении |
+| `border_click` | array | — | Рамка при нажатии |
 
 ```json
 { "type": "IconButton", "icon": "gear-six", "action": "open_settings", "tooltip": "Настройки" }
