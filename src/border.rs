@@ -123,6 +123,32 @@ pub fn get_border(node: &serde_json::Value, theme: &Theme, widget: &str) -> Bord
     BorderStyle { width: w, color: c, border_type: t, gap: g, seg_len: s, round_cap: rc, position: bp }
 }
 
+/// Применяет state-specific border (border_hover, border_click) поверх базового.
+/// suffix = "hover" или "click". Читает ключ border_{suffix} как шортхенд-массив.
+pub fn apply_state_border(node: &serde_json::Value, theme: &Theme, widget: &str,
+                          suffix: &str, base: &BorderStyle) -> BorderStyle {
+    let key = format!("border_{}", suffix);
+    let val = node.get(&key)
+        .or_else(|| theme.widget.get(widget).and_then(|w| w.get(&key)));
+    let arr: &[serde_json::Value] = match val {
+        Some(serde_json::Value::Array(a)) => a,
+        Some(serde_json::Value::Number(_)) => {
+            let mut r = *base;
+            if let Some(n) = val.and_then(|v| v.as_f64()) { r.width = n as f32; }
+            return r;
+        }
+        _ => return *base,
+    };
+
+    let mut r = *base;
+    if arr.len() >= 1 { if let Some(n) = arr[0].as_f64() { r.width = n as f32; } }
+    if arr.len() >= 2 { if let Some(s) = arr[1].as_str() { if let Some(c) = crate::theme::parse_hex_color(s) { r.color = c; } } }
+    if arr.len() >= 3 { if let Some(s) = arr[2].as_str() { if let Some(t) = parse_border_type(s) { r.border_type = t; } } }
+    if arr.len() >= 4 { if let Some(n) = arr[3].as_f64() { r.gap = n as f32; } }
+    if arr.len() >= 5 { if let Some(n) = arr[4].as_f64() { r.seg_len = n as f32; } }
+    r
+}
+
 // -- shorthand border: [width] / [width, "#color"] / [width, "#color", "type"] --
 
 fn shorthand_width(node: &serde_json::Value) -> Option<f64> {
