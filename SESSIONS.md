@@ -3,9 +3,12 @@
 ## Сессия 09.07 — v0.3 иконки и документация
 - 2026-07-09 (10:35) - начата
 
-**Задача:** интеграция Phosphor-иконок, IconButton/Button система, gap/gap_row, универсальные марджины.
+**Задача:** интеграция Phosphor-иконок, IconButton/Button система, gap/gap_row, универсальные марджины, hover_color/click_color, git-чистка.
 
 ### Статус
+- [x] **`galley` → `galley_with_override_text_color`** — hover_color/click_color теперь перекрашивают иконку
+- [x] **`color`, `hover_color`, `click_color`** — переименовано, `parse_hex_color` поддерживает #RGB/#RGBA
+- [x] **ZhukMax вычищен** — git config, Cargo.toml, docs, вся история переписана
 - [x] **Универсальные марджины** — IconButton + Button, per-widget, без Frame (не ломает wrap), `get_margin()`
 - [x] **Row: item_spacing = ZERO, gap_row** — только явный gap, вертикальный отступ между wrapped-строками
 - [x] **Устранён дубликат `IconButton` в theme.json** (слияние + icon_color)

@@ -1,6 +1,23 @@
 # Changelog
 
-## [0.3.0] — 2026-07-09
+## [0.3.1] — 2026-07-11
+
+### Изменено
+- **`icon_color` → `color`** — в IconButton (атрибут + ключ темы), `hover_text_color` → `hover_color`, `click_text_color` → `click_color`
+- **`parse_hex_color`** — добавлена поддержка `#RGB` / `#RGBA`
+- **Button** — добавлен `margin` (по аналогии с IconButton)
+- **Row** — `item_spacing = ZERO` (только явный gap), добавлен `gap_row`
+- **`galley()` → `galley_with_override_text_color()`** — починен цвет иконки при hover/click
+- **ZhukMax → devZu9** — git config, Cargo.toml, docs, история git переписана
+
+### Добавлено
+- **`get_margin()`** — универсальная утилита чтения margin (атрибут → тема → 0)
+- **`gap_row`** — вертикальный отступ между wrapped-строками в Row
+
+### Исправлено
+- **`hover_color`/`click_color` из темы** — не работали из-за `galley()` (заменял только placeholder-цвета вместо всех)
+- **Высота IconButton** — `maket.size().y` → `icon_size` (убран line-height бонус от шрифта)
+- **Дефолтный padding IconButton** — `symmetric(16, 4)` → `symmetric(0, 0)`
 
 ### Добавлено
 - **IconRegistry** — 1512 иконок Phosphor, `resolve()` / `resolve_glyph()`, вкомпилирован в бинарь
