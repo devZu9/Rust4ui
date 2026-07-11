@@ -118,7 +118,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let text_y = valign.align_size_within_range(maket.size().y, inner.y_range()).min;
     let text_pos = egui::pos2(text_x, text_y);
 
-    ui.painter().galley(text_pos, maket, actual_text);
+    ui.painter().galley_with_override_text_color(text_pos, maket, actual_text);
 
     if let Some(tip) = &tooltip_text {
         if !tip.is_empty() {
