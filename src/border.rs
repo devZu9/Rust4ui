@@ -71,8 +71,7 @@ pub fn get_border(node: &serde_json::Value, theme: &Theme, widget: &str) -> Bord
         .unwrap_or(0.0) as f32;
 
     let c = node.get("border_color")
-        .and_then(|v| v.as_str())
-        .and_then(crate::theme::parse_hex_color)
+        .and_then(crate::theme::parse_color_value)
         .or_else(|| shorthand_color(node))
         .or_else(|| theme_widget_color(theme, widget, "border_color"))
         .or_else(|| theme_shorthand_color(theme, widget))
@@ -142,7 +141,7 @@ pub fn apply_state_border(node: &serde_json::Value, theme: &Theme, widget: &str,
 
     let mut r = *base;
     if arr.len() >= 1 { if let Some(n) = arr[0].as_f64() { r.width = n as f32; } }
-    if arr.len() >= 2 { if let Some(s) = arr[1].as_str() { if let Some(c) = crate::theme::parse_hex_color(s) { r.color = c; } } }
+    if arr.len() >= 2 { if let Some(c) = crate::theme::parse_color_value(&arr[1]) { r.color = c; } }
     if arr.len() >= 3 { if let Some(s) = arr[2].as_str() { if let Some(t) = parse_border_type(s) { r.border_type = t; } } }
     if arr.len() >= 4 { if let Some(n) = arr[3].as_f64() { r.gap = n as f32; } }
     if arr.len() >= 5 { if let Some(n) = arr[4].as_f64() { r.seg_len = n as f32; } }
@@ -177,7 +176,7 @@ fn shorthand_width(node: &serde_json::Value) -> Option<f64> {
 fn shorthand_color(node: &serde_json::Value) -> Option<egui::Color32> {
     let arr = node.get("border")?.as_array()?;
     if arr.len() < 2 { return None; }
-    arr[1].as_str().and_then(crate::theme::parse_hex_color)
+    crate::theme::parse_color_value(&arr[1])
 }
 
 fn shorthand_type(node: &serde_json::Value) -> Option<&str> {
@@ -193,8 +192,7 @@ fn theme_widget_f64(theme: &Theme, widget: &str, key: &str) -> Option<f64> {
 }
 
 fn theme_widget_color(theme: &Theme, widget: &str, key: &str) -> Option<egui::Color32> {
-    let s = theme.widget.get(widget)?.get(key)?.as_str()?;
-    crate::theme::parse_hex_color(s)
+    crate::theme::parse_color_value(theme.widget.get(widget)?.get(key)?)
 }
 
 fn theme_shorthand_width(theme: &Theme, widget: &str) -> Option<f64> {
@@ -209,7 +207,7 @@ fn theme_shorthand_width(theme: &Theme, widget: &str) -> Option<f64> {
 fn theme_shorthand_color(theme: &Theme, widget: &str) -> Option<egui::Color32> {
     let arr = theme.widget.get(widget)?.get("border")?.as_array()?;
     if arr.len() < 2 { return None; }
-    arr[1].as_str().and_then(crate::theme::parse_hex_color)
+    crate::theme::parse_color_value(&arr[1])
 }
 
 fn shorthand_gap(node: &serde_json::Value) -> Option<f64> {

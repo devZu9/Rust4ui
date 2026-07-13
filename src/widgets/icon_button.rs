@@ -30,8 +30,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let pad = get_padding(node, &ctx.theme, "IconButton", egui::Margin::symmetric(0, 0));
     let margin = get_margin(node, &ctx.theme, "IconButton");
 
-    let color = attr_str(node, "color")
-        .and_then(crate::theme::parse_hex_color)
+    let color = node.get("color")
+        .and_then(crate::theme::parse_color_value)
         .unwrap_or_else(|| ctx.theme.w_color("IconButton", "color", egui::Color32::from_rgb(0xE0, 0xE0, 0xE0)));
 
     let halign = match align {
@@ -70,13 +70,13 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         egui::Color32::from_rgb(0x30, 0x30, 0x30));
     let actual_text = if enabled {
         if resp.hovered() && resp.is_pointer_button_down_on() {
-            attr_str(node, "click_color")
-                .and_then(crate::theme::parse_hex_color)
+            node.get("click_color")
+                .and_then(crate::theme::parse_color_value)
                 .or_else(|| ctx.theme.w_color_opt("IconButton", "click_color"))
                 .unwrap_or(color)
         } else if resp.hovered() {
-            attr_str(node, "hover_color")
-                .and_then(crate::theme::parse_hex_color)
+            node.get("hover_color")
+                .and_then(crate::theme::parse_color_value)
                 .or_else(|| ctx.theme.w_color_opt("IconButton", "hover_color"))
                 .unwrap_or(color)
         } else {

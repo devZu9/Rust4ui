@@ -20,5 +20,5 @@ pub use node::{strip_json_comments, UiNode};
 pub use ref_resolver::RefResolver;
 pub use renderer::{get_margin, get_state_background, parse_margin, parse_padding, render_children, render_node, resolve_text, RenderCtx};
 pub use state::StateRegistry;
-pub use theme::Theme;
+pub use theme::{parse_color_value, Theme};
 pub use validator::Validator;

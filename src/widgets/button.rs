@@ -29,8 +29,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let pad = get_padding(node, &ctx.theme, "Button", egui::Margin::symmetric(16, 4));
     let margin = get_margin(node, &ctx.theme, "Button");
 
-    let text_color = attr_str(node, "text_color")
-        .and_then(crate::theme::parse_hex_color)
+    let text_color = node.get("text_color")
+        .and_then(crate::theme::parse_color_value)
         .unwrap_or_else(|| ctx.theme.w_color("Button", "text_color", egui::Color32::from_rgb(0xE0, 0xE0, 0xE0)));
 
     let halign = match align {
@@ -68,13 +68,13 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         egui::Color32::from_rgb(0x30, 0x30, 0x30));
     let actual_text = if enabled {
         if resp.hovered() && resp.is_pointer_button_down_on() {
-            attr_str(node, "click_text_color")
-                .and_then(crate::theme::parse_hex_color)
+            node.get("click_text_color")
+                .and_then(crate::theme::parse_color_value)
                 .or_else(|| ctx.theme.w_color_opt("Button", "click_text_color"))
                 .unwrap_or(text_color)
         } else if resp.hovered() {
-            attr_str(node, "hover_text_color")
-                .and_then(crate::theme::parse_hex_color)
+            node.get("hover_text_color")
+                .and_then(crate::theme::parse_color_value)
                 .unwrap_or(text_color)
         } else {
             text_color

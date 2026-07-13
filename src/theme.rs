@@ -77,8 +77,7 @@ impl Theme {
         self.widget
             .get(widget)
             .and_then(|v| v.get(key))
-            .and_then(|v| v.as_str())
-            .and_then(parse_hex_color)
+            .and_then(parse_color_value)
             .unwrap_or(default)
     }
 
@@ -86,8 +85,7 @@ impl Theme {
         self.widget
             .get(widget)
             .and_then(|v| v.get(key))
-            .and_then(|v| v.as_str())
-            .and_then(parse_hex_color)
+            .and_then(parse_color_value)
     }
 
     pub fn w_str2(&self, node: &serde_json::Value, widget: &str, key: &str) -> Option<String> {
@@ -331,6 +329,20 @@ pub fn parse_hex_color(hex: &str) -> Option<egui::Color32> {
         Some(egui::Color32::from_rgba_unmultiplied(r, g, b, a))
     } else {
         None
+    }
+}
+
+/// Парсит цвет из JSON-значения: строка "#RRGGBB" / "#RGB" или массив ["#RRGGBB", opacity].
+pub fn parse_color_value(val: &serde_json::Value) -> Option<egui::Color32> {
+    match val {
+        serde_json::Value::String(s) => parse_hex_color(s),
+        serde_json::Value::Array(arr) if arr.len() == 2 => {
+            let c = arr[0].as_str().and_then(parse_hex_color)?;
+            let opacity = arr[1].as_f64()? as f32;
+            let a = (opacity.clamp(0.0, 1.0) * 255.0) as u8;
+            Some(egui::Color32::from_rgba_unmultiplied(c.r(), c.g(), c.b(), a))
+        }
+        _ => None,
     }
 }
 
