@@ -8,6 +8,9 @@
 - **`gap_row`** — вертикальный отступ между wrapped-строками в Row
 
 ### Изменено
+- **`Sense::click()` → `Sense::click_and_drag()`** — Button и IconButton (убрано таймаут удержания ~1-2 сек)
+- **`get_state_border()`** — условие: `is_pointer_button_down_on` без `hovered` (зажатая кнопка — всегда click, даже если курсор ушёл)
+- **`theme.json`** — удалены секции Hover/Focus/Disabled (псевдо-виджеты, никем не читались)
 - **`border` → `get_state_border()`** — единая функция выбора hover/click/base border
 - **`widget_border`** — добавлены параметры `resp` и `enabled` (state-зависимые границы на 6 виджетах)
 - **`icon_color` → `color`** — в IconButton (атрибут + ключ темы), `hover_text_color` → `hover_color`, `click_text_color` → `click_color`
@@ -18,6 +21,7 @@
 - **ZhukMax → devZu9** — git config, Cargo.toml, docs, история git переписана
 
 ### Исправлено
+- **Button: удержание клика** — egui-таймаут ~1-2 сек на Sense::click, заменён на click_and_drag (держи сколько хочешь)
 - **`border_hover` / `border_click` не работали** — теперь задействуют `get_state_border()` на всех виджетах
 - **`hover_color`/`click_color` из темы** — не работали из-за `galley()` (заменял только placeholder-цвета вместо всех)
 - **Высота IconButton** — `maket.size().y` → `icon_size` (убран line-height бонус от шрифта)

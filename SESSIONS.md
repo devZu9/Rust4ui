@@ -3,9 +3,12 @@
 ## Сессия 09.07 — v0.3 иконки и документация
 - 2026-07-09 (10:35) - начата
 
-**Задача:** интеграция Phosphor-иконок, IconButton/Button система, gap/gap_row, универсальные марджины, hover_color/click_color, git-чистка.
+**Задача:** интеграция Phosphor-иконок, IconButton/Button система, gap/gap_row, универсальные марджины, hover_color/click_color, border_hover/click, git-чистка, удержание клика.
 
 ### Статус
+- [x] **`Sense::click` → `click_and_drag`** — Button/IconButton без таймаута удержания
+- [x] **`get_state_border`** — условие `is_pointer_button_down_on` без `hovered` (чистый click)
+- [x] **`theme.json` — удалены Hover/Focus/Disabled** — псевдо-виджеты, никем не читались
 - [x] **`border_hover` / `border_click`** — get_state_border(), widget_border + resp, на всех виджетах с border
 - [x] **`galley` → `galley_with_override_text_color`** — hover_color/click_color теперь перекрашивают иконку
 - [x] **`color`, `hover_color`, `click_color`** — переименовано, `parse_hex_color` поддерживает #RGB/#RGBA
