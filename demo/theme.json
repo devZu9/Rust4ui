@@ -1,4 +1,4 @@
-{
+﻿{
   "global": {
     "item_spacing_x": 8,
     "item_spacing_y": 10
@@ -9,7 +9,7 @@
     "margin": 0
   },
     "Button": {
-    "fill": "#303030",
+    "background": "#303030",
     "rounding": 25,
     "min_width": 190,
     "text_color": "#E0E0E0",
@@ -78,7 +78,7 @@
     "tab_padding": 10
   },
   "Panel": {
-    "fill": "#1A1D23",
+    "background": "#1A1D23",
     "rounding": 8,
     "padding": [5, 10, 15, 5],
     "border": [1, "#333333"]
@@ -93,7 +93,7 @@
     "show_close": true,
     "constrain": true,
     "modal": false,
-    "fill": "#1E1E24",
+    "background": "#1E1E24",
     "border": [1, "#33333A"],
     "padding": 8
   },
@@ -110,7 +110,7 @@
     "axis": "vertical"
   },
   "FileDrop": {
-    "fill": "#1A1D23",
+    "background": "#1A1D23",
     "rounding": 8,
     "border": [1, "#333333"],
 
@@ -135,7 +135,7 @@
   },
   "Tray": {},
   "IconBar": {
-    "fill": "#1C1C22",
+    "background": "#1C1C22",
     "border": 0
   },
   "Caption": {
@@ -148,7 +148,7 @@
   },
   "StatusBar": {
     "height": 26,
-    "fill": "#18181D",
+    "background": "#18181D",
     "border": [1, "#2A2A30"],
     "padding": 4
   }

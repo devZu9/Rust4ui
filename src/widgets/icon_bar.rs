@@ -1,10 +1,10 @@
-use crate::border::{draw_border, get_border};
+﻿use crate::border::{draw_border, get_border};
 use crate::renderer::{attr_f64, attr_str, render_children, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
     let direction = attr_str(node, "direction").unwrap_or("vertical");
 
-    let fill_str = attr_str(node, "fill");
+    let fill_str = attr_str(node, "background");
     let fill = fill_str
         .and_then(crate::theme::parse_hex_color)
         .unwrap_or(egui::Color32::from_rgb(0x1C, 0x1C, 0x22));

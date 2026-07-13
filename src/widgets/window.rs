@@ -1,4 +1,4 @@
-use crate::border::get_border;
+﻿use crate::border::get_border;
 use crate::renderer::{attr_bool, attr_f64, attr_str, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
@@ -19,7 +19,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let min_w = attr_f64(node, "min_width").unwrap_or(100.0);
     let min_h = attr_f64(node, "min_height").unwrap_or(80.0);
 
-    let fill_str = attr_str(node, "fill");
+    let fill_str = attr_str(node, "background");
     let fill = fill_str
         .and_then(crate::theme::parse_hex_color)
         .unwrap_or(egui::Color32::from_rgb(0x1E, 0x1E, 0x24));
@@ -38,7 +38,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     }
 
     if open_binding.is_none() {
-        log::warn!("Window: отсутствует атрибут 'open' (binding), окно не будет управляться");
+        log::warn!("Window: РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ Р°С‚СЂРёР±СѓС‚ 'open' (binding), РѕРєРЅРѕ РЅРµ Р±СѓРґРµС‚ СѓРїСЂР°РІР»СЏС‚СЊСЃСЏ");
     }
 
     let mut window = egui::Window::new(title)

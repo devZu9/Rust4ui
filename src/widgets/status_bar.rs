@@ -1,11 +1,11 @@
-use crate::border::get_border;
+﻿use crate::border::get_border;
 use crate::renderer::{attr_f64, attr_str, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
     let height = attr_f64(node, "height").unwrap_or(26.0);
     let padding = attr_f64(node, "padding").unwrap_or(4.0);
 
-    let fill_str = attr_str(node, "fill");
+    let fill_str = attr_str(node, "background");
     let fill = fill_str
         .and_then(crate::theme::parse_hex_color)
         .unwrap_or(egui::Color32::from_rgb(0x18, 0x18, 0x1D));

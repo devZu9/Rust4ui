@@ -1,4 +1,4 @@
-{
+﻿{
   "type": "Tab",
   "id": "basic",
   "title": "{{tab.basic}}",
@@ -75,7 +75,7 @@
                   "text": "{{btn.primary}}",
                   "action": "click",
                   "target": "primary",
-                  "fill": "#3366CC",
+                  "background": "#3366CC",
                   "tooltip": "{{tooltip.primary}}"
                 },
                 {
@@ -84,7 +84,7 @@
                   "text": "{{btn.danger}}",
                   "action": "click",
                   "target": "danger",
-                  "fill": "#CC3333",
+                  "background": "#CC3333",
                   "tooltip": "{{tooltip.danger}}"
                 },
                 {
@@ -93,7 +93,7 @@
                   "text": "{{btn.success}}",
                   "action": "click",
                   "target": "success",
-                  "fill": "#00AA66",
+                  "background": "#00AA66",
                   "tooltip": "{{tooltip.success}}"
                 }
                ]
@@ -105,25 +105,25 @@
           "children": [
             {
               "type": "Button",
-              "text": "По центру",
+              "text": "РџРѕ С†РµРЅС‚СЂСѓ",
               "action": "click",
               "target": "align_center",
-              "fill": "#555566"
+              "background": "#555566"
             },
             {
               "type": "Button",
-              "text": "Слева",
+              "text": "РЎР»РµРІР°",
               "action": "click",
               "target": "align_left",
-              "fill": "#555566",
+              "background": "#555566",
               "align": "left"
             },
             {
               "type": "Button",
-              "text": "Справа",
+              "text": "РЎРїСЂР°РІР°",
               "action": "click",
               "target": "align_right",
-              "fill": "#555566",
+              "background": "#555566",
               "align": "right"
             }
           ]
@@ -182,7 +182,7 @@
             },
             {
               "type": "Label",
-              "text": "Тема (RadioGroup):",
+              "text": "РўРµРјР° (RadioGroup):",
               "size": 13,
               "color": "#888888"
             },

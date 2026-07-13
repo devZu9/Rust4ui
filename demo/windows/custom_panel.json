@@ -1,4 +1,4 @@
-{
+﻿{
   "type": "Window",
   "id": "custom_panel",
   "title": "",
@@ -11,7 +11,7 @@
   "anchor_v": "top",
   "anchor_x": -24,
   "anchor_y": 48,
-  "fill": "#14161B",
+  "background": "#14161B",
   "border": [1, "#8844CC44"],
   "children": [
     {
@@ -35,9 +35,9 @@
                 },
                 {
                   "type": "Button",
-                  "text": "×",
+                  "text": "Г—",
                   "action": "toggle_custom_window",
-                  "fill": "#8844CC",
+                  "background": "#8844CC",
                   "min_width": 28,
                   "tooltip": "{{tooltip.close_custom}}"
                 }

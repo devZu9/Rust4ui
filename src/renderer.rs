@@ -139,6 +139,38 @@ pub fn get_margin(node: &serde_json::Value, theme: &crate::theme::Theme, widget:
         .unwrap_or(egui::Margin::ZERO)
 }
 
+pub fn get_state_background(node: &serde_json::Value, theme: &crate::theme::Theme, widget: &str,
+                            resp: &egui::Response, enabled: bool, default: egui::Color32) -> egui::Color32 {
+    let base = attr_str(node, "background")
+        .and_then(crate::theme::parse_hex_color)
+        .or_else(|| theme.w_color_opt(widget, "background"))
+        .unwrap_or(default);
+    if !enabled { return egui::Color32::from_gray(60); }
+    if resp.is_pointer_button_down_on() {
+        attr_str(node, "background_click")
+            .and_then(crate::theme::parse_hex_color)
+            .or_else(|| theme.w_color_opt(widget, "background_click"))
+            .or_else(|| {
+                attr_str(node, "background_hover")
+                    .and_then(crate::theme::parse_hex_color)
+                    .or_else(|| theme.w_color_opt(widget, "background_hover"))
+            })
+            .unwrap_or(base)
+    } else if resp.hovered() {
+        attr_str(node, "background_hover")
+            .and_then(crate::theme::parse_hex_color)
+            .or_else(|| theme.w_color_opt(widget, "background_hover"))
+            .unwrap_or(base)
+    } else if resp.has_focus() {
+        attr_str(node, "background_focus")
+            .and_then(crate::theme::parse_hex_color)
+            .or_else(|| theme.w_color_opt(widget, "background_focus"))
+            .unwrap_or(base)
+    } else {
+        base
+    }
+}
+
 pub fn parse_padding(val: &serde_json::Value) -> Option<egui::Margin> {
     match val {
         serde_json::Value::Number(n) => {

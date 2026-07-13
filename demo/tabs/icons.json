@@ -1,4 +1,4 @@
-{
+﻿{
   "type": "Tab",
   "id": "icons",
   "title": "{{tab.icons}}",
@@ -15,7 +15,7 @@
           "children": [
             {
               "type": "Label",
-              "text": "Иконки Phosphor",
+              "text": "РРєРѕРЅРєРё Phosphor",
               "size": 16,
               "bold": true
             },

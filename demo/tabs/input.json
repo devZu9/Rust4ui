@@ -1,4 +1,4 @@
-{
+﻿{
   "type": "Tab",
   "id": "input",
   "title": "{{tab.input}}",
@@ -152,7 +152,7 @@
             },
             {
               "type": "Label",
-              "text": "Поле пароля (mode=password):",
+              "text": "РџРѕР»Рµ РїР°СЂРѕР»СЏ (mode=password):",
               "size": 13,
               "color": "#888888"
             },
@@ -175,7 +175,7 @@
                   "icon": "check",
                   "text": "{{btn.apply}}",
                   "action": "apply",
-                  "fill": "#3366CC",
+                  "background": "#3366CC",
                   "min_width": 120
                 },
                 {

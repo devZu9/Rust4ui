@@ -1,4 +1,4 @@
-{
+﻿{
   "type": "Window",
   "id": "info_window",
   "title": "{{window.info}}",
@@ -57,7 +57,7 @@
           "type": "Button",
           "text": "{{btn.close}}",
           "action": "toggle_window",
-          "fill": "#CC3333",
+          "background": "#CC3333",
           "min_width": 100
         }
       ]

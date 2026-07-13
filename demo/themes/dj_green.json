@@ -1,10 +1,10 @@
-{
+﻿{
   "Label": {
     "color": "#E0E0E0",
     "size": 13
   },
   "Button": {
-    "fill": "#0A1A0A",
+    "background": "#0A1A0A",
     "rounding": 4,
     "min_width": 100,
     "text_color": "#00FF66"
@@ -37,7 +37,7 @@
     "gap": 4
   },
   "Panel": {
-    "fill": "#0A0F0A",
+    "background": "#0A0F0A",
     "rounding": 4,
     "padding": 12,
     "border": [1, "#00FF6633"]
@@ -52,7 +52,7 @@
     "show_close": true,
     "constrain": true,
     "modal": false,
-    "fill": "#0A0F0A",
+    "background": "#0A0F0A",
     "border": [1, "#00FF6633"],
     "padding": 8
   },
@@ -68,7 +68,7 @@
     "axis": "vertical"
   },
   "FileDrop": {
-    "fill": "#0A0F0A",
+    "background": "#0A0F0A",
     "rounding": 4,
     "border": [1, "#00FF6633"],
     "highlight_color": "#00FF6644",
@@ -90,7 +90,7 @@
   },
   "Tray": {},
   "IconBar": {
-    "fill": "#0A0F0A",
+    "background": "#0A0F0A",
     "border": 0
   },
   "IconButton": {
@@ -106,7 +106,7 @@
   },
   "StatusBar": {
     "height": 26,
-    "fill": "#0A0F0A",
+    "background": "#0A0F0A",
     "border": [1, "#00FF6633"],
     "padding": 4
   },

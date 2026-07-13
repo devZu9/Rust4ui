@@ -1,4 +1,4 @@
-{
+﻿{
   "type": "Tab",
   "id": "menus",
   "title": "{{tab.menus}}",
@@ -15,7 +15,7 @@
           "children": [
             {
               "type": "Label",
-              "text": "Меню",
+              "text": "РњРµРЅСЋ",
               "size": 20,
               "bold": true
             },
@@ -25,7 +25,7 @@
             },
             {
               "type": "Label",
-              "text": "Пример MenuBar (Файл / Правка / Помощь):",
+              "text": "РџСЂРёРјРµСЂ MenuBar (Р¤Р°Р№Р» / РџСЂР°РІРєР° / РџРѕРјРѕС‰СЊ):",
               "size": 13,
               "color": "#888888"
             },
@@ -69,7 +69,7 @@
             },
             {
               "type": "Label",
-              "text": "Горизонтальная панель иконок (IconBar horizontal):",
+              "text": "Р“РѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅР°СЏ РїР°РЅРµР»СЊ РёРєРѕРЅРѕРє (IconBar horizontal):",
               "size": 13,
               "color": "#888888"
             },
@@ -78,9 +78,9 @@
               "direction": "horizontal",
               "children": [
                 { "type": "IconButton", "icon": "floppy-disk", "action": "click", "target": "icon_save", "tooltip": "{{tip.save_title}}" },
-                { "type": "IconButton", "icon": "copy-simple", "action": "click", "target": "icon_copy", "tooltip": "Копировать" },
-                { "type": "IconButton", "icon": "clipboard-text", "action": "click", "target": "icon_paste", "tooltip": "Вставить" },
-                { "type": "IconButton", "icon": "gear-six", "action": "click", "target": "icon_settings", "tooltip": "Настройки" },
+                { "type": "IconButton", "icon": "copy-simple", "action": "click", "target": "icon_copy", "tooltip": "РљРѕРїРёСЂРѕРІР°С‚СЊ" },
+                { "type": "IconButton", "icon": "clipboard-text", "action": "click", "target": "icon_paste", "tooltip": "Р’СЃС‚Р°РІРёС‚СЊ" },
+                { "type": "IconButton", "icon": "gear-six", "action": "click", "target": "icon_settings", "tooltip": "РќР°СЃС‚СЂРѕР№РєРё" },
                 { "type": "IconButton", "icon": "question", "action": "click", "target": "icon_help", "tooltip": "{{tooltip.hyperlink}}" }
               ]
             },
@@ -90,7 +90,7 @@
             },
             {
               "type": "Label",
-              "text": "Вертикальная панель иконок (IconBar vertical):",
+              "text": "Р’РµСЂС‚РёРєР°Р»СЊРЅР°СЏ РїР°РЅРµР»СЊ РёРєРѕРЅРѕРє (IconBar vertical):",
               "size": 13,
               "color": "#888888"
             },
@@ -102,11 +102,11 @@
                   "type": "IconBar",
                   "direction": "vertical",
                   "children": [
-                    { "type": "IconButton", "icon": "house-simple", "action": "click", "target": "icon_home", "tooltip": "Главная" },
-                    { "type": "IconButton", "icon": "user", "action": "click", "target": "icon_user", "tooltip": "Пользователь" },
-                    { "type": "IconButton", "icon": "folder-simple", "action": "click", "target": "icon_folder", "tooltip": "Папка" },
-                    { "type": "IconButton", "icon": "download-simple", "action": "click", "target": "icon_download", "tooltip": "Скачать" },
-                    { "type": "IconButton", "icon": "upload-simple", "action": "click", "target": "icon_upload", "tooltip": "Загрузить" }
+                    { "type": "IconButton", "icon": "house-simple", "action": "click", "target": "icon_home", "tooltip": "Р“Р»Р°РІРЅР°СЏ" },
+                    { "type": "IconButton", "icon": "user", "action": "click", "target": "icon_user", "tooltip": "РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ" },
+                    { "type": "IconButton", "icon": "folder-simple", "action": "click", "target": "icon_folder", "tooltip": "РџР°РїРєР°" },
+                    { "type": "IconButton", "icon": "download-simple", "action": "click", "target": "icon_download", "tooltip": "РЎРєР°С‡Р°С‚СЊ" },
+                    { "type": "IconButton", "icon": "upload-simple", "action": "click", "target": "icon_upload", "tooltip": "Р—Р°РіСЂСѓР·РёС‚СЊ" }
                   ]
                 }
               ]

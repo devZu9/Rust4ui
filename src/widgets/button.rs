@@ -1,4 +1,4 @@
-use crate::border::{draw_border, get_state_border};
+﻿use crate::border::{draw_border, get_state_border};
 use crate::renderer::{attr_bool, attr_f64, attr_str, get_margin, get_padding, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
@@ -12,17 +12,13 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     };
 
     if raw_text.is_empty() && icon_name.is_none() {
-        log::warn!("Button: отсутствует атрибут 'text' и 'icon'");
+        log::warn!("Button: РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ Р°С‚СЂРёР±СѓС‚ 'text' Рё 'icon'");
     }
 
     let enabled = attr_bool(node, "enabled").unwrap_or(true);
     let min_width = attr_f64(node, "min_width")
         .unwrap_or_else(|| ctx.theme.w_f64("Button", "min_width", 100.0));
     let min_height = ctx.theme.w_f64("Button", "height", 28.0) as f32;
-
-    let fill = attr_str(node, "fill")
-        .and_then(crate::theme::parse_hex_color)
-        .unwrap_or_else(|| ctx.theme.w_color("Button", "fill", egui::Color32::from_rgb(0x30, 0x30, 0x30)));
 
     let rounding = attr_f64(node, "rounding")
         .unwrap_or_else(|| ctx.theme.w_f64("Button", "rounding", 6.0));
@@ -68,22 +64,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         egui::pos2(rect.max.x - m_r, rect.max.y - m_b),
     );
 
-    let bg = if resp.hovered() && resp.is_pointer_button_down_on() {
-        attr_str(node, "click_fill")
-            .and_then(crate::theme::parse_hex_color)
-            .or_else(|| ctx.theme.w_color_opt("Button", "click_fill"))
-            .unwrap_or_else(|| ctx.theme.w_color("Button", "hover_fill", egui::Color32::from_rgb(0x44, 0x44, 0x55)))
-    } else if resp.hovered() {
-        attr_str(node, "hover_fill")
-            .and_then(crate::theme::parse_hex_color)
-            .unwrap_or_else(|| ctx.theme.w_color("Button", "hover_fill", egui::Color32::from_rgb(0x44, 0x44, 0x55)))
-    } else if resp.has_focus() {
-        ctx.theme.w_color("Button", "focus_fill", egui::Color32::from_rgb(0x33, 0x44, 0x66))
-    } else {
-        fill
-    };
-
-    let actual_fill = if enabled { bg } else { egui::Color32::from_gray(60) };
+    let actual_fill = crate::renderer::get_state_background(node, &ctx.theme, "Button", &resp, enabled,
+        egui::Color32::from_rgb(0x30, 0x30, 0x30));
     let actual_text = if enabled {
         if resp.hovered() && resp.is_pointer_button_down_on() {
             attr_str(node, "click_text_color")

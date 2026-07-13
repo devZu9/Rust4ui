@@ -1,8 +1,8 @@
-use crate::border::get_border;
+﻿use crate::border::get_border;
 use crate::renderer::{attr_f64, attr_str, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
-    let fill_str = attr_str(node, "fill");
+    let fill_str = attr_str(node, "background");
     let fill = fill_str
         .and_then(crate::theme::parse_hex_color)
         .unwrap_or(egui::Color32::from_rgb(0x1A, 0x1D, 0x23));
@@ -34,9 +34,9 @@ mod tests {
     fn test_smoke_panel() {
         let json = serde_json::json!({
             "type": "Panel",
-            "fill": "#1A1D23",
+            "background": "#1A1D23",
             "padding": 12
         });
-        assert_eq!(attr_str(&json, "fill"), Some("#1A1D23"));
+        assert_eq!(attr_str(&json, "background"), Some("#1A1D23"));
     }
 }

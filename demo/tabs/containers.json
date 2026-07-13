@@ -1,4 +1,4 @@
-{
+﻿{
   "type": "Tab",
   "id": "containers",
   "title": "{{tab.containers}}",
@@ -31,7 +31,7 @@
             },
             {
               "type": "Panel",
-              "fill": "#1A1D23",
+              "background": "#1A1D23",
               "rounding": 8,
               "padding": 12,
               "border": [1, "#333333"],
@@ -70,7 +70,7 @@
                   "text": "{{btn.item}} 1",
                   "action": "click",
                   "target": "item_1",
-                  "fill": "#2A2A33",
+                  "background": "#2A2A33",
                   "rounding": 12,
                   "min_width": 70
                 },
@@ -79,7 +79,7 @@
                   "text": "{{btn.item}} 2",
                   "action": "click",
                   "target": "item_2",
-                  "fill": "#2A2A33",
+                  "background": "#2A2A33",
                   "rounding": 12,
                   "min_width": 70
                 },
@@ -88,7 +88,7 @@
                   "text": "{{btn.item}} 3",
                   "action": "click",
                   "target": "item_3",
-                  "fill": "#2A2A33",
+                  "background": "#2A2A33",
                   "rounding": 12,
                   "min_width": 70
                 },
@@ -97,7 +97,7 @@
                   "text": "{{btn.item}} 4",
                   "action": "click",
                   "target": "item_4",
-                  "fill": "#2A2A33",
+                  "background": "#2A2A33",
                   "rounding": 12,
                   "min_width": 70
                 },
@@ -106,7 +106,7 @@
                   "text": "{{btn.item}} 5",
                   "action": "click",
                   "target": "item_5",
-                  "fill": "#2A2A33",
+                  "background": "#2A2A33",
                   "rounding": 12,
                   "min_width": 70
                 },
@@ -115,7 +115,7 @@
                   "text": "{{btn.item}} 6",
                   "action": "click",
                   "target": "item_6",
-                  "fill": "#2A2A33",
+                  "background": "#2A2A33",
                   "rounding": 12,
                   "min_width": 70
                 },
@@ -124,7 +124,7 @@
                   "text": "{{btn.item}} 7",
                   "action": "click",
                   "target": "item_7",
-                  "fill": "#2A2A33",
+                  "background": "#2A2A33",
                   "rounding": 12,
                   "min_width": 70
                 },
@@ -133,7 +133,7 @@
                   "text": "{{btn.item}} 8",
                   "action": "click",
                   "target": "item_8",
-                  "fill": "#2A2A33",
+                  "background": "#2A2A33",
                   "rounding": 12,
                   "min_width": 70
                 },
@@ -142,7 +142,7 @@
                   "text": "{{btn.item}} 9",
                   "action": "click",
                   "target": "item_9",
-                  "fill": "#2A2A33",
+                  "background": "#2A2A33",
                   "rounding": 12,
                   "min_width": 70
                 },
@@ -151,7 +151,7 @@
                   "text": "{{btn.item}} 10",
                   "action": "click",
                   "target": "item_10",
-                  "fill": "#2A2A33",
+                  "background": "#2A2A33",
                   "rounding": 12,
                   "min_width": 70
                 }
@@ -163,7 +163,7 @@
             },
             {
               "type": "Label",
-              "text": "Колонки 50/50 (Row columns=2):",
+              "text": "РљРѕР»РѕРЅРєРё 50/50 (Row columns=2):",
               "size": 13,
               "color": "#888888"
             },
@@ -173,19 +173,19 @@
               "children": [
                 {
                   "type": "Panel",
-                  "fill": "#1A1D23",
+                  "background": "#1A1D23",
                   "rounding": 8,
                   "padding": 12,
                   "children": [
                     {
                       "type": "Label",
-                      "text": "Левая панель (50%)",
+                      "text": "Р›РµРІР°СЏ РїР°РЅРµР»СЊ (50%)",
                       "size": 14,
                       "bold": true
                     },
                     {
                       "type": "Label",
-                      "text": "Сюда можно поместить любой контент: поля, кнопки, списки.",
+                      "text": "РЎСЋРґР° РјРѕР¶РЅРѕ РїРѕРјРµСЃС‚РёС‚СЊ Р»СЋР±РѕР№ РєРѕРЅС‚РµРЅС‚: РїРѕР»СЏ, РєРЅРѕРїРєРё, СЃРїРёСЃРєРё.",
                       "size": 12,
                       "color": "#888888"
                     }
@@ -193,13 +193,13 @@
                 },
                 {
                   "type": "Panel",
-                  "fill": "#1C1E24",
+                  "background": "#1C1E24",
                   "rounding": 8,
                   "padding": 12,
                   "children": [
                     {
                       "type": "Label",
-                      "text": "Правая панель (50%)",
+                      "text": "РџСЂР°РІР°СЏ РїР°РЅРµР»СЊ (50%)",
                       "size": 14,
                       "bold": true
                     },
@@ -224,7 +224,7 @@
             },
             {
               "type": "Label",
-              "text": "Таблицы (без сетки / с сеткой):",
+              "text": "РўР°Р±Р»РёС†С‹ (Р±РµР· СЃРµС‚РєРё / СЃ СЃРµС‚РєРѕР№):",
               "size": 13,
               "color": "#888888"
             },
@@ -270,7 +270,7 @@
                     {"type": "Label", "text": "{{grid.stat_c}}"},
                     {"type": "Label", "text": "{{grid.ver_c}}"},
                     {"type": "Label", "text": "Rust4ui"},
-                    {"type": "Label", "text": "Готово"},
+                    {"type": "Label", "text": "Р“РѕС‚РѕРІРѕ"},
                     {"type": "Label", "text": "0.2"}
                   ]
                 }
