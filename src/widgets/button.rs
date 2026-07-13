@@ -60,7 +60,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let total_h = desired_h + m_t + m_b;
 
     let size = egui::vec2(total_w, total_h);
-    let (rect, resp) = ui.allocate_exact_size(size, egui::Sense::click());
+    let (rect, resp) = ui.allocate_exact_size(size, egui::Sense::click_and_drag());
     let border = get_state_border(node, &ctx.theme, "Button", &resp, enabled);
 
     let content_rect = egui::Rect::from_min_max(

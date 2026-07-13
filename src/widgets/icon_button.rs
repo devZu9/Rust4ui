@@ -63,7 +63,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let total_h = button_height + m_t + m_b;
 
     let size = egui::vec2(total_w, total_h);
-    let (rect, resp) = ui.allocate_exact_size(size, egui::Sense::click());
+    let (rect, resp) = ui.allocate_exact_size(size, egui::Sense::click_and_drag());
 
     let content_rect = egui::Rect::from_min_max(
         egui::pos2(rect.min.x + m_l, rect.min.y + m_t),
