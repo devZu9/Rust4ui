@@ -35,7 +35,7 @@
                 },
                 {
                   "type": "Button",
-                  "text": "Г—",
+                  "text": "×",
                   "action": "toggle_custom_window",
                   "background": "#8844CC",
                   "min_width": 28,

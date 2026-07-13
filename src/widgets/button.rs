@@ -12,7 +12,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     };
 
     if raw_text.is_empty() && icon_name.is_none() {
-        log::warn!("Button: РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ Р°С‚СЂРёР±СѓС‚ 'text' Рё 'icon'");
+        log::warn!("Button: отсутствует атрибут 'text' и 'icon'");
     }
 
     let enabled = attr_bool(node, "enabled").unwrap_or(true);

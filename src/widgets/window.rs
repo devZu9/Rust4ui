@@ -38,7 +38,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     }
 
     if open_binding.is_none() {
-        log::warn!("Window: РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ Р°С‚СЂРёР±СѓС‚ 'open' (binding), РѕРєРЅРѕ РЅРµ Р±СѓРґРµС‚ СѓРїСЂР°РІР»СЏС‚СЊСЃСЏ");
+        log::warn!("Window: отсутствует атрибут 'open' (binding), окно не будет управляться");
     }
 
     let mut window = egui::Window::new(title)

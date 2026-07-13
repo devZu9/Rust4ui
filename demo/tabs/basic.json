@@ -105,14 +105,14 @@
           "children": [
             {
               "type": "Button",
-              "text": "РџРѕ С†РµРЅС‚СЂСѓ",
+              "text": "По центру",
               "action": "click",
               "target": "align_center",
               "background": "#555566"
             },
             {
               "type": "Button",
-              "text": "РЎР»РµРІР°",
+              "text": "Слева",
               "action": "click",
               "target": "align_left",
               "background": "#555566",
@@ -120,7 +120,7 @@
             },
             {
               "type": "Button",
-              "text": "РЎРїСЂР°РІР°",
+              "text": "Справа",
               "action": "click",
               "target": "align_right",
               "background": "#555566",
@@ -182,7 +182,7 @@
             },
             {
               "type": "Label",
-              "text": "РўРµРјР° (RadioGroup):",
+              "text": "Тема (RadioGroup):",
               "size": 13,
               "color": "#888888"
             },
