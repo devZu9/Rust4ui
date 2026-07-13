@@ -1,4 +1,4 @@
-﻿use crate::border::{draw_border, get_state_border};
+use crate::border::{draw_border, get_state_border};
 use crate::renderer::{attr_bool, attr_f64, attr_str, get_margin, get_padding, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {

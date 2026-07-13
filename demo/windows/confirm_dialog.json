@@ -1,4 +1,4 @@
-﻿{
+{
   "type": "Window",
   "id": "confirm_dialog",
   "title": "{{dialog.confirm}}",
