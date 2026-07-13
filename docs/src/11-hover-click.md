@@ -12,10 +12,10 @@
 {
   "type": "Button",
   "text": "Наведи",
-  "fill": "#303030",
-  "hover_fill": "#505060",
+  "background": "#303030",
+  "background_hover": "#505060",
   "hover_color": "#FFFFFF",
-  "click_fill": "#606080",
+  "background_click": "#606080",
   "click_color": "#CCCCFF",
   "border_hover": [3, "#FF0", "dot", 4, 1]
 }
@@ -57,8 +57,8 @@ if hovered && pressed {
   "color": "#CC4444",
   "hover_color": "#FF8888",
   "click_color": "#FF4444",
-  "hover_fill": "rgba(200, 50, 50, 0.3)",
-  "click_fill": "rgba(200, 50, 50, 0.5)",
+  "background_hover": "rgba(200, 50, 50, 0.3)",
+  "background_click": "rgba(200, 50, 50, 0.5)",
   "border_hover": [3, "#FF0", "dot", 4, 1]
 }
 ```
@@ -81,11 +81,11 @@ if hovered && pressed {
 ```json
 {
   "Button": {
-    "fill": "#303030",
+    "background": "#303030",
     "color": "#E0E0E0",
-    "hover_fill": "#444455",
+    "background_hover": "#444455",
     "hover_color": "#FFFFFF",
-    "click_fill": "#555566",
+    "background_click": "#555566",
     "click_color": "#FFFFFF",
     "focus_fill": "#334466",
     "border_hover": [3, "#88AAFF"]
@@ -94,8 +94,8 @@ if hovered && pressed {
     "color": "#CCCCCC",
     "button_size": 24,
     "icon_size": 14,
-    "hover_fill": "rgba(68,68,85,0.25)",
-    "click_fill": "rgba(85,85,102,0.4)",
+    "background_hover": "rgba(68,68,85,0.25)",
+    "background_click": "rgba(85,85,102,0.4)",
     "hover_color": "#FFFFFF",
     "click_color": "#888888",
     "border_hover": [2, "#88AAFF"]
@@ -105,8 +105,8 @@ if hovered && pressed {
 
 ## Приоритет
 
-1. Атрибут на узле (`"hover_fill": "#FF0000"`)
-2. Тема виджета (`theme.widget["Button"]["hover_fill"]`)
+1. Атрибут на узле (`"background_hover": "#FF0000"`)
+2. Тема виджета (`theme.widget["Button"]["background_hover"]`)
 3. Дефолт темы (встроенный)
 
 Все state-атрибуты (`hover_fill`, `hover_color`, `border_hover`, `click_*`) опциональны — если не указаны, используется значение покоя (`fill`, `color`, `border`).
@@ -124,9 +124,9 @@ if hovered && pressed {
 {
   "type": "Button",
   "text": "Опасная кнопка",
-  "fill": "#882222",
-  "hover_fill": "#CC3333",
-  "click_fill": "#991111",
+  "background": "#882222",
+  "background_hover": "#CC3333",
+  "background_click": "#991111",
   "color": "#FFCCCC",
   "hover_color": "#FFFFFF"
 }
@@ -136,7 +136,7 @@ if hovered && pressed {
   "icon": "heart",
   "color": "#FF6699",
   "hover_color": "#FF88BB",
-  "hover_fill": "rgba(255, 102, 153, 0.2)",
+  "background_hover": "rgba(255, 102, 153, 0.2)",
   "tooltip": "Избранное"
 }
 ```

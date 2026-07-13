@@ -76,10 +76,10 @@
 
 ```json
 { "type": "Button", "text": "Сохранить", "action": "save", "icon": "floppy-disk" }
-{ "type": "Button", "text": "Удалить", "fill": "#CC3333", "action": "delete" }
+{ "type": "Button", "text": "Удалить", "background": "#CC3333", "action": "delete" }
 { "type": "Button", "text": "Настройки", "enabled": false }
 { "type": "Button", "text": "Опасная кнопка",
-  "hover_fill": "#FF4444", "click_fill": "#AA0000",
+  "background_hover": "#FF4444", "background_click": "#AA0000",
   "border": [2, "#FF4444", "dash"],
   "tooltip": "Осторожно!" }
 ```
@@ -301,7 +301,7 @@
 ```json
 {
   "type": "Panel",
-  "fill": "#1A1D23",
+  "background": "#1A1D23",
   "rounding": 8,
   "padding": 16,
   "border": [1, "#333333"],
@@ -522,7 +522,7 @@
 {
   "type": "IconBar",
   "direction": "vertical",
-  "fill": "#1C1C22",
+  "background": "#1C1C22",
   "children": [
     { "type": "IconButton", "icon": "folder-simple", "action": "open" },
     { "type": "IconButton", "icon": "floppy-disk", "action": "save" },

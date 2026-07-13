@@ -3,11 +3,14 @@
 ## [0.3.1] — 2026-07-11
 
 ### Добавлено
+- **`parse_color_value()`** — цвет + opacity как `["#HEX", opacity]` (0.0–1.0)
+- **`get_state_background()`** — универсальная функция выбора фона по hover/click/focus
 - **`border_hover` / `border_click`** — state-зависимые границы на всех виджетах (IconButton, Button, TextField, Column, Row, Label, Checkbox, RadioGroup, Tabs)
 - **`get_margin()`** — универсальная утилита чтения margin (атрибут → тема → 0)
 - **`gap_row`** — вертикальный отступ между wrapped-строками в Row
 
 ### Изменено
+- **`fill` → `background`** — переименован во всех виджетах, темах, UI-файлах и док-ции (`hover_fill` → `background_hover`, `click_fill` → `background_click`)
 - **`Sense::click()` → `Sense::click_and_drag()`** — Button и IconButton (убрано таймаут удержания ~1-2 сек)
 - **`get_state_border()`** — условие: `is_pointer_button_down_on` без `hovered` (зажатая кнопка — всегда click, даже если курсор ушёл)
 - **`theme.json`** — удалены секции Hover/Focus/Disabled (псевдо-виджеты, никем не читались)

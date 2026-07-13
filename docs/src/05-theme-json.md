@@ -26,14 +26,14 @@
   "Button": {
     "min_width": 100,
     "height": 28,
-    "fill": "#303030",
+    "background": "#303030",
     "rounding": 6,
     "padding": [5, 10, 15, 5],
     "margin": 0,
     "color": "#E0E0E0",
-    "hover_fill": "#444455",
+    "background_hover": "#444455",
     "hover_color": "#FFFFFF",
-    "click_fill": "#555566",
+    "background_click": "#555566",
     "click_color": "#FFFFFF",
     "focus_fill": "#334466",
     "border_hover": [3, "#88AAFF"]
@@ -91,7 +91,7 @@
     "tab_padding": 10
   },
   "Panel": {
-    "fill": "#1A1D23",
+    "background": "#1A1D23",
     "rounding": 8,
     "padding": 12,
     "border": [1, "#333333"]
@@ -99,7 +99,7 @@
   "Window": {
     "default_width": 400,
     "default_height": 300,
-    "fill": "#1E1E24",
+    "background": "#1E1E24",
     "border": [1, "#33333A"],
     "padding": 8
   },
@@ -108,7 +108,7 @@
     "size": 24
   },
   "FileDrop": {
-    "fill": "#1A1D23",
+    "background": "#1A1D23",
     "rounding": 8,
     "border": [1, "#333333"],
     "padding": 16
@@ -126,10 +126,10 @@
     "button_size": 20,
     "icon_size": 14,
     "color": "#CCCCCC",
-    "fill": "transparent",
-    "hover_fill": "rgba(68,68,85,0.25)",
+    "background": "transparent",
+    "background_hover": "rgba(68,68,85,0.25)",
     "hover_color": "#FFFFFF",
-    "click_fill": "rgba(85,85,102,0.4)",
+    "background_click": "rgba(85,85,102,0.4)",
     "click_color": "#888888",
     "border_hover": [2, "#88AAFF"]
   },
@@ -138,10 +138,10 @@
   },
   "StatusBar": {
     "height": 26,
-    "fill": "#18181D"
+    "background": "#18181D"
   },
   "IconBar": {
-    "fill": "#1C1C22"
+    "background": "#1C1C22"
   }
 }
 ```
@@ -150,12 +150,12 @@
 
 Атрибуты применяются по приоритету (от высшего к низшему):
 
-1. **Явный атрибут на узле JSON** — `"fill": "#FF0000"` в виджете
-2. **Секция виджета в теме** — `"Button": { "fill": "#303030" }`
+1. **Явный атрибут на узле JSON** — `"background": "#FF0000"` в виджете
+2. **Секция виджета в теме** — `"Button": { "background": "#303030" }`
 3. **Дефолтная тема** (встроенная в код)
 4. **egui default**
 
-Пример: если в `theme.json` указан `"Button": { "fill": "#FF0000" }`, а на кнопке в `ui.json` — `"fill": "#00FF00"`, то применится `#00FF00`.
+Пример: если в `theme.json` указан `"Button": { "background": "#FF0000" }`, а на кнопке в `ui.json` — `"background": "#00FF00"`, то применится `#00FF00`.
 
 ## Встроенные темы
 

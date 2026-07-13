@@ -45,7 +45,7 @@
           "type": "Button",
           "text": "Зарегистрироваться",
           "action": "register",
-          "fill": "#3366CC"
+          "background": "#3366CC"
         },
         {
           "type": "Button",
@@ -147,7 +147,7 @@
 ```json
 {
   "type": "Panel",
-  "fill": "#1A1D23",
+  "background": "#1A1D23",
   "rounding": 8,
   "padding": 16,
   "border": [1, "#33333A"],
@@ -229,7 +229,7 @@
           "type": "Button",
           "text": "Применить",
           "action": "apply",
-          "fill": "#3366CC"
+          "background": "#3366CC"
         },
         {
           "type": "Button",
@@ -253,7 +253,7 @@
       "type": "IconBar",
       "direction": "vertical",
       "width": 48,
-      "fill": "#1C1C22",
+      "background": "#1C1C22",
       "children": [
         {
           "type": "IconButton",
@@ -413,7 +413,7 @@
     { "type": "Spacer" },
     {
       "type": "Panel",
-      "fill": "#1E1E24",
+      "background": "#1E1E24",
       "rounding": 8,
       "padding": 16,
       "border": [1, "#33333A"],
@@ -457,7 +457,7 @@
                   "type": "Button",
                   "text": "Войти",
                   "action": "login",
-                  "fill": "#3366CC",
+                  "background": "#3366CC",
                   "min_width": 120
                 },
                 {
@@ -501,7 +501,7 @@
                   "type": "Button",
                   "text": "OK",
                   "action": "confirm_ok",
-                  "fill": "#3366CC"
+                  "background": "#3366CC"
                 },
                 {
                   "type": "Button",
