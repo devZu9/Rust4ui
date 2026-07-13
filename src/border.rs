@@ -155,7 +155,7 @@ pub fn get_state_border(node: &serde_json::Value, theme: &Theme, widget: &str,
                         resp: &egui::Response, enabled: bool) -> BorderStyle {
     let base = get_border(node, theme, widget);
     if !enabled { return base; }
-    if resp.hovered() && resp.is_pointer_button_down_on() {
+    if resp.hovered() && (resp.is_pointer_button_down_on() || resp.clicked()) {
         apply_state_border(node, theme, widget, "click", &base)
     } else if resp.hovered() {
         apply_state_border(node, theme, widget, "hover", &base)
