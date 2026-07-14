@@ -29,9 +29,9 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let pad = get_padding(node, &ctx.theme, "Button", egui::Margin::symmetric(16, 4));
     let margin = get_margin(node, &ctx.theme, "Button");
 
-    let text_color = node.get("text_color")
+    let color_text = node.get("color_text")
         .and_then(crate::theme::parse_color_value)
-        .unwrap_or_else(|| ctx.theme.w_color("Button", "text_color", egui::Color32::from_rgb(0xE0, 0xE0, 0xE0)));
+        .unwrap_or_else(|| ctx.theme.w_color("Button", "color_text", egui::Color32::from_rgb(0xE0, 0xE0, 0xE0)));
 
     let halign = match align {
         "left" => egui::Align::LEFT,
@@ -43,7 +43,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let maket = ui.painter().layout_no_wrap(
         text.clone(),
         egui::FontId::proportional(14.0),
-        text_color,
+        color_text,
     );
 
     let (pad_l, pad_r, pad_t, pad_b) = (pad.left as f32, pad.right as f32, pad.top as f32, pad.bottom as f32);
@@ -71,13 +71,13 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
             node.get("text_color_click")
                 .and_then(crate::theme::parse_color_value)
                 .or_else(|| ctx.theme.w_color_opt("Button", "text_color_click"))
-                .unwrap_or(text_color)
+                .unwrap_or(color_text)
         } else if resp.hovered() {
             node.get("text_color_hover")
                 .and_then(crate::theme::parse_color_value)
-                .unwrap_or(text_color)
+                .unwrap_or(color_text)
         } else {
-            text_color
+            color_text
         }
     } else {
         egui::Color32::from_gray(100)

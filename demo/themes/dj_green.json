@@ -7,7 +7,7 @@
     "background": "#0A1A0A",
     "rounding": 4,
     "min_width": 100,
-    "text_color": "#00FF66"
+    "color_text": "#00FF66"
   },
   "TextField": {
     "width": 200,

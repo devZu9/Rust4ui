@@ -44,7 +44,7 @@
     "background": "#1C1E24",
     "inner_margin": 4,
     "rounding": 4,
-    "text_color": "#E0E0E0",
+    "color_text": "#E0E0E0",
     "margin": 0,
     "stepper_bg": "#333344",
     "valign": "center"
@@ -61,7 +61,7 @@
     "inner_pad_h": 10,
     "rounding": 4,
     "popup_bg": "#1C1E24",
-    "text_color": "#E0E0E0",
+    "color_text": "#E0E0E0",
     "sel_bg": "rgba(51,102,204,0.4)",
     "margin": 0
   },
