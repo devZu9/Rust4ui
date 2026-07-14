@@ -55,7 +55,7 @@
 | `action` | string | — | Имя экшена при клике |
 | `target` | string | `""` | Строка цели для экшена |
 | `enabled` | bool | `true` | Активна/отключена |
-| `fill` | string | #303030 | Цвет фона |
+| `background` | string/array | #303030 | Цвет фона |
 | `color_text` | string | #E0E0E0 | Цвет текста |
 | `color_icon` | string | =color_text | Цвет иконки (если указан `icon`) |
 | `min_width` | number | 100.0 | Минимальная ширина |
@@ -63,15 +63,19 @@
 | `align` | string | `"center"` | Выравнивание текста: left/center/right |
 | `tooltip` | string | — | Подсказка при наведении |
 | `padding` | number/[2]/[4] | [16,4] | Внутренний отступ |
-| `hover_fill` | string | — | Цвет фона при наведении |
-| `hover_color` | string | — | Цвет текста/иконки при наведении |
-| `click_fill` | string | — | Цвет фона при нажатии |
-| `click_color` | string | — | Цвет текста/иконки при нажатии |
-| `border` | array | — | Шорткат рамки: [width, "#color", "type", gap, seg_len] |
-| `border_hover` | array | — | Рамка при наведении (тот же формат) |
+| `background_hover` | string/array | — | Цвет фона при наведении |
+| `color_text_hover` | string | — | Цвет текста при наведении |
+| `background_click` | string/array | — | Цвет фона при нажатии |
+| `color_text_click` | string | — | Цвет текста при нажатии |
+| `border` | array | — | Шорткат рамки: [width, "#color", opacity?, "type", gap, seg_len] |
+| `border_hover` | array | — | Рамка при наведении |
 | `border_click` | array | — | Рамка при нажатии |
-| `shadow_offset_x` | number | 2.0 | Смещение тени по X |
-| `shadow_offset_y` | number | 2.0 | Смещение тени по Y |
+| `shadow_background` | array | [0.16,"#000",2,2] | Тень фона: [opacity, color?, x?, y?] |
+| `shadow_background_hover` | array | — | Тень фона при наведении |
+| `shadow_background_click` | array | — | Тень фона при нажатии |
+| `shadow_border` | array | [0] | Тень рамки |
+| `shadow_border_hover` | array | — | Тень рамки при наведении |
+| `shadow_border_click` | array | — | Тень рамки при нажатии |
 | `shadow_blur` | number | 4.0 | Размытие тени |
 | `shadow_color` | string | rgba(0,0,0,40) | Цвет тени |
 
@@ -493,12 +497,21 @@
 | `target` | string | `""` | Цель для экшена |
 | `enabled` | bool | `true` | Активна/отключена |
 | `tooltip` | string | — | Подсказка |
-| `hover_fill` | string | rgba(68,68,85,0.25) | Цвет фона при наведении |
-| `click_fill` | string | — | Цвет фона при нажатии |
-| `hover_color` | string | — | Цвет иконки при наведении |
-| `click_color` | string | — | Цвет иконки при нажатии |
+| `background_hover` | string/array | rgba(68,68,85,0.25) | Цвет фона при наведении |
+| `background_click` | string/array | — | Цвет фона при нажатии |
+| `color_hover` | string | — | Цвет иконки при наведении |
+| `color_click` | string | — | Цвет иконки при нажатии |
 | `border_hover` | array | — | Рамка при наведении |
 | `border_click` | array | — | Рамка при нажатии |
+| `shadow_background` | array | [0.16,"#000",2,2] | Тень фона |
+| `shadow_background_hover` | array | — | Тень фона при наведении |
+| `shadow_background_click` | array | — | Тень фона при нажатии |
+| `shadow_border` | array | [0] | Тень рамки |
+| `shadow_border_hover` | array | — | Тень рамки при наведении |
+| `shadow_border_click` | array | — | Тень рамки при нажатии |
+| `shadow_icon` | array | [0] | Тень иконки |
+| `shadow_icon_hover` | array | — | Тень иконки при наведении |
+| `shadow_icon_click` | array | — | Тень иконки при нажатии |
 
 ```json
 { "type": "IconButton", "icon": "gear-six", "action": "open_settings", "tooltip": "Настройки" }

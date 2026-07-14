@@ -3,6 +3,8 @@
 ## [0.3.1] — 2026-07-11
 
 ### Добавлено
+- **Shadow система** — `Shadow` struct, `parse_shadow()`, `draw_shadow_bg/border/icon`, state-aware через `get_state_attr`
+- **border opacity** — `[width, color, opacity, type, gap, seg_len]`, обратная совместимость (если третий — строка, старый формат)
 - **`color_icon`** — отдельный цвет иконки на Button (рендер иконки и текста разделён)
 - **`parse_color_value()`** — цвет + opacity как `["#HEX", opacity]` (0.0–1.0)
 - **`get_state_background()`** — универсальная функция выбора фона по hover/click/focus

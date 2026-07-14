@@ -71,6 +71,12 @@ if hovered && pressed {
 | `click_color` | =color | Цвет иконки при нажатии |
 | `border_hover` | массив | Граница при наведении |
 | `border_click` | массив | Граница при нажатии |
+| `shadow_background_hover` | массив | Тень фона при наведении |
+| `shadow_background_click` | массив | Тень фона при нажатии |
+| `shadow_border_hover` | массив | Тень рамки при наведении |
+| `shadow_border_click` | массив | Тень рамки при нажатии |
+| `shadow_icon_hover` | массив | Тень иконки при наведении |
+| `shadow_icon_click` | массив | Тень иконки при нажатии |
 
 У `IconButton` фон прозрачный (`TRANSPARENT`) в покое, и меняется только при наведении/нажатии. Иконка перерисовывается поверх фона.
 
@@ -109,7 +115,9 @@ if hovered && pressed {
 2. Тема виджета (`theme.widget["Button"]["background_hover"]`)
 3. Дефолт темы (встроенный)
 
-Все state-атрибуты (`hover_fill`, `hover_color`, `border_hover`, `click_*`) опциональны — если не указаны, используется значение покоя (`fill`, `color`, `border`).
+Все state-атрибуты (`hover_fill`, `hover_color`, `border_hover`, `shadow_background_hover`, `click_*`) опциональны — если не указаны, используется значение покоя (`fill`, `color`, `border`, `shadow_background`).
+
+State-тени (`shadow_background`, `shadow_border`, `shadow_icon`) также поддерживают `_hover`, `_click`, `_focus`.
 
 ## Отключённое состояние
 

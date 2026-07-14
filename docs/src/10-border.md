@@ -48,8 +48,85 @@ pub enum BorderPosition { Inside, Center, Outside }
 // Ширина, цвет, тип
 { "border": [2, "#FF0000", "dash"] }
 
-// Полный формат: ширина, цвет, тип, gap, seg_len
-{ "border": [2, "#FF0000", "dash", 4, 8] }
+// Полный формат с opacity: ширина, цвет, opacity, тип, gap, seg_len
+{ "border": [2, "#FF0000", 1, "dash", 4, 8] }
+{ "border": [5, "#000", 0, "dot", 3, 2] }     // opacity=0 → border невидим
+```
+
+Параметр `opacity` (0.0–1.0) указывается третьим элементом, перед типом. Если опущен — поведение как при `1` (полностью видим). Совместимость: если третий элемент строка — старый формат (без opacity).
+
+## Border opacity (прозрачность границы)
+
+Opacity в шортхенде умножает альфа-канал цвета:
+
+```json
+// Полностью видимый
+"border": [5, "#FF0000", 1, "dot", 3, 2]
+
+// Полупрозрачный
+"border": [5, "#FF0000", 0.5, "dot", 3, 2]
+
+// Полностью прозрачный — border невидим, но shadow_border может быть виден
+"border": [5, "#000", 0, "dot", 3, 2]
+```
+
+## Shadow от границы (shadow_border)
+
+Тень от рамки рисуется под ней, повторяя dash/dot/gap/seg_len рамки.
+
+Формат: `[opacity, "#color"?, offset_x?, offset_y?]`
+
+```json
+// Невидимая (по умолчанию)
+"shadow_border": [0]
+
+// Полупрозрачная чёрная, offset +2,+2
+"shadow_border": [0.4, "#000", 2, 2]
+
+// Полупрозрачная красная, offset -2,-2 (влево-вверх)
+"shadow_border": [0.3, "#F00", -2, -2]
+```
+
+State-версии:
+
+```json
+"shadow_border": [0],
+"shadow_border_hover": [0.4, "#000", 2, 2],
+"shadow_border_click": [0.2, "#000", 1, 1]
+```
+
+Работает на: Button, IconButton.
+
+## Shadow от фона (shadow_background)
+
+Тень под прямоугольником кнопки, аналогичная старой `shadow_color`. Формат тот же, что у shadow_border.
+
+```json
+// Старый дефолт (rgba(0,0,0,40), offset 2,2)
+"shadow_background": [0.16, "#000", 2, 2]
+
+// Полностью прозрачная
+"shadow_background": [0]
+```
+
+State-версии:
+
+```json
+"shadow_background": [0.16, "#000", 2, 2],
+"shadow_background_hover": [0.3, "#000", 4, 4],
+"shadow_background_click": [0, "#000", 0, 0],
+"shadow_background_focus": [0.2, "#000", 2, 2]
+```
+
+Работает на: Button, IconButton.
+
+## Shadow от иконки (shadow_icon)
+
+Тень по контуру глифа иконки (только IconButton). Формат тот же.
+
+```json
+// Тень от иконки: 30% чёрная, offset 1,1
+"shadow_icon": [0.3, "#000", 1, 1]
 ```
 
 ## Типы границ
