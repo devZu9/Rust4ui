@@ -1,7 +1,22 @@
 # Sessions — логи сессий
 
+## Сессия 14.07 — v0.4 Тени, Button shadow, плавное развитие
+- 2026-07-14 (20:43) - начата
+
+**Задача:** доработка shadow-системы (Z-order, Button shadow), реализация оставшихся пунктов v0.3 → v0.4.
+
+### Статус
+- [ ] **Shadow Z-order** — параметр положения тени (под/над элементом) для shadow_border, shadow_icon
+- [ ] **Button shadow** — shadow_bg/border/icon для обычной Button (как в IconButton)
+- [ ] **MenuBar** — исправление ошибок
+- [ ] **Slider, ComboBox, Tabs** — доделка дизайна
+- [ ] **Числовое поле, Image, ProgressBar, DataTable** — новые виджеты
+
+---
+
 ## Сессия 09.07 — v0.3 иконки и документация
 - 2026-07-09 (10:35) - начата
+- 2026-07-14 (20:43) - завершена
 
 **Задача:** интеграция Phosphor-иконок, IconButton/Button система, gap/gap_row, универсальные марджины, hover_color/click_color, border_hover/click, git-чистка, удержание клика, fill→background, parse_color_value, suffix naming, color_icon, shadow система, border opacity.
 
