@@ -36,9 +36,9 @@
   - [ ] Проверка, что все binding есть в state
   - [ ] Проверка, что все action зарегистрированы
   - [ ] Визуальный отчёт об ошибках
-- [x] **Margins для всех виджетов** 🟢 *(13.07.2026)* — унифицировать (через `get_margin` + тема)
 - [ ] **10 встроенных тем**
 - [ ] Бенчмарки производительности
+- [x] **Margins для всех виджетов** 🟢 *(13.07.2026)* — унифицировать (через `get_margin` + тема)
 - [x] **Live-reload** 🟢 *(07.07.2026)*
   - [x] File watcher (notify crate) на всю `demo/` директорию
   - [x] Авто-перезагрузка UI-дерева + темы
@@ -48,13 +48,6 @@
 - [ ] **Темы**
  - [ ] `themes/nord.json`
  - [ ] `themes/gruvbox.json`
-- [x] **Виджеты** 🟢 *(06.07.2026)*
-  - [x] `Hyperlink`
-  - [x] `Grid`
-  - [x] `Window`
-- [x] **Layout** 🟢 *(07.07.2026)*
-  - [x] `Padding` / `Margin` на любом контейнере
-  - [x] `align` для Column (left/center/right)
 
 ### v0.* - Расширяем функционал
 
@@ -74,18 +67,6 @@
 
 ### v0.3 — Иконки и документация *(текущая)*
 
-- [x] **Margins для IconButton** 🟢 *(11.07.2026)* — марджины иконок
-- [x] **Hover/Click реакции для IconButton** 🟢 *(11.07.2026)* — хитрый механизм
-- [x] **`fill` → `background`** 🟢 *(13.07.2026)* — переименование, `background_hover/click/focus`
-- [x] **`get_state_attr<T>`** 🟢 *(13.07.2026)* — универсальная функция для state-атрибутов любого типа
-- [x] **Shadow система** 🟢 *(13.07.2026)* — `shadow_background`, `shadow_border`, `shadow_icon`, state-aware
-- [x] **border opacity** 🟢 *(13.07.2026)* — `[width, color, opacity, type, gap, seg_len]`
-- [x] **Suffix naming** 🟢 *(13.07.2026)* — `hover_color`→`color_hover`, `text_color`→`color_text`
-- [x] **`color_icon` на Button** 🟢 *(13.07.2026)* — отдельный цвет иконки, раздельный рендер
-- [x] **gap_row** 🟢 *(11.07.2026)* — вертикальный отступ между wrapped-строками
-- [x] **`parse_color_value()`** 🟢 *(13.07.2026)* — `["#HEX", opacity]`
-- [x] **`parse_hex_color` #RGB/#RGBA** 🟢 *(11.07.2026)*
-- [x] **`Sense::click`→`click_and_drag`** 🟢 *(12.07.2026)* — убрано таймаут удержания
 - [ ] **MenuBar** — исправление ошибок (белые кнопки, {{синтаксис}}, hover)
 - [ ] **Числовое поле (mode=number)** — дизайн и настройки
 - [ ] **Slider** — доделка внешнего вида
@@ -103,18 +84,19 @@
 - [ ] **SVG-текстуры** — отложено (помечено в коде)
 - [ ] **Микро-анимации иконок** — см. v0.* — Расширяем функционал
 
-- [x] **Иконки Phosphor** 🟢 *(09.07.2026)*
-  - [x] IconRegistry: 1512 иконок, `resolve(name)` → codepoint, fallback ⬡
-  - [x] `icons/phosphor-icons/` в .gitignore, замена TTF на официальный
-  - [x] Иконки в IconButton, Button, Label, MenuItem
-  - [x] icon_size на IconButton, size на MenuItem (+ поддержка темы)
-- [x] **Hover/Click-стейты** 🟢 *(09.07.2026)*
-  - [x] `hover_fill`, `click_fill`, `hover_text_color`, `click_text_color` на Button
-  - [x] `hover_fill`, `click_fill` на IconButton
-  - [x] `w_color_opt()` в theme.rs
-- [x] **Тени** 🟢 *(09.07.2026)* — `shadow_offset_x/y`, `shadow_blur`, `shadow_color` на Button
-- [x] **Галерея 1512 иконок** 🟢 *(09.07.2026)* — отдельная вкладка, 95 Label-строк (без тормозов)
-- [x] **Документация mdBook** 🟢 *(09.07.2026)* — 14 глав, `___docs.bat`
+#### Выполнено в v0.3
+- [x] **Shadow система** 🟢 *(13.07.2026)* — `shadow_background`, `shadow_border`, `shadow_icon`, state-aware
+- [x] **border opacity** 🟢 *(13.07.2026)* — `[width, color, opacity, type, gap, seg_len]`
+- [x] **`get_state_attr<T>`** 🟢 *(13.07.2026)* — универсальная функция для state-атрибутов любого типа
+- [x] **`fill` → `background`** 🟢 *(13.07.2026)* — переименование, `background_hover/click/focus`
+- [x] **Suffix naming** 🟢 *(13.07.2026)* — `hover_color`→`color_hover`, `text_color`→`color_text`
+- [x] **`color_icon` на Button** 🟢 *(13.07.2026)* — отдельный цвет иконки, раздельный рендер
+- [x] **`parse_color_value()`** 🟢 *(13.07.2026)* — `["#HEX", opacity]`
+- [x] **`Sense::click`→`click_and_drag`** 🟢 *(12.07.2026)* — убрано таймаут удержания
+- [x] **Margins для IconButton** 🟢 *(11.07.2026)* — марджины иконок
+- [x] **Hover/Click реакции для IconButton** 🟢 *(11.07.2026)* — хитрый механизм
+- [x] **gap_row** 🟢 *(11.07.2026)* — вертикальный отступ между wrapped-строками
+- [x] **`parse_hex_color` #RGB/#RGBA** 🟢 *(11.07.2026)*
 
 ### v0.2 — Расширение возможностей дизайна *(завершена)*
 
