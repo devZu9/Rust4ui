@@ -97,7 +97,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     let rounding_cr = egui::CornerRadius::same(rounding as u8);
     let shadow_bg = crate::renderer::get_state_attr(node, &ctx.theme, "IconButton", "shadow_background", &resp, true,
-        crate::border::Shadow { color: egui::Color32::TRANSPARENT, offset: egui::Vec2::ZERO }, crate::border::parse_shadow);
+        crate::border::Shadow { color: egui::Color32::from_rgba_premultiplied(0, 0, 0, 40), offset: egui::vec2(2.0, 2.0) }, crate::border::parse_shadow);
     crate::border::draw_shadow_bg(ui, content_rect, rounding_cr, &shadow_bg);
     ui.painter().rect_filled(content_rect, rounding_cr, actual_fill);
     draw_border(ui, content_rect, rounding_cr, &border);
