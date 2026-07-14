@@ -336,6 +336,9 @@ pub fn parse_hex_color(hex: &str) -> Option<egui::Color32> {
 pub fn parse_color_value(val: &serde_json::Value) -> Option<egui::Color32> {
     match val {
         serde_json::Value::String(s) => parse_hex_color(s),
+        serde_json::Value::Array(arr) if arr.len() == 1 => {
+            arr[0].as_str().and_then(parse_hex_color)
+        }
         serde_json::Value::Array(arr) if arr.len() == 2 => {
             let c = arr[0].as_str().and_then(parse_hex_color)?;
             let opacity = arr[1].as_f64()? as f32;
@@ -411,5 +414,13 @@ mod tests {
             Some(egui::Color32::from_rgb(0xFF, 0x00, 0xAA))
         );
         assert_eq!(parse_hex_color("invalid"), None);
+        assert_eq!(
+            parse_color_value(&serde_json::json!(["#FF6600"])),
+            Some(egui::Color32::from_rgb(0xFF, 0x66, 0x00))
+        );
+        assert_eq!(
+            parse_color_value(&serde_json::json!(["#FF6600", 0.5])),
+            Some(egui::Color32::from_rgba_unmultiplied(0xFF, 0x66, 0x00, 127))
+        );
     }
 }
