@@ -36,9 +36,9 @@
     "background": ["#000", 0],
     "background_click": ["#FF0", 0],
     "shadow_background": [0],
-    "shadow_icon_hover": [0.4, "under", "#000", 1, 1],
+    "shadow_content_hover": [0.4, "under", "#000", 1, 1],
     "shadow_border": [0.4],
-    "shadow_icon": [0.7],
+    "shadow_content": [0.7],
     "shadow_border_hover": [0.1],
     "color": "#88F",  //  
     "color_hover": "#F80",         // "#FF0",   // yellow

@@ -63,7 +63,7 @@
 
 ### v0.4 — Тени, Button shadow, плавное развитие *(текущая)*
 
-- [x] **Shadow Z-order** 🟢 *(14.07.2026)* — параметр положения тени (под/над элементом) для shadow_border, shadow_icon
+- [x] **Shadow Z-order** 🟢 *(14.07.2026)* — параметр положения тени (под/над элементом) для shadow_border, shadow_content
 - [x] **Button shadow** 🟢 *(14.07.2026)* — shadow_background/border/icon для Button (как в IconButton)
 - [ ] **MenuBar** — исправление ошибок (белые кнопки, {{синтаксис}}, hover)
 - [ ] **Slider** — доделка внешнего вида
@@ -85,7 +85,7 @@
 ### v0.3 — Иконки и документация *(завершена)*
 
 - [x] **Margins для всех виджетов** 🟢 *(13.07.2026)* — унифицировать (через `get_margin` + тема)
-- [x] **Shadow система** 🟢 *(13.07.2026)* — `shadow_background`, `shadow_border`, `shadow_icon`, state-aware
+- [x] **Shadow система** 🟢 *(13.07.2026)* — `shadow_background`, `shadow_border`, `shadow_content`, state-aware
 - [x] **border opacity** 🟢 *(13.07.2026)* — `[width, color, opacity, type, gap, seg_len]`
 - [x] **`get_state_attr<T>`** 🟢 *(13.07.2026)* — универсальная функция для state-атрибутов любого типа
 - [x] **`fill` → `background`** 🟢 *(13.07.2026)* — переименование, `background_hover/click/focus`

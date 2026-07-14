@@ -1,4 +1,4 @@
-use crate::border::{draw_border, draw_shadow_bg, draw_shadow_border, draw_shadow_icon, get_state_border, parse_shadow, Shadow, ShadowZOrder};
+use crate::border::{draw_border, draw_shadow_bg, draw_shadow_border, draw_shadow_content, get_state_border, parse_shadow, Shadow, ShadowZOrder};
 use crate::renderer::{attr_bool, attr_f64, attr_str, get_margin, get_padding, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
@@ -118,14 +118,14 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let text_y = valign.align_size_within_range(maket.size().y, inner.y_range()).min;
     let text_pos = egui::pos2(text_x, text_y);
 
-    let shadow_icon = crate::renderer::get_state_attr(node, &ctx.theme, "IconButton", "shadow_icon", &resp, true,
+    let shadow_content = crate::renderer::get_state_attr(node, &ctx.theme, "IconButton", "shadow_content", &resp, true,
         Shadow::transparent(), parse_shadow);
-    if shadow_icon.z_order == ShadowZOrder::Under {
-        draw_shadow_icon(ui, text_pos, maket.clone(), &shadow_icon);
+    if shadow_content.z_order == ShadowZOrder::Under {
+        draw_shadow_content(ui, text_pos, maket.clone(), &shadow_content);
         ui.painter().galley_with_override_text_color(text_pos, maket, actual_text);
     } else {
         ui.painter().galley_with_override_text_color(text_pos, maket.clone(), actual_text);
-        draw_shadow_icon(ui, text_pos, maket, &shadow_icon);
+        draw_shadow_content(ui, text_pos, maket, &shadow_content);
     }
 
     if let Some(tip) = &tooltip_text {

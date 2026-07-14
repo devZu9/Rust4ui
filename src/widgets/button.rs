@@ -1,4 +1,4 @@
-use crate::border::{draw_border, draw_shadow_bg, draw_shadow_border, draw_shadow_icon, get_state_border, parse_shadow, Shadow, ShadowZOrder};
+use crate::border::{draw_border, draw_shadow_bg, draw_shadow_border, draw_shadow_content, get_state_border, parse_shadow, Shadow, ShadowZOrder};
 use crate::renderer::{attr_bool, attr_f64, attr_str, get_margin, get_padding, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
@@ -102,7 +102,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         draw_border(ui, content_rect, rounding_cr, &border);
         draw_shadow_border(ui, content_rect, rounding_cr, &border, &shadow_border);
     }
-    let shadow_icon = crate::renderer::get_state_attr(node, &ctx.theme, "Button", "shadow_icon", &resp, true,
+    let shadow_content = crate::renderer::get_state_attr(node, &ctx.theme, "Button", "shadow_content", &resp, true,
         Shadow::transparent(), parse_shadow);
 
     let inner = egui::Rect::from_min_max(
@@ -114,23 +114,23 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     if let Some(ig) = &icon_galley {
         let y = valign.align_size_within_range(icon_sz.y, inner.y_range()).min;
         let icon_pos = egui::pos2(start_x, y);
-        if shadow_icon.z_order == ShadowZOrder::Under {
-            draw_shadow_icon(ui, icon_pos, ig.clone(), &shadow_icon);
+        if shadow_content.z_order == ShadowZOrder::Under {
+            draw_shadow_content(ui, icon_pos, ig.clone(), &shadow_content);
             ui.painter().galley(icon_pos, ig.clone(), color_icon);
         } else {
             ui.painter().galley(icon_pos, ig.clone(), color_icon);
-            draw_shadow_icon(ui, icon_pos, ig.clone(), &shadow_icon);
+            draw_shadow_content(ui, icon_pos, ig.clone(), &shadow_content);
         }
     }
     if let Some(tg) = &text_galley {
         let y = valign.align_size_within_range(text_sz.y, inner.y_range()).min;
         let text_pos = egui::pos2(start_x + icon_sz.x + gap, y);
-        if shadow_icon.z_order == ShadowZOrder::Under {
-            draw_shadow_icon(ui, text_pos, tg.clone(), &shadow_icon);
+        if shadow_content.z_order == ShadowZOrder::Under {
+            draw_shadow_content(ui, text_pos, tg.clone(), &shadow_content);
             ui.painter().galley_with_override_text_color(text_pos, tg.clone(), actual_text);
         } else {
             ui.painter().galley_with_override_text_color(text_pos, tg.clone(), actual_text);
-            draw_shadow_icon(ui, text_pos, tg.clone(), &shadow_icon);
+            draw_shadow_content(ui, text_pos, tg.clone(), &shadow_content);
         }
     }
 

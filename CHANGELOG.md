@@ -3,15 +3,15 @@
 ## [0.4.0] — 2026-07-14
 
 ### Добавлено
-- **Shadow Z-order** — параметр положения тени (`"under"` / `"over"`) для `shadow_border` и `shadow_icon` на Button и IconButton. Формат: `[opacity, "under"/"over"?, "#color"?, x?, y?]`. По умолчанию `"under"` (под элементом), `"over"` — над элементом (glow-эффект).
-- **Button: `shadow_icon`** — тень для иконки и текста на Button (аналогично IconButton). Работает с z-order.
+- **Shadow Z-order** — параметр положения тени (`"under"` / `"over"`) для `shadow_border` и `shadow_content` на Button и IconButton. Формат: `[opacity, "under"/"over"?, "#color"?, x?, y?]`. По умолчанию `"under"` (под элементом), `"over"` — над элементом (glow-эффект).
+- **Button: `shadow_content`** — тень для иконки и текста на Button (аналогично IconButton). Работает с z-order.
 - **`ShadowZOrder` enum** — `Under` / `Over` в `border.rs`.
-- **`draw_shadow_icon()`** — вынесена из IconButton в `border.rs` для переиспользования.
+- **`draw_shadow_content()`** — вынесена из IconButton в `border.rs` для переиспользования.
 - **`Shadow::from_rgba()` / `Shadow::transparent()`** — удобные конструкторы.
 
 ### Изменено
 - **`parse_shadow()`** — строгий формат: `[opacity, "under"/"over"?, "#color"?, x?, y?]`. Позиция 1 — z-order, позиция 2 — цвет. Старые форматы не поддерживаются.
-- **IconButton** — inline shadow_icon заменён на `draw_shadow_icon()`.
+- **IconButton** — inline shadow_content заменён на `draw_shadow_content()`.
 - **Shadow struct** — добавлено поле `z_order: ShadowZOrder`.
 
 ## [0.3.1] — 2026-07-11

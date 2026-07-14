@@ -113,7 +113,7 @@ pub fn draw_shadow_bg(ui: &egui::Ui, rect: egui::Rect, rounding: egui::CornerRad
 }
 
 /// Рисует тень от иконки/текста (galley).
-pub fn draw_shadow_icon(ui: &egui::Ui, pos: egui::Pos2, galley: std::sync::Arc<egui::Galley>, shadow: &Shadow) {
+pub fn draw_shadow_content(ui: &egui::Ui, pos: egui::Pos2, galley: std::sync::Arc<egui::Galley>, shadow: &Shadow) {
     if !shadow.is_visible() { return; }
     ui.painter().galley_with_override_text_color(pos + shadow.offset, galley, shadow.color);
 }

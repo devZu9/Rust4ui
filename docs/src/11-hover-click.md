@@ -75,8 +75,8 @@ if hovered && pressed {
 | `shadow_background_click` | массив | Тень фона при нажатии |
 | `shadow_border_hover` | массив | Тень рамки при наведении |
 | `shadow_border_click` | массив | Тень рамки при нажатии |
-| `shadow_icon_hover` | массив | Тень иконки при наведении |
-| `shadow_icon_click` | массив | Тень иконки при нажатии |
+| `shadow_content_hover` | массив | Тень контента при наведении |
+| `shadow_content_click` | массив | Тень контента при нажатии |
 
 У `IconButton` фон прозрачный (`TRANSPARENT`) в покое, и меняется только при наведении/нажатии. Иконка перерисовывается поверх фона.
 
@@ -117,7 +117,7 @@ if hovered && pressed {
 
 Все state-атрибуты (`hover_fill`, `hover_color`, `border_hover`, `shadow_background_hover`, `click_*`) опциональны — если не указаны, используется значение покоя (`fill`, `color`, `border`, `shadow_background`).
 
-State-тени (`shadow_background`, `shadow_border`, `shadow_icon`) также поддерживают `_hover`, `_click`, `_focus`.
+State-тени (`shadow_background`, `shadow_border`, `shadow_content`) также поддерживают `_hover`, `_click`, `_focus`.
 
 ## Отключённое состояние
 
