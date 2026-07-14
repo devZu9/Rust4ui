@@ -56,7 +56,8 @@
 | `target` | string | `""` | Строка цели для экшена |
 | `enabled` | bool | `true` | Активна/отключена |
 | `fill` | string | #303030 | Цвет фона |
-| `color` | string | #E0E0E0 | Цвет текста/иконки |
+| `color_text` | string | #E0E0E0 | Цвет текста |
+| `color_icon` | string | =color_text | Цвет иконки (если указан `icon`) |
 | `min_width` | number | 100.0 | Минимальная ширина |
 | `rounding` | number | 6.0 | Скругление углов |
 | `align` | string | `"center"` | Выравнивание текста: left/center/right |
@@ -78,6 +79,7 @@
 { "type": "Button", "text": "Сохранить", "action": "save", "icon": "floppy-disk" }
 { "type": "Button", "text": "Удалить", "background": "#CC3333", "action": "delete" }
 { "type": "Button", "text": "Настройки", "enabled": false }
+{ "type": "Button", "icon": "heart", "color_icon": "#FF6699", "tooltip": "Цвет иконки отдельно" }
 { "type": "Button", "text": "Опасная кнопка",
   "background_hover": "#FF4444", "background_click": "#AA0000",
   "border": [2, "#FF4444", "dash"],

@@ -5,11 +5,6 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     let raw_text = attr_str(node, "text").unwrap_or("");
     let icon_name = attr_str(node, "icon");
-    let text = if let Some(icon) = icon_name.and_then(|n| ctx.icons.resolve(n)) {
-        format!("{}  {}", icon, resolve_text(raw_text, ctx))
-    } else {
-        resolve_text(raw_text, ctx)
-    };
 
     if raw_text.is_empty() && icon_name.is_none() {
         log::warn!("Button: отсутствует атрибут 'text' и 'icon'");
@@ -33,6 +28,11 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .and_then(crate::theme::parse_color_value)
         .unwrap_or_else(|| ctx.theme.w_color("Button", "color_text", egui::Color32::from_rgb(0xE0, 0xE0, 0xE0)));
 
+    let color_icon = node.get("color_icon")
+        .and_then(crate::theme::parse_color_value)
+        .or_else(|| ctx.theme.w_color_opt("Button", "color_icon"))
+        .unwrap_or(color_text);
+
     let halign = match align {
         "left" => egui::Align::LEFT,
         "right" => egui::Align::RIGHT,
@@ -40,16 +40,31 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     };
     let valign = egui::Align::Center;
 
-    let maket = ui.painter().layout_no_wrap(
-        text.clone(),
-        egui::FontId::proportional(14.0),
-        color_text,
-    );
+    let font_id = egui::FontId::proportional(14.0);
+    let icon_glyph = icon_name.and_then(|n| ctx.icons.resolve(n));
+    let has_icon = icon_glyph.is_some();
+    let has_text = !raw_text.is_empty();
+
+    let icon_galley = icon_glyph.map(|g|
+        ui.painter().layout_no_wrap(g.to_string(), font_id.clone(), color_icon));
+
+    let text_galley = if has_text {
+        Some(ui.painter().layout_no_wrap(resolve_text(raw_text, ctx), font_id, color_text))
+    } else {
+        None
+    };
+
+    let icon_sz = icon_galley.as_ref().map_or(egui::Vec2::ZERO, |g| g.size());
+    let text_sz = text_galley.as_ref().map_or(egui::Vec2::ZERO, |g| g.size());
+    let gap = if has_icon && has_text { 6.0 } else { 0.0 };
 
     let (pad_l, pad_r, pad_t, pad_b) = (pad.left as f32, pad.right as f32, pad.top as f32, pad.bottom as f32);
 
-    let desired_w = (maket.size().x + pad_l + pad_r).max(min_width as f32);
-    let desired_h = (maket.size().y + pad_t + pad_b).max(min_height);
+    let content_w = icon_sz.x + gap + text_sz.x;
+    let content_h = icon_sz.y.max(text_sz.y);
+
+    let desired_w = (content_w + pad_l + pad_r).max(min_width as f32);
+    let desired_h = (content_h + pad_t + pad_b).max(min_height);
 
     let (m_l, m_r, m_t, m_b) = (margin.left as f32, margin.right as f32, margin.top as f32, margin.bottom as f32);
     let total_w = desired_w + m_l + m_r;
@@ -93,11 +108,16 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         egui::pos2(content_rect.left() + pad_l, content_rect.top() + pad_t),
         egui::pos2(content_rect.right() - pad_r, content_rect.bottom() - pad_b),
     );
-    let text_x = halign.align_size_within_range(maket.size().x, inner.x_range()).min;
-    let text_y = valign.align_size_within_range(maket.size().y, inner.y_range()).min;
-    let text_pos = egui::pos2(text_x, text_y);
 
-    ui.painter().galley(text_pos, maket, actual_text);
+    let start_x = halign.align_size_within_range(content_w, inner.x_range()).min;
+    if let Some(ig) = &icon_galley {
+        let y = valign.align_size_within_range(icon_sz.y, inner.y_range()).min;
+        ui.painter().galley_with_override_text_color(egui::pos2(start_x, y), ig.clone(), actual_text);
+    }
+    if let Some(tg) = &text_galley {
+        let y = valign.align_size_within_range(text_sz.y, inner.y_range()).min;
+        ui.painter().galley_with_override_text_color(egui::pos2(start_x + icon_sz.x + gap, y), tg.clone(), actual_text);
+    }
 
     if let Some(tip) = &tooltip_text {
         if !tip.is_empty() {
