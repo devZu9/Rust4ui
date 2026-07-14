@@ -1,13 +1,25 @@
 # Sessions — логи сессий
 
-## Сессия 14.07 — v0.4 Тени, Button shadow, плавное развитие
+## Сессия 14.07 — v0.4 Shadow Z-order + Button shadow
 - 2026-07-14 (20:43) - начата
+- 2026-07-15 (13:00) - завершена
 
 **Задача:** доработка shadow-системы (Z-order, Button shadow), реализация оставшихся пунктов v0.3 → v0.4.
 
+### Ход работ
+1. **Shadow Z-order + Button shadow** — Добавлен `ShadowZOrder` enum, поле `z_order` в `Shadow`, обновлён `parse_shadow` (строгий формат: `[opacity, "under"/"over", "#color"?, x?, y?]`), добавлен `draw_shadow_icon()`. Button получил `shadow_icon`. Z-order работает на Button и IconButton. ✅
+
+### Файлы
+- `src/border.rs` — ShadowZOrder, z_order, draw_shadow_icon, parse_shadow
+- `src/widgets/button.rs` — shadow_icon + z-order
+- `src/widgets/icon_button.rs` — z-order + draw_shadow_icon
+- `demo/theme.json` — исправлен битый JSON в shadow_border
+- `docs/src/04-ui-json.md`, `10-border.md`, `12-shadows.md` — документация
+- `CHANGELOG.md`, `SESSIONS.md`, `ROADMAP.md` — логи
+
 ### Статус
-- [ ] **Shadow Z-order** — параметр положения тени (под/над элементом) для shadow_border, shadow_icon
-- [ ] **Button shadow** — shadow_bg/border/icon для обычной Button (как в IconButton)
+- [x] **Shadow Z-order** — параметр положения тени (под/над элементом) для shadow_border, shadow_icon ✅
+- [x] **Button shadow** — shadow_bg/border/icon для обычной Button (как в IconButton) ✅
 - [ ] **MenuBar** — исправление ошибок (белые кнопки, {{синтаксис}}, hover, иконки при наведении)
 - [ ] **IconBar anchor** — start/center/end
 - [ ] **Separator в IconBar** — разделитель между иконками

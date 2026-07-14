@@ -70,12 +70,15 @@
 | `border` | array | — | Шорткат рамки: [width, "#color", opacity?, "type", gap, seg_len] |
 | `border_hover` | array | — | Рамка при наведении |
 | `border_click` | array | — | Рамка при нажатии |
-| `shadow_background` | array | [0.16,"#000",2,2] | Тень фона: [opacity, color?, x?, y?] |
+| `shadow_background` | array | [0.16,"under","#000",2,2] | Тень фона: [opacity, z?, color?, x?, y?] |
 | `shadow_background_hover` | array | — | Тень фона при наведении |
 | `shadow_background_click` | array | — | Тень фона при нажатии |
-| `shadow_border` | array | [0] | Тень рамки |
+| `shadow_border` | array | [0] | Тень рамки: [opacity, z?, color?, x?, y?] |
 | `shadow_border_hover` | array | — | Тень рамки при наведении |
 | `shadow_border_click` | array | — | Тень рамки при нажатии |
+| `shadow_icon` | array | [0] | Тень иконки/текста: [opacity, z?, color?, x?, y?] |
+| `shadow_icon_hover` | array | — | Тень иконки при наведении |
+| `shadow_icon_click` | array | — | Тень иконки при нажатии |
 | `shadow_blur` | number | 4.0 | Размытие тени |
 | `shadow_color` | string | rgba(0,0,0,40) | Цвет тени |
 
@@ -503,13 +506,13 @@
 | `color_click` | string | — | Цвет иконки при нажатии |
 | `border_hover` | array | — | Рамка при наведении |
 | `border_click` | array | — | Рамка при нажатии |
-| `shadow_background` | array | [0.16,"#000",2,2] | Тень фона |
+| `shadow_background` | array | [0.16,"under","#000",2,2] | Тень фона: [opacity, z?, color?, x?, y?] |
 | `shadow_background_hover` | array | — | Тень фона при наведении |
 | `shadow_background_click` | array | — | Тень фона при нажатии |
-| `shadow_border` | array | [0] | Тень рамки |
+| `shadow_border` | array | [0] | Тень рамки: [opacity, z?, color?, x?, y?] |
 | `shadow_border_hover` | array | — | Тень рамки при наведении |
 | `shadow_border_click` | array | — | Тень рамки при нажатии |
-| `shadow_icon` | array | [0] | Тень иконки |
+| `shadow_icon` | array | [0] | Тень иконки: [opacity, z?, color?, x?, y?] |
 | `shadow_icon_hover` | array | — | Тень иконки при наведении |
 | `shadow_icon_click` | array | — | Тень иконки при нажатии |
 

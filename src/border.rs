@@ -35,42 +35,71 @@ impl BorderStyle {
     }
 }
 
-/// Тень: цвет + смещение.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum ShadowZOrder {
+    Under,
+    Over,
+}
+
 #[derive(Debug, Clone, Copy)]
 pub struct Shadow {
     pub color: egui::Color32,
     pub offset: egui::Vec2,
+    pub z_order: ShadowZOrder,
 }
 
 impl Shadow {
     pub fn is_visible(&self) -> bool {
         self.color.a() > 0
     }
+
+    pub fn transparent() -> Self {
+        Shadow { color: egui::Color32::TRANSPARENT, offset: egui::Vec2::ZERO, z_order: ShadowZOrder::Under }
+    }
+
+    pub fn from_rgba(r: u8, g: u8, b: u8, a: u8) -> Self {
+        Shadow {
+            color: egui::Color32::from_rgba_unmultiplied(r, g, b, a),
+            offset: egui::vec2(2.0, 2.0),
+            z_order: ShadowZOrder::Under,
+        }
+    }
 }
 
 /// Парсит тень из JSON-значения.
 /// Форматы:
-/// - число: [opacity] → чёрная тень с прозрачностью, offset дефолт (2,2)
-/// - массив: [opacity] / [opacity, "#color"] / [opacity, "#color", x, y]
+/// - число: `0.4` → чёрная тень, offset (2,2), z_order Under
+/// - массив: `[opacity]` / `[opacity, "under"|"over"]` / `[opacity, "under"|"over", "#color"]` / `[opacity, "under"|"over", "#color", x, y]`
 pub fn parse_shadow(val: &serde_json::Value) -> Option<Shadow> {
     match val {
         serde_json::Value::Number(n) => {
             let opacity = n.as_f64()? as f32;
             let a = (opacity.clamp(0.0, 1.0) * 255.0) as u8;
-            Some(Shadow { color: egui::Color32::from_rgba_unmultiplied(0, 0, 0, a), offset: egui::Vec2::ZERO })
+            Some(Shadow { color: egui::Color32::from_rgba_unmultiplied(0, 0, 0, a), offset: egui::Vec2::ZERO, z_order: ShadowZOrder::Under })
         }
         serde_json::Value::Array(arr) if arr.len() >= 1 => {
             let opacity = arr[0].as_f64()? as f32;
-            let base_color = if arr.len() >= 2 {
-                arr[1].as_str().and_then(crate::theme::parse_hex_color).unwrap_or(egui::Color32::BLACK)
+
+            let z_order = if arr.len() >= 2 {
+                match arr[1].as_str()? {
+                    "over" => ShadowZOrder::Over,
+                    _ => ShadowZOrder::Under,
+                }
+            } else {
+                ShadowZOrder::Under
+            };
+
+            let base_color = if arr.len() >= 3 {
+                arr[2].as_str().and_then(crate::theme::parse_hex_color).unwrap_or(egui::Color32::BLACK)
             } else {
                 egui::Color32::BLACK
             };
             let a = (opacity.clamp(0.0, 1.0) * 255.0) as u8;
             let color = egui::Color32::from_rgba_unmultiplied(base_color.r(), base_color.g(), base_color.b(), a);
-            let x = if arr.len() >= 3 { arr[2].as_f64()? as f32 } else { 2.0 };
-            let y = if arr.len() >= 4 { arr[3].as_f64()? as f32 } else { 2.0 };
-            Some(Shadow { color, offset: egui::vec2(x, y) })
+
+            let x = if arr.len() >= 4 { arr[3].as_f64()? as f32 } else { 2.0 };
+            let y = if arr.len() >= 5 { arr[4].as_f64()? as f32 } else { 2.0 };
+            Some(Shadow { color, offset: egui::vec2(x, y), z_order })
         }
         _ => None,
     }
@@ -81,6 +110,12 @@ pub fn draw_shadow_bg(ui: &egui::Ui, rect: egui::Rect, rounding: egui::CornerRad
     if !shadow.is_visible() { return; }
     let r = rect.translate(shadow.offset);
     ui.painter().rect_filled(r, rounding, shadow.color);
+}
+
+/// Рисует тень от иконки/текста (galley).
+pub fn draw_shadow_icon(ui: &egui::Ui, pos: egui::Pos2, galley: std::sync::Arc<egui::Galley>, shadow: &Shadow) {
+    if !shadow.is_visible() { return; }
+    ui.painter().galley_with_override_text_color(pos + shadow.offset, galley, shadow.color);
 }
 
 /// Рисует тень от границы — повторяет dash/dot/gap/seg_len, только другим цветом.

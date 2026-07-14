@@ -72,38 +72,41 @@ Opacity в шортхенде умножает альфа-канал цвета:
 
 ## Shadow от границы (shadow_border)
 
-Тень от рамки рисуется под ней, повторяя dash/dot/gap/seg_len рамки.
+Тень от рамки повторяет dash/dot/gap/seg_len рамки. Z-order: `"under"` (под рамкой, по умолчанию) или `"over"` (над рамкой).
 
-Формат: `[opacity, "#color"?, offset_x?, offset_y?]`
+Формат: `[opacity, "under"|"over"?, "#color"?, x?, y?]`
 
 ```json
 // Невидимая (по умолчанию)
 "shadow_border": [0]
 
-// Полупрозрачная чёрная, offset +2,+2
-"shadow_border": [0.4, "#000", 2, 2]
+// Только opacity + z-order (цвет #000)
+"shadow_border": [0.5, "over"]
 
-// Полупрозрачная красная, offset -2,-2 (влево-вверх)
-"shadow_border": [0.3, "#F00", -2, -2]
+// Opacity + z-order + цвет + offset
+"shadow_border": [0.4, "under", "#000", 2, 2]
+
+// Яркое свечение ПОВЕРХ рамки
+"shadow_border": [0.6, "over", "#0FF", 0, 0]
 ```
 
 State-версии:
 
 ```json
 "shadow_border": [0],
-"shadow_border_hover": [0.4, "#000", 2, 2],
-"shadow_border_click": [0.2, "#000", 1, 1]
+"shadow_border_hover": [0.4, "under", "#000", 2, 2],
+"shadow_border_click": [0.2, "under", "#000", 1, 1]
 ```
 
 Работает на: Button, IconButton.
 
 ## Shadow от фона (shadow_background)
 
-Тень под прямоугольником кнопки, аналогичная старой `shadow_color`. Формат тот же, что у shadow_border.
+Тень под прямоугольником кнопки. Формат тот же, что у shadow_border. Z-order не применяется (всегда под фоном).
 
 ```json
-// Старый дефолт (rgba(0,0,0,40), offset 2,2)
-"shadow_background": [0.16, "#000", 2, 2]
+// Дефолт (rgba(0,0,0,40), under, offset 2,2)
+"shadow_background": [0.16, "under", "#000", 2, 2]
 
 // Полностью прозрачная
 "shadow_background": [0]
@@ -112,21 +115,27 @@ State-версии:
 State-версии:
 
 ```json
-"shadow_background": [0.16, "#000", 2, 2],
-"shadow_background_hover": [0.3, "#000", 4, 4],
-"shadow_background_click": [0, "#000", 0, 0],
-"shadow_background_focus": [0.2, "#000", 2, 2]
+"shadow_background": [0.16, "under", "#000", 2, 2],
+"shadow_background_hover": [0.3, "under", "#000", 4, 4],
+"shadow_background_click": [0, "under", "#000", 0, 0],
+"shadow_background_focus": [0.2, "under", "#000", 2, 2]
 ```
 
 Работает на: Button, IconButton.
 
 ## Shadow от иконки (shadow_icon)
 
-Тень по контуру глифа иконки (только IconButton). Формат тот же.
+Тень по контуру глифа иконки/текста. Работает на Button и IconButton.
+Z-order: `"under"` (под иконкой, по умолчанию) или `"over"` (над иконкой, glow).
+
+Формат: `[opacity, "under"|"over"?, "#color"?, x?, y?]`
 
 ```json
-// Тень от иконки: 30% чёрная, offset 1,1
-"shadow_icon": [0.3, "#000", 1, 1]
+// Тень под иконкой: 30% чёрная, offset 1,1
+"shadow_icon": [0.3, "under", "#000", 1, 1]
+
+// Свечение (glow) — тень поверх иконки
+"shadow_icon": [0.5, "over", "#0FF", 0, 0]
 ```
 
 ## Типы границ
