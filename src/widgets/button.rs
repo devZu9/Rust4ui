@@ -68,12 +68,12 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         egui::Color32::from_rgb(0x30, 0x30, 0x30));
     let actual_text = if enabled {
         if resp.hovered() && resp.is_pointer_button_down_on() {
-            node.get("click_text_color")
+            node.get("text_color_click")
                 .and_then(crate::theme::parse_color_value)
-                .or_else(|| ctx.theme.w_color_opt("Button", "click_text_color"))
+                .or_else(|| ctx.theme.w_color_opt("Button", "text_color_click"))
                 .unwrap_or(text_color)
         } else if resp.hovered() {
-            node.get("hover_text_color")
+            node.get("text_color_hover")
                 .and_then(crate::theme::parse_color_value)
                 .unwrap_or(text_color)
         } else {

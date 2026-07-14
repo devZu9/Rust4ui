@@ -14,9 +14,9 @@
   "text": "Наведи",
   "background": "#303030",
   "background_hover": "#505060",
-  "hover_color": "#FFFFFF",
+  "color_hover": "#FFFFFF",
   "background_click": "#606080",
-  "click_color": "#CCCCFF",
+  "color_click": "#CCCCFF",
   "border_hover": [3, "#FF0", "dot", 4, 1]
 }
 ```
@@ -55,8 +55,8 @@ if hovered && pressed {
   "type": "IconButton",
   "icon": "trash-simple",
   "color": "#CC4444",
-  "hover_color": "#FF8888",
-  "click_color": "#FF4444",
+  "color_hover": "#FF8888",
+  "color_click": "#FF4444",
   "background_hover": "rgba(200, 50, 50, 0.3)",
   "background_click": "rgba(200, 50, 50, 0.5)",
   "border_hover": [3, "#FF0", "dot", 4, 1]
@@ -84,9 +84,9 @@ if hovered && pressed {
     "background": "#303030",
     "color": "#E0E0E0",
     "background_hover": "#444455",
-    "hover_color": "#FFFFFF",
+    "color_hover": "#FFFFFF",
     "background_click": "#555566",
-    "click_color": "#FFFFFF",
+    "color_click": "#FFFFFF",
     "focus_fill": "#334466",
     "border_hover": [3, "#88AAFF"]
   },
@@ -96,8 +96,8 @@ if hovered && pressed {
     "icon_size": 14,
     "background_hover": "rgba(68,68,85,0.25)",
     "background_click": "rgba(85,85,102,0.4)",
-    "hover_color": "#FFFFFF",
-    "click_color": "#888888",
+    "color_hover": "#FFFFFF",
+    "color_click": "#888888",
     "border_hover": [2, "#88AAFF"]
   }
 }
@@ -128,14 +128,14 @@ if hovered && pressed {
   "background_hover": "#CC3333",
   "background_click": "#991111",
   "color": "#FFCCCC",
-  "hover_color": "#FFFFFF"
+  "color_hover": "#FFFFFF"
 }
 
 {
   "type": "IconButton",
   "icon": "heart",
   "color": "#FF6699",
-  "hover_color": "#FF88BB",
+  "color_hover": "#FF88BB",
   "background_hover": "rgba(255, 102, 153, 0.2)",
   "tooltip": "Избранное"
 }

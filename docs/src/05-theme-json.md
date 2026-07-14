@@ -32,9 +32,9 @@
     "margin": 0,
     "color": "#E0E0E0",
     "background_hover": "#444455",
-    "hover_color": "#FFFFFF",
+    "color_hover": "#FFFFFF",
     "background_click": "#555566",
-    "click_color": "#FFFFFF",
+    "color_click": "#FFFFFF",
     "focus_fill": "#334466",
     "border_hover": [3, "#88AAFF"]
   },
@@ -128,9 +128,9 @@
     "color": "#CCCCCC",
     "background": "transparent",
     "background_hover": "rgba(68,68,85,0.25)",
-    "hover_color": "#FFFFFF",
+    "color_hover": "#FFFFFF",
     "background_click": "rgba(85,85,102,0.4)",
-    "click_color": "#888888",
+    "color_click": "#888888",
     "border_hover": [2, "#88AAFF"]
   },
   "MenuItem": {
