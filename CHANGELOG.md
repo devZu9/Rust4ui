@@ -3,6 +3,7 @@
 ## [0.3.1] — 2026-07-11
 
 ### Добавлено
+- **`color_icon`** — отдельный цвет иконки на Button (рендер иконки и текста разделён)
 - **`parse_color_value()`** — цвет + opacity как `["#HEX", opacity]` (0.0–1.0)
 - **`get_state_background()`** — универсальная функция выбора фона по hover/click/focus
 - **`border_hover` / `border_click`** — state-зависимые границы на всех виджетах (IconButton, Button, TextField, Column, Row, Label, Checkbox, RadioGroup, Tabs)
@@ -16,7 +17,8 @@
 - **`theme.json`** — удалены секции Hover/Focus/Disabled (псевдо-виджеты, никем не читались)
 - **`border` → `get_state_border()`** — единая функция выбора hover/click/base border
 - **`widget_border`** — добавлены параметры `resp` и `enabled` (state-зависимые границы на 6 виджетах)
-- **`icon_color` → `color`** — в IconButton (атрибут + ключ темы), `hover_text_color` → `hover_color`, `click_text_color` → `click_color`
+- **`text_color` → `color_text`** — suffix naming (`color_text_hover`, `color_text_click`)
+- **`hover_color`/`click_color` → `color_hover`/`color_click`** — suffix naming
 - **`parse_hex_color`** — добавлена поддержка `#RGB` / `#RGBA`
 - **Button** — добавлен `margin` (по аналогии с IconButton)
 - **Row** — `item_spacing = ZERO` (только явный gap), добавлен `gap_row`
