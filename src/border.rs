@@ -83,11 +83,19 @@ pub fn draw_shadow_bg(ui: &egui::Ui, rect: egui::Rect, rounding: egui::CornerRad
     ui.painter().rect_filled(r, rounding, shadow.color);
 }
 
-/// Рисует тень от границы (rect_stroke).
-pub fn draw_shadow_border(ui: &egui::Ui, rect: egui::Rect, rounding: egui::CornerRadius, width: f32, shadow: &Shadow) {
-    if !shadow.is_visible() || width <= 0.0 { return; }
-    let r = rect.translate(shadow.offset);
-    ui.painter().rect_stroke(r, rounding, egui::Stroke::new(width, shadow.color), egui::StrokeKind::Inside);
+/// Рисует тень от границы — повторяет dash/dot/gap/seg_len, только другим цветом.
+pub fn draw_shadow_border(ui: &mut egui::Ui, rect: egui::Rect, rounding: egui::CornerRadius, border: &BorderStyle, shadow: &Shadow) {
+    if !shadow.is_visible() || border.width <= 0.0 { return; }
+    let shadow_border = BorderStyle {
+        color: shadow.color,
+        width: border.width,
+        border_type: border.border_type,
+        gap: border.gap,
+        seg_len: border.seg_len,
+        round_cap: border.round_cap,
+        position: border.position,
+    };
+    draw_border(ui, rect.translate(shadow.offset), rounding, &shadow_border);
 }
 
 /// Парсит border из узла и темы.

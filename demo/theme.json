@@ -35,14 +35,17 @@
     "icon_size_click": 20,
     "background": ["#000", 0],
     "background_click": ["#FF0", 0],
+    "shadow_background": [0],
+    "shadow_icon_hover": [1],
+    "shadow_border_hover": [1],
     "color": "#88F",  //  
     "color_hover": "#F80",         // "#FF0",   // yellow
     "color_click": "#0FF",   // cyan
     /*
           #C74 - pitch
     */
- //   "border": [4, "#88F", "dot", 3, 1],
-    "border_hover": [0, "#F80", "dot", 3, 1],
+    "border": [5, "#88F", "dot", 3, 2],
+    "border_hover": [5, "#F80", "dot", 3, 2],
     "border_click": [4, "#0FF", "dash", 5, 6]
   },
   "TextField": {
