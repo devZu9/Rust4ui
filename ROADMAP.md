@@ -36,7 +36,7 @@
   - [ ] Проверка, что все binding есть в state
   - [ ] Проверка, что все action зарегистрированы
   - [ ] Визуальный отчёт об ошибках
-- [ ] **Margins для всех виджетов** — унифицировать
+- [x] **Margins для всех виджетов** 🟢 *(13.07.2026)* — унифицировать (через `get_margin` + тема)
 - [ ] **10 встроенных тем**
 - [ ] Бенчмарки производительности
 - [x] **Live-reload** 🟢 *(07.07.2026)*
@@ -76,6 +76,16 @@
 
 - [x] **Margins для IconButton** 🟢 *(11.07.2026)* — марджины иконок
 - [x] **Hover/Click реакции для IconButton** 🟢 *(11.07.2026)* — хитрый механизм
+- [x] **`fill` → `background`** 🟢 *(13.07.2026)* — переименование, `background_hover/click/focus`
+- [x] **`get_state_attr<T>`** 🟢 *(13.07.2026)* — универсальная функция для state-атрибутов любого типа
+- [x] **Shadow система** 🟢 *(13.07.2026)* — `shadow_background`, `shadow_border`, `shadow_icon`, state-aware
+- [x] **border opacity** 🟢 *(13.07.2026)* — `[width, color, opacity, type, gap, seg_len]`
+- [x] **Suffix naming** 🟢 *(13.07.2026)* — `hover_color`→`color_hover`, `text_color`→`color_text`
+- [x] **`color_icon` на Button** 🟢 *(13.07.2026)* — отдельный цвет иконки, раздельный рендер
+- [x] **gap_row** 🟢 *(11.07.2026)* — вертикальный отступ между wrapped-строками
+- [x] **`parse_color_value()`** 🟢 *(13.07.2026)* — `["#HEX", opacity]`
+- [x] **`parse_hex_color` #RGB/#RGBA** 🟢 *(11.07.2026)*
+- [x] **`Sense::click`→`click_and_drag`** 🟢 *(12.07.2026)* — убрано таймаут удержания
 - [ ] **MenuBar** — исправление ошибок (белые кнопки, {{синтаксис}}, hover)
 - [ ] **Числовое поле (mode=number)** — дизайн и настройки
 - [ ] **Slider** — доделка внешнего вида
