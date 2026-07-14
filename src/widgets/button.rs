@@ -11,11 +11,11 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     }
 
     let enabled = attr_bool(node, "enabled").unwrap_or(true);
-    let min_width = attr_f64(node, "min_width")
+    let base_min_width = attr_f64(node, "min_width")
         .unwrap_or_else(|| ctx.theme.w_f64("Button", "min_width", 100.0));
-    let min_height = ctx.theme.w_f64("Button", "height", 28.0) as f32;
+    let base_min_height = ctx.theme.w_f64("Button", "height", 28.0) as f32;
 
-    let rounding = attr_f64(node, "rounding")
+    let base_rounding = attr_f64(node, "rounding")
         .unwrap_or_else(|| ctx.theme.w_f64("Button", "rounding", 6.0));
 
     let tooltip_text = attr_str(node, "tooltip").map(|t| resolve_text(t, ctx));
@@ -63,8 +63,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let content_w = icon_sz.x + gap + text_sz.x;
     let content_h = icon_sz.y.max(text_sz.y);
 
-    let desired_w = (content_w + pad_l + pad_r).max(min_width as f32);
-    let desired_h = (content_h + pad_t + pad_b).max(min_height);
+    let desired_w = (content_w + pad_l + pad_r).max(base_min_width as f32);
+    let desired_h = (content_h + pad_t + pad_b).max(base_min_height);
 
     let (m_l, m_r, m_t, m_b) = (margin.left as f32, margin.right as f32, margin.top as f32, margin.bottom as f32);
     let total_w = desired_w + m_l + m_r;
@@ -73,6 +73,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let size = egui::vec2(total_w, total_h);
     let (rect, resp) = ui.allocate_exact_size(size, egui::Sense::click_and_drag());
     let border = get_state_border(node, &ctx.theme, "Button", &resp, enabled);
+    let rounding = crate::renderer::get_state_attr(node, &ctx.theme, "Button", "rounding", &resp, true, base_rounding, |v| v.as_f64());
 
     let content_rect = egui::Rect::from_min_max(
         egui::pos2(rect.min.x + m_l, rect.min.y + m_t),

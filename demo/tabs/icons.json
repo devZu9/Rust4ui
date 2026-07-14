@@ -25,8 +25,8 @@
             },
             {
               "type": "Row",
-              "gap": 5, 
-              "gap_row": 5,
+              "gap": 0, 
+              "gap_row": 0,
               "wrap": true,
               "children": [
                 {

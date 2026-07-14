@@ -21,13 +21,19 @@
     "margin": 0
   },
   "IconButton": {
-    "button_size": 20,
+    "button_size": 25,
     "rounding": 15,
     "padding": [5, 25, 25, 5],
+    "padding_hover": [5, 27, 27, 5],
+    "padding_click": [8, 20, 20, 8],
+    "margin": [3],
+    "margin_hover": [1],
+    "margin_click": [5],
+    "rounding_click": 25,
     "icon_size": 25,
+    "icon_size_click": 15,
     "background": ["#FF0", 0],
     "background_click": ["#FF0", 0],
-  //  "margin": [3],
     "color": "#88F",  //  #88F
     "color_hover": "#FF0",   // yellow
     "color_click": "#0FF",   // cyan

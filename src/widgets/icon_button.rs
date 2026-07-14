@@ -16,10 +16,10 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     }
 
     let enabled = attr_bool(node, "enabled").unwrap_or(true);
-    let button_size = attr_f64(node, "button_size")
+    let base_button_size = attr_f64(node, "button_size")
         .unwrap_or_else(|| ctx.theme.w_f64("IconButton", "button_size", 24.0)) as f32;
 
-    let rounding = attr_f64(node, "rounding")
+    let base_rounding = attr_f64(node, "rounding")
         .unwrap_or_else(|| ctx.theme.w_f64("IconButton", "rounding", 6.0));
 
 
@@ -43,11 +43,11 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     };
     let valign = egui::Align::Center;
 
-    let icon_size = attr_f64(node, "icon_size")
+    let base_icon_size = attr_f64(node, "icon_size")
         .unwrap_or_else(|| ctx.theme.w_f64("IconButton", "icon_size", 14.0)) as f32;
     let maket = ui.painter().layout_no_wrap(
         text.clone(),
-        egui::FontId::proportional(icon_size),
+        egui::FontId::proportional(base_icon_size),
         color,
     );
 
@@ -56,8 +56,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let base_pad_t = base_pad.top as f32;
     let base_pad_b = base_pad.bottom as f32;
 
-    let button_width = (maket.size().x + base_pad_l + base_pad_r).max(button_size);
-    let button_height = (icon_size + base_pad_t + base_pad_b).max(button_size);
+    let button_width = (maket.size().x + base_pad_l + base_pad_r).max(base_button_size);
+    let button_height = (base_icon_size + base_pad_t + base_pad_b).max(base_button_size);
 
     let base_m_l = base_margin.left as f32;
     let base_m_r = base_margin.right as f32;
@@ -90,6 +90,10 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     };
 
     let border = get_state_border(node, &ctx.theme, "IconButton", &resp, enabled);
+
+    let rounding = crate::renderer::get_state_attr(node, &ctx.theme, "IconButton", "rounding", &resp, true, base_rounding, |v| v.as_f64());
+    let icon_size = crate::renderer::get_state_attr(node, &ctx.theme, "IconButton", "icon_size", &resp, true, base_icon_size, |v| v.as_f64().map(|x| x as f32));
+    let maket = ui.painter().layout_no_wrap(text.clone(), egui::FontId::proportional(icon_size), color);
 
     let rounding_cr = egui::CornerRadius::same(rounding as u8);
     let shadow = crate::border::get_shadow(node, &ctx.theme, "IconButton");
