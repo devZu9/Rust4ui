@@ -8,7 +8,12 @@
 ### Статус
 - [ ] **Shadow Z-order** — параметр положения тени (под/над элементом) для shadow_border, shadow_icon
 - [ ] **Button shadow** — shadow_bg/border/icon для обычной Button (как в IconButton)
-- [ ] **MenuBar** — исправление ошибок
+- [ ] **MenuBar** — исправление ошибок (белые кнопки, {{синтаксис}}, hover, иконки при наведении)
+- [ ] **IconBar anchor** — start/center/end
+- [ ] **Separator в IconBar** — разделитель между иконками
+- [ ] **SVG-текстуры** — SVGs/, SVGs Flat/ (отложено)
+- [ ] **ScrollBar стилизация** — толщина, цвет, отступы
+- [ ] **ScrollArea: отступ текста от рамки**
 - [ ] **Slider, ComboBox, Tabs** — доделка дизайна
 - [ ] **Числовое поле, Image, ProgressBar, DataTable** — новые виджеты
 
@@ -58,10 +63,6 @@
 - [x] Demo — все иконки обновлены на реальные Phosphor-имена
 - [x] IconRegistry — тест на все 1512, тест на 60+ common иконок
 - [x] Отдельная вкладка «Иконки» со всеми 1512 иконками Phosphor (со скроллом)
-- [ ] SVG-текстуры (SVGs/, SVGs Flat/) — отложено, помечено в коде
-- [ ] IconBar anchor (start/center/end) — отложено
-- [ ] Separator в IconBar — отложено
-- [ ] Иконки в меню при наведении — баг MenuBar (см. ROADMAP)
 - [x] text_field.rs: deprecated API обновлён (scope_builder, id_salt)
 - [x] text_field.rs: убран лишний `mut`, `valign` → `_valign`
 - [x] plural_key, render_context_menu, Notification — `#[allow(dead_code)]`
@@ -93,8 +94,6 @@
 - [x] ScrollArea + allocate_ui_at_rect работает
 - [x] Фон и рамка едины
 - [x] Hover/focus работают
-- [ ] ScrollBar стилизация (толщина, цвет, отступы) — отложено
-- [ ] ScrollArea обрезает текст строго по рамке — хочется отступ
 
 ### Заметки на будущее
 - Если понадобится отступ между рамкой и текстом — `ScrollArea::inner_margin()` или ручной `rect.shrink()`
