@@ -1,4 +1,4 @@
-use crate::border::{draw_border, get_state_border};
+use crate::border::{draw_border, draw_shadow_bg, draw_shadow_border, get_state_border, parse_shadow, Shadow};
 use crate::renderer::{attr_bool, attr_f64, attr_str, get_margin, get_padding, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
@@ -89,10 +89,14 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     };
 
     let rounding_cr = egui::CornerRadius::same(rounding as u8);
-    let shadow = crate::border::get_shadow(node, &ctx.theme, "Button");
-    crate::border::draw_shadow(ui, content_rect, rounding_cr, &shadow);
+    let shadow_bg = crate::renderer::get_state_attr(node, &ctx.theme, "Button", "shadow_background", &resp, true,
+        Shadow { color: egui::Color32::TRANSPARENT, offset: egui::Vec2::ZERO }, parse_shadow);
+    draw_shadow_bg(ui, content_rect, rounding_cr, &shadow_bg);
     ui.painter().rect_filled(content_rect, rounding_cr, actual_fill);
     draw_border(ui, content_rect, rounding_cr, &border);
+    let shadow_border = crate::renderer::get_state_attr(node, &ctx.theme, "Button", "shadow_border", &resp, true,
+        Shadow { color: egui::Color32::TRANSPARENT, offset: egui::Vec2::ZERO }, parse_shadow);
+    draw_shadow_border(ui, content_rect, rounding_cr, border.width, &shadow_border);
 
     let inner = egui::Rect::from_min_max(
         egui::pos2(content_rect.left() + pad_l, content_rect.top() + pad_t),

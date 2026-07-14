@@ -1,4 +1,4 @@
-use crate::border::{draw_border, get_state_border};
+use crate::border::{draw_border, draw_shadow_border, get_state_border, Shadow};
 use crate::renderer::{attr_bool, attr_f64, attr_str, get_margin, get_padding, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
@@ -96,10 +96,14 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let maket = ui.painter().layout_no_wrap(text.clone(), egui::FontId::proportional(icon_size), color);
 
     let rounding_cr = egui::CornerRadius::same(rounding as u8);
-    let shadow = crate::border::get_shadow(node, &ctx.theme, "IconButton");
-    crate::border::draw_shadow(ui, content_rect, rounding_cr, &shadow);
+    let shadow_bg = crate::renderer::get_state_attr(node, &ctx.theme, "IconButton", "shadow_background", &resp, true,
+        crate::border::Shadow { color: egui::Color32::TRANSPARENT, offset: egui::Vec2::ZERO }, crate::border::parse_shadow);
+    crate::border::draw_shadow_bg(ui, content_rect, rounding_cr, &shadow_bg);
     ui.painter().rect_filled(content_rect, rounding_cr, actual_fill);
     draw_border(ui, content_rect, rounding_cr, &border);
+    let shadow_border = crate::renderer::get_state_attr(node, &ctx.theme, "IconButton", "shadow_border", &resp, true,
+        Shadow { color: egui::Color32::TRANSPARENT, offset: egui::Vec2::ZERO }, crate::border::parse_shadow);
+    draw_shadow_border(ui, content_rect, rounding_cr, border.width, &shadow_border);
 
     let inner = egui::Rect::from_min_max(
         egui::pos2(content_rect.left() + pad_l, content_rect.top() + pad_t),
@@ -109,6 +113,11 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let text_y = valign.align_size_within_range(maket.size().y, inner.y_range()).min;
     let text_pos = egui::pos2(text_x, text_y);
 
+    let shadow_icon = crate::renderer::get_state_attr(node, &ctx.theme, "IconButton", "shadow_icon", &resp, true,
+        Shadow { color: egui::Color32::TRANSPARENT, offset: egui::Vec2::ZERO }, crate::border::parse_shadow);
+    if shadow_icon.is_visible() {
+        ui.painter().galley_with_override_text_color(text_pos + shadow_icon.offset, maket.clone(), shadow_icon.color);
+    }
     ui.painter().galley_with_override_text_color(text_pos, maket, actual_text);
 
     if let Some(tip) = &tooltip_text {

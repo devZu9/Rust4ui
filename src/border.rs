@@ -35,28 +35,59 @@ impl BorderStyle {
     }
 }
 
-/// Парсит тень из узла и темы.
-/// Возвращает (offset_x, offset_y, blur, color).
-pub fn get_shadow(node: &serde_json::Value, _theme: &Theme, _widget: &str) -> (f32, f32, f32, egui::Color32) {
-    let offset_x = node.get("shadow_offset_x")
-        .and_then(|v| v.as_f64()).unwrap_or(2.0) as f32;
-    let offset_y = node.get("shadow_offset_y")
-        .and_then(|v| v.as_f64()).unwrap_or(2.0) as f32;
-    let blur = node.get("shadow_blur")
-        .and_then(|v| v.as_f64()).unwrap_or(4.0) as f32;
-    let color = node.get("shadow_color")
-        .and_then(|v| v.as_str())
-        .and_then(crate::theme::parse_hex_color)
-        .unwrap_or_else(|| egui::Color32::from_rgba_premultiplied(0, 0, 0, 40));
-    (offset_x, offset_y, blur, color)
+/// Тень: цвет + смещение.
+#[derive(Debug, Clone, Copy)]
+pub struct Shadow {
+    pub color: egui::Color32,
+    pub offset: egui::Vec2,
 }
 
-/// Рисует тень под прямоугольником.
-pub fn draw_shadow(ui: &egui::Ui, rect: egui::Rect, rounding: egui::CornerRadius, shadow: &(f32, f32, f32, egui::Color32)) {
-    let (off_x, off_y, _blur, color) = *shadow;
-    if color.a() == 0 { return; }
-    let shadow_rect = rect.translate(egui::vec2(off_x, off_y));
-    ui.painter().rect_filled(shadow_rect, rounding, color);
+impl Shadow {
+    pub fn is_visible(&self) -> bool {
+        self.color.a() > 0
+    }
+}
+
+/// Парсит тень из JSON-значения.
+/// Форматы:
+/// - число: [opacity] → чёрная тень с прозрачностью, offset дефолт (2,2)
+/// - массив: [opacity] / [opacity, "#color"] / [opacity, "#color", x, y]
+pub fn parse_shadow(val: &serde_json::Value) -> Option<Shadow> {
+    match val {
+        serde_json::Value::Number(n) => {
+            let opacity = n.as_f64()? as f32;
+            let a = (opacity.clamp(0.0, 1.0) * 255.0) as u8;
+            Some(Shadow { color: egui::Color32::from_rgba_unmultiplied(0, 0, 0, a), offset: egui::Vec2::ZERO })
+        }
+        serde_json::Value::Array(arr) if arr.len() >= 1 => {
+            let opacity = arr[0].as_f64()? as f32;
+            let base_color = if arr.len() >= 2 {
+                arr[1].as_str().and_then(crate::theme::parse_hex_color).unwrap_or(egui::Color32::BLACK)
+            } else {
+                egui::Color32::BLACK
+            };
+            let a = (opacity.clamp(0.0, 1.0) * 255.0) as u8;
+            let color = egui::Color32::from_rgba_unmultiplied(base_color.r(), base_color.g(), base_color.b(), a);
+            let x = if arr.len() >= 3 { arr[2].as_f64()? as f32 } else { 2.0 };
+            let y = if arr.len() >= 4 { arr[3].as_f64()? as f32 } else { 2.0 };
+            Some(Shadow { color, offset: egui::vec2(x, y) })
+        }
+        _ => None,
+    }
+}
+
+/// Рисует тень от фона (rect_filled).
+pub fn draw_shadow_bg(ui: &egui::Ui, rect: egui::Rect, rounding: egui::CornerRadius, shadow: &Shadow) {
+    if !shadow.is_visible() { return; }
+    let r = rect.translate(shadow.offset);
+    ui.painter().rect_filled(r, rounding, shadow.color);
+}
+
+/// Рисует тень от границы (rect_stroke).
+pub fn draw_shadow_border(ui: &egui::Ui, rect: egui::Rect, rounding: egui::CornerRadius, width: f32, shadow: &Shadow) {
+    if !shadow.is_visible() || width <= 0.0 { return; }
+    let r = rect.translate(shadow.offset);
+    ui.painter().rect_stroke(r, rounding, egui::Stroke::new(width, shadow.color), egui::StrokeKind::Inside);
 }
 
 /// Парсит border из узла и темы.

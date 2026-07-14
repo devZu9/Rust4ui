@@ -21,24 +21,28 @@
     "margin": 0
   },
   "IconButton": {
-    "button_size": 25,
+    "button_size": 65,
     "rounding": 15,
-    "padding": [5, 25, 25, 5],
-    "padding_hover": [5, 27, 27, 5],
+ //   "padding": [5, 25, 25, 5],
+    "padding_hover": [5, 7, 6, 5],
     "padding_click": [8, 20, 20, 8],
     "margin": [3],
-    "margin_hover": [1],
+//    "margin_hover": [10],
     "margin_click": [5],
     "rounding_click": 25,
+ //   "rounding_hover": 10,
     "icon_size": 25,
-    "icon_size_click": 15,
-    "background": ["#FF0", 0],
+    "icon_size_click": 20,
+    "background": ["#000", 0],
     "background_click": ["#FF0", 0],
-    "color": "#88F",  //  #88F
-    "color_hover": "#FF0",   // yellow
+    "color": "#88F",  //  
+    "color_hover": "#F80",         // "#FF0",   // yellow
     "color_click": "#0FF",   // cyan
-    "border": [4, "#88F", "dot", 3, 1],
-    "border_hover": [4, "#FF0", "dot", 4, 1],
+    /*
+          #C74 - pitch
+    */
+ //   "border": [4, "#88F", "dot", 3, 1],
+    "border_hover": [0, "#F80", "dot", 3, 1],
     "border_click": [4, "#0FF", "dash", 5, 6]
   },
   "TextField": {
