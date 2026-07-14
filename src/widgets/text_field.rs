@@ -14,14 +14,14 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let mode = attr_str(node, "mode").unwrap_or("text");
     let password = attr_bool(node, "password").unwrap_or(false) || mode == "password";
     let multiline = attr_bool(node, "multiline").unwrap_or(false);
-    let width = attr_f64(node, "width")
+    let base_width = attr_f64(node, "width")
         .unwrap_or_else(|| ctx.theme.w_f64("TextField", "width", 200.0));
     let hint = attr_str(node, "hint")
         .map(|h| resolve_text(h, ctx))
         .unwrap_or_default();
 
     if mode == "number" {
-        render_number(ui, &binding, node, ctx, width as f32, &hint);
+        render_number(ui, &binding, node, ctx, base_width as f32, &hint);
         return;
     }
 
@@ -44,7 +44,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .size()
         .y;
 
-    let field_w = (width as f32).max(20.0 + pad_l + pad_r);
+    let field_w = (base_width as f32).max(20.0 + pad_l + pad_r);
     let field_h = if multiline {
         let rows = attr_f64(node, "desired_rows").unwrap_or(4.0);
         min_height.max(font_h * rows as f32 + pad_t + pad_b)
