@@ -113,11 +113,12 @@ pub fn resolve_text(text: &str, ctx: &RenderCtx) -> String {
     ctx.locale.i18n_text(text, &ctx.state)
 }
 
-/// Применяет margin виджета из темы: добавляет `margin`px сверху/снизу
-/// и возвращает отступ по X для `ui.add_space`. Если margin > 0 и это вертикальный контейнер,
-/// добавляет пробел сверху, а также слева/справа через `indent`.
-/// Читает padding из атрибута узла (число, [2], [4]) или из темы
-pub fn get_padding(node: &serde_json::Value, theme: &crate::theme::Theme, widget: &str, default: egui::Margin) -> egui::Margin {
+pub fn get_padding(
+    node: &serde_json::Value,
+    theme: &crate::theme::Theme,
+    widget: &str,
+    default: egui::Margin,
+) -> egui::Margin {
     node.get("padding")
         .and_then(parse_padding)
         .or_else(|| {
@@ -128,7 +129,11 @@ pub fn get_padding(node: &serde_json::Value, theme: &crate::theme::Theme, widget
         .unwrap_or(default)
 }
 
-pub fn get_margin(node: &serde_json::Value, theme: &crate::theme::Theme, widget: &str) -> egui::Margin {
+pub fn get_margin(
+    node: &serde_json::Value,
+    theme: &crate::theme::Theme,
+    widget: &str,
+) -> egui::Margin {
     node.get("margin")
         .and_then(parse_padding)
         .or_else(|| {
@@ -137,6 +142,62 @@ pub fn get_margin(node: &serde_json::Value, theme: &crate::theme::Theme, widget:
                 .and_then(parse_padding)
         })
         .unwrap_or(egui::Margin::ZERO)
+}
+
+fn state_attr_lookup<T: Copy>(
+    n: &serde_json::Value,
+    t: &crate::theme::Theme,
+    w: &str,
+    k: &str,
+    p: fn(&serde_json::Value) -> Option<T>,
+) -> Option<T> {
+    n.get(k).and_then(p)
+        .or_else(|| t.widget.get(w).and_then(|x| x.get(k)).and_then(p))
+}
+
+pub fn get_state_attr<T: Copy>(
+    node: &serde_json::Value,
+    theme: &crate::theme::Theme,
+    widget: &str,
+    key: &str,
+    resp: &egui::Response,
+    enabled: bool,
+    default: T,
+    parse: fn(&serde_json::Value) -> Option<T>,
+) -> T {
+    let base = state_attr_lookup(node, theme, widget, key, parse).unwrap_or(default);
+    if !enabled {
+        return base;
+    }
+    if resp.is_pointer_button_down_on() {
+        let ck = format!("{}_click", key);
+        let hk = format!("{}_hover", key);
+        state_attr_lookup(node, theme, widget, &ck, parse)
+            .or_else(|| state_attr_lookup(node, theme, widget, &hk, parse))
+            .unwrap_or(base)
+    } else if resp.hovered() {
+        let hk = format!("{}_hover", key);
+        state_attr_lookup(node, theme, widget, &hk, parse).unwrap_or(base)
+    } else if resp.has_focus() {
+        let fk = format!("{}_focus", key);
+        state_attr_lookup(node, theme, widget, &fk, parse).unwrap_or(base)
+    } else {
+        base
+    }
+}
+
+pub fn get_state_background(
+    node: &serde_json::Value,
+    theme: &crate::theme::Theme,
+    widget: &str,
+    resp: &egui::Response,
+    enabled: bool,
+    default: egui::Color32,
+) -> egui::Color32 {
+    if !enabled {
+        return egui::Color32::from_gray(60);
+    }
+    get_state_attr(node, theme, widget, "background", resp, true, default, crate::theme::parse_color_value)
 }
 
 pub fn parse_padding(val: &serde_json::Value) -> Option<egui::Margin> {
@@ -160,7 +221,12 @@ pub fn parse_padding(val: &serde_json::Value) -> Option<egui::Margin> {
                 let r = arr[1].as_f64()? as i8;
                 let b = arr[2].as_f64()? as i8;
                 let l = arr[3].as_f64()? as i8;
-                Some(egui::Margin { left: l, right: r, top: t, bottom: b })
+                Some(egui::Margin {
+                    left: l,
+                    right: r,
+                    top: t,
+                    bottom: b,
+                })
             }
             _ => None,
         },
@@ -180,36 +246,4 @@ pub fn attr_f64(node: &serde_json::Value, key: &str) -> Option<f64> {
 
 pub fn attr_bool(node: &serde_json::Value, key: &str) -> Option<bool> {
     node.get(key).and_then(|v| v.as_bool())
-}
-
-pub fn get_state_background(node: &serde_json::Value, theme: &crate::theme::Theme, widget: &str,
-                            resp: &egui::Response, enabled: bool, default: egui::Color32) -> egui::Color32 {
-    let base = node.get("background")
-        .and_then(crate::theme::parse_color_value)
-        .or_else(|| theme.w_color_opt(widget, "background"))
-        .unwrap_or(default);
-    if !enabled { return egui::Color32::from_gray(60); }
-    if resp.is_pointer_button_down_on() {
-        node.get("background_click")
-            .and_then(crate::theme::parse_color_value)
-            .or_else(|| theme.w_color_opt(widget, "background_click"))
-            .or_else(|| {
-                node.get("background_hover")
-                    .and_then(crate::theme::parse_color_value)
-                    .or_else(|| theme.w_color_opt(widget, "background_hover"))
-            })
-            .unwrap_or(base)
-    } else if resp.hovered() {
-        node.get("background_hover")
-            .and_then(crate::theme::parse_color_value)
-            .or_else(|| theme.w_color_opt(widget, "background_hover"))
-            .unwrap_or(base)
-    } else if resp.has_focus() {
-        node.get("background_focus")
-            .and_then(crate::theme::parse_color_value)
-            .or_else(|| theme.w_color_opt(widget, "background_focus"))
-            .unwrap_or(base)
-    } else {
-        base
-    }
 }

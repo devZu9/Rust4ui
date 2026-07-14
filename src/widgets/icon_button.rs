@@ -69,19 +69,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let actual_fill = crate::renderer::get_state_background(node, &ctx.theme, "IconButton", &resp, enabled,
         egui::Color32::from_rgb(0x30, 0x30, 0x30));
     let actual_text = if enabled {
-        if resp.hovered() && resp.is_pointer_button_down_on() {
-            node.get("color_click")
-                .and_then(crate::theme::parse_color_value)
-                .or_else(|| ctx.theme.w_color_opt("IconButton", "color_click"))
-                .unwrap_or(color)
-        } else if resp.hovered() {
-            node.get("color_hover")
-                .and_then(crate::theme::parse_color_value)
-                .or_else(|| ctx.theme.w_color_opt("IconButton", "color_hover"))
-                .unwrap_or(color)
-        } else {
-            color
-        }
+        crate::renderer::get_state_attr(node, &ctx.theme, "IconButton", "color", &resp, true, color, crate::theme::parse_color_value)
     } else {
         egui::Color32::from_gray(100)
     };
