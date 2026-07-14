@@ -1,5 +1,22 @@
-use crate::border::{draw_border, draw_shadow_bg, draw_shadow_border, draw_shadow_content, get_state_border, parse_shadow, Shadow, ShadowZOrder};
+use crate::border::{draw_border, draw_shadow_bg, draw_shadow_border, draw_shadow_content, get_state_border, parse_content_shadow, parse_shadow, Shadow, ShadowZOrder};
 use crate::renderer::{attr_bool, attr_f64, attr_str, get_margin, get_padding, resolve_text, RenderCtx};
+use crate::theme::Theme;
+
+fn cascade_shadow(node: &serde_json::Value, theme: &Theme, widget: &str, key: &str, resp: &egui::Response, enabled: bool, fallback: Shadow) -> Shadow {
+    let has = node.get(key).is_some()
+        || node.get(&format!("{}_hover", key)).is_some()
+        || node.get(&format!("{}_click", key)).is_some()
+        || node.get(&format!("{}_focus", key)).is_some()
+        || theme.widget.get(widget).and_then(|w| w.get(key)).is_some()
+        || theme.widget.get(widget).and_then(|w| w.get(&format!("{}_hover", key))).is_some()
+        || theme.widget.get(widget).and_then(|w| w.get(&format!("{}_click", key))).is_some()
+        || theme.widget.get(widget).and_then(|w| w.get(&format!("{}_focus", key))).is_some();
+    if has {
+        crate::renderer::get_state_attr(node, theme, widget, key, resp, enabled, Shadow::transparent(), parse_content_shadow)
+    } else {
+        fallback
+    }
+}
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
 
@@ -103,7 +120,9 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         draw_shadow_border(ui, content_rect, rounding_cr, &border, &shadow_border);
     }
     let shadow_content = crate::renderer::get_state_attr(node, &ctx.theme, "Button", "shadow_content", &resp, true,
-        Shadow::transparent(), parse_shadow);
+        Shadow::transparent(), parse_content_shadow);
+    let shadow_icon = cascade_shadow(node, &ctx.theme, "Button", "shadow_icon", &resp, enabled, shadow_content);
+    let shadow_text = cascade_shadow(node, &ctx.theme, "Button", "shadow_text", &resp, enabled, shadow_content);
 
     let inner = egui::Rect::from_min_max(
         egui::pos2(content_rect.left() + pad_l, content_rect.top() + pad_t),
@@ -114,23 +133,23 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     if let Some(ig) = &icon_galley {
         let y = valign.align_size_within_range(icon_sz.y, inner.y_range()).min;
         let icon_pos = egui::pos2(start_x, y);
-        if shadow_content.z_order == ShadowZOrder::Under {
-            draw_shadow_content(ui, icon_pos, ig.clone(), &shadow_content);
+        if shadow_icon.z_order == ShadowZOrder::Under {
+            draw_shadow_content(ui, icon_pos, ig.clone(), &shadow_icon);
             ui.painter().galley(icon_pos, ig.clone(), color_icon);
         } else {
             ui.painter().galley(icon_pos, ig.clone(), color_icon);
-            draw_shadow_content(ui, icon_pos, ig.clone(), &shadow_content);
+            draw_shadow_content(ui, icon_pos, ig.clone(), &shadow_icon);
         }
     }
     if let Some(tg) = &text_galley {
         let y = valign.align_size_within_range(text_sz.y, inner.y_range()).min;
         let text_pos = egui::pos2(start_x + icon_sz.x + gap, y);
-        if shadow_content.z_order == ShadowZOrder::Under {
-            draw_shadow_content(ui, text_pos, tg.clone(), &shadow_content);
+        if shadow_text.z_order == ShadowZOrder::Under {
+            draw_shadow_content(ui, text_pos, tg.clone(), &shadow_text);
             ui.painter().galley_with_override_text_color(text_pos, tg.clone(), actual_text);
         } else {
             ui.painter().galley_with_override_text_color(text_pos, tg.clone(), actual_text);
-            draw_shadow_content(ui, text_pos, tg.clone(), &shadow_content);
+            draw_shadow_content(ui, text_pos, tg.clone(), &shadow_text);
         }
     }
 

@@ -7,12 +7,14 @@
 **Задача:** доработка shadow-системы (Z-order, Button shadow), реализация оставшихся пунктов v0.3 → v0.4.
 
 ### Ход работ
-1. **Shadow Z-order + Button shadow** — Добавлен `ShadowZOrder` enum, поле `z_order` в `Shadow`, обновлён `parse_shadow` (строгий формат: `[opacity, "under"/"over", "#color"?, x?, y?]`), добавлен `draw_shadow_content()`. Button получил `shadow_content`. Z-order работает на Button и IconButton. ✅
+1. **Shadow Z-order + Button shadow** — Добавлен `ShadowZOrder` enum, поле `z_order` в `Shadow`, обновлён `parse_shadow` (строгий формат), добавлен `draw_shadow_content()`. ✅
+2. **Каскад теней в Button** — `shadow_content` (шорткат), `shadow_icon` и `shadow_text` (переопределения). Приоритет: `shadow_icon ?? shadow_content`, `shadow_text ?? shadow_content`. Добавлен `parse_content_shadow()` (offset 1,1). ✅
+3. **IconButton** — `shadow_icon` через `parse_content_shadow` с offset (1,1). ✅
 
 ### Файлы
-- `src/border.rs` — ShadowZOrder, z_order, draw_shadow_content, parse_shadow
-- `src/widgets/button.rs` — shadow_content + z-order
-- `src/widgets/icon_button.rs` — z-order + draw_shadow_content
+- `src/border.rs` — ShadowZOrder, parse_shadow, parse_content_shadow, draw_shadow_content
+- `src/widgets/button.rs` — cascade: shadow_content + shadow_icon + shadow_text
+- `src/widgets/icon_button.rs` — parse_content_shadow для shadow_icon
 - `demo/theme.json` — исправлен битый JSON в shadow_border
 - `docs/src/04-ui-json.md`, `10-border.md`, `12-shadows.md` — документация
 - `CHANGELOG.md`, `SESSIONS.md`, `ROADMAP.md` — логи

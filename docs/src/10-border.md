@@ -125,13 +125,42 @@ State-версии:
 
 ## Shadow от контента (shadow_content) — Button
 
-Тень по контуру содержимого (иконка + текст). Работает на **Button**.
-Z-order: `"under"` (под контентом) или `"over"` (glow).
+Тень-шорткат для всего содержимого (иконка + текст). Можно переопределить отдельно через `shadow_icon` / `shadow_text`. Default offset (1,1).
 
 ```json
+// Шорткат — влияет и на иконку, и на текст
 "shadow_content": [0.3, "under", "#000", 1, 1]
-"shadow_content": [0.5, "over", "#0FF", 0, 0]
 ```
+
+## Shadow от иконки (shadow_icon) — Button
+
+Переопределяет `shadow_content` для иконки. Default offset (1,1).
+
+```json
+// Иконка со своей тенью, текст берёт shadow_content
+"shadow_content": [0.3, "under", "#000", 1, 1],
+"shadow_icon":    [0.5, "over",  "#FF0", 0, 0]
+```
+
+## Shadow от текста (shadow_text) — Button
+
+Переопределяет `shadow_content` для текста. Default offset (1,1).
+
+```json
+// Всё раздельно
+"shadow_content": [0.3, "under", "#000", 1, 1],
+"shadow_icon":    [0.5, "over",  "#FF0", 0, 0],
+"shadow_text":    [0.4, "under", "#00F", 2, 2]
+```
+
+### Приоритет (каскад)
+
+```
+shadow_icon ?? shadow_content ?? прозрачный (не рисуется)
+shadow_text ?? shadow_content ?? прозрачный (не рисуется)
+```
+
+Если `shadow_icon` не указан — берётся `shadow_content`. Если и он не указан — тень не рисуется. State-версии (`_hover`, `_click`, `_focus`) работают на каждом уровне независимо.
 
 ## Shadow от иконки (shadow_icon) — IconButton
 

@@ -76,9 +76,15 @@
 | `shadow_border` | array | [0] | Тень рамки: [opacity, z?, color?, x?, y?] |
 | `shadow_border_hover` | array | — | Тень рамки при наведении |
 | `shadow_border_click` | array | — | Тень рамки при нажатии |
-| `shadow_content` | array | [0] | Тень контента (иконка + текст): [opacity, z?, color?, x?, y?] |
+| `shadow_content` | array | [0] | Тень контента (шорткат для icon+text): [opacity, z?, color?, x?, y?] |
 | `shadow_content_hover` | array | — | Тень контента при наведении |
 | `shadow_content_click` | array | — | Тень контента при нажатии |
+| `shadow_icon` | array | — | Тень иконки (переопределяет shadow_content) |
+| `shadow_icon_hover` | array | — | Тень иконки при наведении |
+| `shadow_icon_click` | array | — | Тень иконки при нажатии |
+| `shadow_text` | array | — | Тень текста (переопределяет shadow_content) |
+| `shadow_text_hover` | array | — | Тень текста при наведении |
+| `shadow_text_click` | array | — | Тень текста при нажатии |
 | `shadow_blur` | number | 4.0 | Размытие тени |
 | `shadow_color` | string | rgba(0,0,0,40) | Цвет тени |
 

@@ -6,7 +6,9 @@
 
 - **shadow_background** — тень фона (под заливкой)
 - **shadow_border** — тень рамки (под или над рамкой)
-- **shadow_content** — тень контента (иконка + текст) — **Button**
+- **shadow_content** — шорткат тени для иконки+текста — **Button**
+- **shadow_icon** — переопределяет `shadow_content` для иконки — **Button**
+- **shadow_text** — переопределяет `shadow_content` для текста — **Button**
 - **shadow_icon** — тень иконки — **IconButton**
 
 Подробное описание форматов и примеры см. в разделе [Border → Shadow](10-border.md).
@@ -32,7 +34,17 @@
 - `"under"` (по умолчанию) — тень под элементом (классическая тень)
 - `"over"` — тень поверх элемента (glow-эффект)
 
-Работает для `shadow_border` и `shadow_content`. `shadow_background` всегда под фоном. `shadow_icon` (IconButton) — всегда `"under"`.
+Работает для `shadow_border`, `shadow_content`, `shadow_icon`, `shadow_text`. `shadow_background` всегда под фоном. `shadow_icon` (IconButton) — всегда `"under"`.
+
+### Default offset
+
+| Атрибут | Default offset | Где используется |
+|---------|---------------|-----------------|
+| `shadow_background` | (2, 2) | Button, IconButton |
+| `shadow_border` | (2, 2) | Button, IconButton |
+| `shadow_content` | (1, 1) | Button (шорткат) |
+| `shadow_icon` | (1, 1) | Button, IconButton |
+| `shadow_text` | (1, 1) | Button |
 
 ## Атрибуты (устаревшие)
 

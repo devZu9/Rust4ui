@@ -3,14 +3,17 @@
 ## [0.4.0] — 2026-07-14
 
 ### Добавлено
-- **Shadow Z-order** — параметр положения тени (`"under"` / `"over"`) для `shadow_border` и `shadow_content` на Button и IconButton. Формат: `[opacity, "under"/"over"?, "#color"?, x?, y?]`. По умолчанию `"under"` (под элементом), `"over"` — над элементом (glow-эффект).
-- **Button: `shadow_content`** — тень для иконки и текста на Button (аналогично IconButton). Работает с z-order.
+- **Button: каскад теней** — `shadow_content` как шорткат, `shadow_icon` и `shadow_text` как переопределения. Приоритет: `shadow_icon ?? shadow_content`, `shadow_text ?? shadow_content`.
+- **`parse_content_shadow()`** — парсер с default offset (1,1) для shadow_content/shadow_icon/shadow_text.
 - **`ShadowZOrder` enum** — `Under` / `Over` в `border.rs`.
-- **`draw_shadow_content()`** — вынесена из IconButton в `border.rs` для переиспользования.
+- **`draw_shadow_content()`** — утилита отрисовки тени для galley.
 - **`Shadow::from_rgba()` / `Shadow::transparent()`** — удобные конструкторы.
 
 ### Изменено
 - **`parse_shadow()`** — строгий формат: `[opacity, "under"/"over"?, "#color"?, x?, y?]`. Позиция 1 — z-order, позиция 2 — цвет. Старые форматы не поддерживаются.
+- **Default offset**: `shadow_background`/`shadow_border` → (2,2); `shadow_content`/`shadow_icon`/`shadow_text` → (1,1).
+- **IconButton**: `shadow_icon` парсится через `parse_content_shadow` (offset 1,1).
+- **Shadow struct** — добавлено поле `z_order: ShadowZOrder`.
 - **IconButton** — inline shadow_content заменён на `draw_shadow_content()`.
 - **Shadow struct** — добавлено поле `z_order: ShadowZOrder`.
 

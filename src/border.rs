@@ -66,11 +66,7 @@ impl Shadow {
     }
 }
 
-/// Парсит тень из JSON-значения.
-/// Форматы:
-/// - число: `0.4` → чёрная тень, offset (2,2), z_order Under
-/// - массив: `[opacity]` / `[opacity, "under"|"over"]` / `[opacity, "under"|"over", "#color"]` / `[opacity, "under"|"over", "#color", x, y]`
-pub fn parse_shadow(val: &serde_json::Value) -> Option<Shadow> {
+fn parse_shadow_impl(val: &serde_json::Value, default_xy: f32) -> Option<Shadow> {
     match val {
         serde_json::Value::Number(n) => {
             let opacity = n.as_f64()? as f32;
@@ -97,12 +93,25 @@ pub fn parse_shadow(val: &serde_json::Value) -> Option<Shadow> {
             let a = (opacity.clamp(0.0, 1.0) * 255.0) as u8;
             let color = egui::Color32::from_rgba_unmultiplied(base_color.r(), base_color.g(), base_color.b(), a);
 
-            let x = if arr.len() >= 4 { arr[3].as_f64()? as f32 } else { 2.0 };
-            let y = if arr.len() >= 5 { arr[4].as_f64()? as f32 } else { 2.0 };
+            let x = if arr.len() >= 4 { arr[3].as_f64()? as f32 } else { default_xy };
+            let y = if arr.len() >= 5 { arr[4].as_f64()? as f32 } else { default_xy };
             Some(Shadow { color, offset: egui::vec2(x, y), z_order })
         }
         _ => None,
     }
+}
+
+/// Парсит тень фона/рамки. Default offset (2,2).
+/// Форматы:
+/// - число: `0.4` → чёрная тень, offset (2,2), z_order Under
+/// - массив: `[opacity]` / `[opacity, "under"|"over"]` / `[opacity, "under"|"over", "#color", x, y]`
+pub fn parse_shadow(val: &serde_json::Value) -> Option<Shadow> {
+    parse_shadow_impl(val, 2.0)
+}
+
+/// Парсит тень контента/иконки/текста. Default offset (1,1).
+pub fn parse_content_shadow(val: &serde_json::Value) -> Option<Shadow> {
+    parse_shadow_impl(val, 1.0)
 }
 
 /// Рисует тень от фона (rect_filled).
