@@ -29,6 +29,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     let pad = get_padding(node, &ctx.theme, "IconButton", egui::Margin::symmetric(0, 0));
     let margin = get_margin(node, &ctx.theme, "IconButton");
+    let base_pad = pad;
+    let base_margin = margin;
 
     let color = node.get("color")
         .and_then(crate::theme::parse_color_value)
@@ -49,17 +51,30 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         color,
     );
 
-    let (pad_l, pad_r, pad_t, pad_b) = (pad.left as f32, pad.right as f32, pad.top as f32, pad.bottom as f32);
+    let base_pad_l = base_pad.left as f32;
+    let base_pad_r = base_pad.right as f32;
+    let base_pad_t = base_pad.top as f32;
+    let base_pad_b = base_pad.bottom as f32;
 
-    let button_width = (maket.size().x + pad_l + pad_r).max(button_size);
-    let button_height = (icon_size + pad_t + pad_b).max(button_size);
+    let button_width = (maket.size().x + base_pad_l + base_pad_r).max(button_size);
+    let button_height = (icon_size + base_pad_t + base_pad_b).max(button_size);
 
-    let (m_l, m_r, m_t, m_b) = (margin.left as f32, margin.right as f32, margin.top as f32, margin.bottom as f32);
-    let total_w = button_width + m_l + m_r;
-    let total_h = button_height + m_t + m_b;
+    let base_m_l = base_margin.left as f32;
+    let base_m_r = base_margin.right as f32;
+    let base_m_t = base_margin.top as f32;
+    let base_m_b = base_margin.bottom as f32;
+
+    let total_w = button_width + base_m_l + base_m_r;
+    let total_h = button_height + base_m_t + base_m_b;
 
     let size = egui::vec2(total_w, total_h);
     let (rect, resp) = ui.allocate_exact_size(size, egui::Sense::click_and_drag());
+
+    let pad = crate::renderer::get_state_attr(node, &ctx.theme, "IconButton", "padding", &resp, true, base_pad, crate::renderer::parse_padding);
+    let margin = crate::renderer::get_state_attr(node, &ctx.theme, "IconButton", "margin", &resp, true, base_margin, crate::renderer::parse_padding);
+
+    let (m_l, m_r, m_t, m_b) = (margin.left as f32, margin.right as f32, margin.top as f32, margin.bottom as f32);
+    let (pad_l, pad_r, pad_t, pad_b) = (pad.left as f32, pad.right as f32, pad.top as f32, pad.bottom as f32);
 
     let content_rect = egui::Rect::from_min_max(
         egui::pos2(rect.min.x + m_l, rect.min.y + m_t),
