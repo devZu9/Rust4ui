@@ -123,19 +123,23 @@ State-версии:
 
 Работает на: Button, IconButton.
 
-## Shadow от контента (shadow_content)
+## Shadow от контента (shadow_content) — Button
 
-Тень по контуру содержимого (иконка + текст). Работает на Button и IconButton.
-Z-order: `"under"` (под иконкой, по умолчанию) или `"over"` (над иконкой, glow).
-
-Формат: `[opacity, "under"|"over"?, "#color"?, x?, y?]`
+Тень по контуру содержимого (иконка + текст). Работает на **Button**.
+Z-order: `"under"` (под контентом) или `"over"` (glow).
 
 ```json
-// Тень под иконкой: 30% чёрная, offset 1,1
 "shadow_content": [0.3, "under", "#000", 1, 1]
-
-// Свечение (glow) — тень поверх иконки
 "shadow_content": [0.5, "over", "#0FF", 0, 0]
+```
+
+## Shadow от иконки (shadow_icon) — IconButton
+
+Тень по контуру глифа иконки. Работает на **IconButton**.
+Только `"under"` (всегда под иконкой).
+
+```json
+"shadow_icon": [0.3, "under", "#000", 1, 1]
 ```
 
 ## Типы границ

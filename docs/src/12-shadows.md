@@ -2,10 +2,12 @@
 
 ## Обзор
 
-Тени поддерживаются на `Button` и `IconButton` в трёх вариантах:
+Тени поддерживаются на `Button` и `IconButton`:
+
 - **shadow_background** — тень фона (под заливкой)
 - **shadow_border** — тень рамки (под или над рамкой)
-- **shadow_content** — тень контента (иконка + текст)
+- **shadow_content** — тень контента (иконка + текст) — **Button**
+- **shadow_icon** — тень иконки — **IconButton**
 
 Подробное описание форматов и примеры см. в разделе [Border → Shadow](10-border.md).
 
@@ -30,7 +32,7 @@
 - `"under"` (по умолчанию) — тень под элементом (классическая тень)
 - `"over"` — тень поверх элемента (glow-эффект)
 
-Работает для `shadow_border` и `shadow_content`. `shadow_background` всегда под фоном.
+Работает для `shadow_border` и `shadow_content`. `shadow_background` всегда под фоном. `shadow_icon` (IconButton) — всегда `"under"`.
 
 ## Атрибуты (устаревшие)
 

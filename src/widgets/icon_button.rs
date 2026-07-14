@@ -113,10 +113,10 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let text_y = valign.align_size_within_range(maket.size().y, inner.y_range()).min;
     let text_pos = egui::pos2(text_x, text_y);
 
-    let shadow_content = crate::renderer::get_state_attr(node, &ctx.theme, "IconButton", "shadow_content", &resp, true,
+    let shadow_icon = crate::renderer::get_state_attr(node, &ctx.theme, "IconButton", "shadow_icon", &resp, true,
         Shadow { color: egui::Color32::TRANSPARENT, offset: egui::Vec2::ZERO, z_order: ShadowZOrder::Under }, crate::border::parse_shadow);
-    if shadow_content.is_visible() {
-        ui.painter().galley_with_override_text_color(text_pos + shadow_content.offset, maket.clone(), shadow_content.color);
+    if shadow_icon.is_visible() {
+        ui.painter().galley_with_override_text_color(text_pos + shadow_icon.offset, maket.clone(), shadow_icon.color);
     }
     ui.painter().galley_with_override_text_color(text_pos, maket, actual_text);
 
