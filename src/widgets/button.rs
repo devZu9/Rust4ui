@@ -112,7 +112,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let start_x = halign.align_size_within_range(content_w, inner.x_range()).min;
     if let Some(ig) = &icon_galley {
         let y = valign.align_size_within_range(icon_sz.y, inner.y_range()).min;
-        ui.painter().galley_with_override_text_color(egui::pos2(start_x, y), ig.clone(), actual_text);
+        ui.painter().galley(egui::pos2(start_x, y), ig.clone(), color_icon);
     }
     if let Some(tg) = &text_galley {
         let y = valign.align_size_within_range(text_sz.y, inner.y_range()).min;
