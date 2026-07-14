@@ -181,9 +181,17 @@ pub fn apply_state_border(node: &serde_json::Value, theme: &Theme, widget: &str,
     let mut r = *base;
     if arr.len() >= 1 { if let Some(n) = arr[0].as_f64() { r.width = n as f32; } }
     if arr.len() >= 2 { if let Some(c) = crate::theme::parse_color_value(&arr[1]) { r.color = c; } }
-    if arr.len() >= 3 { if let Some(s) = arr[2].as_str() { if let Some(t) = parse_border_type(s) { r.border_type = t; } } }
-    if arr.len() >= 4 { if let Some(n) = arr[3].as_f64() { r.gap = n as f32; } }
-    if arr.len() >= 5 { if let Some(n) = arr[4].as_f64() { r.seg_len = n as f32; } }
+    let has_op = arr.len() >= 3 && arr[2].as_f64().is_some();
+    let off = if has_op { 1 } else { 0 };
+    if has_op {
+        if let Some(o) = arr[2].as_f64() {
+            let a = (r.color.a() as f32 * o.clamp(0.0, 1.0) as f32) as u8;
+            r.color = egui::Color32::from_rgba_unmultiplied(r.color.r(), r.color.g(), r.color.b(), a);
+        }
+    }
+    if arr.len() >= (3 + off) { if let Some(s) = arr[2 + off].as_str() { if let Some(t) = parse_border_type(s) { r.border_type = t; } } }
+    if arr.len() >= (4 + off) { if let Some(n) = arr[3 + off].as_f64() { r.gap = n as f32; } }
+    if arr.len() >= (5 + off) { if let Some(n) = arr[4 + off].as_f64() { r.seg_len = n as f32; } }
     r
 }
 
@@ -215,13 +223,21 @@ fn shorthand_width(node: &serde_json::Value) -> Option<f64> {
 fn shorthand_color(node: &serde_json::Value) -> Option<egui::Color32> {
     let arr = node.get("border")?.as_array()?;
     if arr.len() < 2 { return None; }
-    crate::theme::parse_color_value(&arr[1])
+    let mut c = crate::theme::parse_color_value(&arr[1])?;
+    if arr.len() >= 3 {
+        if let Some(o) = arr[2].as_f64() {
+            let a = (c.a() as f32 * o.clamp(0.0, 1.0) as f32) as u8;
+            c = egui::Color32::from_rgba_unmultiplied(c.r(), c.g(), c.b(), a);
+        }
+    }
+    Some(c)
 }
 
 fn shorthand_type(node: &serde_json::Value) -> Option<&str> {
     let arr = node.get("border")?.as_array()?;
-    if arr.len() < 3 { return None; }
-    arr[2].as_str()
+    let off = if arr.len() >= 3 && arr[2].as_f64().is_some() { 1 } else { 0 };
+    if arr.len() < (3 + off) { return None; }
+    arr[2 + off].as_str()
 }
 
 // -- helpers для чтения из theme.widget --
@@ -246,37 +262,49 @@ fn theme_shorthand_width(theme: &Theme, widget: &str) -> Option<f64> {
 fn theme_shorthand_color(theme: &Theme, widget: &str) -> Option<egui::Color32> {
     let arr = theme.widget.get(widget)?.get("border")?.as_array()?;
     if arr.len() < 2 { return None; }
-    crate::theme::parse_color_value(&arr[1])
+    let mut c = crate::theme::parse_color_value(&arr[1])?;
+    if arr.len() >= 3 {
+        if let Some(o) = arr[2].as_f64() {
+            let a = (c.a() as f32 * o.clamp(0.0, 1.0) as f32) as u8;
+            c = egui::Color32::from_rgba_unmultiplied(c.r(), c.g(), c.b(), a);
+        }
+    }
+    Some(c)
 }
 
 fn shorthand_gap(node: &serde_json::Value) -> Option<f64> {
     let arr = node.get("border")?.as_array()?;
-    if arr.len() < 4 { return None; }
-    arr[3].as_f64()
+    let off = if arr.len() >= 3 && arr[2].as_f64().is_some() { 1 } else { 0 };
+    if arr.len() < (4 + off) { return None; }
+    arr[3 + off].as_f64()
 }
 
 fn theme_shorthand_gap(theme: &Theme, widget: &str) -> Option<f64> {
     let arr = theme.widget.get(widget)?.get("border")?.as_array()?;
-    if arr.len() < 4 { return None; }
-    arr[3].as_f64()
+    let off = if arr.len() >= 3 && arr[2].as_f64().is_some() { 1 } else { 0 };
+    if arr.len() < (4 + off) { return None; }
+    arr[3 + off].as_f64()
 }
 
 fn shorthand_seg_len(node: &serde_json::Value) -> Option<f64> {
     let arr = node.get("border")?.as_array()?;
-    if arr.len() < 5 { return None; }
-    arr[4].as_f64()
+    let off = if arr.len() >= 3 && arr[2].as_f64().is_some() { 1 } else { 0 };
+    if arr.len() < (5 + off) { return None; }
+    arr[4 + off].as_f64()
 }
 
 fn theme_shorthand_seg_len(theme: &Theme, widget: &str) -> Option<f64> {
     let arr = theme.widget.get(widget)?.get("border")?.as_array()?;
-    if arr.len() < 5 { return None; }
-    arr[4].as_f64()
+    let off = if arr.len() >= 3 && arr[2].as_f64().is_some() { 1 } else { 0 };
+    if arr.len() < (5 + off) { return None; }
+    arr[4 + off].as_f64()
 }
 
 fn theme_shorthand_type<'a>(theme: &'a Theme, widget: &str) -> Option<&'a str> {
     let arr = theme.widget.get(widget)?.get("border")?.as_array()?;
-    if arr.len() < 3 { return None; }
-    arr[2].as_str()
+    let off = if arr.len() >= 3 && arr[2].as_f64().is_some() { 1 } else { 0 };
+    if arr.len() < (3 + off) { return None; }
+    arr[2 + off].as_str()
 }
 
 fn node_str<'a>(node: &'a serde_json::Value, key: &str) -> Option<&'a str> {
