@@ -12,9 +12,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
             0x33, 0x66, 0xCC, 0x44,
         ));
 
-    let fill_str = attr_str(node, "fill");
-    let fill = fill_str
-        .and_then(crate::theme::parse_hex_color)
+    let fill = node.get("background")
+        .and_then(crate::theme::parse_color_value)
         .unwrap_or(egui::Color32::from_rgb(0x1A, 0x1D, 0x23));
 
     let rounding = attr_f64(node, "rounding").unwrap_or(8.0);

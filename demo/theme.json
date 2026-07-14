@@ -14,7 +14,7 @@
     "rounding": 25,
     "min_width": 190,
     "color_text": "#E0E0E0",
-    "color_icon": "#88AAFF",
+    "color_icon": "#FF0",
     "border_hover": [4, "#FF0", "dot", 4, 1],
     "border_click": [4, "#0FF", "dash", 5, 6],
     "padding": [15],

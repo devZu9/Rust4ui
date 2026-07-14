@@ -1,17 +1,12 @@
 use crate::renderer::{attr_str, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, _ctx: &mut RenderCtx) {
-    let _color = attr_str(node, "color")
-        .and_then(crate::theme::parse_hex_color)
-        .unwrap_or(egui::Color32::from_rgb(0x80, 0x80, 0x80));
-
     let size = attr_str(node, "size").unwrap_or("8");
     let _pulse = attr_str(node, "pulse").unwrap_or("false") == "true";
-
     let tooltip = attr_str(node, "tooltip");
 
-    let color_str = attr_str(node, "color").unwrap_or("#888888");
-    let color = crate::theme::parse_hex_color(color_str)
+    let color = node.get("color")
+        .and_then(crate::theme::parse_color_value)
         .unwrap_or(egui::Color32::from_rgb(0x88, 0x88, 0x88));
 
     let diameter: f32 = size.parse().unwrap_or(8.0);

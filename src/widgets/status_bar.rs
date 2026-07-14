@@ -5,9 +5,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let height = attr_f64(node, "height").unwrap_or(26.0);
     let padding = attr_f64(node, "padding").unwrap_or(4.0);
 
-    let fill_str = attr_str(node, "background");
-    let fill = fill_str
-        .and_then(crate::theme::parse_hex_color)
+    let fill = node.get("background")
+        .and_then(crate::theme::parse_color_value)
         .unwrap_or(egui::Color32::from_rgb(0x18, 0x18, 0x1D));
 
     let border = get_border(node, &ctx.theme, "StatusBar");

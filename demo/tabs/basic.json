@@ -75,7 +75,8 @@
                   "text": "{{btn.primary}}",
                   "action": "click",
                   "target": "primary",
-                  "background": "#3366CC",
+                  "background": ["#3366CC", 0.9],
+		  "color_icon": "#0FF",
                   "tooltip": "{{tooltip.primary}}"
                 },
                 {
