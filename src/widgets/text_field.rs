@@ -80,7 +80,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     w.active.bg_stroke = egui::Stroke::NONE;
 
     let (resp, border_rect) = if multiline && fixed {
-        let (rect, _) = ui.allocate_exact_size(egui::vec2(field_w, field_h), egui::Sense::empty());
+        let (rect, _) = ui.allocate_exact_size(egui::vec2(field_w, field_h), egui::Sense::click());
         let inner_resp = ui.scope_builder(egui::UiBuilder::new().max_rect(rect), |ui| {
             egui::ScrollArea::vertical()
                 .id_salt(scroll_id)
@@ -91,16 +91,14 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
                 })
                 .inner
         }).inner;
+        ui.painter().rect_filled(rect, radius, base_bg);
         (inner_resp, rect)
     } else {
-        let (rect, _) = ui.allocate_exact_size(egui::vec2(field_w, field_h), egui::Sense::empty());
-        let inner = ui.allocate_ui_at_rect(rect, |ui| {
-            ui.add(text_edit.frame(false).margin(base_pad).desired_width(field_w))
-        }).inner;
-        (inner, rect)
+        let te = text_edit.frame(true).background_color(base_bg).margin(base_pad);
+        let r = ui.add_sized(egui::vec2(field_w, field_h), te);
+        let rr = r.rect;
+        (r, rr)
     };
-    let bg = crate::renderer::get_state_background(node, &ctx.theme, "TextField", &resp, true, base_bg);
-    ui.painter().rect_filled(border_rect, radius, bg);
     let border = get_state_border(node, &ctx.theme, "TextField", &resp, true);
 
     (ui.style_mut().visuals.widgets.inactive.corner_radius,
