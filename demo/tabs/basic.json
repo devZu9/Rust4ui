@@ -109,7 +109,6 @@
               "action": "click",
               "target": "align_center",
               "background": ["#555566"],
-    	      "background_hover": ["#FF0", 1],
     	      "background_click": ["#FF0", 0.3]
             },
             {
@@ -118,7 +117,8 @@
               "action": "click",
               "target": "align_left",
               "background": "#555566",
-              "align": "left"
+              "align": "left",
+              "align_hover": "right"
             },
             {
               "type": "Button",

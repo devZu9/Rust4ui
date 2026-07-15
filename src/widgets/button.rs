@@ -36,7 +36,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .unwrap_or_else(|| ctx.theme.w_f64("Button", "rounding", 6.0));
 
     let tooltip_text = attr_str(node, "tooltip").map(|t| resolve_text(t, ctx));
-    let align = attr_str(node, "align").unwrap_or("center");
+    let base_align = attr_str(node, "align").unwrap_or("center");
 
     let pad = get_padding(node, &ctx.theme, "Button", egui::Margin::symmetric(16, 4));
     let margin = get_margin(node, &ctx.theme, "Button");
@@ -50,11 +50,6 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .or_else(|| ctx.theme.w_color_opt("Button", "color_icon"))
         .unwrap_or(color_text);
 
-    let halign = match align {
-        "left" => egui::Align::LEFT,
-        "right" => egui::Align::RIGHT,
-        _ => egui::Align::Center,
-    };
     let valign = egui::Align::Center;
 
     let font_id = egui::FontId::proportional(14.0);
@@ -89,6 +84,24 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     let size = egui::vec2(total_w, total_h);
     let (rect, resp) = ui.allocate_exact_size(size, egui::Sense::click_and_drag());
+
+    let align = if enabled {
+        if resp.is_pointer_button_down_on() {
+            attr_str(node, "align_click").unwrap_or(base_align)
+        } else if resp.hovered() {
+            attr_str(node, "align_hover").unwrap_or(base_align)
+        } else {
+            base_align
+        }
+    } else {
+        base_align
+    };
+    let halign = match align {
+        "left" => egui::Align::LEFT,
+        "right" => egui::Align::RIGHT,
+        _ => egui::Align::Center,
+    };
+
     let border = get_state_border(node, &ctx.theme, "Button", &resp, enabled);
     let rounding = crate::renderer::get_state_attr(node, &ctx.theme, "Button", "rounding", &resp, true, base_rounding, |v| v.as_f64());
 
