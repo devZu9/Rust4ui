@@ -139,6 +139,31 @@ impl Default for RefResolver {
     }
 }
 
+/// Заменяет `$var` во всех строковых значениях Value на значения из vars.
+/// Рекурсивно обходит объекты и массивы.
+pub fn substitute_vars(value: &mut Value, vars: &HashMap<String, Value>) {
+    match value {
+        Value::Object(map) => {
+            for val in map.values_mut() {
+                substitute_vars(val, vars);
+            }
+        }
+        Value::Array(arr) => {
+            for item in arr.iter_mut() {
+                substitute_vars(item, vars);
+            }
+        }
+        Value::String(s) => {
+            if let Some(stripped) = s.strip_prefix('$') {
+                if let Some(replacement) = vars.get(stripped) {
+                    *value = replacement.clone();
+                }
+            }
+        }
+        _ => {}
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -220,5 +245,58 @@ mod tests {
 
         assert_eq!(resolved["type"], "Button");
         assert_eq!(resolved["text"], "Overridden");
+    }
+
+    #[test]
+    fn test_substitute_vars_string() {
+        let mut vars = HashMap::new();
+        vars.insert("primary".into(), Value::String("#3366CC".into()));
+        let mut val = Value::String("$primary".into());
+        substitute_vars(&mut val, &vars);
+        assert_eq!(val, Value::String("#3366CC".into()));
+    }
+
+    #[test]
+    fn test_substitute_vars_number() {
+        let mut vars = HashMap::new();
+        vars.insert("radius".into(), Value::Number(serde_json::Number::from(6)));
+        let mut val = Value::String("$radius".into());
+        substitute_vars(&mut val, &vars);
+        assert_eq!(val, Value::Number(serde_json::Number::from(6)));
+    }
+
+    #[test]
+    fn test_substitute_vars_nested() {
+        let mut vars = HashMap::new();
+        vars.insert("primary".into(), Value::String("#3366CC".into()));
+        vars.insert("bg".into(), Value::String("#1A1D23".into()));
+        let mut val = serde_json::json!({
+            "type": "Button",
+            "background": "$bg",
+            "color_text": "$primary",
+            "children": [{"text": "$primary"}]
+        });
+        substitute_vars(&mut val, &vars);
+        assert_eq!(val["background"], "#1A1D23");
+        assert_eq!(val["color_text"], "#3366CC");
+        assert_eq!(val["children"][0]["text"], "#3366CC");
+    }
+
+    #[test]
+    fn test_substitute_vars_unknown_unchanged() {
+        let vars = HashMap::new();
+        let mut val = Value::String("$unknown".into());
+        substitute_vars(&mut val, &vars);
+        assert_eq!(val, Value::String("$unknown".into()));
+    }
+
+    #[test]
+    fn test_substitute_vars_self_ref() {
+        let mut vars = HashMap::new();
+        vars.insert("primary".into(), Value::String("$primary".into())); // self-reference
+        let mut val = Value::String("$primary".into());
+        substitute_vars(&mut val, &vars);
+        // Should stay as "$primary" since substitute_vars doesn't iterate
+        assert_eq!(val, Value::String("$primary".into()));
     }
 }

@@ -8,6 +8,7 @@ pub struct Theme {
     pub sizes: HashMap<String, f32>,
     pub rounding: HashMap<String, f32>,
     pub widget: HashMap<String, serde_json::Value>,
+    pub vars: HashMap<String, serde_json::Value>,
 }
 
 impl Theme {
@@ -23,6 +24,9 @@ impl Theme {
         }
         for (k, v) in &other.widget {
             self.widget.insert(k.clone(), v.clone());
+        }
+        for (k, v) in &other.vars {
+            self.vars.insert(k.clone(), v.clone());
         }
     }
 
@@ -46,6 +50,10 @@ impl Theme {
 
     pub fn rounding_or(&self, key: &str, default: f32) -> f32 {
         self.rounding.get(key).copied().unwrap_or(default)
+    }
+
+    pub fn get_var(&self, key: &str) -> Option<&serde_json::Value> {
+        self.vars.get(key)
     }
 
     pub fn w_f64(&self, widget: &str, key: &str, default: f64) -> f64 {
@@ -204,6 +212,8 @@ impl Default for Theme {
         sizes.insert("heading_size".into(), 20.0);
         sizes.insert("gap".into(), 4.0);
 
+        let vars = HashMap::new();
+
         let mut widget = HashMap::new();
         widget.insert("TextField".into(), serde_json::json!({
             "width": 200.0,
@@ -299,6 +309,7 @@ impl Default for Theme {
             sizes,
             rounding: HashMap::new(),
             widget,
+            vars,
         }
     }
 }

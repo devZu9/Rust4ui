@@ -1,4 +1,4 @@
-use rust4ui::{render_node, strip_json_comments, LocaleRegistry, RefResolver, RenderCtx, StateRegistry, Theme};
+use rust4ui::{render_node, strip_json_comments, substitute_vars, LocaleRegistry, RefResolver, RenderCtx, StateRegistry, Theme};
 use std::path::Path;
 use std::path::PathBuf;
 use std::sync::Arc;
@@ -35,8 +35,23 @@ fn load_theme(base: &Path) -> Theme {
             }
         };
         if let Some(obj) = parsed.as_object() {
+            // 1. Вычитать vars
+            if let Some(v) = obj.get("vars").and_then(|v| v.as_object()) {
+                for (key, val) in v {
+                    theme.vars.insert(key.clone(), val.clone());
+                }
+            }
+            // 2. Резолвить vars внутри самой секции vars
+            let resolved_vars = theme.vars.clone();
+            for val in theme.vars.values_mut() {
+                substitute_vars(val, &resolved_vars);
+            }
+            // 3. Загрузить и резолвить все остальные секции
             for (widget, attrs) in obj {
-                theme.widget.insert(widget.clone(), attrs.clone());
+                if widget == "vars" { continue; }
+                let mut resolved = attrs.clone();
+                substitute_vars(&mut resolved, &theme.vars);
+                theme.widget.insert(widget.clone(), resolved);
             }
         }
         log::info!(
@@ -99,6 +114,8 @@ impl DemoApp {
     fn new() -> Self {
         let base = Path::new(env!("CARGO_MANIFEST_DIR")).to_path_buf();
 
+        let theme = load_theme(&base);
+
         log::info!("Загрузка UI из demo/ui.json...");
         let tree = {
             let ui_path = base.join("demo").join("ui.json");
@@ -107,9 +124,11 @@ impl DemoApp {
             let root: serde_json::Value =
                 serde_json::from_str(&strip_json_comments(&content)).expect("demo/ui.json невалидный JSON");
             let mut resolver = RefResolver::new();
-            resolver
+            let mut resolved = resolver
                 .resolve(&root, &base.join("demo"))
-                .expect("Ошибка резолвинга $ref в demo/")
+                .expect("Ошибка резолвинга $ref в demo/");
+            substitute_vars(&mut resolved, &theme.vars);
+            resolved
         };
 
         let mut state = StateRegistry::new();
@@ -163,8 +182,6 @@ impl DemoApp {
         locale
             .load_file("en", &base.join("locales").join("en.json"))
             .expect("Не удалось загрузить locales/en.json");
-
-        let theme = load_theme(&base);
 
         rust4ui::contrast::check_theme_contrasts(&theme.colors, "demo");
 
@@ -264,16 +281,18 @@ impl DemoApp {
 }
 
 impl DemoApp {
-    fn reload_ui_tree(&mut self) {
+    fn reload_ui(&mut self) {
+        let new_theme = load_theme(&self.base);
         let ui_path = self.base.join("demo").join("ui.json");
         match std::fs::read_to_string(&ui_path) {
             Ok(content) => match serde_json::from_str::<serde_json::Value>(&strip_json_comments(&content)) {
                 Ok(root) => {
                     let mut resolver = RefResolver::new();
                     match resolver.resolve(&root, &self.base.join("demo")) {
-                        Ok(resolved) => {
+                        Ok(mut resolved) => {
+                            substitute_vars(&mut resolved, &new_theme.vars);
                             self.tree = resolved;
-                            log::info!("UI-дерево перезагружено с диска");
+                            log::info!("UI-дерево и тема перезагружены с диска");
                         }
                         Err(e) => log::error!("Ошибка резолвинга UI: {e}"),
                     }
@@ -282,6 +301,8 @@ impl DemoApp {
             },
             Err(e) => log::error!("Ошибка чтения ui.json: {e}"),
         }
+        rust4ui::contrast::check_theme_contrasts(&new_theme.colors, "demo");
+        self.ctx.theme = new_theme;
     }
 
     fn save_settings_if_needed(&mut self, ctx: &egui::Context) {
@@ -318,10 +339,7 @@ impl eframe::App for DemoApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         if self.files_changed.swap(false, Ordering::Relaxed) {
             log::info!("Обнаружено изменение файлов, hot-reload...");
-            self.reload_ui_tree();
-            let new_theme = load_theme(&self.base);
-            rust4ui::contrast::check_theme_contrasts(&new_theme.colors, "demo");
-            self.ctx.theme = new_theme;
+            self.reload_ui();
         }
 
         self.ctx.theme.apply_to_egui(ctx);

@@ -1,10 +1,28 @@
 {
+  "vars": {
+    "color_primary": "#3366CC",
+    "color_accent": "#66CCFF",
+    "color_bg": "#1A1D23",
+    "color_bg_dark": "#14161B",
+    "color_text": "#E0E0E0",
+    "color_text_dim": "#888888",
+    "color_border": "#33333A",
+    "color_danger": "#CC3333",
+    "color_success": "#00AA66",
+    "color_warning": "#CC8800",
+    "radius_sm": 4,
+    "radius_md": 6,
+    "radius_lg": 8,
+    "space_xs": 4,
+    "space_sm": 8,
+    "space_md": 16
+  },
   "global": {
     "item_spacing_x": 8,
     "item_spacing_y": 10
   },
   "Label": {
-    "color": "#CCCCCC",
+    "color": "$color_text",
     "size": 14,
     "margin": 0
   },
@@ -12,9 +30,9 @@
     "background": "#303030",
     "background_click": ["#FF0", 0],
     "background_hover": ["#FF0", 0],
-    "rounding": 25,
+    "rounding": "$radius_md",
     "min_width": 190,
- //   "color_text": "#E0E0E0",
+    "color_text": "$color_text",
     "color_icon": "#FF0",
     "shadow_content": [0.9, "under", "#000"],
     "shadow_icon_hover": [0.9, "under", "#F00"],
@@ -46,9 +64,9 @@
     "shadow_border": [0.4],
     "shadow_icon": [0.7],
     "shadow_border_hover": [0.1],
-    "color": "#88F",  //  
-    "color_hover": "#F80",         // "#FF0",   // yellow
-    "color_click": "#0FF",   // cyan
+    "color": "$color_accent",
+    "color_hover": "#F80",
+    "color_click": "#0FF",
     /*
           #C74 - pitch
     */
@@ -60,7 +78,7 @@
     "width": 200,
     "height": 48,
     "rounding": 40,
-    "border": [5, "#303030", 1, "dash", 9],
+    "border": [5, "$color_border", 1, "dash", 9],
     "border_position": "center",
     "border_seg_cap": true,
     "padding": [15, 25],
