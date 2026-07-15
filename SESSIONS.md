@@ -10,10 +10,12 @@
 1. **Shadow Z-order + Button shadow** — Добавлен `ShadowZOrder` enum, поле `z_order` в `Shadow`, обновлён `parse_shadow` (строгий формат), добавлен `draw_shadow_content()`. ✅
 2. **Каскад теней в Button** — `shadow_content` (шорткат), `shadow_icon` и `shadow_text` (переопределения). Приоритет: `shadow_icon ?? shadow_content`, `shadow_text ?? shadow_content`. Добавлен `parse_content_shadow()` (offset 1,1). ✅
 3. **IconButton** — `shadow_icon` через `parse_content_shadow` с offset (1,1). ✅
+4. **Button: state-aware align** — `align_hover`, `align_click`. ✅
+5. **Button: state-aware padding/margin** — `padding_hover/click`, `margin_hover/click`. ✅
 
 ### Файлы
 - `src/border.rs` — ShadowZOrder, parse_shadow, parse_content_shadow, draw_shadow_content
-- `src/widgets/button.rs` — cascade: shadow_content + shadow_icon + shadow_text
+- `src/widgets/button.rs` — cascade shadow + state-aware align/padding/margin
 - `src/widgets/icon_button.rs` — parse_content_shadow для shadow_icon
 - `demo/theme.json` — исправлен битый JSON в shadow_border
 - `docs/src/04-ui-json.md`, `10-border.md`, `12-shadows.md` — документация
@@ -22,6 +24,7 @@
 ### Статус
 - [x] **Shadow Z-order** — параметр положения тени (под/над элементом) для shadow_border, shadow_content ✅
 - [x] **Button shadow** — shadow_bg/border/icon для обычной Button (как в IconButton) ✅
+- [x] **Button: state-aware** — align_hover/click, padding_hover/click, margin_hover/click ✅
 - [ ] **MenuBar** — исправление ошибок (белые кнопки, {{синтаксис}}, hover, иконки при наведении)
 - [ ] **IconBar anchor** — start/center/end
 - [ ] **Separator в IconBar** — разделитель между иконками

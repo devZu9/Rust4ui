@@ -65,6 +65,7 @@
 
 - [x] **Shadow Z-order** 🟢 *(14.07.2026)* — параметр положения тени (под/над элементом) для shadow_border, shadow_content
 - [x] **Button shadow** 🟢 *(14.07.2026)* — shadow_background/border/icon для Button (как в IconButton)
+- [x] **Button state-aware** 🟢 *(15.07.2026)* — align_hover/click, padding_hover/click, margin_hover/click
 - [ ] **MenuBar** — исправление ошибок (белые кнопки, {{синтаксис}}, hover)
 - [ ] **Slider** — доделка внешнего вида
 - [ ] **ComboBox** — доделка дизайна

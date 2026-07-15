@@ -14,8 +14,7 @@
 - **Default offset**: `shadow_background`/`shadow_border` → (2,2); `shadow_content`/`shadow_icon`/`shadow_text` → (1,1).
 - **IconButton**: `shadow_icon` парсится через `parse_content_shadow` (offset 1,1).
 - **Shadow struct** — добавлено поле `z_order: ShadowZOrder`.
-- **IconButton** — inline shadow_content заменён на `draw_shadow_content()`.
-- **Shadow struct** — добавлено поле `z_order: ShadowZOrder`.
+- **Button**: align_hover/click, padding_hover/click, margin_hover/click — state-aware через get_state_attr.
 
 ## [0.3.1] — 2026-07-11
 

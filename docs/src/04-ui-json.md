@@ -61,8 +61,15 @@
 | `min_width` | number | 100.0 | Минимальная ширина |
 | `rounding` | number | 6.0 | Скругление углов |
 | `align` | string | `"center"` | Выравнивание текста: left/center/right |
+| `align_hover` | string | — | Выравнивание при наведении |
+| `align_click` | string | — | Выравнивание при нажатии |
 | `tooltip` | string | — | Подсказка при наведении |
 | `padding` | number/[2]/[4] | [16,4] | Внутренний отступ |
+| `padding_hover` | number/[2]/[4] | — | Внутренний отступ при наведении |
+| `padding_click` | number/[2]/[4] | — | Внутренний отступ при нажатии |
+| `margin` | number/[2]/[4] | 0 | Внешний отступ |
+| `margin_hover` | number/[2]/[4] | — | Внешний отступ при наведении |
+| `margin_click` | number/[2]/[4] | — | Внешний отступ при нажатии |
 | `background_hover` | string/array | — | Цвет фона при наведении |
 | `color_text_hover` | string | — | Цвет текста при наведении |
 | `background_click` | string/array | — | Цвет фона при нажатии |

@@ -118,7 +118,7 @@
               "target": "align_left",
               "background": "#555566",
               "align": "left",
-              "padding_hover": [25]
+              "padding_hover": [15, 18]
             },
             {
               "type": "Button",
