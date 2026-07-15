@@ -81,6 +81,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     let (resp, border_rect) = if multiline && fixed {
         let (rect, _) = ui.allocate_exact_size(egui::vec2(field_w, field_h), egui::Sense::click());
+        ui.painter().rect_filled(rect, radius, base_bg);
         let inner_resp = ui.scope_builder(egui::UiBuilder::new().max_rect(rect), |ui| {
             egui::ScrollArea::vertical()
                 .id_salt(scroll_id)
@@ -91,7 +92,6 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
                 })
                 .inner
         }).inner;
-        ui.painter().rect_filled(rect, radius, base_bg);
         (inner_resp, rect)
     } else {
         let te = text_edit.frame(true).background_color(base_bg).margin(base_pad);
