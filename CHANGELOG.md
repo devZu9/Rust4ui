@@ -18,6 +18,7 @@
 - **Приоритет state** — `click > focus > hover > base` в `get_state_border` и `get_state_attr`.
 - **TextField: focus state** — `border_focus`, `background_focus`. Убрана синяя рамка egui (active.bg_stroke = NONE, frame(false) для multiline).
 - **Settings persistence** — `StateRegistry::save()/load()`. Сохранение размера/позиции окна, активной вкладки (`active_tab`), языка (`active_locale`). Файл `demo/settings.json` читается при старте, пишется только при изменении. Hot-reload игнорирует settings.json.
+- **Vars в theme.json** — секция `vars` с переменными вида `$имя`. Авторезолв внутри vars и во всех атрибутах темы + UI. `substitute_vars()` в `ref_resolver.rs`. 5 unit-тестов.
 
 ## [0.3.1] — 2026-07-11
 

@@ -79,6 +79,7 @@
 - [ ] **Система иконок** — IconBar anchor (start/center/end), Separator в IconBar
 - [ ] **SVG-текстуры** — отложено (помечено в коде)
 - [ ] **Микро-анимации иконок** — см. v0.* — Расширяем функционал
+- [x] **Vars в theme.json** 🟢 *(15.07.2026)* — переменные `$var`, авторезолв, работа со всеми JSON-типами
 - [x] **Settings persistence** 🟢 *(15.07.2026)* — save/load размера/позиции окна, вкладки, языка
 - [x] **Приоритет state click > focus > hover** 🟢 *(15.07.2026)* — get_state_border, get_state_attr
 - [x] **TextField: focus state** 🟢 *(15.07.2026)* — border_focus, background_focus, убрана синяя рамка egui

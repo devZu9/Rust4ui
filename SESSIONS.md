@@ -21,6 +21,7 @@
 - [ ] **ScrollArea: отступ текста от рамки**
 - [ ] **Slider, ComboBox, Tabs** — доделка дизайна
 - [ ] **Числовое поле, Image, ProgressBar, DataTable** — новые виджеты
+- [x] **Vars в theme.json** — переменные `$var`, авторезолв внутри vars и во всех секциях темы + UI. Работает с любыми JSON-типами
 - [x] **Settings persistence** — save/load размера окна, позиции, вкладки, языка. debounce через сравнение дампа. Watcher игнорит settings.json
 - [x] **Приоритет state** — click > focus > hover > base (get_state_border, get_state_attr)
 - [x] **TextField: focus state** — border_focus, background_focus, убрана синяя рамка egui
