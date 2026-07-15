@@ -285,14 +285,19 @@ impl DemoApp {
     }
 
     fn save_settings_if_needed(&mut self, ctx: &egui::Context) {
-        let sr = ctx.screen_rect();
         let threshold = self.last_save.map_or(false, |t| t.elapsed() > Duration::from_millis(500));
         if self.last_save.is_none() || threshold {
             let mut settings = StateRegistry::new();
-            settings.set_f64("window_size_width", sr.width() as f64);
-            settings.set_f64("window_size_height", sr.height() as f64);
-            settings.set_f64("window_position_x", sr.min.x as f64);
-            settings.set_f64("window_position_y", sr.min.y as f64);
+            if let Some(rect) = ctx.input(|i| i.viewport().inner_rect) {
+                settings.set_f64("window_size_width", rect.width() as f64);
+                settings.set_f64("window_size_height", rect.height() as f64);
+                settings.set_f64("window_position_x", rect.min.x as f64);
+                settings.set_f64("window_position_y", rect.min.y as f64);
+            } else {
+                let sr = ctx.screen_rect();
+                settings.set_f64("window_size_width", sr.width() as f64);
+                settings.set_f64("window_size_height", sr.height() as f64);
+            }
             if let Some(t) = self.ctx.state.get_string("active_tab") {
                 settings.set_string("active_tab", t.to_string());
             }

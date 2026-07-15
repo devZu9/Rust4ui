@@ -118,7 +118,7 @@ impl StateRegistry {
             };
             map.insert(key.clone(), json_val);
         }
-        serde_json::Value::Object(map).to_string()
+        serde_json::to_string_pretty(&serde_json::Value::Object(map)).unwrap_or_default()
     }
 
     pub fn save(&self, path: &std::path::Path) -> Result<(), String> {
