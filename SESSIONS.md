@@ -4,27 +4,11 @@
 - 2026-07-14 (20:43) - начата
 - 2026-07-15 (13:00) - завершена
 
-**Задача:** доработка shadow-системы (Z-order, Button shadow), реализация оставшихся пунктов v0.3 → v0.4.
-
-### Ход работ
-1. **Shadow Z-order + Button shadow** — Добавлен `ShadowZOrder` enum, поле `z_order` в `Shadow`, обновлён `parse_shadow` (строгий формат), добавлен `draw_shadow_content()`. ✅
-2. **Каскад теней в Button** — `shadow_content` (шорткат), `shadow_icon` и `shadow_text` (переопределения). Приоритет: `shadow_icon ?? shadow_content`, `shadow_text ?? shadow_content`. Добавлен `parse_content_shadow()` (offset 1,1). ✅
-3. **IconButton** — `shadow_icon` через `parse_content_shadow` с offset (1,1). ✅
-4. **Button: state-aware align** — `align_hover`, `align_click`. ✅
-5. **Button: state-aware padding/margin** — `padding_hover/click`, `margin_hover/click`. ✅
-
-### Файлы
-- `src/border.rs` — ShadowZOrder, parse_shadow, parse_content_shadow, draw_shadow_content
-- `src/widgets/button.rs` — cascade shadow + state-aware align/padding/margin
-- `src/widgets/icon_button.rs` — parse_content_shadow для shadow_icon
-- `demo/theme.json` — исправлен битый JSON в shadow_border
-- `docs/src/04-ui-json.md`, `10-border.md`, `12-shadows.md` — документация
-- `CHANGELOG.md`, `SESSIONS.md`, `ROADMAP.md` — логи
-
-### Статус
-- [x] **Shadow Z-order** — параметр положения тени (под/над элементом) для shadow_border, shadow_content ✅
-- [x] **Button shadow** — shadow_bg/border/icon для обычной Button (как в IconButton) ✅
-- [x] **Button: state-aware** — align_hover/click, padding_hover/click, margin_hover/click ✅
+- [x] **Shadow Z-order** — параметр положения тени (под/над элементом) для shadow_border, shadow_content
+- [x] **Button shadow** — shadow_bg/border/icon для обычной Button (как в IconButton)
+- [x] **Button: state-aware** — align_hover/click, padding_hover/click, margin_hover/click
+- [x] **Каскад теней в Button** — shadow_content (шорткат), shadow_icon + shadow_text (переопределения)
+- [x] **IconButton** — shadow_icon через parse_content_shadow с offset (1,1)
 - [ ] **MenuBar** — исправление ошибок (белые кнопки, {{синтаксис}}, hover, иконки при наведении)
 - [ ] **IconBar anchor** — start/center/end
 - [ ] **Separator в IconBar** — разделитель между иконками
@@ -40,9 +24,6 @@
 - 2026-07-09 (10:35) - начата
 - 2026-07-14 (20:43) - завершена
 
-**Задача:** интеграция Phosphor-иконок, IconButton/Button система, gap/gap_row, универсальные марджины, hover_color/click_color, border_hover/click, git-чистка, удержание клика, fill→background, parse_color_value, suffix naming, color_icon, shadow система, border opacity.
-
-### Статус
 - [x] **Shadow система** — Shadow struct, parse_shadow, draw_shadow_bg/border/icon, state-aware
 - [x] **border opacity** — `[width, color, opacity, type, gap, seg_len]`, обратная совместимость
 - [x] **`color_icon`** — отдельный цвет иконки на Button, раздельный рендер icon+text
@@ -90,28 +71,6 @@
 - 2026-07-06 (11:07) - начата
 - 2026-07-09 (02:02) - завершена
 
-**Задача:** починить `fixed` для многострочного TextField (фиксированная высота + прокрутка при переполнении).
-
-### Ход работ
-
-1. **Попытка 1 — `new_child(max_rect)` + `add_sized`** — не сработало, TextEdit всё равно расширялся
-2. **Попытка 2 — `Frame::fill(bg)` + `ScrollArea` + `frame(false)`** — ScrollArea выезжал за пределы фона, hover/focus потеряны
-3. **Попытка 3 — `allocate_ui_at_rect` без ScrollArea** — фон ехал вниз с текстом
-4. **Попытка 4 — `ScrollArea::vertical().max_height(h).show(ui, ...)` напрямую** — ScrollArea растягивался на всю ширину окна, фон и рамка расходились
-5. **Попытка 5 — `allocate_exact_size` + `allocate_ui_at_rect(rect, ScrollArea.show(...))`** — ✅ **РЕШЕНИЕ**
-
-**Ключевое открытие:** после `allocate_exact_size` курсор перемещается под зарезервированный rect, и `ScrollArea.show(ui, ...)` начинается с этого нового положения. Обёртка `allocate_ui_at_rect(rect, ...)` принудительно возвращает ScrollArea в пределы rect.
-
-### Файлы
-- `src/widgets/text_field.rs` — основное изменение (fixed-ветка)
-- `CHANGELOG.md` — v0.2.1 описан
-- `Cargo.toml` — v0.2.0 → v0.2.1
-
-### Статус
 - [x] ScrollArea + allocate_ui_at_rect работает
 - [x] Фон и рамка едины
 - [x] Hover/focus работают
-
-### Заметки на будущее
-- Если понадобится отступ между рамкой и текстом — `ScrollArea::inner_margin()` или ручной `rect.shrink()`
-- ScrollId через `Id::new("__scroll_{binding}")` — сохраняет позицию скролла при перерисовке
