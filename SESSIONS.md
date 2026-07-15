@@ -3,6 +3,8 @@
 ## Сессия 14.07 — v0.4 Shadow Z-order + Button shadow
 - 2026-07-14 (20:43) - начата
 
+---
+
 - [ ] **MenuBar** — исправление ошибок (белые кнопки, {{синтаксис}}, hover, иконки при наведении)
 - [ ] **IconBar anchor** — start/center/end
 - [ ] **Separator в IconBar** — разделитель между иконками
@@ -22,6 +24,8 @@
 ## Сессия 09.07 — v0.3 иконки и документация
 - 2026-07-09 (10:35) - начата
 - 2026-07-14 (20:43) - завершена
+
+---
 
 - [x] **Shadow система** — Shadow struct, parse_shadow, draw_shadow_bg/border/icon, state-aware
 - [x] **border opacity** — `[width, color, opacity, type, gap, seg_len]`, обратная совместимость
@@ -69,6 +73,8 @@
 ## Сессия 06.07 — multiline fixed
 - 2026-07-06 (11:07) - начата
 - 2026-07-09 (02:02) - завершена
+
+---
 
 - [x] ScrollArea + allocate_ui_at_rect работает
 - [x] Фон и рамка едины
