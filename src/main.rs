@@ -3,7 +3,7 @@ use std::path::Path;
 use std::path::PathBuf;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
-use std::time::{Duration, Instant};
+use std::time::Duration;
 
 struct DemoApp {
     ctx: RenderCtx,
@@ -12,7 +12,7 @@ struct DemoApp {
     files_changed: Arc<AtomicBool>,
     base: PathBuf,
     settings_path: PathBuf,
-    last_save: Option<Instant>,
+    last_saved_content: String,
 }
 
 fn load_theme(base: &Path) -> Theme {
@@ -258,7 +258,7 @@ impl DemoApp {
             files_changed,
             base,
             settings_path,
-            last_save: None,
+            last_saved_content: String::new(),
         }
     }
 }
@@ -285,30 +285,32 @@ impl DemoApp {
     }
 
     fn save_settings_if_needed(&mut self, ctx: &egui::Context) {
-        let threshold = self.last_save.map_or(false, |t| t.elapsed() > Duration::from_millis(500));
-        if self.last_save.is_none() || threshold {
-            let mut settings = StateRegistry::new();
-            if let Some(rect) = ctx.input(|i| i.viewport().inner_rect) {
-                settings.set_f64("window_size_width", rect.width() as f64);
-                settings.set_f64("window_size_height", rect.height() as f64);
-                settings.set_f64("window_position_x", rect.min.x as f64);
-                settings.set_f64("window_position_y", rect.min.y as f64);
-            } else {
-                let sr = ctx.screen_rect();
-                settings.set_f64("window_size_width", sr.width() as f64);
-                settings.set_f64("window_size_height", sr.height() as f64);
-            }
-            if let Some(t) = self.ctx.state.get_string("active_tab") {
-                settings.set_string("active_tab", t.to_string());
-            }
-            let locale_idx = self.ctx.state.get_usize("active_locale").unwrap_or(0);
-            let locale_code = match locale_idx { 1 => "en", _ => "ru" };
-            settings.set_string("active_locale", locale_code.to_string());
-            if let Err(e) = settings.save(&self.settings_path) {
-                log::error!("{e}");
-            }
-            self.last_save = Some(Instant::now());
+        let mut settings = StateRegistry::new();
+        if let Some(rect) = ctx.input(|i| i.viewport().inner_rect) {
+            settings.set_f64("window_size_width", rect.width() as f64);
+            settings.set_f64("window_size_height", rect.height() as f64);
+            settings.set_f64("window_position_x", rect.min.x as f64);
+            settings.set_f64("window_position_y", rect.min.y as f64);
+        } else {
+            let sr = ctx.screen_rect();
+            settings.set_f64("window_size_width", sr.width() as f64);
+            settings.set_f64("window_size_height", sr.height() as f64);
         }
+        if let Some(t) = self.ctx.state.get_string("active_tab") {
+            settings.set_string("active_tab", t.to_string());
+        }
+        let locale_idx = self.ctx.state.get_usize("active_locale").unwrap_or(0);
+        let locale_code = match locale_idx { 1 => "en", _ => "ru" };
+        settings.set_string("active_locale", locale_code.to_string());
+
+        let content = settings.to_json();
+        if content == self.last_saved_content {
+            return;
+        }
+        if let Err(e) = settings.save(&self.settings_path) {
+            log::error!("{e}");
+        }
+        self.last_saved_content = content;
     }
 }
 
