@@ -249,6 +249,8 @@ pub fn get_state_border(node: &serde_json::Value, theme: &Theme, widget: &str,
         apply_state_border(node, theme, widget, "click", &base)
     } else if resp.hovered() {
         apply_state_border(node, theme, widget, "hover", &base)
+    } else if resp.has_focus() {
+        apply_state_border(node, theme, widget, "focus", &base)
     } else {
         base
     }

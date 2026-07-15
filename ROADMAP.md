@@ -63,6 +63,7 @@
 
 ### v0.4 — Тени, Button shadow, плавное развитие *(текущая)*
 
+- [ ] **TextField: focus state** — border_focus, background_focus, убрать синюю рамку egui
 - [ ] **MenuBar** — исправление ошибок (белые кнопки, {{синтаксис}}, hover)
 - [ ] **Slider** — доделка внешнего вида
 - [ ] **ComboBox** — доделка дизайна

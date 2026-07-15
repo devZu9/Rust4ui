@@ -26,13 +26,13 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     }
 
     let min_height = ctx.theme.w_f64("TextField", "height", 28.0) as f32;
-    let bg = ctx.theme.w_color("TextField", "background", egui::Color32::from_rgb(0x1C, 0x1E, 0x24));
+    let base_bg = ctx.theme.w_color("TextField", "background", egui::Color32::from_rgb(0x1C, 0x1E, 0x24));
     let rounding = ctx.theme.w_f64("TextField", "rounding", 4.0) as u8;
-    let pad = get_padding(node, &ctx.theme, "TextField", egui::Margin::symmetric(0, 2));
+    let base_pad = get_padding(node, &ctx.theme, "TextField", egui::Margin::symmetric(0, 2));
     let _valign = ctx.theme.w_str2(node, "TextField", "valign")
         .unwrap_or_else(|| "center".to_string());
 
-    let (pad_l, pad_r, pad_t, pad_b) = (pad.left as f32, pad.right as f32, pad.top as f32, pad.bottom as f32);
+    let (base_pad_l, base_pad_r, base_pad_t, base_pad_b) = (base_pad.left as f32, base_pad.right as f32, base_pad.top as f32, base_pad.bottom as f32);
 
     let font_h = ui
         .painter()
@@ -44,12 +44,12 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .size()
         .y;
 
-    let field_w = (base_width as f32).max(20.0 + pad_l + pad_r);
+    let field_w = (base_width as f32).max(20.0 + base_pad_l + base_pad_r);
     let field_h = if multiline {
         let rows = attr_f64(node, "desired_rows").unwrap_or(4.0);
-        min_height.max(font_h * rows as f32 + pad_t + pad_b)
+        min_height.max(font_h * rows as f32 + base_pad_t + base_pad_b)
     } else {
-        min_height.max(font_h + pad_t + pad_b)
+        min_height.max(font_h + base_pad_t + base_pad_b)
     };
 
     let mut value = ctx.state.get_string(&binding).unwrap_or("").to_string();
@@ -73,39 +73,40 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let scroll_id = egui::Id::new(format!("__scroll_{binding}"));
 
     let w = &mut ui.style_mut().visuals.widgets;
-    let prev = (w.inactive.corner_radius, w.hovered.corner_radius, w.active.corner_radius);
+    let prev = (w.inactive.corner_radius, w.hovered.corner_radius, w.active.corner_radius, w.active.bg_stroke);
     w.inactive.corner_radius = radius;
     w.hovered.corner_radius = radius;
     w.active.corner_radius = radius;
+    w.active.bg_stroke = egui::Stroke::NONE;
 
     let (resp, border_rect) = if multiline && fixed {
         let (rect, _) = ui.allocate_exact_size(egui::vec2(field_w, field_h), egui::Sense::click());
-        ui.painter().rect_filled(rect, radius, bg);
         let inner_resp = ui.scope_builder(egui::UiBuilder::new().max_rect(rect), |ui| {
             egui::ScrollArea::vertical()
                 .id_salt(scroll_id)
                 .max_height(field_h)
                 .auto_shrink([false; 2])
                 .show(ui, |ui| {
-                    ui.add(text_edit.frame(false).margin(pad).desired_width(field_w))
+                    ui.add(text_edit.frame(false).margin(base_pad).desired_width(field_w))
                 })
                 .inner
         }).inner;
-        if inner_resp.has_focus() {
-            ui.painter().rect_stroke(rect, radius, egui::Stroke::new(2.0, egui::Color32::from_rgb(0x66, 0x99, 0xFF)), egui::StrokeKind::Inside);
-        }
         (inner_resp, rect)
     } else {
-        let te = text_edit.frame(true).background_color(bg).margin(pad);
-        let r = ui.add_sized(egui::vec2(field_w, field_h), te);
-        let rr = r.rect;
-        (r, rr)
+        let (rect, _) = ui.allocate_exact_size(egui::vec2(field_w, field_h), egui::Sense::click());
+        let inner = ui.allocate_ui_at_rect(rect, |ui| {
+            ui.add(text_edit.frame(false).margin(base_pad).desired_width(field_w))
+        }).inner;
+        (inner, rect)
     };
+    let bg = crate::renderer::get_state_background(node, &ctx.theme, "TextField", &resp, true, base_bg);
+    ui.painter().rect_filled(border_rect, radius, bg);
     let border = get_state_border(node, &ctx.theme, "TextField", &resp, true);
 
     (ui.style_mut().visuals.widgets.inactive.corner_radius,
      ui.style_mut().visuals.widgets.hovered.corner_radius,
-     ui.style_mut().visuals.widgets.active.corner_radius) = prev;
+     ui.style_mut().visuals.widgets.active.corner_radius,
+     ui.style_mut().visuals.widgets.active.bg_stroke) = prev;
     draw_border(ui, border_rect, radius, &border);
     if resp.changed() {
         ctx.state.set_string(&binding, value);
@@ -136,16 +137,16 @@ fn render_number(
         .unwrap_or(0);
 
     let min_height = ctx.theme.w_f64("TextField", "height", 28.0) as f32;
-    let bg = ctx.theme.w_color("TextField", "background", egui::Color32::from_rgb(0x1C, 0x1E, 0x24));
+    let base_bg = ctx.theme.w_color("TextField", "background", egui::Color32::from_rgb(0x1C, 0x1E, 0x24));
     let stepper_bg = ctx
         .theme
         .w_color("TextField", "stepper_bg", egui::Color32::from_rgb(0x33, 0x33, 0x44));
-    let pad = get_padding(node, &ctx.theme, "TextField", egui::Margin::symmetric(0, 2));
+    let base_pad = get_padding(node, &ctx.theme, "TextField", egui::Margin::symmetric(0, 2));
     let rounding = ctx.theme.w_f64("TextField", "rounding", 4.0) as u8;
     let valign = ctx.theme.w_str2(node, "TextField", "valign")
         .unwrap_or_else(|| "center".to_string());
 
-    let (pad_l, pad_r, pad_t, pad_b) = (pad.left as f32, pad.right as f32, pad.top as f32, pad.bottom as f32);
+    let (base_pad_l, base_pad_r, base_pad_t, base_pad_b) = (base_pad.left as f32, base_pad.right as f32, base_pad.top as f32, base_pad.bottom as f32);
 
     let font_h = ui
         .painter()
@@ -157,34 +158,29 @@ fn render_number(
         .size()
         .y;
 
-    let field_w = width.max(40.0 + pad_l + pad_r);
-    let field_h = min_height.max(font_h + pad_t + pad_b);
+    let field_w = width.max(40.0 + base_pad_l + base_pad_r);
+    let field_h = min_height.max(font_h + base_pad_t + base_pad_b);
 
     let num_value = ctx.state.get_f64(binding).unwrap_or(0.0);
     let fmt_value = format!("{:.decimals$}", num_value, decimals = decimals);
     let mut text_value = fmt_value.clone();
 
     let (rect, rect_resp) = ui.allocate_exact_size(egui::vec2(field_w, field_h), egui::Sense::click());
+    let bg = crate::renderer::get_state_background(node, &ctx.theme, "TextField", &rect_resp, true, base_bg);
     let border = get_state_border(node, &ctx.theme, "TextField", &rect_resp, true);
 
-    let fill = if rect_resp.hovered() {
-        bg.linear_multiply(1.2)
-    } else {
-        bg
-    };
-
-    ui.painter().rect_filled(rect, egui::CornerRadius::same(rounding as u8), fill);
+    ui.painter().rect_filled(rect, egui::CornerRadius::same(rounding as u8), bg);
     draw_border(ui, rect, egui::CornerRadius::same(rounding as u8), &border);
 
-    let avail_h = field_h - pad_t - pad_b;
+    let avail_h = field_h - base_pad_t - base_pad_b;
     let content_y = match valign.as_str() {
-        "bottom" => rect.top() + pad_t + (avail_h - font_h),
-        "center" => rect.top() + pad_t + (avail_h - font_h) / 2.0,
-        _ => rect.top() + pad_t,
+        "bottom" => rect.top() + base_pad_t + (avail_h - font_h),
+        "center" => rect.top() + base_pad_t + (avail_h - font_h) / 2.0,
+        _ => rect.top() + base_pad_t,
     };
     let content = egui::Rect::from_min_max(
-        egui::pos2(rect.min.x + pad_l, content_y),
-        egui::pos2(rect.max.x - pad_r, content_y + font_h),
+        egui::pos2(rect.min.x + base_pad_l, content_y),
+        egui::pos2(rect.max.x - base_pad_r, content_y + font_h),
     );
 
     let text_changed;
