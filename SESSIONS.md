@@ -1,5 +1,11 @@
 # Sessions — логи сессий
 
+> **Правила ведения:**
+> - `[ ]` — не сделано, вверху списка
+> - `[x]` — сделано, внизу списка; новые сверху, старые снизу
+> - `---` разделяет дату и список пунктов
+> - Сессия завершается строкой `- 2026-ММ-ДД (ЧЧ:ММ) - завершена` (только после согласования)
+
 ## Сессия 14.07 — v0.4 Shadow Z-order + Button shadow
 - 2026-07-14 (20:43) - начата
 
@@ -13,14 +19,14 @@
 - [ ] **ScrollArea: отступ текста от рамки**
 - [ ] **Slider, ComboBox, Tabs** — доделка дизайна
 - [ ] **Числовое поле, Image, ProgressBar, DataTable** — новые виджеты
-- [x] **Shadow Z-order** — параметр положения тени (под/над элементом) для shadow_border, shadow_content
-- [x] **Button shadow** — shadow_bg/border/icon для обычной Button (как в IconButton)
-- [x] **Button: state-aware** — align_hover/click, padding_hover/click, margin_hover/click
-- [x] **Каскад теней в Button** — shadow_content (шорткат), shadow_icon + shadow_text (переопределения)
-- [x] **IconButton** — shadow_icon через parse_content_shadow с offset (1,1)
-- [x] **TextField: focus state** — border_focus, background_focus, убрана синяя рамка egui
-- [x] **Приоритет state** — click > focus > hover > base (get_state_border, get_state_attr)
 - [x] **Settings persistence** — save/load размера окна, позиции, вкладки, языка. debounce через сравнение дампа. Watcher игнорит settings.json
+- [x] **Приоритет state** — click > focus > hover > base (get_state_border, get_state_attr)
+- [x] **TextField: focus state** — border_focus, background_focus, убрана синяя рамка egui
+- [x] **Каскад теней в Button** — shadow_content (шорткат), shadow_icon + shadow_text (переопределения)
+- [x] **Button: state-aware** — align_hover/click, padding_hover/click, margin_hover/click
+- [x] **IconButton** — shadow_icon через parse_content_shadow с offset (1,1)
+- [x] **Button shadow** — shadow_bg/border/icon для обычной Button (как в IconButton)
+- [x] **Shadow Z-order** — параметр положения тени (под/над элементом) для shadow_border, shadow_content
 
 ---
 

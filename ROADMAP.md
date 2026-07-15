@@ -79,14 +79,14 @@
 - [ ] **Система иконок** — IconBar anchor (start/center/end), Separator в IconBar
 - [ ] **SVG-текстуры** — отложено (помечено в коде)
 - [ ] **Микро-анимации иконок** — см. v0.* — Расширяем функционал
-- [x] **Shadow Z-order** 🟢 *(14.07.2026)* — параметр положения тени (под/над элементом) для shadow_border, shadow_content
-- [x] **Button shadow** 🟢 *(14.07.2026)* — shadow_background/border/icon для Button (как в IconButton)
+- [x] **Settings persistence** 🟢 *(15.07.2026)* — save/load размера/позиции окна, вкладки, языка
+- [x] **Приоритет state click > focus > hover** 🟢 *(15.07.2026)* — get_state_border, get_state_attr
+- [x] **TextField: focus state** 🟢 *(15.07.2026)* — border_focus, background_focus, убрана синяя рамка egui
 - [x] **Каскад теней в Button** 🟢 *(15.07.2026)* — shadow_content (шорткат), shadow_icon + shadow_text (переопределения)
 - [x] **Button state-aware** 🟢 *(15.07.2026)* — align_hover/click, padding_hover/click, margin_hover/click
 - [x] **IconButton: offset (1,1)** 🟢 *(15.07.2026)* — shadow_icon через parse_content_shadow
-- [x] **TextField: focus state** 🟢 *(15.07.2026)* — border_focus, background_focus, убрана синяя рамка egui
-- [x] **Приоритет state click > focus > hover** 🟢 *(15.07.2026)* — get_state_border, get_state_attr
-- [x] **Settings persistence** 🟢 *(15.07.2026)* — save/load размера/позиции окна, вкладки, языка
+- [x] **Button shadow** 🟢 *(14.07.2026)* — shadow_background/border/icon для Button (как в IconButton)
+- [x] **Shadow Z-order** 🟢 *(14.07.2026)* — параметр положения тени (под/над элементом) для shadow_border, shadow_content
 
 ### v0.3 — Иконки и документация *(завершена)*
 
