@@ -38,8 +38,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let tooltip_text = attr_str(node, "tooltip").map(|t| resolve_text(t, ctx));
     let base_align = attr_str(node, "align").unwrap_or("center");
 
-    let pad = get_padding(node, &ctx.theme, "Button", egui::Margin::symmetric(16, 4));
-    let margin = get_margin(node, &ctx.theme, "Button");
+    let base_pad = get_padding(node, &ctx.theme, "Button", egui::Margin::symmetric(16, 4));
+    let base_margin = get_margin(node, &ctx.theme, "Button");
 
     let color_text = node.get("color_text")
         .and_then(crate::theme::parse_color_value)
@@ -70,17 +70,17 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let text_sz = text_galley.as_ref().map_or(egui::Vec2::ZERO, |g| g.size());
     let gap = if has_icon && has_text { 6.0 } else { 0.0 };
 
-    let (pad_l, pad_r, pad_t, pad_b) = (pad.left as f32, pad.right as f32, pad.top as f32, pad.bottom as f32);
+    let (base_pad_l, base_pad_r, base_pad_t, base_pad_b) = (base_pad.left as f32, base_pad.right as f32, base_pad.top as f32, base_pad.bottom as f32);
 
     let content_w = icon_sz.x + gap + text_sz.x;
     let content_h = icon_sz.y.max(text_sz.y);
 
-    let desired_w = (content_w + pad_l + pad_r).max(base_min_width as f32);
-    let desired_h = (content_h + pad_t + pad_b).max(base_min_height);
+    let desired_w = (content_w + base_pad_l + base_pad_r).max(base_min_width as f32);
+    let desired_h = (content_h + base_pad_t + base_pad_b).max(base_min_height);
 
-    let (m_l, m_r, m_t, m_b) = (margin.left as f32, margin.right as f32, margin.top as f32, margin.bottom as f32);
-    let total_w = desired_w + m_l + m_r;
-    let total_h = desired_h + m_t + m_b;
+    let (base_m_l, base_m_r, base_m_t, base_m_b) = (base_margin.left as f32, base_margin.right as f32, base_margin.top as f32, base_margin.bottom as f32);
+    let total_w = desired_w + base_m_l + base_m_r;
+    let total_h = desired_h + base_m_t + base_m_b;
 
     let size = egui::vec2(total_w, total_h);
     let (rect, resp) = ui.allocate_exact_size(size, egui::Sense::click_and_drag());
@@ -104,6 +104,12 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     let border = get_state_border(node, &ctx.theme, "Button", &resp, enabled);
     let rounding = crate::renderer::get_state_attr(node, &ctx.theme, "Button", "rounding", &resp, true, base_rounding, |v| v.as_f64());
+
+    let pad = crate::renderer::get_state_attr(node, &ctx.theme, "Button", "padding", &resp, true, base_pad, crate::renderer::parse_padding);
+    let margin = crate::renderer::get_state_attr(node, &ctx.theme, "Button", "margin", &resp, true, base_margin, crate::renderer::parse_padding);
+
+    let (m_l, m_r, m_t, m_b) = (margin.left as f32, margin.right as f32, margin.top as f32, margin.bottom as f32);
+    let (pad_l, pad_r, pad_t, pad_b) = (pad.left as f32, pad.right as f32, pad.top as f32, pad.bottom as f32);
 
     let content_rect = egui::Rect::from_min_max(
         egui::pos2(rect.min.x + m_l, rect.min.y + m_t),
