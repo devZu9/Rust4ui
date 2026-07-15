@@ -17,6 +17,7 @@
 - **Button**: align_hover/click, padding_hover/click, margin_hover/click — state-aware через get_state_attr.
 - **Приоритет state** — `click > focus > hover > base` в `get_state_border` и `get_state_attr`.
 - **TextField: focus state** — `border_focus`, `background_focus`. Убрана синяя рамка egui (active.bg_stroke = NONE, frame(false) для multiline).
+- **Settings persistence** — `StateRegistry::save()/load()`. Сохранение размера/позиции окна, активной вкладки (`active_tab`), языка (`active_locale`). Файл `demo/settings.json` читается при старте, пишется только при изменении. Hot-reload игнорирует settings.json.
 
 ## [0.3.1] — 2026-07-11
 

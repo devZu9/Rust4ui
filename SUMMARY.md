@@ -30,6 +30,7 @@ UI собирается как конструктор из трёх слоёв:
 - **Padding border-box** — `N`, `[N]`, `[V,H]`, `[T,R,B,L]` — раздвигает элемент, текст внутри
 - **Hot-reload** — все файлы в `demo/` (theme.json + tabs + windows) через file watcher
 - **text_align** — left/center/right для TextField и Button
+- **Settings persistence** — `demo/settings.json` с автосохранением размера/позиции окна, вкладки, языка
 - **Обработка ошибок** — никогда не паникует, все ошибки видны в UI (оранжевые/красные заглушки)
 
 ## Текущие ограничения

@@ -86,6 +86,7 @@
 - [x] **IconButton: offset (1,1)** 🟢 *(15.07.2026)* — shadow_icon через parse_content_shadow
 - [x] **TextField: focus state** 🟢 *(15.07.2026)* — border_focus, background_focus, убрана синяя рамка egui
 - [x] **Приоритет state click > focus > hover** 🟢 *(15.07.2026)* — get_state_border, get_state_attr
+- [x] **Settings persistence** 🟢 *(15.07.2026)* — save/load размера/позиции окна, вкладки, языка
 
 ### v0.3 — Иконки и документация *(завершена)*
 

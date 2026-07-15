@@ -112,6 +112,33 @@ let text = locale.i18n_text("{{greeting}}", &state);
 // "Привет, Мир!"
 ```
 
+## Сохранение настроек (Settings Persistence)
+
+Некоторые ключи состояния автоматически сохраняются в `demo/settings.json` и восстанавливаются при перезапуске:
+
+| Ключ | Тип | Описание |
+|------|-----|----------|
+| `window_size_width` | f64 | Ширина окна |
+| `window_size_height` | f64 | Высота окна |
+| `window_position_x` | f64 | Позиция окна по X |
+| `window_position_y` | f64 | Позиция окна по Y |
+| `active_tab` | string | Активная вкладка (id) |
+| `active_locale` | string | Код языка (`"ru"` / `"en"`) |
+
+Файл обновляется **только при изменении** значений — не чаще, чем нужно. Hot-reload его игнорирует.
+
+```json
+// demo/settings.json
+{
+  "window_size_width": 900.0,
+  "window_size_height": 640.0,
+  "window_position_x": 100.0,
+  "window_position_y": 100.0,
+  "active_tab": "basic",
+  "active_locale": "ru"
+}
+```
+
 ## Служебные ключи
 
 - `__tab_active` — активная вкладка в Tabs (по умолчанию)

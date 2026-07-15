@@ -20,6 +20,7 @@
 - [x] **IconButton** — shadow_icon через parse_content_shadow с offset (1,1)
 - [x] **TextField: focus state** — border_focus, background_focus, убрана синяя рамка egui
 - [x] **Приоритет state** — click > focus > hover > base (get_state_border, get_state_attr)
+- [x] **Settings persistence** — save/load размера окна, позиции, вкладки, языка. debounce через сравнение дампа. Watcher игнорит settings.json
 
 ---
 
