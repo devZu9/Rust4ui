@@ -168,11 +168,8 @@ fn render_number(
     let mut text_value = fmt_value.clone();
 
     let (rect, rect_resp) = ui.allocate_exact_size(egui::vec2(field_w, field_h), egui::Sense::click());
-    let bg = crate::renderer::get_state_background(node, &ctx.theme, "TextField", &rect_resp, true, base_bg);
-    let border = get_state_border(node, &ctx.theme, "TextField", &rect_resp, true);
 
-    ui.painter().rect_filled(rect, egui::CornerRadius::same(rounding as u8), bg);
-    draw_border(ui, rect, egui::CornerRadius::same(rounding as u8), &border);
+    ui.painter().rect_filled(rect, egui::CornerRadius::same(rounding as u8), base_bg);
 
     let avail_h = field_h - base_pad_t - base_pad_b;
     let content_y = match valign.as_str() {
@@ -210,69 +207,86 @@ fn render_number(
                 .pointer_interact_pos()
                 .unwrap_or(egui::pos2(-1.0, -1.0)),
         );
+
+        // Stepper overlay
+        let up_glyph = ctx.icons.resolve_glyph("caret-up");
+        let down_glyph = ctx.icons.resolve_glyph("caret-down");
+        let icon_color = egui::Color32::LIGHT_GRAY;
+        let icon_size = 14.0;
+        let btn_dim = icon_size + 2.0 * stepper_pad;
+
+        let up_maket = ui.painter().layout_no_wrap(
+            up_glyph, egui::FontId::proportional(icon_size), icon_color,
+        );
+        let down_maket = ui.painter().layout_no_wrap(
+            down_glyph, egui::FontId::proportional(icon_size), icon_color,
+        );
+
+        let stepper_x = rect.right() - base_pad_r - btn_dim;
+        let stepper_center_y = rect.center().y;
+
+        let up_btn_rect = egui::Rect::from_min_size(
+            egui::pos2(stepper_x, stepper_center_y - btn_dim),
+            egui::vec2(btn_dim, btn_dim),
+        );
+        let down_btn_rect = egui::Rect::from_min_size(
+            egui::pos2(stepper_x, stepper_center_y),
+            egui::vec2(btn_dim, btn_dim),
+        );
+
+        let up_id = ui.auto_id_with("__num_up");
+        let up_resp = ui.interact(up_btn_rect, up_id, egui::Sense::click());
+        if up_resp.clicked() {
+            let nv = (num_value + step).min(max);
+            ctx.state.set_f64(binding, nv);
+        }
+        if stepper_bg.a() > 0 {
+            ui.painter().rect_filled(up_btn_rect, egui::CornerRadius::same(stepper_round), stepper_bg);
+        }
+        ui.painter().galley_with_override_text_color(
+            egui::pos2(
+                up_btn_rect.center().x - up_maket.size().x / 2.0,
+                up_btn_rect.center().y - up_maket.size().y / 2.0,
+            ),
+            up_maket,
+            icon_color,
+        );
+
+        let down_id = ui.auto_id_with("__num_down");
+        let down_resp = ui.interact(down_btn_rect, down_id, egui::Sense::click());
+        if down_resp.clicked() {
+            let nv = (num_value - step).max(min);
+            ctx.state.set_f64(binding, nv);
+        }
+        if stepper_bg.a() > 0 {
+            ui.painter().rect_filled(down_btn_rect, egui::CornerRadius::same(stepper_round), stepper_bg);
+        }
+        ui.painter().galley_with_override_text_color(
+            egui::pos2(
+                down_btn_rect.center().x - down_maket.size().x / 2.0,
+                down_btn_rect.center().y - down_maket.size().y / 2.0,
+            ),
+            down_maket,
+            icon_color,
+        );
+
+        // Re-paint background and border with combined state
+        let is_click = edit_r.is_pointer_button_down_on() || up_resp.is_pointer_button_down_on() || down_resp.is_pointer_button_down_on();
+        let is_focus = edit_r.has_focus();
+        let is_hover = rect_resp.hovered() || edit_r.hovered() || up_resp.hovered() || down_resp.hovered();
+
+        let base_border = crate::border::get_border(node, &ctx.theme, "TextField");
+        let state_border = if is_click {
+            crate::border::apply_state_border(node, &ctx.theme, "TextField", "click", &base_border)
+        } else if is_focus {
+            crate::border::apply_state_border(node, &ctx.theme, "TextField", "focus", &base_border)
+        } else if is_hover {
+            crate::border::apply_state_border(node, &ctx.theme, "TextField", "hover", &base_border)
+        } else {
+            base_border
+        };
+        draw_border(ui, rect, egui::CornerRadius::same(rounding as u8), &state_border);
     }
-
-    // Stepper overlay
-    let up_glyph = ctx.icons.resolve_glyph("caret-up");
-    let down_glyph = ctx.icons.resolve_glyph("caret-down");
-    let icon_color = egui::Color32::LIGHT_GRAY;
-    let icon_size = 14.0;
-    let btn_dim = icon_size + 2.0 * stepper_pad;
-
-    let up_maket = ui.painter().layout_no_wrap(
-        up_glyph, egui::FontId::proportional(icon_size), icon_color,
-    );
-    let down_maket = ui.painter().layout_no_wrap(
-        down_glyph, egui::FontId::proportional(icon_size), icon_color,
-    );
-
-    let stepper_x = rect.right() - base_pad_r - btn_dim;
-    let stepper_center_y = rect.center().y;
-
-    let up_btn_rect = egui::Rect::from_min_size(
-        egui::pos2(stepper_x, stepper_center_y - btn_dim),
-        egui::vec2(btn_dim, btn_dim),
-    );
-    let down_btn_rect = egui::Rect::from_min_size(
-        egui::pos2(stepper_x, stepper_center_y),
-        egui::vec2(btn_dim, btn_dim),
-    );
-
-    let up_id = ui.auto_id_with("__num_up");
-    let up_resp = ui.interact(up_btn_rect, up_id, egui::Sense::click());
-    if up_resp.clicked() {
-        let nv = (num_value + step).min(max);
-        ctx.state.set_f64(binding, nv);
-    }
-    if stepper_bg.a() > 0 {
-        ui.painter().rect_filled(up_btn_rect, egui::CornerRadius::same(stepper_round), stepper_bg);
-    }
-    ui.painter().galley_with_override_text_color(
-        egui::pos2(
-            up_btn_rect.center().x - up_maket.size().x / 2.0,
-            up_btn_rect.center().y - up_maket.size().y / 2.0,
-        ),
-        up_maket,
-        icon_color,
-    );
-
-    let down_id = ui.auto_id_with("__num_down");
-    let down_resp = ui.interact(down_btn_rect, down_id, egui::Sense::click());
-    if down_resp.clicked() {
-        let nv = (num_value - step).max(min);
-        ctx.state.set_f64(binding, nv);
-    }
-    if stepper_bg.a() > 0 {
-        ui.painter().rect_filled(down_btn_rect, egui::CornerRadius::same(stepper_round), stepper_bg);
-    }
-    ui.painter().galley_with_override_text_color(
-        egui::pos2(
-            down_btn_rect.center().x - down_maket.size().x / 2.0,
-            down_btn_rect.center().y - down_maket.size().y / 2.0,
-        ),
-        down_maket,
-        icon_color,
-    );
 
     if area_hovered {
         let sd = ui.input(|i| i.raw_scroll_delta.y);
