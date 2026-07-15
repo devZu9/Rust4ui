@@ -247,10 +247,10 @@ pub fn get_state_border(node: &serde_json::Value, theme: &Theme, widget: &str,
     if !enabled { return base; }
     if resp.is_pointer_button_down_on() {
         apply_state_border(node, theme, widget, "click", &base)
-    } else if resp.hovered() {
-        apply_state_border(node, theme, widget, "hover", &base)
     } else if resp.has_focus() {
         apply_state_border(node, theme, widget, "focus", &base)
+    } else if resp.hovered() {
+        apply_state_border(node, theme, widget, "hover", &base)
     } else {
         base
     }

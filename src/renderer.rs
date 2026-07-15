@@ -171,16 +171,16 @@ pub fn get_state_attr<T: Copy>(
     }
     if resp.is_pointer_button_down_on() {
         let ck = format!("{}_click", key);
-        let hk = format!("{}_hover", key);
+        let fk = format!("{}_focus", key);
         state_attr_lookup(node, theme, widget, &ck, parse)
-            .or_else(|| state_attr_lookup(node, theme, widget, &hk, parse))
+            .or_else(|| state_attr_lookup(node, theme, widget, &fk, parse))
             .unwrap_or(base)
-    } else if resp.hovered() {
-        let hk = format!("{}_hover", key);
-        state_attr_lookup(node, theme, widget, &hk, parse).unwrap_or(base)
     } else if resp.has_focus() {
         let fk = format!("{}_focus", key);
         state_attr_lookup(node, theme, widget, &fk, parse).unwrap_or(base)
+    } else if resp.hovered() {
+        let hk = format!("{}_hover", key);
+        state_attr_lookup(node, theme, widget, &hk, parse).unwrap_or(base)
     } else {
         base
     }

@@ -67,6 +67,7 @@
     "background": "#000000",
     "border_hover": [4, "#FF0", 1, "dot", 4, 1],
     "border_click": [4, "#0FF", 1, "dash", 5, 6],
+    "border_focus": [4, "#F0F", 1, "dash", 5, 6],
     "margin": 0
   },
   "ComboBox": {

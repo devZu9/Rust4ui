@@ -80,7 +80,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     w.active.bg_stroke = egui::Stroke::NONE;
 
     let (resp, border_rect) = if multiline && fixed {
-        let (rect, _) = ui.allocate_exact_size(egui::vec2(field_w, field_h), egui::Sense::click());
+        let (rect, _) = ui.allocate_exact_size(egui::vec2(field_w, field_h), egui::Sense::empty());
         let inner_resp = ui.scope_builder(egui::UiBuilder::new().max_rect(rect), |ui| {
             egui::ScrollArea::vertical()
                 .id_salt(scroll_id)
@@ -93,7 +93,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         }).inner;
         (inner_resp, rect)
     } else {
-        let (rect, _) = ui.allocate_exact_size(egui::vec2(field_w, field_h), egui::Sense::click());
+        let (rect, _) = ui.allocate_exact_size(egui::vec2(field_w, field_h), egui::Sense::empty());
         let inner = ui.allocate_ui_at_rect(rect, |ui| {
             ui.add(text_edit.frame(false).margin(base_pad).desired_width(field_w))
         }).inner;
