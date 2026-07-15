@@ -18,6 +18,8 @@
 - [x] **Button: state-aware** — align_hover/click, padding_hover/click, margin_hover/click
 - [x] **Каскад теней в Button** — shadow_content (шорткат), shadow_icon + shadow_text (переопределения)
 - [x] **IconButton** — shadow_icon через parse_content_shadow с offset (1,1)
+- [x] **TextField: focus state** — border_focus, background_focus, убрана синяя рамка egui
+- [x] **Приоритет state** — click > focus > hover > base (get_state_border, get_state_attr)
 
 ---
 

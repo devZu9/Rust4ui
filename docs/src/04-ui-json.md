@@ -127,6 +127,12 @@
 | `max` | number | +∞ | Максимум (mode=number) |
 | `step` | number | 1.0 | Шаг (mode=number) |
 | `decimals` | number | авто | Кол-во знаков после запятой |
+| `border` | array | — | Шорткат рамки: [width, "#color", opacity?, "type", gap, seg_len] |
+| `border_hover` | array | — | Рамка при наведении |
+| `border_click` | array | — | Рамка при нажатии |
+| `border_focus` | array | — | Рамка при фокусе |
+| `background` | string/array | #1C1E24 | Цвет фона |
+| `background_focus` | string/array | — | Цвет фона при фокусе |
 
 ```json
 { "type": "TextField", "binding": "name", "hint": "Введите имя..." }

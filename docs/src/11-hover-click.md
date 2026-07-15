@@ -81,6 +81,8 @@ if hovered && pressed {
 | `shadow_icon_click` | массив | Тень иконки при нажатии (Button, IconButton) |
 | `shadow_text_hover` | массив | Тень текста при наведении (Button) |
 | `shadow_text_click` | массив | Тень текста при нажатии (Button) |
+| `border_focus` | массив | Граница при фокусе (TextField) |
+| `background_focus` | string/array | Цвет фона при фокусе (TextField) |
 
 У `IconButton` фон прозрачный (`TRANSPARENT`) в покое, и меняется только при наведении/нажатии. Иконка перерисовывается поверх фона.
 
@@ -119,9 +121,11 @@ if hovered && pressed {
 2. Тема виджета (`theme.widget["Button"]["background_hover"]`)
 3. Дефолт темы (встроенный)
 
-Все state-атрибуты (`hover_fill`, `hover_color`, `border_hover`, `shadow_background_hover`, `click_*`) опциональны — если не указаны, используется значение покоя (`fill`, `color`, `border`, `shadow_background`).
+Все state-атрибуты (`hover_*`, `click_*`, `focus_*`) опциональны — если не указаны, используется значение покоя (`fill`, `color`, `border`, `shadow_background`).
 
 State-тени (`shadow_background`, `shadow_border`, `shadow_content`, `shadow_icon`, `shadow_text`) также поддерживают `_hover`, `_click`, `_focus`.
+
+**Приоритет state**: `click > focus > hover > base` — клик перекрывает фокус, фокус перекрывает ховер.
 
 ## Отключённое состояние
 

@@ -63,7 +63,6 @@
 
 ### v0.4 — Тени, Button shadow, плавное развитие *(текущая)*
 
-- [ ] **TextField: focus state** — border_focus, background_focus, убрать синюю рамку egui
 - [ ] **MenuBar** — исправление ошибок (белые кнопки, {{синтаксис}}, hover)
 - [ ] **Slider** — доделка внешнего вида
 - [ ] **ComboBox** — доделка дизайна
@@ -85,6 +84,8 @@
 - [x] **Каскад теней в Button** 🟢 *(15.07.2026)* — shadow_content (шорткат), shadow_icon + shadow_text (переопределения)
 - [x] **Button state-aware** 🟢 *(15.07.2026)* — align_hover/click, padding_hover/click, margin_hover/click
 - [x] **IconButton: offset (1,1)** 🟢 *(15.07.2026)* — shadow_icon через parse_content_shadow
+- [x] **TextField: focus state** 🟢 *(15.07.2026)* — border_focus, background_focus, убрана синяя рамка egui
+- [x] **Приоритет state click > focus > hover** 🟢 *(15.07.2026)* — get_state_border, get_state_attr
 
 ### v0.3 — Иконки и документация *(завершена)*
 

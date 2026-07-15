@@ -15,6 +15,8 @@
 - **IconButton**: `shadow_icon` парсится через `parse_content_shadow` (offset 1,1).
 - **Shadow struct** — добавлено поле `z_order: ShadowZOrder`.
 - **Button**: align_hover/click, padding_hover/click, margin_hover/click — state-aware через get_state_attr.
+- **Приоритет state** — `click > focus > hover > base` в `get_state_border` и `get_state_attr`.
+- **TextField: focus state** — `border_focus`, `background_focus`. Убрана синяя рамка egui (active.bg_stroke = NONE, frame(false) для multiline).
 
 ## [0.3.1] — 2026-07-11
 
