@@ -2,13 +2,7 @@
 
 ## Сессия 14.07 — v0.4 Shadow Z-order + Button shadow
 - 2026-07-14 (20:43) - начата
-- 2026-07-15 (13:00) - завершена
 
-- [x] **Shadow Z-order** — параметр положения тени (под/над элементом) для shadow_border, shadow_content
-- [x] **Button shadow** — shadow_bg/border/icon для обычной Button (как в IconButton)
-- [x] **Button: state-aware** — align_hover/click, padding_hover/click, margin_hover/click
-- [x] **Каскад теней в Button** — shadow_content (шорткат), shadow_icon + shadow_text (переопределения)
-- [x] **IconButton** — shadow_icon через parse_content_shadow с offset (1,1)
 - [ ] **MenuBar** — исправление ошибок (белые кнопки, {{синтаксис}}, hover, иконки при наведении)
 - [ ] **IconBar anchor** — start/center/end
 - [ ] **Separator в IconBar** — разделитель между иконками
@@ -17,6 +11,11 @@
 - [ ] **ScrollArea: отступ текста от рамки**
 - [ ] **Slider, ComboBox, Tabs** — доделка дизайна
 - [ ] **Числовое поле, Image, ProgressBar, DataTable** — новые виджеты
+- [x] **Shadow Z-order** — параметр положения тени (под/над элементом) для shadow_border, shadow_content
+- [x] **Button shadow** — shadow_bg/border/icon для обычной Button (как в IconButton)
+- [x] **Button: state-aware** — align_hover/click, padding_hover/click, margin_hover/click
+- [x] **Каскад теней в Button** — shadow_content (шорткат), shadow_icon + shadow_text (переопределения)
+- [x] **IconButton** — shadow_icon через parse_content_shadow с offset (1,1)
 
 ---
 
