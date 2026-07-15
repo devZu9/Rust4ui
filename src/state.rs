@@ -121,6 +121,17 @@ impl StateRegistry {
         serde_json::Value::Object(map).to_string()
     }
 
+    pub fn save(&self, path: &std::path::Path) -> Result<(), String> {
+        std::fs::write(path, self.to_json()).map_err(|e| format!("Ошибка сохранения состояния: {e}"))
+    }
+
+    pub fn load(path: &std::path::Path) -> Self {
+        match std::fs::read_to_string(path) {
+            Ok(content) => Self::from_json(&crate::strip_json_comments(&content)).unwrap_or_default(),
+            Err(_) => Self::new(),
+        }
+    }
+
     pub fn from_json(json: &str) -> Result<Self, serde_json::Error> {
         let parsed: serde_json::Value = serde_json::from_str(&strip_json_comments(json))?;
         let mut state = Self::new();
@@ -195,5 +206,25 @@ mod tests {
         let mut state = StateRegistry::new();
         state.set_vec_string("items", vec!["A".into(), "B".into()]);
         assert_eq!(state.get_vec_string("items").unwrap(), &vec!["A", "B"]);
+    }
+
+    #[test]
+    fn test_state_save_load_roundtrip() {
+        let dir = std::env::temp_dir().join("rust4ui_test_state");
+        let _ = std::fs::create_dir_all(&dir);
+        let path = dir.join("test.json");
+
+        let mut state = StateRegistry::new();
+        state.set_string("active_tab", "basic".into());
+        state.set_f64("window_size_width", 1024.0);
+        state.set_f64("window_size_height", 768.0);
+        assert!(state.save(&path).is_ok());
+
+        let loaded = StateRegistry::load(&path);
+        assert_eq!(loaded.get_string("active_tab"), Some("basic"));
+        assert_eq!(loaded.get_f64("window_size_width"), Some(1024.0));
+        assert_eq!(loaded.get_f64("window_size_height"), Some(768.0));
+
+        let _ = std::fs::remove_dir_all(&dir);
     }
 }

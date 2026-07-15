@@ -1,6 +1,6 @@
 {
   "type": "Tabs",
-  "active": "basic",
+  "active": "active_tab",
   "children": [
     { "$ref": "basic.json" },
     { "$ref": "input.json" },

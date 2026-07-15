@@ -3,7 +3,7 @@ use std::path::Path;
 use std::path::PathBuf;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
-use std::time::Duration;
+use std::time::{Duration, Instant};
 
 struct DemoApp {
     ctx: RenderCtx,
@@ -11,6 +11,8 @@ struct DemoApp {
     prev_locale_idx: usize,
     files_changed: Arc<AtomicBool>,
     base: PathBuf,
+    settings_path: PathBuf,
+    last_save: Option<Instant>,
 }
 
 fn load_theme(base: &Path) -> Theme {
@@ -84,7 +86,9 @@ fn start_file_watcher(demo_path: PathBuf, changed: Arc<AtomicBool>) {
         for event in rx {
             if let Ok(ev) = event {
                 if matches!(ev.kind, EventKind::Modify(_) | EventKind::Create(_)) {
-                    changed.store(true, Ordering::Relaxed);
+                    if !ev.paths.iter().any(|p| p.ends_with("settings.json")) {
+                        changed.store(true, Ordering::Relaxed);
+                    }
                 }
             }
         }
@@ -134,6 +138,22 @@ impl DemoApp {
             ],
         );
         state.set_vec_string("locale_list", vec!["Русский".into(), "English".into()]);
+        state.set_string("active_tab", "basic".into());
+
+        let settings_path = base.join("demo").join("settings.json");
+        if settings_path.exists() {
+            let settings = StateRegistry::load(&settings_path);
+            if let Some(w) = settings.get_f64("window_size_width") { state.set_f64("window_size_width", w); }
+            if let Some(h) = settings.get_f64("window_size_height") { state.set_f64("window_size_height", h); }
+            if let Some(x) = settings.get_f64("window_position_x") { state.set_f64("window_position_x", x); }
+            if let Some(y) = settings.get_f64("window_position_y") { state.set_f64("window_position_y", y); }
+            if let Some(t) = settings.get_string("active_tab") { state.set_string("active_tab", t.to_string()); }
+            if let Some(l) = settings.get_string("active_locale") {
+                let idx = match l { "en" => 1, _ => 0 };
+                state.set_usize("active_locale", idx);
+            }
+            log::info!("Настройки загружены из demo/settings.json");
+        }
 
         log::info!("Загрузка локалей...");
         let mut locale = LocaleRegistry::new("ru");
@@ -237,6 +257,8 @@ impl DemoApp {
             prev_locale_idx: 0,
             files_changed,
             base,
+            settings_path,
+            last_save: None,
         }
     }
 }
@@ -259,6 +281,28 @@ impl DemoApp {
                 Err(e) => log::error!("Ошибка парсинга ui.json: {e}"),
             },
             Err(e) => log::error!("Ошибка чтения ui.json: {e}"),
+        }
+    }
+
+    fn save_settings_if_needed(&mut self, ctx: &egui::Context) {
+        let sr = ctx.screen_rect();
+        let threshold = self.last_save.map_or(false, |t| t.elapsed() > Duration::from_millis(500));
+        if self.last_save.is_none() || threshold {
+            let mut settings = StateRegistry::new();
+            settings.set_f64("window_size_width", sr.width() as f64);
+            settings.set_f64("window_size_height", sr.height() as f64);
+            settings.set_f64("window_position_x", sr.min.x as f64);
+            settings.set_f64("window_position_y", sr.min.y as f64);
+            if let Some(t) = self.ctx.state.get_string("active_tab") {
+                settings.set_string("active_tab", t.to_string());
+            }
+            let locale_idx = self.ctx.state.get_usize("active_locale").unwrap_or(0);
+            let locale_code = match locale_idx { 1 => "en", _ => "ru" };
+            settings.set_string("active_locale", locale_code.to_string());
+            if let Err(e) = settings.save(&self.settings_path) {
+                log::error!("{e}");
+            }
+            self.last_save = Some(Instant::now());
         }
     }
 }
@@ -298,6 +342,7 @@ impl eframe::App for DemoApp {
             render_node(ui, &self.tree, &mut self.ctx);
         });
 
+        self.save_settings_if_needed(ctx);
         ctx.request_repaint_after(Duration::from_millis(100));
     }
 }
@@ -307,11 +352,23 @@ fn main() -> Result<(), eframe::Error> {
 
     log::info!("Rust4ui v{} — запуск", env!("CARGO_PKG_VERSION"));
 
+    let base = Path::new(env!("CARGO_MANIFEST_DIR")).join("demo");
+    let saved = StateRegistry::load(&base.join("settings.json"));
+    let sw = saved.get_f64("window_size_width").unwrap_or(900.0) as f32;
+    let sh = saved.get_f64("window_size_height").unwrap_or(640.0) as f32;
+    let sx = saved.get_f64("window_position_x");
+    let sy = saved.get_f64("window_position_y");
+
+    let mut vp = egui::ViewportBuilder::default()
+        .with_title("Rust4ui — Demo")
+        .with_inner_size([sw, sh])
+        .with_min_inner_size([600.0, 400.0]);
+    if let (Some(px), Some(py)) = (sx, sy) {
+        vp = vp.with_position([px as f32, py as f32]);
+    }
+
     let options = eframe::NativeOptions {
-        viewport: egui::ViewportBuilder::default()
-            .with_title("Rust4ui — Demo")
-            .with_inner_size([900.0, 640.0])
-            .with_min_inner_size([600.0, 400.0]),
+        viewport: vp,
         ..Default::default()
     };
 
