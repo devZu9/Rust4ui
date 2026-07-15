@@ -101,14 +101,17 @@
               "align": "center",
               "children": [
                 {
-                  "type": "TextField",
+                  "type": "NumberField",
                   "binding": "font_size",
-                  "mode": "number",
                   "min": 8,
                   "max": 72,
                   "step": 2,
+                  "padding": [15, 0, 15, 20],
+		  "stepper_padding": 6,
+		  "stepper_rounding": 15,
+		  "stepper_background": ["#333344", 0.9],
                   "decimals": 0,
-                  "width": 120
+                  "width": 70
                 },
                 {
                   "type": "Label",

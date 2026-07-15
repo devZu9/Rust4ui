@@ -10,17 +10,10 @@
 
 ## Сессия 14.07 — v0.4 Shadow Z-order + Button shadow
 - 2026-07-14 (20:43) - начата
+- 2026-07-15 (09:45) - завершена
 
 ---
 
-- [ ] **MenuBar** — исправление ошибок (белые кнопки, {{синтаксис}}, hover, иконки при наведении)
-- [ ] **IconBar anchor** — start/center/end
-- [ ] **Separator в IconBar** — разделитель между иконками
-- [ ] **SVG-текстуры** — SVGs/, SVGs Flat/ (отложено)
-- [ ] **ScrollBar стилизация** — толщина, цвет, отступы
-- [ ] **ScrollArea: отступ текста от рамки**
-- [ ] **Slider, ComboBox, Tabs** — доделка дизайна
-- [ ] **Числовое поле, Image, ProgressBar, DataTable** — новые виджеты
 - [x] **Vars в theme.json** — переменные `$var`, авторезолв внутри vars и во всех секциях темы + UI. Работает с любыми JSON-типами
 - [x] **Settings persistence** — save/load размера окна, позиции, вкладки, языка. debounce через сравнение дампа. Watcher игнорит settings.json
 - [x] **Приоритет state** — click > focus > hover > base (get_state_border, get_state_attr)
@@ -30,6 +23,22 @@
 - [x] **IconButton** — shadow_icon через parse_content_shadow с offset (1,1)
 - [x] **Button shadow** — shadow_bg/border/icon для обычной Button (как в IconButton)
 - [x] **Shadow Z-order** — параметр положения тени (под/над элементом) для shadow_border, shadow_content
+
+---
+
+## Сессия 15.07 — Числовое поле и доведение v0.4
+- 2026-07-15 (09:45) - начата
+
+---
+
+- [x] **Числовое поле (mode=number)** — дизайн, точность, степпер, тесты 🟢
+- [ ] **MenuBar** — исправление ошибок (белые кнопки, {{синтаксис}}, hover, иконки при наведении)
+- [ ] **IconBar anchor** — start/center/end
+- [ ] **Separator в IconBar** — разделитель между иконками
+- [ ] **ScrollBar стилизация** — толщина, цвет, отступы
+- [ ] **ScrollArea: отступ текста от рамки**
+- [ ] **Slider, ComboBox, Tabs** — доделка дизайна
+- [ ] **Image, ProgressBar, DataTable** — новые виджеты
 
 ---
 

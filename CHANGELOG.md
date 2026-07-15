@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.4.1] — 2026-07-15
+
+### Добавлено
+- **NumberField** — алиас `"type": "NumberField"` для TextField с `mode: "number"`. Работает без указания `mode`.
+- **Stepper overlay** — степпер вынесен из layout'а в overlay поверх поля. Не привязан к высоте текста.
+- **`stepper_padding`** — атрибут, расширяющий каждую кнопку степпера равномерно (ширина + высота). Формула: `btn_dim = icon_size + 2 * pad`.
+- **`stepper_background`** — атрибут, цвет/альфа фона кнопок степпера. Поддерживает `"#HEX"` и `["#HEX", opacity]`.
+- **`stepper_rounding`** — атрибут скругления углов кнопок степпера.
+
+### Изменено
+- **Числовое поле (mode=number)**: иконки `▲/▼` заменены на Phosphor-глифы `caret-up`/`caret-down` (через IconRegistry).
+- **Stepper button**: egui::Button заменён на `ui.interact()` + painter. Нет фона/тени/обводки по умолчанию.
+- **TextEdit в number-поле**: занимает всю ширину контента (без резервации 20px под степпер).
+
+### Удалено
+- **`stepper_bg`** из темы — больше не читается (заменён на `stepper_background`).
+
 ## [0.4.0] — 2026-07-14
 
 ### Добавлено

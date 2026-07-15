@@ -57,6 +57,11 @@ pub fn render_node(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut Render
         "Label" => crate::widgets::label::render(ui, node, ctx),
         "Button" => crate::widgets::button::render(ui, node, ctx),
         "TextField" => crate::widgets::text_field::render(ui, node, ctx),
+        "NumberField" => {
+            let mut n = node.clone();
+            n["mode"] = serde_json::json!("number");
+            crate::widgets::text_field::render(ui, &n, ctx);
+        }
         "Checkbox" => crate::widgets::checkbox::render(ui, node, ctx),
         "Separator" => crate::widgets::separator::render(ui, node, ctx),
         "Column" => crate::widgets::column::render(ui, node, ctx),
