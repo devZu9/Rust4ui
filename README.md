@@ -111,6 +111,11 @@ fn main() -> eframe::Result<()> {
 |------|-------|
 | **[TECHNICAL_SPECIFICATION.md](TECHNICAL_SPECIFICATION.md)** | Полная техническая спецификация: формат JSON, theme.json, state, actions, i18n, тесты |
 | **[ROADMAP.md](ROADMAP.md)** | План развития (v0.1 → v1.0) |
+| **[CHANGELOG.md](CHANGELOG.md)** | История изменений по версиям |
+| **[SESSIONS.md](SESSIONS.md)** | Логи сессий разработки |
+| **[AGENTS.md](AGENTS.md)** | Инструкции для ИИ-ассистентов |
+| **[SUMMARY.md](SUMMARY.md)** | Краткое описание проекта и фич |
+| **`docs/src/` (mdBook)** | Полная документация: введение, quickstart, архитектура, ui.json, theme.json, иконки, actions, state, locale, border, hover/click, тени, hot-reload, примеры |
 
 ---
 
