@@ -43,13 +43,11 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     let inher_margin = node
         .get("margin_children")
-        .and_then(crate::renderer::parse_padding)
-        .or_else(|| ctx.inherited_margin);
+        .and_then(crate::renderer::parse_padding);
 
     let inher_padding = node
         .get("padding_children")
-        .and_then(crate::renderer::parse_padding)
-        .or_else(|| ctx.inherited_padding);
+        .and_then(crate::renderer::parse_padding);
 
     // Измеряем реальный размер детей (invisible scope — shapes не рендерятся)
     let kids_rect = ui.scope(|ui| {

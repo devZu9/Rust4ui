@@ -8,14 +8,12 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let bg = node
         .get("background")
         .and_then(crate::theme::parse_color_value)
-        .or_else(|| ctx.inherited_bg)
         .or_else(|| ctx.theme.w_color_opt("Menu", "background"))
         .unwrap_or_else(|| egui::Color32::from_rgb(0x2A, 0x2A, 0x33));
 
     let color = node
         .get("color")
         .and_then(crate::theme::parse_color_value)
-        .or_else(|| ctx.inherited_color)
         .or_else(|| ctx.theme.w_color_opt("Menu", "color"))
         .unwrap_or_else(|| egui::Color32::from_gray(220));
 
@@ -27,21 +25,17 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let margin = node
         .get("margin")
         .and_then(crate::renderer::parse_padding)
-        .or_else(|| ctx.inherited_margin)
-        .or_else(|| Some(egui::Margin::ZERO))
         .unwrap_or_default();
 
     let pad = node
         .get("padding")
         .and_then(crate::renderer::parse_padding)
-        .or_else(|| ctx.inherited_padding)
         .unwrap_or(egui::Margin::ZERO);
 
     let inher_bg = node
         .get("background_children")
         .and_then(crate::theme::parse_color_value)
         .or_else(|| node.get("background").and_then(crate::theme::parse_color_value))
-        .or_else(|| ctx.inherited_bg)
         .or_else(|| ctx.theme.w_color_opt("Menu", "background_children"))
         .or_else(|| ctx.theme.w_color_opt("Menu", "background"));
 
@@ -49,19 +43,16 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .get("color_children")
         .and_then(crate::theme::parse_color_value)
         .or_else(|| node.get("color").and_then(crate::theme::parse_color_value))
-        .or_else(|| ctx.inherited_color)
         .or_else(|| ctx.theme.w_color_opt("Menu", "color_children"))
         .or_else(|| ctx.theme.w_color_opt("Menu", "color"));
 
     let inher_margin = node
         .get("margin_children")
-        .and_then(crate::renderer::parse_padding)
-        .or_else(|| ctx.inherited_margin);
+        .and_then(crate::renderer::parse_padding);
 
     let inher_padding = node
         .get("padding_children")
-        .and_then(crate::renderer::parse_padding)
-        .or_else(|| ctx.inherited_padding);
+        .and_then(crate::renderer::parse_padding);
 
     let prev_bg = ctx.inherited_bg;
     let prev_color = ctx.inherited_color;

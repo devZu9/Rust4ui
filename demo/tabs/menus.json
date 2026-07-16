@@ -34,15 +34,14 @@
 	      "background": ["$rust", 1], 
 	      "background_hover": ["$yellow", 1], 
 	      "padding": 5,
-	      "padding_children": 10,
-	      "margin": [15, 20],
+ 	      "padding_children": 0,
+	      "margin_children": [0, 0],
 	      "color": "$cyan",
 	      "gap": 5, 
               "children": [
                 {
                   "type": "Menu",
-                  "text": "{{menu.file}}",
- 		  "background": ["$color_bg_dark", 1], 
+                   "text": "{{menu.file}}",
                   "children": [
                     { 
 		    "type": "MenuItem", 
@@ -60,24 +59,24 @@
                 },
                 {
                   "type": "Menu",
-                  "text": "{{menu.edit}}",
-  		  "background": ["$color_bg_dark", 1], 
-                  "children": [
-                    { "type": "MenuItem", "icon": "arrow-counter-clockwise", "text": "{{menu.undo}}", "action": "click", "target": "menu_undo" },
-                    { "type": "MenuItem", "icon": "arrow-clockwise", "text": "{{menu.redo}}", "action": "click", "target": "menu_redo" },
-                    { "type": "Separator" },
-                    { "type": "MenuItem", "icon": "gear-six", "text": "{{chk.gpu}}", "action": "click", "target": "menu_gpu" }
-                  ]
-                },
-                {
-                  "type": "Menu",
                   "text": "{{menu.help}}",
                   "children": [
                     { "type": "MenuItem", "icon": "question", "text": "{{menu.help}}", "action": "click", "target": "menu_about" },
                     { "type": "Separator" },
                     { "type": "MenuItem", "icon": "question", "text": "{{menu.about}}", "action": "click", "target": "menu_about" }
                   ]
+                },
+                {
+                  "type": "Menu",
+                  "text": "{{menu.edit}}",
+                  "children": [
+                    { "type": "MenuItem", "icon": "arrow-counter-clockwise", "text": "{{menu.undo}}", "action": "click", "target": "menu_undo" },
+                    { "type": "MenuItem", "icon": "arrow-clockwise", "text": "{{menu.redo}}", "action": "click", "target": "menu_redo" },
+                    { "type": "Separator" },
+                    { "type": "MenuItem", "icon": "gear-six", "text": "{{chk.gpu}}", "action": "click", "target": "menu_gpu" }
+                  ]
                 }
+
               ]
             },
             {
