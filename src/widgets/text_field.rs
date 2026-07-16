@@ -209,24 +209,24 @@ fn render_number(
                 .unwrap_or(egui::pos2(-1.0, -1.0)),
         );
 
-        // Stepper overlay
+        // Stepper interaction (registered before border for correct state)
         let mut stepper_up_hover = false;
         let mut stepper_up_click = false;
         let mut stepper_down_hover = false;
         let mut stepper_down_click = false;
+        let mut stepper_data = None;
 
         if stepper_show == "always" || (stepper_show == "hover" && area_hovered) {
             let up_glyph = ctx.icons.resolve_glyph("caret-up");
             let down_glyph = ctx.icons.resolve_glyph("caret-down");
-            let icon_color = egui::Color32::LIGHT_GRAY;
             let icon_size = 14.0;
             let btn_dim = icon_size + 2.0 * stepper_pad;
 
             let up_maket = ui.painter().layout_no_wrap(
-                up_glyph, egui::FontId::proportional(icon_size), icon_color,
+                up_glyph, egui::FontId::proportional(icon_size), egui::Color32::LIGHT_GRAY,
             );
             let down_maket = ui.painter().layout_no_wrap(
-                down_glyph, egui::FontId::proportional(icon_size), icon_color,
+                down_glyph, egui::FontId::proportional(icon_size), egui::Color32::LIGHT_GRAY,
             );
 
             let stepper_x = rect.right() - base_pad_r - btn_dim;
@@ -241,6 +241,8 @@ fn render_number(
                 egui::vec2(btn_dim, btn_dim),
             );
 
+            stepper_data = Some((up_maket, down_maket, up_btn_rect, down_btn_rect));
+
             let up_id = ui.auto_id_with("__num_up");
             let up_resp = ui.interact(up_btn_rect, up_id, egui::Sense::click());
             stepper_up_hover = up_resp.hovered();
@@ -249,17 +251,6 @@ fn render_number(
                 let nv = (num_value + step).min(max);
                 ctx.state.set_f64(binding, nv);
             }
-            if stepper_bg.a() > 0 {
-                ui.painter().rect_filled(up_btn_rect, egui::CornerRadius::same(stepper_round), stepper_bg);
-            }
-            ui.painter().galley_with_override_text_color(
-                egui::pos2(
-                    up_btn_rect.center().x - up_maket.size().x / 2.0,
-                    up_btn_rect.center().y - up_maket.size().y / 2.0,
-                ),
-                up_maket,
-                icon_color,
-            );
 
             let down_id = ui.auto_id_with("__num_down");
             let down_resp = ui.interact(down_btn_rect, down_id, egui::Sense::click());
@@ -269,20 +260,9 @@ fn render_number(
                 let nv = (num_value - step).max(min);
                 ctx.state.set_f64(binding, nv);
             }
-            if stepper_bg.a() > 0 {
-                ui.painter().rect_filled(down_btn_rect, egui::CornerRadius::same(stepper_round), stepper_bg);
-            }
-            ui.painter().galley_with_override_text_color(
-                egui::pos2(
-                    down_btn_rect.center().x - down_maket.size().x / 2.0,
-                    down_btn_rect.center().y - down_maket.size().y / 2.0,
-                ),
-                down_maket,
-                icon_color,
-            );
         }
 
-        // Re-paint background and border with combined state
+        // Border with combined state (stepper interact already registered)
         let is_click = edit_r.is_pointer_button_down_on() || stepper_up_click || stepper_down_click;
         let is_focus = edit_r.has_focus();
         let is_hover = rect_resp.hovered() || edit_r.hovered() || stepper_up_hover || stepper_down_hover;
@@ -298,6 +278,33 @@ fn render_number(
             base_border
         };
         draw_border(ui, rect, egui::CornerRadius::same(rounding as u8), &state_border);
+
+        // Stepper visuals (after border — overlap on top)
+        if let Some((up_maket, down_maket, up_btn_rect, down_btn_rect)) = stepper_data {
+            if stepper_bg.a() > 0 {
+                ui.painter().rect_filled(up_btn_rect, egui::CornerRadius::same(stepper_round), stepper_bg);
+            }
+            ui.painter().galley_with_override_text_color(
+                egui::pos2(
+                    up_btn_rect.center().x - up_maket.size().x / 2.0,
+                    up_btn_rect.center().y - up_maket.size().y / 2.0,
+                ),
+                up_maket,
+                egui::Color32::LIGHT_GRAY,
+            );
+
+            if stepper_bg.a() > 0 {
+                ui.painter().rect_filled(down_btn_rect, egui::CornerRadius::same(stepper_round), stepper_bg);
+            }
+            ui.painter().galley_with_override_text_color(
+                egui::pos2(
+                    down_btn_rect.center().x - down_maket.size().x / 2.0,
+                    down_btn_rect.center().y - down_maket.size().y / 2.0,
+                ),
+                down_maket,
+                egui::Color32::LIGHT_GRAY,
+            );
+        }
     }
 
     if area_hovered {

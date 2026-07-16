@@ -46,7 +46,9 @@
     "rounding": 4,
     "color_text": "#E0E0E0",
     "margin": 0,
-    "stepper_bg": "#333344",
+    "stepper_padding": 2,
+    "stepper_background": ["#333344", 0.5],
+    "stepper_rounding": 3,
     "valign": "center"
   },
   "Label": {

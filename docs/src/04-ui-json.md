@@ -127,6 +127,10 @@
 | `max` | number | +∞ | Максимум (mode=number) |
 | `step` | number | 1.0 | Шаг (mode=number) |
 | `decimals` | number | авто | Кол-во знаков после запятой |
+| `stepper_padding` | number | 2.0 | Внутренний отступ кнопок степпера (равномерно со всех сторон) |
+| `stepper_rounding` | number | 0 | Скругление углов кнопок степпера |
+| `stepper_background` | string/array | прозрачный | Цвет/альфа фона кнопок степпера: `"#HEX"` или `["#HEX", opacity]` |
+| `stepper_show` | string | `"always"` | Режим показа степпера: `always` / `hidden` / `hover` |
 | `border` | array | — | Шорткат рамки: [width, "#color", opacity?, "type", gap, seg_len] |
 | `border_hover` | array | — | Рамка при наведении |
 | `border_click` | array | — | Рамка при нажатии |
@@ -139,6 +143,7 @@
 { "type": "TextField", "binding": "password", "mode": "password", "width": 200 }
 { "type": "TextField", "binding": "description", "multiline": true, "desired_rows": 4 }
 { "type": "TextField", "binding": "volume", "mode": "number", "min": 0, "max": 100, "step": 1 }
+{ "type": "NumberField", "binding": "volume", "min": 0, "max": 100, "step": 1, "stepper_padding": 4, "stepper_show": "hover" }
 ```
 
 ---
