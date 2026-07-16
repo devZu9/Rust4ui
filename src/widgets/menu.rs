@@ -12,6 +12,20 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .or_else(|| ctx.theme.w_color_opt("Menu", "background"))
         .unwrap_or_else(|| egui::Color32::from_rgb(0x2A, 0x2A, 0x33));
 
+    let bg_hover = node
+        .get("background_hover")
+        .and_then(crate::theme::parse_color_value)
+        .or_else(|| ctx.inherited_bg_hover)
+        .or_else(|| ctx.theme.w_color_opt("Menu", "background_hover"))
+        .unwrap_or(bg);
+
+    let bg_click = node
+        .get("background_click")
+        .and_then(crate::theme::parse_color_value)
+        .or_else(|| ctx.inherited_bg_click)
+        .or_else(|| ctx.theme.w_color_opt("Menu", "background_click"))
+        .unwrap_or(bg_hover);
+
     let color = node
         .get("color")
         .and_then(crate::theme::parse_color_value)
@@ -46,6 +60,16 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .and_then(crate::theme::parse_color_value)
         .or_else(|| ctx.theme.w_color_opt("Menu", "color_children"));
 
+    let inher_bg_hover = node
+        .get("background_hover_children")
+        .and_then(crate::theme::parse_color_value)
+        .or_else(|| ctx.theme.w_color_opt("Menu", "background_hover_children"));
+
+    let inher_bg_click = node
+        .get("background_click_children")
+        .and_then(crate::theme::parse_color_value)
+        .or_else(|| ctx.theme.w_color_opt("Menu", "background_click_children"));
+
     let inher_margin = node
         .get("margin_children")
         .and_then(crate::renderer::parse_padding);
@@ -56,10 +80,14 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     let prev_bg = ctx.inherited_bg;
     let prev_color = ctx.inherited_color;
+    let prev_bg_hover = ctx.inherited_bg_hover;
+    let prev_bg_click = ctx.inherited_bg_click;
     let prev_margin = ctx.inherited_margin;
     let prev_padding = ctx.inherited_padding;
     ctx.inherited_bg = inher_bg;
     ctx.inherited_color = inher_color;
+    ctx.inherited_bg_hover = inher_bg_hover;
+    ctx.inherited_bg_click = inher_bg_click;
     ctx.inherited_margin = inher_margin;
     ctx.inherited_padding = inher_padding;
 
@@ -68,9 +96,9 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         let prev = (style.visuals.widgets.inactive.clone(), style.visuals.widgets.hovered.clone(), style.visuals.widgets.active.clone(), style.visuals.widgets.open.clone(), style.visuals.window_fill, style.spacing.button_padding);
         style.visuals.widgets.inactive.weak_bg_fill = bg;
         style.visuals.widgets.inactive.corner_radius = radius;
-        style.visuals.widgets.hovered.weak_bg_fill = bg;
+        style.visuals.widgets.hovered.weak_bg_fill = bg_hover;
         style.visuals.widgets.hovered.corner_radius = radius;
-        style.visuals.widgets.active.weak_bg_fill = bg;
+        style.visuals.widgets.active.weak_bg_fill = bg_click;
         style.visuals.widgets.active.corner_radius = radius;
         style.visuals.widgets.open.weak_bg_fill = bg;
         style.visuals.widgets.open.corner_radius = radius;
@@ -103,6 +131,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     ctx.inherited_bg = prev_bg;
     ctx.inherited_color = prev_color;
+    ctx.inherited_bg_hover = prev_bg_hover;
+    ctx.inherited_bg_click = prev_bg_click;
     ctx.inherited_margin = prev_margin;
     ctx.inherited_padding = prev_padding;
 }

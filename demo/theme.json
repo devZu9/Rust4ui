@@ -178,10 +178,10 @@
   },
   "MenuBar": {
     "background": "#1E1E24",
+    "rounding": 15,
     "color": "$color_text"
   },
   "Menu": {
-    "background": ["#1E1E24", 1],
     "color": "$color_text",
     "rounding": 0
   },
