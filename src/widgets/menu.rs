@@ -27,26 +27,22 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let margin = node
         .get("margin")
         .and_then(crate::renderer::parse_padding)
-        .or_else(|| ctx.inherited_margin)
         .unwrap_or_default();
 
     let pad = node
         .get("padding")
         .and_then(crate::renderer::parse_padding)
-        .or_else(|| ctx.inherited_padding)
         .unwrap_or(egui::Margin::ZERO);
 
     let inher_bg = node
         .get("background_children")
         .and_then(crate::theme::parse_color_value)
-        .or_else(|| ctx.theme.w_color_opt("Menu", "background_children"))
-        .or_else(|| ctx.theme.w_color_opt("Menu", "background"));
+        .or_else(|| ctx.theme.w_color_opt("Menu", "background_children"));
 
     let inher_color = node
         .get("color_children")
         .and_then(crate::theme::parse_color_value)
-        .or_else(|| ctx.theme.w_color_opt("Menu", "color_children"))
-        .or_else(|| ctx.theme.w_color_opt("Menu", "color"));
+        .or_else(|| ctx.theme.w_color_opt("Menu", "color_children"));
 
     let inher_margin = node
         .get("margin_children")
