@@ -429,6 +429,9 @@ fn draw_pattern(
     for w in pts.windows(2) {
         dists.push(dists.last().copied().unwrap_or(0.0) + w[0].distance(w[1]));
     }
+    if pts.len() >= 2 {
+        dists.push(dists.last().copied().unwrap_or(0.0) + pts.last().unwrap().distance(pts[0]));
+    }
     let total = *dists.last().unwrap_or(&0.0);
     if total <= 0.0 { return; }
 

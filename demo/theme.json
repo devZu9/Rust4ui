@@ -35,7 +35,7 @@
     "background": "#303030",
     "background_click": ["#FF0", 0],
     "background_hover": ["#FF0", 0],
-    "rounding": "$radius_md",
+    "rounding": 1,
     "min_width": 190,
     "color_text": "$color_text",
     "color_icon": "#FF0",
