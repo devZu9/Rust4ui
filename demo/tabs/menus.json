@@ -31,17 +31,18 @@
             },
             {
               "type": "MenuBar",
-	      "background": ["$color_bg_dark", 0], 
-	      "background_hover": ["$color_bg_dark", 1], 
-	      "color": "#0FF",
+	      "background": ["$rust", 1], 
+	      "background_hover": ["$yellow", 1], 
+	      "padding": 5,
+	      "padding_children": 10,
+	      "margin": [15, 20],
+	      "color": "$cyan",
 	      "gap": 5, 
               "children": [
                 {
                   "type": "Menu",
                   "text": "{{menu.file}}",
-		  "background": ["$color_bg_dark", 1], 
-		  "padding": 10,
-		  "margin": [15, 20],
+ 		  "background": ["$color_bg_dark", 1], 
                   "children": [
                     { 
 		    "type": "MenuItem", 

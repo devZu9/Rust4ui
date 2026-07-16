@@ -10,6 +10,11 @@
     "color_danger": "#CC3333",
     "color_success": "#00AA66",
     "color_warning": "#CC8800",
+    "cyan": "#0FF",
+    "pitch": "#C74",
+    "yellow": "#FF0",
+    "orange": "#F80",
+    "rust": "$orange",
     "radius_sm": 4,
     "radius_md": 6,
     "radius_lg": 8,
@@ -65,13 +70,13 @@
     "shadow_icon": [0.7],
     "shadow_border_hover": [0.1],
     "color": "$color_accent",
-    "color_hover": "#F80",
+    "color_hover": "$rust",
     "color_click": "#0FF",
     /*
           #C74 - pitch
     */
     "border": [5, "#88F", 1, "dot", 3, 2],
-    "border_hover": [5, "#F80", 0.01, "dot", 3, 2],
+    "border_hover": [5, "$rust", 1, "dot", 3, 2],
     "border_click": [4, "#0FF", 1, "dash", 5, 6]
   },
   "TextField": {

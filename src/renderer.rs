@@ -12,6 +12,8 @@ pub struct RenderCtx {
     pub icons: IconRegistry,
     pub inherited_bg: Option<egui::Color32>,
     pub inherited_color: Option<egui::Color32>,
+    pub inherited_margin: Option<egui::Margin>,
+    pub inherited_padding: Option<egui::Margin>,
 }
 
 impl RenderCtx {
@@ -24,6 +26,8 @@ impl RenderCtx {
             icons: IconRegistry::new(),
             inherited_bg: None,
             inherited_color: None,
+            inherited_margin: None,
+            inherited_padding: None,
         }
     }
 

@@ -24,6 +24,19 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .unwrap_or(4.0) as u8;
     let radius = egui::CornerRadius::same(rounding_val);
 
+    let margin = node
+        .get("margin")
+        .and_then(crate::renderer::parse_padding)
+        .or_else(|| ctx.inherited_margin)
+        .or_else(|| Some(egui::Margin::ZERO))
+        .unwrap_or_default();
+
+    let pad = node
+        .get("padding")
+        .and_then(crate::renderer::parse_padding)
+        .or_else(|| ctx.inherited_padding)
+        .unwrap_or(egui::Margin::ZERO);
+
     let inher_bg = node
         .get("background_children")
         .and_then(crate::theme::parse_color_value)
@@ -40,12 +53,24 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .or_else(|| ctx.theme.w_color_opt("Menu", "color_children"))
         .or_else(|| ctx.theme.w_color_opt("Menu", "color"));
 
-    let pad = crate::renderer::get_padding(node, &ctx.theme, "Menu", egui::Margin::ZERO);
+    let inher_margin = node
+        .get("margin_children")
+        .and_then(crate::renderer::parse_padding)
+        .or_else(|| ctx.inherited_margin);
+
+    let inher_padding = node
+        .get("padding_children")
+        .and_then(crate::renderer::parse_padding)
+        .or_else(|| ctx.inherited_padding);
 
     let prev_bg = ctx.inherited_bg;
     let prev_color = ctx.inherited_color;
+    let prev_margin = ctx.inherited_margin;
+    let prev_padding = ctx.inherited_padding;
     ctx.inherited_bg = inher_bg;
     ctx.inherited_color = inher_color;
+    ctx.inherited_margin = inher_margin;
+    ctx.inherited_padding = inher_padding;
 
     let (prev_inactive, prev_hovered, prev_active, prev_open, prev_window_fill, prev_button_pad) = {
         let style = &mut ui.style_mut();
@@ -63,6 +88,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         prev
     };
 
+    if margin.left > 0 { ui.add_space(margin.left as f32); }
     ui.menu_button(egui::RichText::new(text).color(color), |ui| {
         if let Some(children) = node.get("children").and_then(|v| v.as_array()) {
             for child in children {
@@ -70,6 +96,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
             }
         }
     });
+    if margin.right > 0 { ui.add_space(margin.right as f32); }
 
     {
         let style = &mut ui.style_mut();
@@ -83,6 +110,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     ctx.inherited_bg = prev_bg;
     ctx.inherited_color = prev_color;
+    ctx.inherited_margin = prev_margin;
+    ctx.inherited_padding = prev_padding;
 }
 
 #[cfg(test)]

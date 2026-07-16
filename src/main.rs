@@ -193,6 +193,8 @@ impl DemoApp {
             icons: rust4ui::IconRegistry::new(),
             inherited_bg: None,
             inherited_color: None,
+            inherited_margin: None,
+            inherited_padding: None,
         };
 
         log::info!("Регистрация действий...");

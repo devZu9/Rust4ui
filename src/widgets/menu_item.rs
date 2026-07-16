@@ -42,11 +42,16 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let galley = ui.painter().layout_no_wrap(label.clone(), font_id, color_icon);
     let csize = galley.size();
 
+    let margin = ctx.inherited_margin.unwrap_or(egui::Margin::ZERO);
+    let pad = ctx.inherited_padding.unwrap_or(egui::Margin::ZERO);
+
+    if margin.top > 0 { ui.add_space(margin.top as f32); }
+
     let out = crate::widgets::base::widget_base(
         ui, node, &ctx.theme, "MenuItem",
         csize, egui::Sense::click(), enabled,
         egui::Color32::TRANSPARENT, base_rounding,
-        egui::Margin::ZERO,
+        pad,
         ctx.inherited_bg,
     );
 
@@ -62,6 +67,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
             ctx.state = action_ctx.state;
         }
     }
+
+    if margin.bottom > 0 { ui.add_space(margin.bottom as f32); }
 }
 
 #[cfg(test)]
