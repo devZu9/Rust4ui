@@ -39,7 +39,7 @@
 	      "padding_children": [15, 25],
 	      "margin_children": [0],
 	      "color_children": "#022",
-	      "color_click_children": "$cyan",
+	      "color_click_children": "#FFF",
 	      "gap": 0,
 	      "border": [5, "#DFF", 1, "dash", 7, 5],
 	      "border_position": "center",

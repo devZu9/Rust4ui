@@ -141,7 +141,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     if margin.top > 0 { ui.add_space(margin.top as f32); }
     if margin.left > 0 { ui.add_space(margin.left as f32); }
-    ui.menu_button(egui::RichText::new(text).color(color), |ui| {
+    ui.menu_button(egui::RichText::new(text), |ui| {
         if let Some(children) = node.get("children").and_then(|v| v.as_array()) {
             for child in children {
                 super::super::renderer::render_node(ui, child, ctx);
