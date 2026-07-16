@@ -70,6 +70,8 @@
   - [x] **Кастомизация фона/цвета через _children** — background, background_hover/click, color, color_hover/click 🟢 *(16.07.2026)*
   - [x] **padding_children / margin_children / rounding_children** 🟢 *(16.07.2026)*
   - [ ] **Кастомизация показа иконок в MenuItem** — настройка видимости иконок (всегда/при наведении/скрыть)
+  - [ ] **Border _children** — border для children элементов со всеми состояниями (hover/click/focus)
+  - [ ] **Shadow на MenuBar** — протестировать и донастроить shadow на MenuBar и его children
 - [ ] **Slider** — доделка внешнего вида
 - [ ] **ComboBox** — доделка дизайна
 - [ ] **Tabs / Tab** — доделка дизайна
