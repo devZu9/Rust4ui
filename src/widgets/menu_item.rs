@@ -22,19 +22,6 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         format!("{prefix} {text}")
     };
 
-    let bg = node
-        .get("background")
-        .and_then(crate::theme::parse_color_value)
-        .or_else(|| ctx.inherited_bg)
-        .or_else(|| ctx.theme.w_color_opt("MenuItem", "background"))
-        .unwrap_or_else(|| egui::Color32::TRANSPARENT);
-
-    let bg_hover = node
-        .get("background_hover")
-        .and_then(crate::theme::parse_color_value)
-        .or_else(|| ctx.theme.w_color_opt("MenuItem", "background_hover"))
-        .unwrap_or_else(|| egui::Color32::from_rgb(0x3A, 0x3A, 0x44));
-
     let color = node
         .get("color")
         .and_then(crate::theme::parse_color_value)
@@ -47,33 +34,26 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .and_then(crate::theme::parse_color_value)
         .unwrap_or(color);
 
-    let rounding_val = attr_f64(node, "rounding")
+    let base_rounding = attr_f64(node, "rounding")
         .or_else(|| Some(ctx.theme.w_f64("MenuItem", "rounding", 4.0)))
-        .unwrap_or(4.0) as u8;
-    let radius = egui::CornerRadius::same(rounding_val);
+        .unwrap_or(4.0);
 
-    let (prev_inactive, prev_hovered, prev_active) = {
-        let w = &mut ui.style_mut().visuals.widgets;
-        let prev = (w.inactive.clone(), w.hovered.clone(), w.active.clone());
-        w.inactive.bg_fill = bg;
-        w.inactive.corner_radius = radius;
-        w.hovered.bg_fill = bg_hover;
-        w.hovered.corner_radius = radius;
-        w.active.bg_fill = bg_hover;
-        w.active.corner_radius = radius;
-        prev
-    };
+    let font_id = egui::FontId::proportional(size);
+    let galley = ui.painter().layout_no_wrap(label.clone(), font_id, color_icon);
+    let csize = galley.size();
 
-    if ui
-        .add_enabled(
-            enabled,
-            egui::Button::new(
-                egui::RichText::new(label).size(size).color(color_icon),
-            ),
-        )
-        .clicked()
-        && enabled
-    {
+    let out = crate::widgets::base::widget_base(
+        ui, node, &ctx.theme, "MenuItem",
+        csize, egui::Sense::click(), enabled,
+        egui::Color32::TRANSPARENT, base_rounding,
+        egui::Margin::ZERO,
+        ctx.inherited_bg,
+    );
+
+    let text_pos = egui::pos2(out.inner_rect.left(), egui::Align::Center.align_size_within_range(csize.y, out.inner_rect.y_range()).min);
+    ui.painter().galley_with_override_text_color(text_pos, galley, color_icon);
+
+    if out.response.clicked() && enabled {
         if let Some(action_name) = action {
             let mut action_ctx = crate::actions::ActionCtx::new()
                 .with_target(target.unwrap_or(""))
@@ -81,13 +61,6 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
             ctx.actions.invoke(action_name, &mut action_ctx);
             ctx.state = action_ctx.state;
         }
-    }
-
-    {
-        let w = &mut ui.style_mut().visuals.widgets;
-        w.inactive = prev_inactive;
-        w.hovered = prev_hovered;
-        w.active = prev_active;
     }
 }
 
