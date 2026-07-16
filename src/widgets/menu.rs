@@ -24,23 +24,42 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .unwrap_or(4.0) as u8;
     let radius = egui::CornerRadius::same(rounding_val);
 
+    let inher_bg = node
+        .get("background_children")
+        .and_then(crate::theme::parse_color_value)
+        .or_else(|| node.get("background").and_then(crate::theme::parse_color_value))
+        .or_else(|| ctx.inherited_bg)
+        .or_else(|| ctx.theme.w_color_opt("Menu", "background_children"))
+        .or_else(|| ctx.theme.w_color_opt("Menu", "background"));
+
+    let inher_color = node
+        .get("color_children")
+        .and_then(crate::theme::parse_color_value)
+        .or_else(|| node.get("color").and_then(crate::theme::parse_color_value))
+        .or_else(|| ctx.inherited_color)
+        .or_else(|| ctx.theme.w_color_opt("Menu", "color_children"))
+        .or_else(|| ctx.theme.w_color_opt("Menu", "color"));
+
+    let pad = crate::renderer::get_padding(node, &ctx.theme, "Menu", egui::Margin::ZERO);
+
     let prev_bg = ctx.inherited_bg;
     let prev_color = ctx.inherited_color;
-    ctx.inherited_bg = Some(bg);
-    ctx.inherited_color = Some(color);
+    ctx.inherited_bg = inher_bg;
+    ctx.inherited_color = inher_color;
 
-    let (prev_inactive, prev_hovered, prev_active, prev_open, prev_window_fill) = {
-        let v = &mut ui.style_mut().visuals;
-        let prev = (v.widgets.inactive.clone(), v.widgets.hovered.clone(), v.widgets.active.clone(), v.widgets.open.clone(), v.window_fill);
-        v.widgets.inactive.weak_bg_fill = bg;
-        v.widgets.inactive.corner_radius = radius;
-        v.widgets.hovered.weak_bg_fill = bg;
-        v.widgets.hovered.corner_radius = radius;
-        v.widgets.active.weak_bg_fill = bg;
-        v.widgets.active.corner_radius = radius;
-        v.widgets.open.weak_bg_fill = bg;
-        v.widgets.open.corner_radius = radius;
-        v.window_fill = bg;
+    let (prev_inactive, prev_hovered, prev_active, prev_open, prev_window_fill, prev_button_pad) = {
+        let style = &mut ui.style_mut();
+        let prev = (style.visuals.widgets.inactive.clone(), style.visuals.widgets.hovered.clone(), style.visuals.widgets.active.clone(), style.visuals.widgets.open.clone(), style.visuals.window_fill, style.spacing.button_padding);
+        style.visuals.widgets.inactive.weak_bg_fill = bg;
+        style.visuals.widgets.inactive.corner_radius = radius;
+        style.visuals.widgets.hovered.weak_bg_fill = bg;
+        style.visuals.widgets.hovered.corner_radius = radius;
+        style.visuals.widgets.active.weak_bg_fill = bg;
+        style.visuals.widgets.active.corner_radius = radius;
+        style.visuals.widgets.open.weak_bg_fill = bg;
+        style.visuals.widgets.open.corner_radius = radius;
+        style.visuals.window_fill = bg;
+        style.spacing.button_padding = egui::vec2(pad.left as f32, pad.top as f32);
         prev
     };
 
@@ -53,12 +72,13 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     });
 
     {
-        let v = &mut ui.style_mut().visuals;
-        v.widgets.inactive = prev_inactive;
-        v.widgets.hovered = prev_hovered;
-        v.widgets.active = prev_active;
-        v.widgets.open = prev_open;
-        v.window_fill = prev_window_fill;
+        let style = &mut ui.style_mut();
+        style.visuals.widgets.inactive = prev_inactive;
+        style.visuals.widgets.hovered = prev_hovered;
+        style.visuals.widgets.active = prev_active;
+        style.visuals.widgets.open = prev_open;
+        style.visuals.window_fill = prev_window_fill;
+        style.spacing.button_padding = prev_button_pad;
     }
 
     ctx.inherited_bg = prev_bg;

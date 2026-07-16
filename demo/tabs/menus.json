@@ -31,15 +31,25 @@
             },
             {
               "type": "MenuBar",
-	      "background": ["$color_bg_dark", 1], 
-	      "color": "#0FF", 
-	      "gap": 0, 
+	      "background": ["$color_bg_dark", 0], 
+	      "background_hover": ["$color_bg_dark", 1], 
+	      "color": "#0FF",
+	      "gap": 5, 
               "children": [
                 {
                   "type": "Menu",
                   "text": "{{menu.file}}",
+		  "background": ["$color_bg_dark", 1], 
+		  "padding": 10,
+		  "margin": [15, 20],
                   "children": [
-                    { "type": "MenuItem", "icon": "plus", "text": "{{menu.new}}", "action": "click", "target": "menu_new" },
+                    { 
+		    "type": "MenuItem", 
+		    "icon": "plus", 
+		    "text": "{{menu.new}}", 
+		    "action": "click", 
+		    "target": "menu_new" 
+		    },
                     { "type": "MenuItem", "icon": "folder-simple", "text": "{{menu.open}}", "action": "click", "target": "menu_open" },
                     { "type": "Separator" },
                     { "type": "MenuItem", "icon": "download-simple", "text": "{{menu.export}}", "action": "click", "target": "menu_export" },
@@ -50,6 +60,7 @@
                 {
                   "type": "Menu",
                   "text": "{{menu.edit}}",
+  		  "background": ["$color_bg_dark", 1], 
                   "children": [
                     { "type": "MenuItem", "icon": "arrow-counter-clockwise", "text": "{{menu.undo}}", "action": "click", "target": "menu_undo" },
                     { "type": "MenuItem", "icon": "arrow-clockwise", "text": "{{menu.redo}}", "action": "click", "target": "menu_redo" },
