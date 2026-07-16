@@ -294,6 +294,7 @@ fn render_number(
             let nv = (num_value + step * sd.signum() as f64).max(min).min(max);
             ctx.state.set_f64(binding, nv);
         }
+        ui.input_mut(|i| i.smooth_scroll_delta = egui::Vec2::ZERO);
     }
 
     if text_changed {
