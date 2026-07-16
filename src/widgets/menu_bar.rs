@@ -1,3 +1,4 @@
+use crate::border::{draw_border, get_border};
 use crate::renderer::{attr_f64, get_margin, get_padding, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
@@ -54,7 +55,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     if margin.top > 0 { ui.add_space(margin.top as f32); }
 
-    egui::Frame::new()
+    let frame_resp = egui::Frame::new()
         .fill(bg)
         .corner_radius(rounding_cr)
         .inner_margin(padding)
@@ -69,6 +70,9 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
                 if margin.right > 0 { ui.add_space(margin.right as f32); }
             });
         });
+
+    let border = get_border(node, &ctx.theme, "MenuBar");
+    draw_border(ui, frame_resp.response.rect, rounding_cr, &border);
 
     if margin.bottom > 0 { ui.add_space(margin.bottom as f32); }
 
