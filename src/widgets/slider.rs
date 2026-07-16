@@ -1,7 +1,6 @@
 use crate::renderer::{attr_f64, attr_str, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
-
     let binding = match attr_str(node, "binding") {
         Some(key) => key.to_string(),
         None => {
@@ -21,16 +20,21 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     let mut value = ctx.state.get_f64(&binding).unwrap_or(min);
 
-    let slider = egui::Slider::new(&mut value, min..=max)
-        .step_by(step)
-        .show_value(false)
-        .trailing_fill(false);
-
-    let resp = ui.add_sized(egui::vec2(width as f32, 20.0), slider);
-
-    if resp.changed() {
-        ctx.state.set_f64(&binding, value);
-    }
+    let (_, resp) = crate::widgets::base::widget_base_wrap(
+        ui, node, &ctx.theme, "Slider",
+        egui::vec2(width as f32, 20.0), egui::Sense::click(), true,
+        egui::Color32::TRANSPARENT, 4.0, egui::Margin::ZERO, None,
+        |ui| {
+            let slider = egui::Slider::new(&mut value, min..=max)
+                .step_by(step)
+                .show_value(false)
+                .trailing_fill(false);
+            let r = ui.add_sized(egui::vec2(width as f32, 20.0), slider);
+            if r.changed() {
+                ctx.state.set_f64(&binding, value);
+            }
+        },
+    );
 }
 
 #[cfg(test)]

@@ -1,8 +1,6 @@
-use crate::border::widget_border;
-use crate::renderer::{attr_str, get_padding, resolve_text, RenderCtx};
+use crate::renderer::{attr_str, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
-
     let binding = match attr_str(node, "binding") {
         Some(key) => key.to_string(),
         None => {
@@ -14,28 +12,19 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let raw_text = attr_str(node, "text").unwrap_or("");
     let text = resolve_text(raw_text, ctx);
 
-    let pad = get_padding(node, &ctx.theme, "Checkbox", egui::Margin::ZERO);
-
     let mut checked = ctx.state.get_bool(&binding).unwrap_or(false);
 
-    let do_checkbox = |ui: &mut egui::Ui| {
-        let resp = ui.checkbox(&mut checked, text);
-        if resp.changed() {
-            ctx.state.set_bool(&binding, checked);
-        }
-    };
-
-    let response = if pad != egui::Margin::ZERO {
-        Some(egui::Frame::new()
-            .inner_margin(pad)
-            .show(ui, do_checkbox))
-    } else {
-        do_checkbox(ui);
-        None
-    };
-    if let Some(r) = response {
-        widget_border(ui, r.response.rect, node, &ctx.theme, "Checkbox", egui::CornerRadius::same(4), Some(&r.response), true);
-    }
+    let (_, resp) = crate::widgets::base::widget_base_wrap(
+        ui, node, &ctx.theme, "Checkbox",
+        egui::vec2(200.0, 24.0), egui::Sense::click(), true,
+        egui::Color32::TRANSPARENT, 4.0, egui::Margin::ZERO, None,
+        |ui| {
+            let r = ui.checkbox(&mut checked, text);
+            if r.changed() {
+                ctx.state.set_bool(&binding, checked);
+            }
+        },
+    );
 }
 
 #[cfg(test)]

@@ -8,13 +8,19 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &RenderCtx) {
 
     let tooltip = attr_str(node, "tooltip").map(|t| resolve_text(t, ctx));
 
-    let resp = ui.hyperlink_to(text, url);
-
-    if let Some(tip) = &tooltip {
-        if !tip.is_empty() {
-            resp.on_hover_text(tip.as_str());
-        }
-    }
+    let (_, resp) = crate::widgets::base::widget_base_wrap(
+        ui, node, &ctx.theme, "Hyperlink",
+        egui::vec2(200.0, 20.0), egui::Sense::click(), true,
+        egui::Color32::TRANSPARENT, 4.0, egui::Margin::ZERO, None,
+        |ui| {
+            let r = ui.hyperlink_to(text, url);
+            if let Some(tip) = &tooltip {
+                if !tip.is_empty() {
+                    r.on_hover_text(tip.as_str());
+                }
+            }
+        },
+    );
 }
 
 #[cfg(test)]

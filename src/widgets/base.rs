@@ -102,3 +102,71 @@ pub fn widget_base(
 
     BaseOut { response: resp, content_rect, inner_rect, rounding_cr }
 }
+
+struct PrevWidgetStyle {
+    inactive: egui::style::WidgetVisuals,
+    hovered: egui::style::WidgetVisuals,
+    active: egui::style::WidgetVisuals,
+    open: egui::style::WidgetVisuals,
+    window_fill: egui::Color32,
+}
+
+fn save_widget_style(ui: &egui::Ui) -> PrevWidgetStyle {
+    let v = &ui.visuals();
+    PrevWidgetStyle {
+        inactive: v.widgets.inactive,
+        hovered: v.widgets.hovered,
+        active: v.widgets.active,
+        open: v.widgets.open,
+        window_fill: v.window_fill,
+    }
+}
+
+fn restore_widget_style(ui: &mut egui::Ui, saved: PrevWidgetStyle) {
+    let v = &mut ui.style_mut().visuals;
+    v.widgets.inactive = saved.inactive;
+    v.widgets.hovered = saved.hovered;
+    v.widgets.active = saved.active;
+    v.widgets.open = saved.open;
+    v.window_fill = saved.window_fill;
+}
+
+/// Wrap-режим: alloc + bg/border от widget_base + стилизованный child_ui для egui-виджета.
+pub fn widget_base_wrap<R>(
+    ui: &mut egui::Ui,
+    node: &serde_json::Value,
+    theme: &crate::theme::Theme,
+    widget: &str,
+    content_size: egui::Vec2,
+    sense: egui::Sense,
+    enabled: bool,
+    default_bg: egui::Color32,
+    default_rounding: f64,
+    default_pad: egui::Margin,
+    inherited_bg: Option<egui::Color32>,
+    add_contents: impl FnOnce(&mut egui::Ui) -> R,
+) -> (R, egui::Response) {
+    let out = widget_base(ui, node, theme, widget, content_size, sense, enabled,
+        default_bg, default_rounding, default_pad, inherited_bg);
+
+    let saved = save_widget_style(ui);
+    let v = &mut ui.style_mut().visuals;
+    v.widgets.inactive.weak_bg_fill = egui::Color32::TRANSPARENT;
+    v.widgets.hovered.weak_bg_fill = egui::Color32::from_rgb(0x3A, 0x3A, 0x44);
+    v.widgets.active.weak_bg_fill = egui::Color32::from_rgb(0x4A, 0x4A, 0x54);
+    v.widgets.open.weak_bg_fill = egui::Color32::TRANSPARENT;
+    v.widgets.inactive.corner_radius = out.rounding_cr;
+    v.widgets.hovered.corner_radius = out.rounding_cr;
+    v.widgets.active.corner_radius = out.rounding_cr;
+    v.widgets.open.corner_radius = out.rounding_cr;
+
+    let mut child_ui = ui.new_child(
+        egui::UiBuilder::new()
+            .max_rect(out.inner_rect)
+            .layout(*ui.layout()),
+    );
+    let result = add_contents(&mut child_ui);
+
+    restore_widget_style(ui, saved);
+    (result, out.response)
+}

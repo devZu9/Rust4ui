@@ -1,24 +1,24 @@
 use crate::renderer::{attr_f64, attr_str, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &RenderCtx) {
-    let _size = attr_f64(node, "size").unwrap_or(24.0);
-    let color = attr_str(node, "color")
-        .and_then(crate::theme::parse_hex_color)
-        .unwrap_or(egui::Color32::from_rgb(0x66, 0xCC, 0xFF));
-
     let text = attr_str(node, "text")
         .map(|t| resolve_text(t, ctx))
         .unwrap_or_default();
 
-    ui.add_space(4.0);
-    ui.horizontal(|ui| {
-        ui.spinner();
-        if !text.is_empty() {
-            ui.add_space(8.0);
-            ui.label(egui::RichText::new(text).color(color));
-        }
-    });
-    ui.add_space(4.0);
+    let (_, _) = crate::widgets::base::widget_base_wrap(
+        ui, node, &ctx.theme, "Spinner",
+        egui::vec2(200.0, 24.0), egui::Sense::hover(), true,
+        egui::Color32::TRANSPARENT, 4.0, egui::Margin::symmetric(4, 0), None,
+        |ui| {
+            ui.horizontal(|ui| {
+                ui.spinner();
+                if !text.is_empty() {
+                    ui.add_space(8.0);
+                    ui.label(&text);
+                }
+            });
+        },
+    );
 }
 
 #[cfg(test)]

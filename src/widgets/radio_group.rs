@@ -1,8 +1,6 @@
-use crate::border::widget_border;
-use crate::renderer::{attr_str, get_padding, resolve_text, RenderCtx};
+use crate::renderer::{attr_str, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
-
     let binding = match attr_str(node, "binding") {
         Some(key) => key.to_string(),
         None => return,
@@ -27,34 +25,25 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         None => return,
     };
 
-    let pad = get_padding(node, &ctx.theme, "RadioGroup", egui::Margin::ZERO);
-
-    let mut render_radios = |ui: &mut egui::Ui| {
-        for (val, label) in &options {
-            let is_current = selected == *val;
-            if direction == "horizontal" {
-                if ui.selectable_label(is_current, label).clicked() {
-                    selected = *val;
-                }
-            } else {
-                if ui.radio_value(&mut selected, *val, label.as_str()).clicked() {
-                    selected = *val;
+    let (_, _) = crate::widgets::base::widget_base_wrap(
+        ui, node, &ctx.theme, "RadioGroup",
+        egui::vec2(200.0, (options.len() as f32) * 24.0), egui::Sense::click(), true,
+        egui::Color32::TRANSPARENT, 4.0, egui::Margin::ZERO, None,
+        |ui| {
+            for (val, label) in &options {
+                let is_current = selected == *val;
+                if direction == "horizontal" {
+                    if ui.selectable_label(is_current, label).clicked() {
+                        selected = *val;
+                    }
+                } else {
+                    if ui.radio_value(&mut selected, *val, label.as_str()).clicked() {
+                        selected = *val;
+                    }
                 }
             }
-        }
-    };
-
-    let response = if pad != egui::Margin::ZERO {
-        Some(egui::Frame::new()
-            .inner_margin(pad)
-            .show(ui, render_radios))
-    } else {
-        render_radios(ui);
-        None
-    };
-    if let Some(r) = response {
-        widget_border(ui, r.response.rect, node, &ctx.theme, "RadioGroup", egui::CornerRadius::same(4), Some(&r.response), true);
-    }
+        },
+    );
 
     ctx.state.set_usize(&binding, selected);
 }
