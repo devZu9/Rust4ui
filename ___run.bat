@@ -25,4 +25,4 @@ if %CARGO_EXIT% neq 0 (
 echo.
 echo [3/3] Zapusk...
 target\debug\rust4ui.exe
-pause
+rem pause
