@@ -32,7 +32,6 @@
             {
               "type": "MenuBar",
 	      "background": ["$rust", 1], 
-	      "background_hover": ["$yellow", 1], 
 	      "padding": 0,
 	      "rounding": 15,
 	      "border": [4, "$yellow", 1, "dot", 4, 1],
@@ -43,6 +42,7 @@
               "children": [
                 {
                   "type": "Menu",
+	  	  "rounding": 5,
                    "text": "{{menu.file}}",
                   "children": [
                     { 

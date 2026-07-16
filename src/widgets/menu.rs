@@ -39,14 +39,12 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let inher_bg = node
         .get("background_children")
         .and_then(crate::theme::parse_color_value)
-        .or_else(|| node.get("background").and_then(crate::theme::parse_color_value))
         .or_else(|| ctx.theme.w_color_opt("Menu", "background_children"))
         .or_else(|| ctx.theme.w_color_opt("Menu", "background"));
 
     let inher_color = node
         .get("color_children")
         .and_then(crate::theme::parse_color_value)
-        .or_else(|| node.get("color").and_then(crate::theme::parse_color_value))
         .or_else(|| ctx.theme.w_color_opt("Menu", "color_children"))
         .or_else(|| ctx.theme.w_color_opt("Menu", "color"));
 
