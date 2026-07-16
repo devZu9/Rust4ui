@@ -12,3 +12,4 @@
 [Тени](12-shadows.md)
 [Hot-reload](13-hot-reload.md)
 [Примеры JSON](14-examples.md)
+[MenuBar наследование _children](15-menu-children.md)

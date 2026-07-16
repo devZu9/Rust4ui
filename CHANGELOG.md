@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.4.3] — 2026-07-16
+
+### Добавлено
+- **MenuBar: система `_children`** — наследование атрибутов на 1 уровень:
+  - `background_children`, `background_hover_children`, `background_click_children`
+  - `color_children`, `color_hover_children`, `color_click_children`
+  - `padding_children`, `margin_children`, `rounding_children`
+- **MenuBar: state-aware фон** — `background_hover`, `background_click` на полосе
+- **Menu: state-aware цвет текста** — `color_hover`, `color_click` через `fg_stroke`
+- **Menu: margin top/bottom** — вертикальные отступы для пунктов меню
+- **RenderCtx** — `inherited_bg_hover`, `inherited_bg_click`, `inherited_color_hover`, `inherited_color_click`, `inherited_rounding`
+- **`border.rs: rounded_rect_perimeter`** — публичная функция для кастомной отрисовки
+
+### Исправлено
+- **border.rs: draw_pattern** — замыкание периметра (последняя точка → первую). Левая сторона dash/dot бордюра не рисовалась при `rounding=0`.
+- **border.rs: point_at_dist** — выход за границы `pts` при `dists.len() > pts.len()` (паника при `rounding=0` с dash/dot).
+
 ## [0.4.2] — 2026-07-16
 
 ### Добавлено

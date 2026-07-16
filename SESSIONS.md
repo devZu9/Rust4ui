@@ -2,10 +2,10 @@
 
 > Правила оформления — в `.opencode/skills/session-log/SKILL.md`
 
-## Сессица 15.07 — Числовое поле и MenuBar + widget_base
+## Сессия 16.07 — MenuBar: _children, state-атрибуты, border-fix
 
-- 2026-07-15 (09:45) - начата
-- 2026-07-16 (18:00) - завершена
+- 2026-07-16 (18:00) - начата
+- 2026-07-16 (23:59) - завершена
 
 ---
 
@@ -15,6 +15,13 @@
 - [ ] **ScrollArea: отступ текста от рамки**
 - [ ] **Slider, ComboBox, Tabs** — доделка дизайна
 - [ ] **Image, ProgressBar, DataTable** — новые виджеты
+- [x] **border: левая сторона dash/dot не рисовалась** — замыкание периметра в draw_pattern 🟢 *(16.07.2026)*
+- [x] **border: паника при rounding=0** — point_at_dist out of bounds 🟢 *(16.07.2026)*
+- [x] **MenuBar: _children система** — background/color/padding/margin/rounding + hover/click для детей 🟢 *(16.07.2026)*
+- [x] **MenuBar: gap, padding, margin, rounding** — все атрибуты корректно работают 🟢 *(16.07.2026)*
+- [x] **MenuBar: border через draw_border** — solid/dash/dot 🟢 *(16.07.2026)*
+- [x] **Menu: state-aware фон и цвет** — background_hover/click + color_hover/click через fg_stroke 🟢 *(16.07.2026)*
+- [x] **Menu: margin top/bottom** — вертикальные отступы 🟢 *(16.07.2026)*
 - [x] **widget_base** — единая функция отрисовки для custom-paint виджетов. Button -80 строк, IconButton -50 строк, MenuItem переведён на custom-paint 🟢 *(16.07.2026)*
 - [x] **MenuItem: state-aware стили** — background_hover/click/focus работают через widget_base 🟢 *(16.07.2026)*
 - [x] **MenuBar: {{syntax}} резолвится** — menu.rs подцепил resolve_text() 🟢 *(16.07.2026)*
