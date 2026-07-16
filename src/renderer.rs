@@ -10,6 +10,8 @@ pub struct RenderCtx {
     pub actions: ActionRegistry,
     pub locale: LocaleRegistry,
     pub icons: IconRegistry,
+    pub inherited_bg: Option<egui::Color32>,
+    pub inherited_color: Option<egui::Color32>,
 }
 
 impl RenderCtx {
@@ -20,6 +22,8 @@ impl RenderCtx {
             actions: ActionRegistry::new(),
             locale: LocaleRegistry::default(),
             icons: IconRegistry::new(),
+            inherited_bg: None,
+            inherited_color: None,
         }
     }
 

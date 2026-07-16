@@ -82,8 +82,21 @@
   "ColorPicker": {
     "width": 160
   },
-  "MenuBar": {},
-  "MenuItem": {},
+  "MenuBar": {
+    "background": "#0A0F0A",
+    "color": "#00FF66"
+  },
+  "Menu": {
+    "background": "#0A0F0A",
+    "color": "#00FF66",
+    "rounding": 4
+  },
+  "MenuItem": {
+    "background": ["#000", 0],
+    "background_hover": "#0A1A0A",
+    "color": "#00FF66",
+    "rounding": 4
+  },
   "SubMenu": {},
   "Notifications": {
     "width": 300

@@ -191,6 +191,8 @@ impl DemoApp {
             actions: rust4ui::ActionRegistry::new(),
             locale,
             icons: rust4ui::IconRegistry::new(),
+            inherited_bg: None,
+            inherited_color: None,
         };
 
         log::info!("Регистрация действий...");

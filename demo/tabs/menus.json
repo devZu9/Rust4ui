@@ -31,6 +31,8 @@
             },
             {
               "type": "MenuBar",
+	      "background": "#000", 
+	      "color": "#0FF", 
               "children": [
                 {
                   "type": "Menu",

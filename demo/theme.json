@@ -171,8 +171,21 @@
   "ColorPicker": {
     "width": 160
   },
-  "MenuBar": {},
-  "MenuItem": {},
+  "MenuBar": {
+    "background": "#1E1E24",
+    "color": "$color_text"
+  },
+  "Menu": {
+    "background": "#1E1E24",
+    "color": "$color_text",
+    "rounding": 4
+  },
+  "MenuItem": {
+    "background": ["#000", 0],
+    "background_hover": "#3A3A44",
+    "color": "$color_text",
+    "rounding": 4
+  },
   "SubMenu": {},
   "Notifications": {
     "width": 300
