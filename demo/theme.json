@@ -51,7 +51,7 @@
   },
   "IconButton": {
     "button_size": 65,
-    "rounding": 15,
+    "rounding": 1,
  //   "padding": [5, 25, 25, 5],
  //   "padding_hover": [5, 7, 6, 5],
     "padding_click": [8, 20, 20, 8],

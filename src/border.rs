@@ -550,7 +550,7 @@ fn arc_pts(pts: &mut Vec<egui::Pos2>, cx: f32, cy: f32, r: f32, start_deg: f32, 
 fn point_at_dist(pts: &[egui::Pos2], dists: &[f32], d: f32) -> egui::Pos2 {
     if d <= 0.0 { return pts[0]; }
     let last = dists.len() - 1;
-    if d >= dists[last] { return pts[last]; }
+    if d >= dists[last] { return pts[pts.len() - 1]; }
     let i = match dists.binary_search_by(|&v| v.partial_cmp(&d).unwrap()) {
         Ok(i) => i.min(last - 1),
         Err(i) => {
