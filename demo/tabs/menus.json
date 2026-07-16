@@ -33,6 +33,7 @@
               "type": "MenuBar",
 	      "background": ["$color_bg_dark", 1], 
 	      "color": "#0FF", 
+	      "gap": 0, 
               "children": [
                 {
                   "type": "Menu",
@@ -60,6 +61,8 @@
                   "type": "Menu",
                   "text": "{{menu.help}}",
                   "children": [
+                    { "type": "MenuItem", "icon": "question", "text": "{{menu.help}}", "action": "click", "target": "menu_about" },
+                    { "type": "Separator" },
                     { "type": "MenuItem", "icon": "question", "text": "{{menu.about}}", "action": "click", "target": "menu_about" }
                   ]
                 }
