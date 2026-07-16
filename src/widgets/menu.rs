@@ -32,6 +32,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let pad = node
         .get("padding")
         .and_then(crate::renderer::parse_padding)
+        .or_else(|| ctx.inherited_padding)
         .unwrap_or(egui::Margin::ZERO);
 
     let inher_bg = node
