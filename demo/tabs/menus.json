@@ -34,8 +34,7 @@
 	      "background": ["$rust", 1], 
 	      "background_hover": ["$yellow", 1], 
 	      "padding": 5,
- 	      "padding_children": 5,
-	      "margin_children": [10, 0],
+	      "margin_children": 20,
 	      "color_children": "$cyan",
 	      "gap": 5, 
               "children": [

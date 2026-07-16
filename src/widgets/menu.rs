@@ -83,6 +83,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         prev
     };
 
+    if margin.top > 0 { ui.add_space(margin.top as f32); }
     if margin.left > 0 { ui.add_space(margin.left as f32); }
     ui.menu_button(egui::RichText::new(text).color(color), |ui| {
         if let Some(children) = node.get("children").and_then(|v| v.as_array()) {
@@ -92,6 +93,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         }
     });
     if margin.right > 0 { ui.add_space(margin.right as f32); }
+    if margin.bottom > 0 { ui.add_space(margin.bottom as f32); }
 
     {
         let style = &mut ui.style_mut();
