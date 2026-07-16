@@ -44,6 +44,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     let inher_rounding_val = attr_f64(node, "rounding_children")
         .or_else(|| attr_f64(node, "rounding"))
+        .or_else(|| Some(ctx.theme.w_f64("MenuBar", "rounding", 0.0)))
         .unwrap_or(0.0) as u8;
 
     let prev_bg = ctx.inherited_bg;

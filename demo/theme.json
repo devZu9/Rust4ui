@@ -178,8 +178,7 @@
   },
   "MenuBar": {
     "background": "#1E1E24",
-    "color": "$color_text",
-    "rounding": 15
+    "color": "$color_text"
   },
   "Menu": {
     "background": ["#1E1E24", 1],
@@ -190,7 +189,7 @@
     "background": ["#000", 0],
     "background_hover": "#3A3A44",
     "color": "$color_text",
-    "rounding": 10
+    "rounding": 0
   },
   "SubMenu": {},
   "Notifications": {

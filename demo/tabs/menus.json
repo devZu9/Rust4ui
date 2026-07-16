@@ -34,7 +34,10 @@
 	      "background": ["$rust", 1], 
  	      "padding": 0,
 	      "border_position": "inside",
+
+	      "rounding": 15,
 	      "padding_children": [15, 20],
+	      "margin_children": [2],
 	      "color_children": "$cyan",
 	      "gap": 0, 
               "children": [
