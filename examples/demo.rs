@@ -66,6 +66,8 @@ impl DemoApp {
             inherited_color: None,
             inherited_bg_hover: None,
             inherited_bg_click: None,
+            inherited_color_hover: None,
+            inherited_color_click: None,
             inherited_margin: None,
             inherited_padding: None,
             inherited_rounding: None,

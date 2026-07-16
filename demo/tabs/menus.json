@@ -31,21 +31,21 @@
             },
             {
               "type": "MenuBar",
-	      "background": ["$rust", 1], 
-	      "background_children": ["$rust", 1],
-	      "background_hover_children": ["#1E1E24", 0.5],
-	      "background_click_children": ["#1E1E24", 0.2],
+	      "background": ["$like", 1], 
+	      "background_children": ["$like", 1],
+	      "background_hover_children": ["#87F", 1],
+	      "background_click_children": ["#77F", 1],
  	      "padding": 0,
-	      "border_position": "inside",
-
-	      "padding_children": [15, 20],
-	      "margin_children": [2],
-	      "color_children": "$cyan",
-	      "gap": 0, 
+	      "padding_children": [15, 25],
+	      "margin_children": [0],
+	      "color_children": "#022",
+	      "color_click_children": "$cyan",
+	      "gap": 0,
+	      "border": [5, "#DFF", 1, "dash", 7, 5],
+	      "border_position": "center",
               "children": [
                 {
                   "type": "Menu",
-		  "background_hover": ["#1E1E24", 0.5],
                    "text": "{{menu.file}}",
                   "children": [
                     { 

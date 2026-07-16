@@ -33,6 +33,20 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .or_else(|| ctx.theme.w_color_opt("Menu", "color"))
         .unwrap_or_else(|| egui::Color32::from_gray(220));
 
+    let color_hover = node
+        .get("color_hover")
+        .and_then(crate::theme::parse_color_value)
+        .or_else(|| ctx.inherited_color_hover)
+        .or_else(|| ctx.theme.w_color_opt("Menu", "color_hover"))
+        .unwrap_or(color);
+
+    let color_click = node
+        .get("color_click")
+        .and_then(crate::theme::parse_color_value)
+        .or_else(|| ctx.inherited_color_click)
+        .or_else(|| ctx.theme.w_color_opt("Menu", "color_click"))
+        .unwrap_or(color_hover);
+
     let rounding_val = attr_f64(node, "rounding")
         .or_else(|| Some(ctx.theme.w_f64("Menu", "rounding", 4.0)))
         .unwrap_or(4.0) as u8;
@@ -70,6 +84,16 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .and_then(crate::theme::parse_color_value)
         .or_else(|| ctx.theme.w_color_opt("Menu", "background_click_children"));
 
+    let inher_color_hover = node
+        .get("color_hover_children")
+        .and_then(crate::theme::parse_color_value)
+        .or_else(|| ctx.theme.w_color_opt("Menu", "color_hover_children"));
+
+    let inher_color_click = node
+        .get("color_click_children")
+        .and_then(crate::theme::parse_color_value)
+        .or_else(|| ctx.theme.w_color_opt("Menu", "color_click_children"));
+
     let inher_margin = node
         .get("margin_children")
         .and_then(crate::renderer::parse_padding);
@@ -82,12 +106,16 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let prev_color = ctx.inherited_color;
     let prev_bg_hover = ctx.inherited_bg_hover;
     let prev_bg_click = ctx.inherited_bg_click;
+    let prev_color_hover = ctx.inherited_color_hover;
+    let prev_color_click = ctx.inherited_color_click;
     let prev_margin = ctx.inherited_margin;
     let prev_padding = ctx.inherited_padding;
     ctx.inherited_bg = inher_bg;
     ctx.inherited_color = inher_color;
     ctx.inherited_bg_hover = inher_bg_hover;
     ctx.inherited_bg_click = inher_bg_click;
+    ctx.inherited_color_hover = inher_color_hover;
+    ctx.inherited_color_click = inher_color_click;
     ctx.inherited_margin = inher_margin;
     ctx.inherited_padding = inher_padding;
 
@@ -96,12 +124,16 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         let prev = (style.visuals.widgets.inactive.clone(), style.visuals.widgets.hovered.clone(), style.visuals.widgets.active.clone(), style.visuals.widgets.open.clone(), style.visuals.window_fill, style.spacing.button_padding);
         style.visuals.widgets.inactive.weak_bg_fill = bg;
         style.visuals.widgets.inactive.corner_radius = radius;
+        style.visuals.widgets.inactive.fg_stroke = egui::Stroke::new(1.0, color);
         style.visuals.widgets.hovered.weak_bg_fill = bg_hover;
         style.visuals.widgets.hovered.corner_radius = radius;
+        style.visuals.widgets.hovered.fg_stroke = egui::Stroke::new(1.0, color_hover);
         style.visuals.widgets.active.weak_bg_fill = bg_click;
         style.visuals.widgets.active.corner_radius = radius;
+        style.visuals.widgets.active.fg_stroke = egui::Stroke::new(1.0, color_click);
         style.visuals.widgets.open.weak_bg_fill = bg;
         style.visuals.widgets.open.corner_radius = radius;
+        style.visuals.widgets.open.fg_stroke = egui::Stroke::new(1.0, color);
         style.visuals.window_fill = bg;
         style.spacing.button_padding = egui::vec2(pad.left as f32, pad.top as f32);
         prev
@@ -133,6 +165,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     ctx.inherited_color = prev_color;
     ctx.inherited_bg_hover = prev_bg_hover;
     ctx.inherited_bg_click = prev_bg_click;
+    ctx.inherited_color_hover = prev_color_hover;
+    ctx.inherited_color_click = prev_color_click;
     ctx.inherited_margin = prev_margin;
     ctx.inherited_padding = prev_padding;
 }
