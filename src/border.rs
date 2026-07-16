@@ -551,19 +551,22 @@ fn point_at_dist(pts: &[egui::Pos2], dists: &[f32], d: f32) -> egui::Pos2 {
     if d <= 0.0 { return pts[0]; }
     let last_dist = dists.len() - 1;
     if d >= dists[last_dist] { return pts[pts.len() - 1]; }
-    let max_pt = pts.len().saturating_sub(2);
+    let n = pts.len();
+    let max_i = n.saturating_sub(1);
     let i = match dists.binary_search_by(|&v| v.partial_cmp(&d).unwrap()) {
-        Ok(i) => i.min(max_pt),
+        Ok(i) => i.min(max_i),
         Err(i) => {
             if i == 0 { return pts[0]; }
-            (i - 1).min(max_pt)
+            (i - 1).min(max_i)
         }
     };
     let edge_start = dists[i];
     let edge_len = dists[i + 1] - edge_start;
     if edge_len <= 0.001 { return pts[i]; }
     let t = ((d - edge_start) / edge_len).clamp(0.0, 1.0);
-    egui::pos2(pts[i].x + (pts[i + 1].x - pts[i].x) * t, pts[i].y + (pts[i + 1].y - pts[i].y) * t)
+    let p0 = pts[i];
+    let p1 = pts[(i + 1) % n];
+    egui::pos2(p0.x + (p1.x - p0.x) * t, p0.y + (p1.y - p0.y) * t)
 }
 
 /// Удобная обёртка: читает border из узла/темы и рисует.
