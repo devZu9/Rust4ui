@@ -66,9 +66,15 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
                 for (i, child) in children.iter().enumerate() {
                     if i > 0 && gap > 0.0 { ui.add_space(gap); }
                     if let Some(ch_m) = inher_margin {
-                        if ch_m.top > 0 { ui.allocate_exact_size(egui::vec2(0.0, ch_m.top as f32), egui::Sense::hover()); }
-                        super::super::renderer::render_node(ui, child, ctx);
-                        if ch_m.bottom > 0 { ui.allocate_exact_size(egui::vec2(0.0, ch_m.bottom as f32), egui::Sense::hover()); }
+                        ui.vertical(|ui| {
+                            if ch_m.top > 0 { ui.add_space(ch_m.top as f32); }
+                            ui.horizontal(|ui| {
+                                if ch_m.left > 0 { ui.add_space(ch_m.left as f32); }
+                                super::super::renderer::render_node(ui, child, ctx);
+                                if ch_m.right > 0 { ui.add_space(ch_m.right as f32); }
+                            });
+                            if ch_m.bottom > 0 { ui.add_space(ch_m.bottom as f32); }
+                        });
                     } else {
                         super::super::renderer::render_node(ui, child, ctx);
                     }
