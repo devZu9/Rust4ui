@@ -2,19 +2,24 @@
 
 > Правила оформления — в `.opencode/skills/session-log/SKILL.md`
 
-## Сессия 15.07 — Числовое поле и доведение v0.4
+## Сессица 15.07 — Числовое поле и MenuBar + widget_base
 
 - 2026-07-15 (09:45) - начата
+- 2026-07-16 (18:00) - завершена
 
 ---
 
-- [ ] **MenuBar** — исправление ошибок (белые кнопки, {{синтаксис}}, hover, иконки при наведении)
 - [ ] **IconBar anchor** — start/center/end
 - [ ] **Separator в IconBar** — разделитель между иконками
 - [ ] **ScrollBar стилизация** — толщина, цвет, отступы
 - [ ] **ScrollArea: отступ текста от рамки**
 - [ ] **Slider, ComboBox, Tabs** — доделка дизайна
 - [ ] **Image, ProgressBar, DataTable** — новые виджеты
+- [x] **widget_base** — единая функция отрисовки для custom-paint виджетов. Button -80 строк, IconButton -50 строк, MenuItem переведён на custom-paint 🟢 *(16.07.2026)*
+- [x] **MenuItem: state-aware стили** — background_hover/click/focus работают через widget_base 🟢 *(16.07.2026)*
+- [x] **MenuBar: {{syntax}} резолвится** — menu.rs подцепил resolve_text() 🟢 *(16.07.2026)*
+- [x] **MenuBar: каскад наследования** — MenuBar → Menu → MenuItem. background и color наследуются 🟢 *(16.07.2026)*
+- [x] **MenuBar: weak_bg_fill** — bg_fill → weak_bg_fill для всех состояний. Попап наследует фон через window_fill 🟢 *(16.07.2026)*
 - [x] **Числовое поле (mode=number)** — дизайн, точность, степпер, тесты 🟢 *(15.07.2026)*
 
 ---

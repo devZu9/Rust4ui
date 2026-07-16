@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.4.2] — 2026-07-16
+
+### Добавлено
+- **`widget_base`** — единый слой отрисовки для всех custom-paint виджетов (`src/widgets/base.rs`). Устраняет копипасту фона, обводки, теней, padding/margin, state-атрибутов между виджетами.
+  - `widget_base()` — alloc, фон (state-aware), обводка (state-aware), shadow_background/shadow_border, padding/margin, rounding
+  - `inherited_bg` — каскадное наследование фона от родителя (MenuBar → Menu → MenuItem)
+  - `BaseOut` — возвращает response, content_rect, inner_rect, rounding_cr
+- **MenuItem** — переведён с egui-обёртки на custom-paint через `widget_base`. Теперь поддерживает `background_hover`, `background_click`, `background_focus`.
+- **MenuBar** — каскадное наследование `background`/`color` от MenuBar → Menu → MenuItem. Поддержка всех состояний (inactive/hovered/active/open) через `visuals.widgets.*.weak_bg_fill`.
+
+### Изменено
+- **RenderCtx** — добавлены `inherited_bg` и `inherited_color` для каскадного наследования
+- **menu.rs** — фон кнопок меню теперь читает `weak_bg_fill` (вместо `bg_fill`), задаётся для всех состояний + `window_fill` для попапа
+- **menu_item.rs** — убран style-override (egui-обёртка), теперь рисуется как Button через custom-paint
+- **Темы** — `color_text` → `color` для Menu/MenuItem/MenuBar, добавлены секции `Menu` и `MenuItem` с `background`/`background_hover`/`color`
+
+### Удалено
+- **`fg_stroke`** — больше не используется для цвета текста (заменён на `RichText::color()`)
+
 ## [0.4.1] — 2026-07-15
 
 ### Добавлено

@@ -27,6 +27,7 @@ UI собирается как конструктор из трёх слоёв:
 - **i18n с первого дня** — `{{key}}` из `locales/*.json`, плюрализация (CLDR), runtime-переключение языка
 - **StateRegistry** — привязка данных к UI (`binding` в JSON → переменная в Rust)
 - **ActionRegistry** — функции по имени из JSON (`action` → Rust-коллбэк)
+- **widget_base** — единый промежуточный слой для custom-paint виджетов. Автоматически обрабатывает фон, обводку, тени, padding/margin, state-атрибуты (`_hover`/`_click`/`_focus`). Каскадное наследование MenuBar → Menu → MenuItem.
 - **Padding border-box** — `N`, `[N]`, `[V,H]`, `[T,R,B,L]` — раздвигает элемент, текст внутри
 - **Hot-reload** — все файлы в `demo/` (theme.json + tabs + windows) через file watcher
 - **text_align** — left/center/right для TextField и Button
