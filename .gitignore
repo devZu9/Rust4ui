@@ -20,3 +20,6 @@ __fix_icons.py
 # mdBook generated output
 /docs/book/
 
+# OpenCode AI-ассистент (конфиги, скиллы, агенты — разработка, не результат)
+.opencode/
+
