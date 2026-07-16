@@ -195,6 +195,7 @@ impl DemoApp {
             inherited_color: None,
             inherited_margin: None,
             inherited_padding: None,
+            inherited_rounding: None,
         };
 
         log::info!("Регистрация действий...");

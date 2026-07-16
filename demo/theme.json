@@ -178,18 +178,19 @@
   },
   "MenuBar": {
     "background": "#1E1E24",
-    "color": "$color_text"
+    "color": "$color_text",
+    "rounding": 15
+  },
+  "Menu": {
+    "background": ["#1E1E24", 1],
+    "color": "$color_text",
+    "rounding": 0
   },
   "MenuItem": {
     "background": ["#000", 0],
     "background_hover": "#3A3A44",
     "color": "$color_text",
-    "rounding": 4
-  },
-  "Menu": {
-    "background": ["#1E1E24", 0],
-    "color": "$color_text",
-    "rounding": 4
+    "rounding": 10
   },
   "SubMenu": {},
   "Notifications": {

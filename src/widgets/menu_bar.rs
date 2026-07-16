@@ -42,10 +42,15 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .get("padding_children")
         .and_then(crate::renderer::parse_padding);
 
+    let inher_rounding_val = attr_f64(node, "rounding_children")
+        .or_else(|| attr_f64(node, "rounding"))
+        .unwrap_or(0.0) as u8;
+
     let prev_bg = ctx.inherited_bg;
     let prev_color = ctx.inherited_color;
     let prev_margin = ctx.inherited_margin;
     let prev_padding = ctx.inherited_padding;
+    let prev_rounding = ctx.inherited_rounding;
     ctx.inherited_bg = inher_bg;
     ctx.inherited_color = inher_color;
     ctx.inherited_margin = inher_margin;
@@ -63,6 +68,12 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
                 if margin.left > 0 { ui.add_space(margin.left as f32); }
                 for (i, child) in children.iter().enumerate() {
                     if i > 0 && gap > 0.0 { ui.add_space(gap); }
+                    let child_cr = match i {
+                        0 => egui::CornerRadius { nw: inher_rounding_val, sw: inher_rounding_val, ..egui::CornerRadius::ZERO },
+                        i if i == children.len() - 1 => egui::CornerRadius { ne: inher_rounding_val, se: inher_rounding_val, ..egui::CornerRadius::ZERO },
+                        _ => egui::CornerRadius::ZERO,
+                    };
+                    ctx.inherited_rounding = Some(child_cr);
                     if let Some(ch_m) = inher_margin {
                         ui.vertical(|ui| {
                             if ch_m.top > 0 { ui.add_space(ch_m.top as f32); }
@@ -76,6 +87,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
                     } else {
                         super::super::renderer::render_node(ui, child, ctx);
                     }
+                    ctx.inherited_rounding = prev_rounding;
                 }
                 if margin.right > 0 { ui.add_space(margin.right as f32); }
             });
@@ -90,6 +102,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     ctx.inherited_color = prev_color;
     ctx.inherited_margin = prev_margin;
     ctx.inherited_padding = prev_padding;
+    ctx.inherited_rounding = prev_rounding;
 }
 
 #[cfg(test)]

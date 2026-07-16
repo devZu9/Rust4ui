@@ -32,18 +32,14 @@
             {
               "type": "MenuBar",
 	      "background": ["$rust", 1], 
-	      "padding": 0,
-	      "rounding": 15,
-	      "border": [4, "$yellow", 1, "dot", 4, 1],
+ 	      "padding": 0,
 	      "border_position": "inside",
 	      "padding_children": [15, 20],
-	      "margin_children": [15, 20],
 	      "color_children": "$cyan",
 	      "gap": 0, 
               "children": [
                 {
                   "type": "Menu",
-	  	  "rounding": 5,
                    "text": "{{menu.file}}",
                   "children": [
                     { 

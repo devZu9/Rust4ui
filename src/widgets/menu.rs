@@ -22,7 +22,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let rounding_val = attr_f64(node, "rounding")
         .or_else(|| Some(ctx.theme.w_f64("Menu", "rounding", 4.0)))
         .unwrap_or(4.0) as u8;
-    let radius = egui::CornerRadius::same(rounding_val);
+    let radius = ctx.inherited_rounding
+        .unwrap_or_else(|| egui::CornerRadius::same(rounding_val));
 
     let margin = node
         .get("margin")
