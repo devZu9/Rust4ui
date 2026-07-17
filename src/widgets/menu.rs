@@ -2,7 +2,17 @@ use crate::renderer::{attr_f64, attr_str, get_margin, get_padding, resolve_text,
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
     let raw_text = attr_str(node, "text").unwrap_or("");
-    let icon_name = attr_str(node, "icon");
+    let inher_icon = &ctx.inherited_icon;
+
+    let icon_name = attr_str(node, "icon")
+        .or_else(|| inher_icon.as_ref().map(|i| i.name.as_str()));
+    let icon_position = attr_str(node, "icon_position")
+        .or_else(|| inher_icon.as_ref().map(|i| i.position.as_str()))
+        .unwrap_or("left");
+    let icon_gap = attr_f64(node, "icon_gap")
+        .or_else(|| inher_icon.as_ref().map(|i| i.gap as f64))
+        .unwrap_or(6.0) as f32;
+
     let text = if raw_text.is_empty() && icon_name.is_some() {
         String::new()
     } else if raw_text.is_empty() {
@@ -11,9 +21,6 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         resolve_text(raw_text, ctx)
     };
 
-    let icon_name = attr_str(node, "icon");
-    let icon_position = attr_str(node, "icon_position").unwrap_or("left");
-    let icon_gap = attr_f64(node, "icon_gap").unwrap_or(6.0) as f32;
     let icon_glyph = icon_name.and_then(|n| ctx.icons.resolve(n));
     let has_icon = icon_glyph.is_some();
 

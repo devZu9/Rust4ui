@@ -206,6 +206,7 @@ impl DemoApp {
             inherited_border_focus: None,
             pending_borders: Vec::new(),
             open_popup_id: None,
+            inherited_icon: None,
         };
 
         log::info!("Регистрация действий...");

@@ -25,6 +25,14 @@ pub struct RenderCtx {
     pub inherited_border_focus: Option<crate::border::BorderStyle>,
     pub pending_borders: Vec<(egui::Rect, egui::CornerRadius, crate::border::BorderStyle)>,
     pub open_popup_id: Option<String>,
+    pub inherited_icon: Option<crate::renderer::InheritedIcon>,
+}
+
+#[derive(Clone)]
+pub struct InheritedIcon {
+    pub name: String,
+    pub position: String,
+    pub gap: f32,
 }
 
 impl RenderCtx {
@@ -50,6 +58,7 @@ impl RenderCtx {
             inherited_border_focus: None,
             pending_borders: Vec::new(),
             open_popup_id: None,
+            inherited_icon: None,
         }
     }
 

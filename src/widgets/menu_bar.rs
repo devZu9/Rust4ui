@@ -1,5 +1,5 @@
 use crate::border::{draw_border, get_border};
-use crate::renderer::{attr_f64, get_margin, get_padding, RenderCtx};
+use crate::renderer::{attr_f64, attr_str, get_margin, get_padding, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
     let children = match node.get("children").and_then(|v| v.as_array()) {
@@ -84,6 +84,12 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .or_else(|| Some(ctx.theme.w_f64("MenuBar", "rounding", 0.0)))
         .unwrap_or(0.0) as u8;
 
+    let inher_icon = attr_str(node, "icon_children").map(|name| crate::renderer::InheritedIcon {
+        name: name.to_string(),
+        position: attr_str(node, "icon_position_children").unwrap_or("left").to_string(),
+        gap: attr_f64(node, "icon_gap_children").unwrap_or(6.0) as f32,
+    });
+
     let prev_bg = ctx.inherited_bg;
     let prev_color = ctx.inherited_color;
     let prev_bg_hover = ctx.inherited_bg_hover;
@@ -97,6 +103,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let prev_margin = ctx.inherited_margin;
     let prev_padding = ctx.inherited_padding;
     let prev_rounding = ctx.inherited_rounding;
+    let prev_icon = ctx.inherited_icon.take();
     ctx.inherited_bg = inher_bg;
     ctx.inherited_color = inher_color;
     ctx.inherited_bg_hover = inher_bg_hover;
@@ -107,6 +114,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     ctx.inherited_border_hover = inher_border_hover;
     ctx.inherited_border_click = inher_border_click;
     ctx.inherited_border_focus = inher_border_focus;
+    ctx.inherited_icon = inher_icon;
     ctx.inherited_margin = inher_margin;
     ctx.inherited_padding = inher_padding;
 
@@ -167,6 +175,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     ctx.inherited_border_hover = prev_border_hover;
     ctx.inherited_border_click = prev_border_click;
     ctx.inherited_border_focus = prev_border_focus;
+    ctx.inherited_icon = prev_icon;
     ctx.inherited_margin = prev_margin;
     ctx.inherited_padding = prev_padding;
     ctx.inherited_rounding = prev_rounding;

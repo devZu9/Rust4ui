@@ -47,11 +47,16 @@
         "border_hover_children": [4, "$like", 1, "dash", 8],
         "border_position_children": "center",
         "gap": 0,
+        "icon_children": "check",
+        "icon_position_children": "right",
+        "icon_gap_children": 10,
 
               "children": [
                 {
                   "type": "Menu",
-                  "icon": "folder-simple",
+                  "icon": "check",
+                  "icon_gap": 10,
+                  "text": "{{menu.file}}",
                   "children": [
                     { 
                       "type": "MenuItem", 
@@ -69,7 +74,7 @@
                 },
                 {
                   "type": "Menu",
-                  "icon": "play", 
+                  "text": "{{menu.edit}}",
                   "children": [
                     { "type": "MenuItem", "icon": "question", "text": "{{menu.help}}", "action": "click", "target": "menu_about" },
                     { "type": "Separator" },
