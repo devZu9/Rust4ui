@@ -56,8 +56,8 @@
                 {
                   "type": "Menu",
                   "border_position": "outside",
-                  "rounding_children": 10, 
-                  "padding_children": [20, 25],
+//                  "rounding_children": 10, 
+//                  "padding_children": [20, 25],
                   "icon": "check",
                   "icon_gap": 10,
                   "text": "{{menu.file}}",

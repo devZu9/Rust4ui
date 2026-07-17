@@ -65,8 +65,9 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     if margin.top > 0 { ui.add_space(margin.top as f32); }
 
     let content_size = if stretch {
-        let avail_w = ui.available_width().max(csize.x + pad.left as f32 + pad.right as f32);
-        egui::vec2(avail_w, csize.y)
+        let pad_sum = pad.left as f32 + pad.right as f32 + margin.left as f32 + margin.right as f32;
+        let inner_w = (ui.available_width() - pad_sum).max(csize.x);
+        egui::vec2(inner_w, csize.y)
     } else {
         csize
     };
