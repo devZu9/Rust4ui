@@ -152,7 +152,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         else if resp.has_focus() { p("focus", ctx.inherited_border_focus) }
         else if resp.hovered() { p("hover", ctx.inherited_border_hover) } else { base_border };
     if border.is_visible() {
-        ctx.pending_borders.push((inner_rect, radius, border));
+        ctx.pending_borders.push((content_rect, radius, border));
     }
 
     // Popup
