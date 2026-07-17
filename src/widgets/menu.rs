@@ -221,6 +221,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
                     .inner_margin(popup_padding)
                     .show(ui, |ui| {
                         ui.set_min_width(popup_min_w);
+                        ui.set_max_width(popup_min_w);
                         ui.style_mut().spacing.item_spacing = egui::vec2(0.0, popup_gap);
                         if popup_max_height > 0.0 {
                             egui::ScrollArea::vertical().max_height(popup_max_height).show(ui, |ui| {
