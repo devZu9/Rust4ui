@@ -38,7 +38,7 @@
  	      "padding": 0,
 	      "padding_children": [15, 25],
 	      "margin_children": [0],
-	      "margin": 0,
+	      "margin": 5,
 	      "color_children": "#022",
 	      "color_click_children": "#FFF",
 	//      "border_hover_children": [5, "F7F", 1, "dot", 2],

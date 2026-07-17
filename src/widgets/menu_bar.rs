@@ -116,6 +116,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .inner_margin(padding)
         .show(ui, |ui| {
             ui.vertical(|ui| {
+                ui.style_mut().spacing.item_spacing = egui::Vec2::ZERO;
                 if margin.top > 0 { ui.add_space(margin.top as f32); }
                 ui.horizontal(|ui| {
                     ui.style_mut().spacing.item_spacing = egui::Vec2::ZERO;
