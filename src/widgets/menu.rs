@@ -1,4 +1,3 @@
-use crate::border::draw_border;
 use crate::renderer::{attr_f64, attr_str, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
@@ -185,7 +184,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         base_border
     };
     if border.is_visible() {
-        draw_border(ui, menu_resp.response.rect.shrink(1.0), radius, &border);
+        ctx.pending_borders.push((menu_resp.response.rect.shrink(1.0), radius, border));
     }
 
     {

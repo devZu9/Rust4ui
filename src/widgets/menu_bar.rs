@@ -150,6 +150,10 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let border = get_border(node, &ctx.theme, "MenuBar");
     draw_border(ui, frame_resp.response.rect, rounding_cr, &border);
 
+    for (brect, bradius, bstyle) in ctx.pending_borders.drain(..) {
+        crate::border::draw_border(ui, brect, bradius, &bstyle);
+    }
+
     if margin.bottom > 0 { ui.add_space(margin.bottom as f32); }
 
     ctx.inherited_bg = prev_bg;

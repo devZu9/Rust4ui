@@ -204,6 +204,7 @@ impl DemoApp {
             inherited_border_hover: None,
             inherited_border_click: None,
             inherited_border_focus: None,
+            pending_borders: Vec::new(),
         };
 
         log::info!("Регистрация действий...");

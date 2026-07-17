@@ -23,6 +23,7 @@ pub struct RenderCtx {
     pub inherited_border_hover: Option<crate::border::BorderStyle>,
     pub inherited_border_click: Option<crate::border::BorderStyle>,
     pub inherited_border_focus: Option<crate::border::BorderStyle>,
+    pub pending_borders: Vec<(egui::Rect, egui::CornerRadius, crate::border::BorderStyle)>,
 }
 
 impl RenderCtx {
@@ -46,6 +47,7 @@ impl RenderCtx {
             inherited_border_hover: None,
             inherited_border_click: None,
             inherited_border_focus: None,
+            pending_borders: Vec::new(),
         }
     }
 
