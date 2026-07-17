@@ -161,11 +161,14 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let border = if base_border.is_visible() {
         let resp = &menu_resp.response;
         if resp.is_pointer_button_down_on() {
-            crate::border::apply_state_border(node, &ctx.theme, "Menu", "click", &base_border)
+            ctx.inherited_border_click
+                .unwrap_or_else(|| crate::border::apply_state_border(node, &ctx.theme, "Menu", "click", &base_border))
         } else if resp.has_focus() {
-            crate::border::apply_state_border(node, &ctx.theme, "Menu", "focus", &base_border)
+            ctx.inherited_border_focus
+                .unwrap_or_else(|| crate::border::apply_state_border(node, &ctx.theme, "Menu", "focus", &base_border))
         } else if resp.hovered() {
-            crate::border::apply_state_border(node, &ctx.theme, "Menu", "hover", &base_border)
+            ctx.inherited_border_hover
+                .unwrap_or_else(|| crate::border::apply_state_border(node, &ctx.theme, "Menu", "hover", &base_border))
         } else {
             base_border
         }

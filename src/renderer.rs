@@ -20,6 +20,9 @@ pub struct RenderCtx {
     pub inherited_padding: Option<egui::Margin>,
     pub inherited_rounding: Option<egui::CornerRadius>,
     pub inherited_border: Option<crate::border::BorderStyle>,
+    pub inherited_border_hover: Option<crate::border::BorderStyle>,
+    pub inherited_border_click: Option<crate::border::BorderStyle>,
+    pub inherited_border_focus: Option<crate::border::BorderStyle>,
 }
 
 impl RenderCtx {
@@ -40,6 +43,9 @@ impl RenderCtx {
             inherited_padding: None,
             inherited_rounding: None,
             inherited_border: None,
+            inherited_border_hover: None,
+            inherited_border_click: None,
+            inherited_border_focus: None,
         }
     }
 

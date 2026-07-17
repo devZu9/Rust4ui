@@ -42,7 +42,7 @@
 	      "color_click_children": "#FFF",
 	      "gap": 0,
 	      "border": [2, "#DFF", 1, "dash", 4, 15],
-	      "border_children": [5, "#DFF", 1, "dash", 7, 5],
+	      "border_hover_children": [5, "#DFF", 1, "dash", 7, 5],
 	      "border_position": "center",
               "children": [
                 {

@@ -201,6 +201,9 @@ impl DemoApp {
             inherited_padding: None,
             inherited_rounding: None,
             inherited_border: None,
+            inherited_border_hover: None,
+            inherited_border_click: None,
+            inherited_border_focus: None,
         };
 
         log::info!("Регистрация действий...");
