@@ -22,6 +22,16 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         format!("{prefix} {text}")
     };
 
+    let stretch = node.get("stretch")
+        .or_else(|| ctx.inherited.get("stretch"))
+        .and_then(|v| v.as_bool())
+        .unwrap_or(false);
+
+    let align = node.get("align")
+        .or_else(|| ctx.inherited.get("align"))
+        .and_then(|v| v.as_str())
+        .unwrap_or("left");
+
     let inherited_color = ctx.inherited.get("color").and_then(crate::theme::parse_color_value);
     let color = node
         .get("color")
@@ -50,17 +60,28 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     if margin.top > 0 { ui.add_space(margin.top as f32); }
 
-    let inherited_bg = ctx.inherited.get("background").and_then(crate::theme::parse_color_value);
+    let content_size = if stretch {
+        let avail_w = ui.available_width().max(csize.x + pad.left as f32 + pad.right as f32);
+        egui::vec2(avail_w, csize.y)
+    } else {
+        csize
+    };
+
     let out = crate::widgets::base::widget_base(
         ui, node, &ctx.theme, "MenuItem",
-        csize, egui::Sense::click(), enabled,
+        content_size, egui::Sense::click(), enabled,
         egui::Color32::TRANSPARENT, base_rounding,
         pad,
         &ctx.inherited,
     );
 
-    let text_pos = egui::pos2(out.inner_rect.left(), egui::Align::Center.align_size_within_range(csize.y, out.inner_rect.y_range()).min);
-    ui.painter().galley_with_override_text_color(text_pos, galley, color_icon);
+    let text_x = match align {
+        "center" => egui::Align::Center.align_size_within_range(csize.x, out.inner_rect.x_range()).min,
+        "right"  => out.inner_rect.right() - csize.x,
+        _        => out.inner_rect.left(),
+    };
+    let text_y = egui::Align::Center.align_size_within_range(csize.y, out.inner_rect.y_range()).min;
+    ui.painter().galley_with_override_text_color(egui::pos2(text_x, text_y), galley, color_icon);
 
     if out.response.clicked() && enabled {
         if let Some(action_name) = action {

@@ -195,6 +195,7 @@
     "padding": [15, 25],
     "background": ["#000", 0],
     "background_hover": "#3A3A44",
+    "border_hover": [3, "$pitch", 1, "dot", 2],
     "color": "$color_text",
     "rounding": 0
   },

@@ -706,7 +706,7 @@
 
 ## MenuItem
 
-Пункт меню.
+Пункт меню. Рендерится через `widget_base()` — поддерживает все визуальные атрибуты.
 
 | Атрибут | Тип | По умолчанию | Описание |
 |---------|-----|-------------|----------|
@@ -715,11 +715,61 @@
 | `target` | string | — | Цель для экшена |
 | `enabled` | bool | `true` | Доступен ли пункт |
 | `icon` | string | — | Имя иконки Phosphor |
-| `shortcut` | string | — | Текст шортката (отображается, но не обрабатывается) |
-| `size` | number | 12.0 | Размер шрифта |
+| `shortcut` | string | — | Текст шортката (отображается, не обрабатывается) |
+| `size` | number | 14.0 | Размер шрифта |
+| `color` | string | из темы | Цвет текста |
+| `color_icon` | string | =color | Цвет иконки |
+| `background` | string/array | transparent | Фон |
+| `background_hover` | string/array | =background | Фон при наведении |
+| `background_click` | string/array | =background_hover | Фон при клике |
+| `background_focus` | string/array | =background | Фон при фокусе |
+| `padding` | number/array | из inherited | Внутренний отступ |
+| `margin` | number/array | из inherited | Внешний отступ |
+| `rounding` | number | из темы | Скругление |
+| `border` | array | — | Граница |
+| `border_hover` | array | — | Граница при наведении |
+| `border_click` | array | — | Граница при клике |
+| `border_focus` | array | — | Граница при фокусе |
+| `stretch` | bool | false | Растянуть на всю ширину попапа |
+| `align` | string | `"left"` | Выравнивание контента (`"left"`, `"center"`, `"right"`) |
+| `shadow_background` | array | — | Тень фона |
+| `shadow_border` | array | — | Тень рамки |
+
+Все атрибуты поддерживают `_children` наследование и state-постфиксы (`_hover`, `_click`, `_focus`).
+
+Пример с полной настройкой:
 
 ```json
-{ "type": "MenuItem", "text": "Сохранить", "action": "save", "icon": "floppy-disk", "shortcut": "Ctrl+S" }
+{
+  "type": "MenuItem",
+  "text": "Сохранить",
+  "action": "save",
+  "icon": "floppy-disk",
+  "shortcut": "Ctrl+S",
+  "color": "#E0E0E0",
+  "color_hover": "#FFF",
+  "background_hover": "#3A3A44",
+  "padding": [8, 16],
+  "rounding": 6,
+  "stretch": true,
+  "align": "center",
+  "border_hover": [2, "#87F", 1, "solid"],
+  "border_focus": [2, "#FFF", 1]
+}
+```
+
+Наследование через родителя:
+
+```json
+{
+  "type": "Menu",
+  "stretch_children": true,
+  "align_children": "center",
+  "children": [
+    { "type": "MenuItem", "text": "{{menu.new}}" },
+    { "type": "MenuItem", "text": "{{menu.open}}" }
+  ]
+}
 ```
 
 ---
