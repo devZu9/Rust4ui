@@ -109,7 +109,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let icon_galley = has_icon.then(|| ui.painter().layout_no_wrap(icon_glyph.unwrap().to_string(), font_id, color));
     let icon_w = icon_galley.as_ref().map_or(0.0, |g| g.size().x);
     let text_w = text_galley.size().x;
-    let gap_w = if has_icon { icon_gap } else { 0.0 };
+    let gap_w = if has_icon && text_w > 0.0 { icon_gap } else { 0.0 };
     let content_w = if icon_position == "right" { text_w + gap_w + icon_w } else { icon_w + gap_w + text_w };
     let content_h = icon_galley.as_ref().map_or(text_galley.size().y, |g| text_galley.size().y.max(g.size().y));
     let (p_l, p_r, p_t, p_b) = (pad.left as f32, pad.right as f32, pad.top as f32, pad.bottom as f32);

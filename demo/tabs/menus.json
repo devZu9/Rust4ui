@@ -52,16 +52,13 @@
                 {
                   "type": "Menu",
                   "icon": "folder-simple",
-                  "icon_position": "left",
-                  "icon_gap": 5,
-                  "text": "{{menu.file}}",
                   "children": [
                     { 
-		    "type": "MenuItem", 
-		    "icon": "plus", 
-		    "text": "{{menu.new}}", 
-		    "action": "click", 
-		    "target": "menu_new" 
+                      "type": "MenuItem", 
+                      "icon": "plus", 
+                      "text": "{{menu.new}}", 
+                      "action": "click", 
+                      "target": "menu_new" 
 		    },
                     { "type": "MenuItem", "icon": "folder-simple", "text": "{{menu.open}}", "action": "click", "target": "menu_open" },
                     { "type": "Separator" },
@@ -72,7 +69,7 @@
                 },
                 {
                   "type": "Menu",
-                  "text": "{{menu.help}}",
+                  "icon": "play", 
                   "children": [
                     { "type": "MenuItem", "icon": "question", "text": "{{menu.help}}", "action": "click", "target": "menu_about" },
                     { "type": "Separator" },
