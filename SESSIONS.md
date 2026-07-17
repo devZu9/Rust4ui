@@ -5,11 +5,29 @@
 ## Сессия 16.07 — MenuBar: _children, state-атрибуты, border-fix, универсальный механизм _hover/_click/_focus + _children
 
 - 2026-07-16 (18:00) - начата
-- 
 
 ---
 
+### Продолжение (17-18.07)
 
+- [x] **popup_* атрибуты** — контекстное меню настраивается отдельно от кнопки Menu:
+  `popup_background`, `popup_rounding`, `popup_padding`, `popup_gap`,
+  `popup_min_width`, `popup_max_height`, `popup_border`, `popup_shadow`
+  Все через `_children` наследование. Документация обновлена.
+- [x] **popup open/close logic fix** — три проблемы:
+  1. clicked_elsewhere() срабатывал на свой же клик → меню закрывалось сразу.
+     Исправлено: `!resp.clicked()` перед `clicked_elsewhere()`.
+  2. Ховер-переключение не закрывало предыдущий попап.
+     Исправлено: `ctx.state.set_bool(prev, false)` при ховере.
+  3. open_popup_id очищался для чужого ключа.
+     Исправлено: проверка `ctx.open_popup_id.as_deref() == Some(&popup_key)`.
+- [x] **inherit_children: theme fallback** — `inherit_children(node, Some("MenuBar"))` читает
+  `*_children` сначала из JSON-узла, потом из темы (entry.or_insert_with).
+  `rounding_children`, `padding_children`, `popup_*_children` из `theme.json` работают.
+- [x] **always_on_top** — в `settings.json`. Читается на старте → `ViewportBuilder.with_always_on_top()`.
+  Сохраняется. Runtime-тогл через `ViewportCommand::WindowLevel(WindowLevel::AlwaysOnTop)`.
+- [x] **popup_padding fix** — читал ключ "padding" вместо "popup_padding" (через get_padding).
+  Исправлено: прямой `parse_padding(node.get("popup_padding"))`.
 
 - [x] **RenderCtx: `inherited: HashMap<String, Value>`** вместо 14 отдельных полей inherited_bg, inherited_bg_hover и т.д. Любой атрибут с _children суффиксом автоматом ложится в ctx.inherited.
 - [x] **`inherit_children()`** — drain всех текущих inherited → clear → apply только _children из узла. Каждый уровень изолирован.

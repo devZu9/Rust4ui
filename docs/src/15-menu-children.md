@@ -25,6 +25,22 @@ MenuBar
 - `_children` — **ровно один уровень** вниз
 - Если ребёнок указал свой атрибут — он переопределяет наследованный
 - Любой атрибут с суффиксом `_children` работает: хоть `background_hover_children`, хоть `icon_position_click_children`, хоть `border_focus_children`
+- **`_children` из `theme.json`** — `*_children` можно задать в теме. Приоритет: **JSON-узел (inline) → тема**. Если атрибут не указан в JSON-узле, подхватывается из темы. Позволяет задать глобальные стили для всех Menu в одном месте.
+
+  ```json
+  // theme.json — глобальные настройки для всех Menu
+  "Menu": {
+    "rounding_children": 10,
+    "padding_children": [20, 25]
+  }
+
+  // ui.json — переопределение для конкретного Menu
+  {
+    "type": "Menu",
+    "text": "{{menu.file}}",
+    "padding_children": [5, 5]  // свой padding, rounding из темы
+  }
+  ```
 
 ---
 

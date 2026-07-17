@@ -28,7 +28,8 @@ UI собирается как конструктор из трёх слоёв:
 - **StateRegistry** — привязка данных к UI (`binding` в JSON → переменная в Rust)
 - **ActionRegistry** — функции по имени из JSON (`action` → Rust-коллбэк)
 - **widget_base** — единый промежуточный слой для custom-paint виджетов. Автоматически обрабатывает фон, обводку, тени, padding/margin, state-атрибуты (`_hover`/`_click`/`_focus`). Каскадное наследование MenuBar → Menu → MenuItem.
-- **Универсальное наследование `_children`** — любой атрибут с суффиксом `_children` автоматом наследуется на 1 уровень вниз. `background_children`, `icon_position_hover_children`, `border_focus_children` — все без per-виджетного кода. Документация: `docs/src/15-menu-children.md`.
+- **Универсальное наследование `_children`** — любой атрибут с суффиксом `_children` автоматом наследуется на 1 уровень вниз. `background_children`, `icon_position_hover_children`, `border_focus_children` — все без per-виджетного кода. Поддержка `_children` из `theme.json` как глобальных defaults. Документация: `docs/src/15-menu-children.md`.
+- **popup_* атрибуты Menu** — раздельная настройка кнопки на MenuBar и контекстного меню (попап): `popup_background`, `popup_border`, `popup_padding`, `popup_gap`, `popup_min_width`, `popup_max_height`, `popup_shadow`. Все через `_children` наследование.
 - **Padding border-box** — `N`, `[N]`, `[V,H]`, `[T,R,B,L]` — раздвигает элемент, текст внутри
 - **Hot-reload** — все файлы в `demo/` (theme.json + tabs + windows) через file watcher
 - **text_align** — left/center/right для TextField и Button

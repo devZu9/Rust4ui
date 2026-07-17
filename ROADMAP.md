@@ -68,14 +68,19 @@
 
 - [ ] **Отключение сторон бордюра** — возможность отключить любую сторону (top/right/bottom/left) у виджетов с border, чтобы делать уголки или односторонние полоски
 
-- [ ] **MenuBar** — исправление ошибок (белые кнопки, {{синтаксис}}, hover, state-aware фон, каскад _children) 🟢 *(16.07.2026)*
+- [x] **MenuBar** — универсальный _children/_hover/_click/_focus механизм, popup_*, исправление ошибок 🟢 *(18.07.2026)*
+  - [x] **popup_* атрибуты** — popup_background/rounding/padding/gap/min_width/max_height/border/shadow 🟢 *(18.07.2026)*
+  - [x] **inherit_children: theme fallback** — *_children из theme.json работают (JSON → theme) 🟢 *(18.07.2026)*
+  - [x] **popup open/close logic** — clicked_elsewhere, ховер-переключение, очистка open_popup_id 🟢 *(18.07.2026)*
+  - [x] **Универсальный _children механизм** — inherit_children / restore_children / resolve_state_attr 🟢 *(17.07.2026)*
+  - [x] **Кастомизация фона/цвета через _children** — background, background_hover/click, color, color_hover/click 🟢 *(16.07.2026)*
+  - [x] padding_children / margin_children / rounding_children 🟢 *(16.07.2026)*
+  - [x] border _children + border_position_children 🟢 *(17.07.2026)*
+  - [x] icon_children / icon_position_children / icon_gap_children 🟢 *(17.07.2026)*
   - [ ] Состояние _focus на раскрытом меню можно настраивать через постфикс
   - [ ] Настройка авто-раскрытия после клика (т.е. первый клик раскрывает пункт меню, а дальше мы просто водим и меню раскрывается из-за hover)
   - [ ] **Кастомизация показа иконок в MenuItem** — настройка видимости иконок (всегда/при наведении/скрыть)
-  - [ ] **Border _children** — border для children элементов со всеми состояниями (hover/click/focus)
   - [ ] **Shadow на MenuBar** — протестировать и донастроить shadow на MenuBar и его children
-  - [x] **Кастомизация фона/цвета через _children** — background, background_hover/click, color, color_hover/click 🟢 *(16.07.2026)*
-  - [x] padding_children / margin_children / rounding_children** 🟢 *(16.07.2026)
 
 - [x] 
 
