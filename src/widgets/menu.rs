@@ -218,18 +218,16 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
                     .corner_radius(popup_cr)
                     .inner_margin(popup_padding)
                     .show(ui, |ui| {
-                        ui.set_min_width(popup_min_w);
-                        ui.set_max_width(popup_min_w);
+                        let aw = ui.available_width().max(1.0);
 
-                        // Явная фиксация ширины — available_width() для всех детей = popup_min_w
                         let (content_rect, _) = ui.allocate_exact_size(
-                            egui::vec2(popup_min_w, 0.0),
+                            egui::vec2(aw, 0.0),
                             egui::Sense::hover(),
                         );
 
                         ui.allocate_ui_at_rect(content_rect, |ui| {
-                            ui.set_min_width(popup_min_w);
-                            ui.set_max_width(popup_min_w);
+                            ui.set_min_width(aw);
+                            ui.set_max_width(aw);
                             ui.style_mut().spacing.item_spacing = egui::vec2(0.0, popup_gap);
                             if popup_max_height > 0.0 {
                                 egui::ScrollArea::vertical().max_height(popup_max_height).show(ui, |ui| {
