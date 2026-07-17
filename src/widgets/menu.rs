@@ -4,7 +4,23 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let text = attr_str(node, "text")
         .map(|t| resolve_text(t, ctx))
         .unwrap_or_else(|| "{{menu}}".to_string());
-    let label = format!("{} ▾", text);
+
+    let icon_name = attr_str(node, "icon");
+    let icon_position = attr_str(node, "icon_position").unwrap_or("left");
+    let icon_gap = attr_f64(node, "icon_gap").unwrap_or(6.0) as f32;
+    let icon_glyph = icon_name.and_then(|n| ctx.icons.resolve(n));
+    let has_icon = icon_glyph.is_some();
+    let label = if has_icon {
+        let g = icon_glyph.unwrap();
+        let gap = std::iter::repeat(" ").take((icon_gap / 3.0).round() as usize).collect::<String>();
+        if icon_position == "right" {
+            format!("{text}{gap}{g}")
+        } else {
+            format!("{g}{gap}{text}")
+        }
+    } else {
+        text.to_string()
+    };
 
     let bg = node
         .get("background")
