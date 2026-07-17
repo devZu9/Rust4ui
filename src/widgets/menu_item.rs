@@ -65,8 +65,13 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     if margin.top > 0 { ui.add_space(margin.top as f32); }
 
     let content_size = if stretch {
+        let popup_w = ctx.inherited.get("popup_width").and_then(|v| v.as_f64().map(|f| f as f32));
         let pad_sum = pad.left as f32 + pad.right as f32 + margin.left as f32 + margin.right as f32;
-        let inner_w = (ui.available_width() - pad_sum).max(csize.x);
+        let inner_w = if let Some(pw) = popup_w {
+            (pw - pad_sum).max(csize.x)
+        } else {
+            (ui.available_width() - pad_sum).max(csize.x)
+        };
         egui::vec2(inner_w, csize.y)
     } else {
         csize

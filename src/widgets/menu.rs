@@ -208,6 +208,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     if is_open && !children.is_empty() {
         let popup_cr = egui::CornerRadius::same(popup_rounding);
         let popup_min_w = if popup_min_width > 0.0 { popup_min_width } else { content_rect.width().max(content_w + p_l + p_r) };
+        ctx.inherited.insert("popup_width".to_string(), serde_json::json!(popup_min_w));
 
         let ar: egui::InnerResponse<()> = egui::Area::new(egui::Id::new(&popup_key))
             .fixed_pos(egui::pos2(content_rect.left(), content_rect.bottom()))
