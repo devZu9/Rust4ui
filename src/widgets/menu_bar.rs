@@ -113,12 +113,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let frame_resp = egui::Frame::new()
         .fill(bg)
         .corner_radius(rounding_cr)
-        .inner_margin(egui::Margin {
-            left: padding.left + 1,
-            right: padding.right + 1,
-            top: padding.top + 1,
-            bottom: padding.bottom + 1,
-        })
+        .inner_margin(padding)
         .show(ui, |ui| {
             ui.vertical(|ui| {
                 if margin.top > 0 { ui.add_space(margin.top as f32); }
