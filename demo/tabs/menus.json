@@ -70,7 +70,7 @@
                       "target": "menu_new" 
 		    },
                     { "type": "MenuItem", "icon": "folder-simple", "text": "{{menu.open}}", "action": "click", "target": "menu_open" },
-                    { "type": "Separator" },
+           //         { "type": "Separator" },
                     { "type": "MenuItem", "icon": "upload-simple", "text": "{{menu.import}}", "action": "click", "target": "menu_import" },
                     { "type": "Separator" },
                     { "type": "MenuItem", "icon": "download-simple", "text": "{{menu.export}}", "action": "click", "target": "menu_export" },
