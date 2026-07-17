@@ -76,6 +76,7 @@ impl DemoApp {
             inherited_border_click: None,
             inherited_border_focus: None,
             pending_borders: Vec::new(),
+            open_popup_id: None,
         };
 
         let actions = &mut ctx.actions;
