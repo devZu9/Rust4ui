@@ -192,7 +192,7 @@
     "rounding": 0
   },
   "MenuItem": {
-    "stretch": true,
+    "stretch": false,
     "padding": [15, 15],
 //    "background": ["#000", 0],
     "background": "#3A3A44",

@@ -208,14 +208,11 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     if is_open && !children.is_empty() {
         let popup_cr = egui::CornerRadius::same(popup_rounding);
         let popup_min_w = if popup_min_width > 0.0 { popup_min_width } else { content_rect.width().max(content_w + p_l + p_r) };
-        ctx.inherited.insert("popup_width".to_string(), serde_json::json!(popup_min_w));
 
         let ar: egui::InnerResponse<()> = egui::Area::new(egui::Id::new(&popup_key))
             .fixed_pos(egui::pos2(content_rect.left(), content_rect.bottom()))
             .order(egui::Order::Foreground)
             .show(ui.ctx(), |ui| {
-                crate::border::draw_shadow_bg(ui, ui.available_rect_before_wrap(), popup_cr, &popup_shadow);
-
                 egui::Frame::new()
                     .fill(popup_bg)
                     .corner_radius(popup_cr)
@@ -223,23 +220,35 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
                     .show(ui, |ui| {
                         ui.set_min_width(popup_min_w);
                         ui.set_max_width(popup_min_w);
-                        ui.style_mut().spacing.item_spacing = egui::vec2(0.0, popup_gap);
-                        if popup_max_height > 0.0 {
-                            egui::ScrollArea::vertical().max_height(popup_max_height).show(ui, |ui| {
+
+                        // Явная фиксация ширины — available_width() для всех детей = popup_min_w
+                        let (content_rect, _) = ui.allocate_exact_size(
+                            egui::vec2(popup_min_w, 0.0),
+                            egui::Sense::hover(),
+                        );
+
+                        ui.allocate_ui_at_rect(content_rect, |ui| {
+                            ui.set_min_width(popup_min_w);
+                            ui.set_max_width(popup_min_w);
+                            ui.style_mut().spacing.item_spacing = egui::vec2(0.0, popup_gap);
+                            if popup_max_height > 0.0 {
+                                egui::ScrollArea::vertical().max_height(popup_max_height).show(ui, |ui| {
+                                    for child in &children {
+                                        super::super::renderer::render_node(ui, child, ctx);
+                                    }
+                                });
+                            } else {
                                 for child in &children {
                                     super::super::renderer::render_node(ui, child, ctx);
                                 }
-                            });
-                        } else {
-                            for child in &children {
-                                super::super::renderer::render_node(ui, child, ctx);
                             }
-                        }
+                        });
                     });
 
+                let popup_rect = ui.min_rect();
+                crate::border::draw_shadow_bg(ui, popup_rect, popup_cr, &popup_shadow);
                 if popup_border.is_visible() {
-                    let pr = ui.min_rect();
-                    crate::border::draw_border(ui, pr, popup_cr, &popup_border);
+                    crate::border::draw_border(ui, popup_rect, popup_cr, &popup_border);
                 }
             });
 

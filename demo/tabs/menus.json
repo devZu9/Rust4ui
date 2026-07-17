@@ -93,7 +93,7 @@
                   "children": [
                     { "type": "MenuItem", "icon": "arrow-counter-clockwise", "text": "{{menu.undo}}", "action": "click", "target": "menu_undo" },
                     { "type": "MenuItem", "icon": "arrow-clockwise", "text": "{{menu.redo}}", "action": "click", "target": "menu_redo" },
-                    { "type": "Separator" },
+        //            { "type": "Separator" },
                     { "type": "MenuItem", "icon": "gear-six", "text": "{{chk.gpu}}", "action": "click", "target": "menu_gpu" }
                   ]
                 }
