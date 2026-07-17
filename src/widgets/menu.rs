@@ -1,4 +1,4 @@
-use crate::border::{draw_border, get_state_border};
+use crate::border::draw_border;
 use crate::renderer::{attr_f64, attr_str, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
@@ -156,12 +156,24 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     if margin.right > 0 { ui.add_space(margin.right as f32); }
     if margin.bottom > 0 { ui.add_space(margin.bottom as f32); }
 
-    let border = ctx.inherited_border
-        .map(|b| get_state_border(node, &ctx.theme, "Menu", &menu_resp.response, true))
+    let base_border = ctx.inherited_border
         .unwrap_or_else(|| crate::border::get_border(node, &ctx.theme, "Menu"));
+    let border = if base_border.is_visible() {
+        let resp = &menu_resp.response;
+        if resp.is_pointer_button_down_on() {
+            crate::border::apply_state_border(node, &ctx.theme, "Menu", "click", &base_border)
+        } else if resp.has_focus() {
+            crate::border::apply_state_border(node, &ctx.theme, "Menu", "focus", &base_border)
+        } else if resp.hovered() {
+            crate::border::apply_state_border(node, &ctx.theme, "Menu", "hover", &base_border)
+        } else {
+            base_border
+        }
+    } else {
+        base_border
+    };
     if border.is_visible() {
-        let border_rounding = if rounding_val == 0 { egui::CornerRadius::ZERO } else { radius };
-        draw_border(ui, menu_resp.response.rect, border_rounding, &border);
+        draw_border(ui, menu_resp.response.rect, radius, &border);
     }
 
     {
