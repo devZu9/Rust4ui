@@ -110,40 +110,42 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     ctx.inherited_margin = inher_margin;
     ctx.inherited_padding = inher_padding;
 
-    if margin.top > 0 { ui.add_space(margin.top as f32); }
-
     let frame_resp = egui::Frame::new()
         .fill(bg)
         .corner_radius(rounding_cr)
         .inner_margin(padding)
         .show(ui, |ui| {
-            ui.horizontal(|ui| {
-                ui.style_mut().spacing.item_spacing = egui::Vec2::ZERO;
-                if margin.left > 0 { ui.add_space(margin.left as f32); }
-                for (i, child) in children.iter().enumerate() {
-                    if i > 0 && gap > 0.0 { ui.add_space(gap); }
-                    let child_cr = match i {
-                        0 => egui::CornerRadius { nw: inher_rounding_val, sw: inher_rounding_val, ..egui::CornerRadius::ZERO },
-                        i if i == children.len() - 1 => egui::CornerRadius { ne: inher_rounding_val, se: inher_rounding_val, ..egui::CornerRadius::ZERO },
-                        _ => egui::CornerRadius::ZERO,
-                    };
-                    ctx.inherited_rounding = Some(child_cr);
-                    if let Some(ch_m) = inher_margin {
-                        ui.vertical(|ui| {
-                            if ch_m.top > 0 { ui.add_space(ch_m.top as f32); }
-                            ui.horizontal(|ui| {
-                                if ch_m.left > 0 { ui.add_space(ch_m.left as f32); }
-                                super::super::renderer::render_node(ui, child, ctx);
-                                if ch_m.right > 0 { ui.add_space(ch_m.right as f32); }
+            ui.vertical(|ui| {
+                if margin.top > 0 { ui.add_space(margin.top as f32); }
+                ui.horizontal(|ui| {
+                    ui.style_mut().spacing.item_spacing = egui::Vec2::ZERO;
+                    if margin.left > 0 { ui.add_space(margin.left as f32); }
+                    for (i, child) in children.iter().enumerate() {
+                        if i > 0 && gap > 0.0 { ui.add_space(gap); }
+                        let child_cr = match i {
+                            0 => egui::CornerRadius { nw: inher_rounding_val, sw: inher_rounding_val, ..egui::CornerRadius::ZERO },
+                            i if i == children.len() - 1 => egui::CornerRadius { ne: inher_rounding_val, se: inher_rounding_val, ..egui::CornerRadius::ZERO },
+                            _ => egui::CornerRadius::ZERO,
+                        };
+                        ctx.inherited_rounding = Some(child_cr);
+                        if let Some(ch_m) = inher_margin {
+                            ui.vertical(|ui| {
+                                if ch_m.top > 0 { ui.add_space(ch_m.top as f32); }
+                                ui.horizontal(|ui| {
+                                    if ch_m.left > 0 { ui.add_space(ch_m.left as f32); }
+                                    super::super::renderer::render_node(ui, child, ctx);
+                                    if ch_m.right > 0 { ui.add_space(ch_m.right as f32); }
+                                });
+                                if ch_m.bottom > 0 { ui.add_space(ch_m.bottom as f32); }
                             });
-                            if ch_m.bottom > 0 { ui.add_space(ch_m.bottom as f32); }
-                        });
-                    } else {
-                        super::super::renderer::render_node(ui, child, ctx);
+                        } else {
+                            super::super::renderer::render_node(ui, child, ctx);
+                        }
+                        ctx.inherited_rounding = prev_rounding;
                     }
-                    ctx.inherited_rounding = prev_rounding;
-                }
-                if margin.right > 0 { ui.add_space(margin.right as f32); }
+                    if margin.right > 0 { ui.add_space(margin.right as f32); }
+                });
+                if margin.bottom > 0 { ui.add_space(margin.bottom as f32); }
             });
         });
 
@@ -153,8 +155,6 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     for (brect, bradius, bstyle) in ctx.pending_borders.drain(..) {
         crate::border::draw_border(ui, brect, bradius, &bstyle);
     }
-
-    if margin.bottom > 0 { ui.add_space(margin.bottom as f32); }
 
     ctx.inherited_bg = prev_bg;
     ctx.inherited_color = prev_color;
