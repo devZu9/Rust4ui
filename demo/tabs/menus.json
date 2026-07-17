@@ -38,11 +38,13 @@
  	      "padding": 0,
 	      "padding_children": [15, 25],
 	      "margin_children": [0],
-	      "margin": 5,
+	      "margin": 0,
 	      "color_children": "#022",
 	      "color_click_children": "#FFF",
-	//      "border_hover_children": [5, "F7F", 1, "dot", 2],
-	      "border_position_children": "inside",
+	      "border": [3, "$like", 1, "dot", 2],
+        "border_position": "center",
+	      "border_hover_children": [5, "#F7F", 1, "dot", 2],
+        "border_position_children": "inside",
  	      "gap": 0,
 
               "children": [

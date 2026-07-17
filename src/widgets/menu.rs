@@ -88,10 +88,10 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .or_else(|| ctx.theme.w_color_opt("Menu", "color_click_children"));
     let inher_margin = node.get("margin_children").and_then(crate::renderer::parse_padding);
     let inher_padding = node.get("padding_children").and_then(crate::renderer::parse_padding);
-    let inher_border = node.get("border_children").map(|bv| crate::border::get_border(&serde_json::json!({"border": bv}), &ctx.theme, "Menu"));
-    let inher_border_hover = node.get("border_hover_children").map(|bv| crate::border::get_border(&serde_json::json!({"border": bv}), &ctx.theme, "Menu"));
-    let inher_border_click = node.get("border_click_children").map(|bv| crate::border::get_border(&serde_json::json!({"border": bv}), &ctx.theme, "Menu"));
-    let inher_border_focus = node.get("border_focus_children").map(|bv| crate::border::get_border(&serde_json::json!({"border": bv}), &ctx.theme, "Menu"));
+    let inher_border = node.get("border_children").map(|bv| crate::border::get_border(&serde_json::json!({"border": bv}), &ctx.theme, "Menu")).or_else(|| ctx.inherited_border);
+    let inher_border_hover = node.get("border_hover_children").map(|bv| crate::border::get_border(&serde_json::json!({"border": bv}), &ctx.theme, "Menu")).or_else(|| ctx.inherited_border_hover);
+    let inher_border_click = node.get("border_click_children").map(|bv| crate::border::get_border(&serde_json::json!({"border": bv}), &ctx.theme, "Menu")).or_else(|| ctx.inherited_border_click);
+    let inher_border_focus = node.get("border_focus_children").map(|bv| crate::border::get_border(&serde_json::json!({"border": bv}), &ctx.theme, "Menu")).or_else(|| ctx.inherited_border_focus);
 
     // Save/restore ctx
     let prev = (
