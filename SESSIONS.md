@@ -2,57 +2,35 @@
 
 > Правила оформления — в `.opencode/skills/session-log/SKILL.md`
 
-## Сессия 17.07 — Универсальный _hover/_click/_focus + _children механизм
-
-- 2026-07-17 (10:00) - начата
-- 2026-07-17 (16:30) - завершена
-
----
-
-### Цель
-Заменить ручной per-атрибутный код для `_hover`/`_click`/`_focus` и `_children` на универсальный механизм, работающий для ЛЮБОГО атрибута без дополнительного кода.
-
-### Что сделано
-
-- [x] **RenderCtx: `inherited: HashMap<String, Value>`** вместо 14 отдельных полей `inherited_bg`, `inherited_bg_hover` и т.д. Теперь любой атрибут (`foobar`) с `_children` суффиксом автоматом ложится в `ctx.inherited["foobar"]`.
-- [x] **`inherit_children()`** — drain всех текущих inherited → clear → apply только `_children` из текущего узла. Каждый уровень изолирован. Исправлено после того, как выяснилось, что рестор не чистил лишние ключи.
-- [x] **`restore_children()`** — clear + insert только из снапшота. Без этого ключи MenuBar просачивались на Label/Button за пределами Menu.
-- [x] **`resolve_state_attr()`** — универсальная функция чтения атрибута с полной цепочкой: `node[hover] → inherited[hover] → theme[hover] → node → inherited → theme → default`. Работает с любым типом через `parse`-замыкание.
-- [x] **`ctx.get_border()`** — обогащает node из `ctx.inherited` для border-суб-атрибутов. Решает проблему `border_position_children`.
-
-### menu_bar.rs — рефакторинг
-- [x] Убрана ручная обработка 30+ атрибутов (`background_children`, `color_hover_children`, `icon_children` и т.д.) — заменена на `inherit_children(node)` / `restore_children(old)`.
-- [x] `rounding_children` теперь хранится как массив `[nw, ne, sw, se]`, а не одно число. Первый и последний Menu получают per-corner скругление.
-
-### menu.rs — рефакторинг
-- [x] Ручные цепочки `bg/bg_hover/bg_click` → `resolve_state_attr()`.
-- [x] Ручные icon/icon_position/icon_gap → `resolve_state_attr()`.
-- [x] Порядок: layout → resolve_state_attr (читает от MenuBar) → inherit_children (свои _children) → popup → restore_children. Исправлено после того, как выяснилось, что Menu не видел background_children от MenuBar.
-
-### menu_item.rs
-- [x] Читает `ctx.inherited["margin"]`, `ctx.inherited["padding"]`, `ctx.inherited["background"]`, `ctx.inherited["color"]` через HashMap.
-
-### base.rs
-- [x] `widget_base()` / `widget_base_wrap()` принимают `&HashMap<String, Value>` вместо `Option<Color32>`. Теперь все виджеты (Button, Checkbox, Label и т.д.) поддерживают наследование через `ctx.inherited`.
-
-### border.rs
-- [x] `Default` для `BorderStyle`, `BorderType`, `BorderPosition` — убран хардкод пустого бордера в menu.rs.
-
-### Исправленные баги
-- [x] **`border_position_children` не работал** — `menu.rs` захардкодил `node.get("border_position")` без fallback на `ctx.inherited`. Исправлено через `ctx.get_border()`.
-- [x] **`inherit_children` протекал глубже одного уровня** — MenuBar's `background_children` доходил до Label/Button.
-- [x] **Menu не видел `background_children` от MenuBar** — `inherit_children` очищал HashMap до resolve_state_attr.
-- [x] **`rounding_children` делал все 4 угла одинаковыми** — хранилось `f64`, читалось как `CornerRadius::same()`. Исправлено: массив `[nw, ne, sw, se]`.
-
-### ROADMAP
-- [x] Добавлен пункт «Отключение сторон бордюра» в v0.5.
-
----
+## Сессия 16.07 — MenuBar: _children, state-атрибуты, border-fix, универсальный механизм _hover/_click/_focus + _children
 
 - 2026-07-16 (18:00) - начата
-- 2026-07-16 (23:59) - завершена
 
 ---
+
+### Новое в сессии (17.07)
+
+- [x] **RenderCtx: `inherited: HashMap<String, Value>`** вместо 14 отдельных полей inherited_bg, inherited_bg_hover и т.д. Любой атрибут с _children суффиксом автоматом ложится в ctx.inherited.
+- [x] **`inherit_children()`** — drain всех текущих inherited → clear → apply только _children из узла. Каждый уровень изолирован.
+- [x] **`restore_children()`** — clear + insert только из снапшота. Предотвращает протекание ключей на уровень глубже.
+- [x] **`resolve_state_attr()`** — универсальная функция чтения атрибута с цепочкой: node[state] → inherited[state] → theme[state] → node → inherited → theme → default.
+- [x] **`ctx.get_border()`** — обогащает node из inherited для всех border-суб-атрибутов. border_position_children/width/color/type/gap/seg_len работают автоматом.
+- [x] **menu_bar.rs** — ручная обработка 30+ атрибутов заменена на inherit_children/restore_children.
+- [x] **menu_bar.rs** — rounding_children хранится как массив [nw,ne,sw,se], а не одно f64.
+- [x] **menu.rs** — bg/bg_hover/bg_click/color/icon_position/icon_gap/border → resolve_state_attr.
+- [x] **menu.rs** — порядок: layout → resolve_state_attr → inherit_children → popup → restore_children. Исправлено протекание и невидимость background_children.
+- [x] **menu_item.rs** — читает inherited через HashMap.
+- [x] **base.rs** — widget_base/widget_base_wrap принимают &HashMap вместо Option<Color32>.
+- [x] **border.rs** — Default для BorderStyle, BorderType, BorderPosition.
+- [x] **Исправлено: `border_position_children` не работал** — menu.rs захардкодил node.get("border_position"). Исправлено через ctx.get_border().
+- [x] **Исправлено: `inherit_children` протекал глубже одного уровня** — MenuBar's background_children доходил до Label/Button.
+- [x] **Исправлено: Menu не видел `background_children` от MenuBar** — inherit_children очищал HashMap до resolve_state_attr.
+- [x] **Исправлено: `rounding_children` делал все 4 угла одинаковыми** — хранилось f64, читалось как CornerRadius::same(). Исправлено массивом [nw,ne,sw,se].
+- [x] **ROADMAP** — добавлен пункт «Отключение сторон бордюра» в v0.5.
+
+---
+
+### Ранее в сессии (16.07)
 
 - [ ] **IconBar anchor** — start/center/end
 - [ ] **Separator в IconBar** — разделитель между иконками
