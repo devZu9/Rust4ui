@@ -1,5 +1,39 @@
 # Changelog
 
+## [0.4.4] — 2026-07-17
+
+### Добавлено
+- **Универсальный механизм `_hover/_click/_focus`** — `resolve_state_attr()` в `renderer.rs`. Любой атрибут с постфиксом `_hover`, `_click`, `_focus` обрабатывается автоматом без per-виджетного кода. Цепочка: `node[state] → inherited[state] → theme[state] → node → inherited → theme → default`.
+- **Универсальный механизм `_children`** — `inherit_children()` / `restore_children()` в `RenderCtx`. Любой атрибут с суффиксом `_children` автоматически наследуется на один уровень вниз. Не нужно ручного кода под каждый атрибут.
+- **`RenderCtx.inherited: HashMap<String, Value>`** — единое хранилище вместо 14 отдельных полей `inherited_bg`, `inherited_bg_hover` и т.д.
+- **`border_position_children`** — теперь работает через `ctx.get_border()`, который обогащает node из `ctx.inherited` для всех border-суб-атрибутов.
+- **`border_width_children`, `border_color_children`, `border_type_children`, `border_gap_children`, `border_seg_len_children`** — все border-суб-атрибуты работают с _children.
+- **`icon_children`, `icon_position_children`, `icon_gap_children`** — наследование иконки через `ctx.inherited_icon`.
+- **`icon_position_hover/click/focus`, `icon_gap_hover/click/focus`** — state-зависимая позиция и отступ иконки (через универсальный `resolve_state_attr`).
+- **`Default` impl для `BorderStyle`, `BorderType`, `BorderPosition`** — убран хардкод пустого бордера.
+
+### Изменено
+- **`inherit_children()`** — теперь `drain()` всех inherited → `clear()` → вставка только `_children` из текущего узла. Каждый уровень полностью изолирован. Предотвращает протекание значений глубже одного уровня.
+- **`restore_children()`** — `clear()` + вставка только старых значений из снапшота. Ключи, добавленные `inherit_children`, не просачиваются мимо.
+- **`menu.rs`** — порядок: layout → resolve_state_attr (читает ctx.inherited от родителя) → inherit_children (свои _children) → popup → restore_children.
+- **`menu_bar.rs`** — `rounding_children` сохраняется как `[nw, ne, sw, se]` (массив 4 угла), а не одно число.
+- **`menu_bar.rs`** — вся ручная обработка `_children` (30+ строк) заменена на `inherit_children(node)` / `restore_children(old)`.
+- **`widget_base()` / `widget_base_wrap()`** — принимают `&HashMap<String, Value>` (вместо `Option<Color32>`), что даёт универсальное наследование любых атрибутов через `ctx.inherited`.
+- **`base.rs`** — `get_bg()` переведён на `resolve_state_attr()`.
+- **`main.rs`, `examples/demo.rs`** — обновлены под новую структуру RenderCtx.
+
+### Исправлено
+- **`border_position_children` не работал** — `menu.rs` захардкодил `node.get("border_position")` без fallback на `ctx.inherited`. Исправлено через `ctx.get_border()`, который обогащает node из inherited.
+- **`inherit_children` протекал глубже одного уровня** — `restore_children()` не чистил лишние ключи. Исправлено: полный `clear()` + вставка только снапшота.
+- **Menu не видел `background_children` от MenuBar** — `inherit_children(node)` вызывался ДО `resolve_state_attr`. Исправлено: порядок переставлен.
+- **`rounding_children` делал все 4 угла одинаковыми** — хранилось одно число, читалось как `CornerRadius::same()`. Исправлено: хранится массив `[nw, ne, sw, se]`.
+
+### Технический долг
+- `label.rs` — неиспользуемый `widget_border`
+- `panel.rs` — неиспользуемый `attr_str`
+- `spinner.rs` — неиспользуемый `attr_f64`
+- `checkbox.rs`, `hyperlink.rs`, `slider.rs` — неиспользуемые `resp`
+
 ## [0.4.3] — 2026-07-16
 
 ### Добавлено

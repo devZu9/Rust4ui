@@ -58,6 +58,20 @@ impl RenderCtx {
         }
     }
 
+    /// Получить BorderStyle для node, обогащая border-суб-атрибутами из inherited.
+    /// Позволяет border_position_children / border_width_children / border_color_children
+    /// и любым другим border_*_children работать автоматом через inherit_children.
+    pub fn get_border(&self, node: &serde_json::Value, widget: &str) -> crate::border::BorderStyle {
+        let mut n = node.clone();
+        for key in &["border_position", "border_width", "border_color",
+                       "border_type", "border_gap", "border_seg_len", "border_seg_cap"] {
+            if let Some(val) = self.inherited.get(*key) {
+                n[(*key).to_string()] = val.clone();
+            }
+        }
+        crate::border::get_border(&n, &self.theme, widget)
+    }
+
     pub fn color_from_attr(
         &self,
         attr: &serde_json::Value,

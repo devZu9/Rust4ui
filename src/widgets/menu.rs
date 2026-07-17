@@ -124,19 +124,19 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     }
 
     // Border (deferred)
-    let base_border = crate::border::get_border(node, &ctx.theme, "Menu");
+    let base_border = ctx.get_border(node, "Menu");
     let border = resolve_state_attr(
         node, &ctx.inherited, &resp, "border",
-        |v| Some(crate::border::get_border(
-            &serde_json::json!({"border": v, "border_position": node.get("border_position").cloned().unwrap_or(serde_json::Value::Null)}),
-            &ctx.theme, "Menu",
+        |v| Some(ctx.get_border(
+            &serde_json::json!({"border": v}),
+            "Menu",
         )),
         |k| {
             if k == "border" { return Some(base_border); }
             ctx.theme.widget.get("Menu").and_then(|w| w.get(k)).map(|bv| {
-                crate::border::get_border(
-                    &serde_json::json!({"border": bv, "border_position": node.get("border_position").cloned().unwrap_or(serde_json::Value::Null)}),
-                    &ctx.theme, "Menu",
+                ctx.get_border(
+                    &serde_json::json!({"border": bv}),
+                    "Menu",
                 )
             })
         },
