@@ -5,10 +5,11 @@
 ## Сессия 16.07 — MenuBar: _children, state-атрибуты, border-fix, универсальный механизм _hover/_click/_focus + _children
 
 - 2026-07-16 (18:00) - начата
+- 
 
 ---
 
-### Новое в сессии (17.07)
+
 
 - [x] **RenderCtx: `inherited: HashMap<String, Value>`** вместо 14 отдельных полей inherited_bg, inherited_bg_hover и т.д. Любой атрибут с _children суффиксом автоматом ложится в ctx.inherited.
 - [x] **`inherit_children()`** — drain всех текущих inherited → clear → apply только _children из узла. Каждый уровень изолирован.
@@ -28,17 +29,6 @@
 - [x] **Исправлено: `rounding_children` делал все 4 угла одинаковыми** — хранилось f64, читалось как CornerRadius::same(). Исправлено массивом [nw,ne,sw,se].
 - [x] **ROADMAP** — добавлен пункт «Отключение сторон бордюра» в v0.5.
 
----
-
-### Ранее в сессии (16.07)
-
-- [ ] **IconBar anchor** — start/center/end
-- [ ] **Separator в IconBar** — разделитель между иконками
-- [ ] **ScrollBar стилизация** — толщина, цвет, отступы
-- [ ] **ScrollArea: отступ текста от рамки**
-- [ ] **Slider, ComboBox, Tabs** — доделка дизайна
-- [ ] **Image, ProgressBar, DataTable** — новые виджеты
-- [x] **border: левая сторона dash/dot не рисовалась** — замыкание периметра в draw_pattern 🟢 *(16.07.2026)*
 - [x] **border: паника при rounding=0** — point_at_dist out of bounds 🟢 *(16.07.2026)*
 - [x] **MenuBar: _children система** — background/color/padding/margin/rounding + hover/click для детей 🟢 *(16.07.2026)*
 - [x] **MenuBar: gap, padding, margin, rounding** — все атрибуты корректно работают 🟢 *(16.07.2026)*

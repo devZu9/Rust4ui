@@ -156,10 +156,15 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     if resp.clicked() { is_open = !is_open; }
     if resp.hovered() && !is_open && prev_open.is_some() && prev_open.as_deref() != Some(&popup_key) {
+        if let Some(prev) = &prev_open {
+            ctx.state.set_bool(prev, false);
+        }
         is_open = true;
     }
     if is_open {
         ctx.open_popup_id = Some(popup_key.clone());
+    } else if ctx.open_popup_id.as_deref() == Some(&popup_key) {
+        ctx.open_popup_id = None;
     }
 
     ctx.state.set_bool(&popup_key, is_open);
@@ -184,7 +189,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
                     });
             });
 
-        if ar.response.clicked_elsewhere() {
+        // clicked_elsewhere — только если не было клика на этой же Menu (toggle уже обработал)
+        if !resp.clicked() && ar.response.clicked_elsewhere() {
             ctx.state.set_bool(&popup_key, false);
             ctx.open_popup_id = None;
         }
