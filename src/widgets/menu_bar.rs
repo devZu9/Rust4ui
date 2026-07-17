@@ -50,7 +50,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
                             i if i == children.len() - 1 => egui::CornerRadius { ne: inher_rounding_val, se: inher_rounding_val, ..egui::CornerRadius::ZERO },
                             _ => egui::CornerRadius::ZERO,
                         };
-                        ctx.inherited.insert("rounding".to_string(), serde_json::json!(child_cr.nw as f64));
+                        ctx.inherited.insert("rounding".to_string(), serde_json::json!([child_cr.nw, child_cr.ne, child_cr.sw, child_cr.se]));
 
                         let ch_m = ctx.inherited.get("margin").and_then(crate::renderer::parse_padding);
                         if let Some(ch_m) = ch_m {

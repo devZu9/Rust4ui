@@ -31,18 +31,16 @@ impl RenderCtx {
     }
 
     /// Применить все _children-атрибуты из node в self.inherited.
-    /// Возвращает `(prev, guard)`, где prev — старые значения для restore.
+    /// Сохраняет полный снапшот всех текущих inherited, затем очищает HashMap
+    /// и заполняет только _children-ключами из node. Гарантирует отсутствие
+    /// протекания значений на уровень глубже.
     pub fn inherit_children(&mut self, node: &serde_json::Value) -> Vec<(String, Option<serde_json::Value>)> {
-        let mut old = Vec::new();
-        let obj = match node.as_object() {
-            Some(o) => o,
-            None => return old,
-        };
-        for (key, val) in obj {
-            if let Some(base) = key.strip_suffix("_children") {
-                let prev = self.inherited.get(base).cloned();
-                self.inherited.insert(base.to_string(), val.clone());
-                old.push((base.to_string(), prev));
+        let old: Vec<_> = self.inherited.drain().map(|(k, v)| (k, Some(v))).collect();
+        if let Some(obj) = node.as_object() {
+            for (key, val) in obj {
+                if let Some(base) = key.strip_suffix("_children") {
+                    self.inherited.insert(base.to_string(), val.clone());
+                }
             }
         }
         old

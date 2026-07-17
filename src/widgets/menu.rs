@@ -33,7 +33,19 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .or_else(|| Some(ctx.theme.w_f64("Menu", "rounding", 4.0)))
         .unwrap_or(4.0) as u8;
     let radius = ctx.inherited.get("rounding")
-        .and_then(|v| v.as_f64().map(|f| egui::CornerRadius::same(f as u8)))
+        .and_then(|v| {
+            v.as_f64().map(|f| egui::CornerRadius::same(f as u8))
+                .or_else(|| v.as_array().and_then(|a| {
+                    if a.len() >= 4 {
+                        Some(egui::CornerRadius {
+                            nw: a[0].as_f64()? as u8,
+                            ne: a[1].as_f64()? as u8,
+                            sw: a[2].as_f64()? as u8,
+                            se: a[3].as_f64()? as u8,
+                        })
+                    } else { None }
+                }))
+        })
         .unwrap_or_else(|| egui::CornerRadius::same(rounding_val));
 
     let margin = get_margin(node, &ctx.theme, "Menu");
