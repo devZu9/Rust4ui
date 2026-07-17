@@ -41,15 +41,12 @@
 	      "color_children": "#022",
 	      "color_click_children": "#FFF",
  	      "gap": 0,
-	      "border_hover_children": [3, "#DFF", 1, "dash", 7, 5],
-	      "border_position_children": "outside",
-	      "border_position": "center",
+
               "children": [
                 {
                   "type": "Menu",
                    "text": "{{menu.file}}",
-		   "border_hover": [5, "#DFF", 1, "dash", 7, 5],
-		   "border_position": "outside",
+
                   "children": [
                     { 
 		    "type": "MenuItem", 

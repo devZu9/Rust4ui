@@ -127,18 +127,22 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         style.visuals.widgets.inactive.corner_radius = radius;
         style.visuals.widgets.inactive.fg_stroke = egui::Stroke::new(1.0, color);
         style.visuals.widgets.inactive.bg_stroke = egui::Stroke::NONE;
+        style.visuals.widgets.inactive.expansion = -1.0;
         style.visuals.widgets.hovered.weak_bg_fill = bg_hover;
         style.visuals.widgets.hovered.corner_radius = radius;
         style.visuals.widgets.hovered.fg_stroke = egui::Stroke::new(1.0, color_hover);
         style.visuals.widgets.hovered.bg_stroke = egui::Stroke::NONE;
+        style.visuals.widgets.hovered.expansion = -1.0;
         style.visuals.widgets.active.weak_bg_fill = bg_click;
         style.visuals.widgets.active.corner_radius = radius;
         style.visuals.widgets.active.fg_stroke = egui::Stroke::new(1.0, color_click);
         style.visuals.widgets.active.bg_stroke = egui::Stroke::NONE;
+        style.visuals.widgets.active.expansion = -1.0;
         style.visuals.widgets.open.weak_bg_fill = bg;
         style.visuals.widgets.open.corner_radius = radius;
         style.visuals.widgets.open.fg_stroke = egui::Stroke::new(1.0, color);
         style.visuals.widgets.open.bg_stroke = egui::Stroke::NONE;
+        style.visuals.widgets.open.expansion = -1.0;
         style.visuals.window_fill = bg;
         style.spacing.button_padding = egui::vec2(pad.left as f32, pad.top as f32);
         prev
