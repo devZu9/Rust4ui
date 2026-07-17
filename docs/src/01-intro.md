@@ -40,4 +40,4 @@
 - **Темы** — dark/light/dj_green, приоритет: атрибут виджета > тема > egui default
 - **Границы** — solid/dash/dot, с позицией inside/center/outside
 - **Тени** — offset, blur, color
-- **Hover/Click состояния** — per-widget и через тему
+- **Hover/Click/Focus состояния** — универсальные state-атрибуты через `resolve_state_attr()`

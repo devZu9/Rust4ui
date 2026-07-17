@@ -1,12 +1,59 @@
-# Hover/Click — состояния
+# Hover/Click/Focus — state-атрибуты
 
-## Per-widget состояния
+## Универсальный механизм
 
-Кнопки (`Button`, `IconButton`) поддерживают разные цвета и границы для состояний покоя, наведения и нажатия.
+Любой виджет поддерживает state-атрибуты с постфиксами `_hover`, `_click`, `_focus`.   
+Не только Button — а **любой**: Menu, MenuItem, Checkbox, TextField, Label, Column, Row и т.д.
 
-## Button
+```json
+{
+  "type": "Button",
+  "text": "Наведи",
+  "background": "#303030",
+  "background_hover": "#505060",
+  "background_click": "#606080",
+  "background_focus": "#334466",
+  "color_hover": "#FFFFFF",
+  "color_click": "#CCCCFF",
+  "border_hover": [3, "#FF0", "dot", 4, 1]
+}
+```
 
-### Атрибуты на виджете
+### Как это работает
+
+Внутри один вызов `resolve_state_attr()` из `src/renderer.rs`:
+
+```
+node["key_hover"] → inherited["key_hover"] → theme["key_hover"] →
+node["key"]       → inherited["key"]       → theme["key"]       → default
+```
+
+Тип атрибута может быть любым: цвет, число, строка, массив, Margin, Shadow, BorderStyle — `resolve_state_attr` принимает generic `parse`-замыкание.
+
+### Приоритет state
+
+**`click > focus > hover > base`** — нажатие перекрывает фокус, фокус перекрывает наведение.
+
+### State и `_children`
+
+State-атрибуты работают с наследованием `_children`:
+
+```json
+{
+  "type": "MenuBar",
+  "background_hover_children": "#87F",
+  "background_click_children": "#77F",
+  "color_hover_children": "#FFF"
+}
+```
+
+Подробнее: [MenuBar наследование _children](15-menu-children.md).
+
+---
+
+## Атрибуты виджетов
+
+### Button
 
 ```json
 {
@@ -21,34 +68,48 @@
 }
 ```
 
-| Атрибут | По умолчанию | Описание |
-|---------|-------------|----------|
-| `fill` | #303030 | Цвет фона в покое |
-| `hover_fill` | #444455 | Цвет фона при наведении |
-| `hover_color` | =color | Цвет текста при наведении |
-| `click_fill` | =hover_fill | Цвет фона при нажатии |
-| `click_color` | =color | Цвет текста при нажатии |
-| `color` | #E0E0E0 | Цвет текста/иконки в покое |
-| `border_hover` | массив | Граница при наведении (тот же формат, что `border`) |
+| Атрибут | Дефолт | Описание |
+|---------|--------|----------|
+| `background` | #303030 | Фон в покое |
+| `background_hover` | =background | Фон при наведении |
+| `background_click` | =background_hover | Фон при нажатии |
+| `background_focus` | =background | Фон при фокусе |
+| `color` | #E0E0E0 | Цвет текста в покое |
+| `color_hover` | =color | Цвет текста при наведении |
+| `color_click` | =color | Цвет текста при нажатии |
+| `color_text` | =color | Цвет текста (alias) |
+| `color_text_hover` | =color_text | Цвет текста при наведении |
+| `color_text_click` | =color_text | Цвет текста при нажатии |
+| `border` | массив | Граница в покое |
+| `border_hover` | массив | Граница при наведении |
 | `border_click` | массив | Граница при нажатии |
+| `border_focus` | массив | Граница при фокусе |
+| `align` | "center" | Выравнивание в покое |
+| `align_hover` | =align | Выравнивание при наведении |
+| `align_click` | =align | Выравнивание при нажатии |
+| `padding` | [16, 4] | Отступ в покое |
+| `padding_hover` | =padding | Отступ при наведении |
+| `padding_click` | =padding | Отступ при нажатии |
+| `margin` | 0 | Внешний отступ |
+| `margin_hover` | =margin | Отступ при наведении |
+| `margin_click` | =margin | Отступ при нажатии |
+| `shadow_background` | массив | Тень фона |
+| `shadow_background_hover` | массив | Тень фона при наведении |
+| `shadow_background_click` | массив | Тень фона при нажатии |
+| `shadow_border` | массив | Тень рамки |
+| `shadow_border_hover` | массив | Тень рамки при наведении |
+| `shadow_border_click` | массив | Тень рамки при нажатии |
+| `shadow_content` | массив | Тень контента |
+| `shadow_content_hover` | массив | Тень контента при наведении |
+| `shadow_content_click` | массив | Тень контента при нажатии |
+| `shadow_icon` | массив | Тень иконки |
+| `shadow_icon_hover` | массив | Тень иконки при наведении |
+| `shadow_icon_click` | массив | Тень иконки при нажатии |
+| `shadow_text` | массив | Тень текста |
+| `shadow_text_hover` | массив | Тень текста при наведении |
+| `shadow_text_click` | массив | Тень текста при нажатии |
 
-### Логика выбора цвета
-
-```rust
-if hovered && pressed {
-    // click_fill / click_color / border_click
-} else if hovered {
-    // hover_fill / hover_color / border_hover
-} else if has_focus {
-    // focus_fill
-} else {
-    // fill / color / border
-}
-```
-
-Для текста/иконки и границы аналогично.
-
-## IconButton
+### IconButton
 
 ```json
 {
@@ -63,32 +124,47 @@ if hovered && pressed {
 }
 ```
 
-| Атрибут | По умолчанию | Описание |
-|---------|-------------|----------|
-| `hover_fill` | rgba(68,68,85,0.25) | Цвет фона при наведении |
-| `click_fill` | =hover_fill | Цвет фона при нажатии |
-| `hover_color` | =color | Цвет иконки при наведении |
-| `click_color` | =color | Цвет иконки при нажатии |
+| Атрибут | Дефолт | Описание |
+|---------|--------|----------|
+| `background` | transparent | Фон в покое |
+| `background_hover` | rgba(68,68,85,0.25) | Фон при наведении |
+| `background_click` | =hover | Фон при нажатии |
+| `background_focus` | =background | Фон при фокусе |
+| `color` | #CCCCCC | Цвет иконки в покое |
+| `color_hover` | =color | Цвет иконки при наведении |
+| `color_click` | =color | Цвет иконки при нажатии |
+| `color_focus` | =color | Цвет иконки при фокусе |
+| `icon_size` | 14 | Размер иконки |
+| `icon_size_hover` | =icon_size | Размер иконки при наведении |
+| `icon_size_click` | =icon_size | Размер иконки при нажатии |
+| `border` | массив | Граница в покое |
 | `border_hover` | массив | Граница при наведении |
 | `border_click` | массив | Граница при нажатии |
-| `shadow_background_hover` | массив | Тень фона при наведении |
-| `shadow_background_click` | массив | Тень фона при нажатии |
-| `shadow_border_hover` | массив | Тень рамки при наведении |
-| `shadow_border_click` | массив | Тень рамки при нажатии |
-| `shadow_content_hover` | массив | Тень контента при наведении (Button) |
-| `shadow_content_click` | массив | Тень контента при нажатии (Button) |
-| `shadow_icon_hover` | массив | Тень иконки при наведении (Button, IconButton) |
-| `shadow_icon_click` | массив | Тень иконки при нажатии (Button, IconButton) |
-| `shadow_text_hover` | массив | Тень текста при наведении (Button) |
-| `shadow_text_click` | массив | Тень текста при нажатии (Button) |
-| `border_focus` | массив | Граница при фокусе (TextField) |
-| `background_focus` | string/array | Цвет фона при фокусе (TextField) |
+| `border_focus` | массив | Граница при фокусе |
+| (тени) | | Все shadow_* варианты, как в Button |
 
-У `IconButton` фон прозрачный (`TRANSPARENT`) в покое, и меняется только при наведении/нажатии. Иконка перерисовывается поверх фона.
+### Другие виджеты
+
+Все виджеты, проходящие через `widget_base()` (TextField, Checkbox, RadioGroup, Label, Slider, ComboBox, Separator, Spacer и т.д.), поддерживают те же базовые state-атрибуты:
+
+| Атрибут | Описание |
+|---------|----------|
+| `background_hover` | Фон при наведении |
+| `background_click` | Фон при нажатии |
+| `background_focus` | Фон при фокусе |
+| `border_hover` | Граница при наведении |
+| `border_click` | Граница при нажатии |
+| `border_focus` | Граница при фокусе |
+| `padding_hover` | Отступ при наведении |
+| `padding_click` | Отступ при нажатии |
+| `shadow_background_hover` | Тень фона при наведении |
+| `shadow_border_hover` | Тень рамки при наведении |
+
+---
 
 ## Тематические defaults
 
-В `theme.json` можно задать дефолтные цвета для всех кнопок:
+В `theme.json` можно задать дефолтные значения для всех кнопок:
 
 ```json
 {
@@ -115,24 +191,43 @@ if hovered && pressed {
 }
 ```
 
-## Приоритет
+### Приоритет разрешения
 
-1. Атрибут на узле (`"background_hover": "#FF0000"`)
-2. Тема виджета (`theme.widget["Button"]["background_hover"]`)
-3. Дефолт темы (встроенный)
+1. Атрибут на JSON-узле (`"background_hover": "#FF0000"`)
+2. `ctx.inherited` (от `_children` родителя)
+3. Тема виджета (`theme.widget["Button"]["background_hover"]`)
+4. Дефолт в коде
 
-Все state-атрибуты (`hover_*`, `click_*`, `focus_*`) опциональны — если не указаны, используется значение покоя (`fill`, `color`, `border`, `shadow_background`).
+Все state-атрибуты опциональны — если не указаны, используется базовое значение.
 
-State-тени (`shadow_background`, `shadow_border`, `shadow_content`, `shadow_icon`, `shadow_text`) также поддерживают `_hover`, `_click`, `_focus`.
-
-**Приоритет state**: `click > focus > hover > base` — клик перекрывает фокус, фокус перекрывает ховер.
+---
 
 ## Отключённое состояние
 
-Если `enabled: false`, кнопка рендерится серым цветом:
+Если `enabled: false`, виджет рендерится серым:
 - Фон: `Color32::from_gray(60)`
 - Текст/иконка: `Color32::from_gray(100)`
 - State-атрибуты игнорируются
+
+---
+
+## Логика выбора цвета (для справки)
+
+```rust
+if resp.is_pointer_button_down_on() {
+    // _click → _focus
+} else if resp.has_focus() {
+    // _focus
+} else if resp.hovered() {
+    // _hover
+} else {
+    // base
+}
+```
+
+Этот код живёт в `resolve_state_attr()` в `src/renderer.rs` единожды, не дублируется в виджетах.
+
+---
 
 ## Примеры
 
