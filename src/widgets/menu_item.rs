@@ -1,4 +1,4 @@
-use crate::renderer::{attr_f64, attr_str, resolve_text, RenderCtx};
+use crate::renderer::{attr_f64, attr_str, get_margin, get_padding, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
     let action = attr_str(node, "action");
@@ -58,9 +58,9 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let csize = galley.size();
 
     let inherited_margin = ctx.inherited.get("margin").and_then(crate::renderer::parse_padding);
-    let margin = inherited_margin.unwrap_or(egui::Margin::ZERO);
-    let inherited_pad = ctx.inherited.get("padding").and_then(crate::renderer::parse_padding);
-    let pad = inherited_pad.unwrap_or(egui::Margin::ZERO);
+    let margin = inherited_margin.unwrap_or_else(|| get_margin(node, &ctx.theme, "MenuItem"));
+    let default_pad = ctx.inherited.get("padding").and_then(crate::renderer::parse_padding).unwrap_or(egui::Margin::ZERO);
+    let pad = get_padding(node, &ctx.theme, "MenuItem", default_pad);
 
     if margin.top > 0 { ui.add_space(margin.top as f32); }
 
