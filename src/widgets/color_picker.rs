@@ -19,7 +19,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let (_, _) = crate::widgets::base::widget_base_wrap(
         ui, node, &ctx.theme, "ColorPicker",
         egui::vec2(160.0, 24.0), egui::Sense::click(), true,
-        egui::Color32::TRANSPARENT, 4.0, egui::Margin::ZERO, None,
+        egui::Color32::TRANSPARENT, 4.0, egui::Margin::ZERO, &ctx.inherited,
         |ui| {
             let new_color = if alpha {
                 let mut rgba = [

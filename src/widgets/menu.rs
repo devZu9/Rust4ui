@@ -1,19 +1,22 @@
-use crate::renderer::{attr_f64, attr_str, get_margin, get_padding, resolve_text, RenderCtx};
+use crate::renderer::{attr_f64, attr_str, get_margin, get_padding, resolve_state_attr, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
     let raw_text = attr_str(node, "text").unwrap_or("");
-    let inher_icon = &ctx.inherited_icon;
 
-    let icon_name = attr_str(node, "icon")
-        .or_else(|| inher_icon.as_ref().map(|i| i.name.as_str()));
-    let icon_position = attr_str(node, "icon_position")
-        .or_else(|| inher_icon.as_ref().map(|i| i.position.as_str()))
-        .unwrap_or("left");
-    let icon_gap = attr_f64(node, "icon_gap")
-        .or_else(|| inher_icon.as_ref().map(|i| i.gap as f64))
+    // Base icon attrs (no state — used for layout sizing before Response exists)
+    let icon_name_base = attr_str(node, "icon")
+        .or_else(|| ctx.inherited.get("icon").and_then(|v| v.as_str()))
+        .map(|s| s.to_string());
+    let icon_pos_base = ctx.inherited.get("icon_position")
+        .and_then(|v| v.as_str().map(|s| s.to_owned()))
+        .or_else(|| attr_str(node, "icon_position").map(|s| s.to_owned()))
+        .unwrap_or_else(|| "left".to_owned());
+    let icon_gap_base = ctx.inherited.get("icon_gap")
+        .and_then(|v| v.as_f64())
+        .or_else(|| attr_f64(node, "icon_gap"))
         .unwrap_or(6.0) as f32;
 
-    let text = if raw_text.is_empty() && icon_name.is_some() {
+    let text = if raw_text.is_empty() && icon_name_base.is_some() {
         String::new()
     } else if raw_text.is_empty() {
         "{{menu}}".to_string()
@@ -21,103 +24,35 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         resolve_text(raw_text, ctx)
     };
 
-    let icon_glyph = icon_name.and_then(|n| ctx.icons.resolve(n));
+    let icon_glyph = icon_name_base.as_deref()
+        .and_then(|n| ctx.icons.resolve(n))
+        .map(|s| s.to_string());
     let has_icon = icon_glyph.is_some();
-
-    let bg = node
-        .get("background")
-        .and_then(crate::theme::parse_color_value)
-        .or_else(|| ctx.inherited_bg)
-        .or_else(|| ctx.theme.w_color_opt("Menu", "background"))
-        .unwrap_or_else(|| egui::Color32::from_rgb(0x2A, 0x2A, 0x33));
-
-    let bg_hover = node
-        .get("background_hover")
-        .and_then(crate::theme::parse_color_value)
-        .or_else(|| ctx.inherited_bg_hover)
-        .or_else(|| ctx.theme.w_color_opt("Menu", "background_hover"))
-        .unwrap_or(bg);
-
-    let bg_click = node
-        .get("background_click")
-        .and_then(crate::theme::parse_color_value)
-        .or_else(|| ctx.inherited_bg_click)
-        .or_else(|| ctx.theme.w_color_opt("Menu", "background_click"))
-        .unwrap_or(bg_hover);
-
-    let color = node
-        .get("color")
-        .and_then(crate::theme::parse_color_value)
-        .or_else(|| ctx.inherited_color)
-        .or_else(|| ctx.theme.w_color_opt("Menu", "color"))
-        .unwrap_or_else(|| egui::Color32::from_gray(220));
-
-    let color_hover = node
-        .get("color_hover")
-        .and_then(crate::theme::parse_color_value)
-        .or_else(|| ctx.inherited_color_hover)
-        .or_else(|| ctx.theme.w_color_opt("Menu", "color_hover"))
-        .unwrap_or(color);
-
-    let color_click = node
-        .get("color_click")
-        .and_then(crate::theme::parse_color_value)
-        .or_else(|| ctx.inherited_color_click)
-        .or_else(|| ctx.theme.w_color_opt("Menu", "color_click"))
-        .unwrap_or(color_hover);
 
     let rounding_val = attr_f64(node, "rounding")
         .or_else(|| Some(ctx.theme.w_f64("Menu", "rounding", 4.0)))
         .unwrap_or(4.0) as u8;
-    let radius = ctx.inherited_rounding
+    let radius = ctx.inherited.get("rounding")
+        .and_then(|v| v.as_f64().map(|f| egui::CornerRadius::same(f as u8)))
         .unwrap_or_else(|| egui::CornerRadius::same(rounding_val));
 
     let margin = get_margin(node, &ctx.theme, "Menu");
-    let pad = get_padding(node, &ctx.theme, "Menu", ctx.inherited_padding.unwrap_or(egui::Margin::ZERO));
+    let inherited_pad = ctx.inherited.get("padding").and_then(crate::renderer::parse_padding);
+    let inherited_pad_val = inherited_pad.unwrap_or(egui::Margin::ZERO);
+    let pad = get_padding(node, &ctx.theme, "Menu", inherited_pad_val);
 
-    // inher_* для children
-    let inher_bg = node.get("background_children").and_then(crate::theme::parse_color_value)
-        .or_else(|| ctx.theme.w_color_opt("Menu", "background_children"));
-    let inher_color = node.get("color_children").and_then(crate::theme::parse_color_value)
-        .or_else(|| ctx.theme.w_color_opt("Menu", "color_children"));
-    let inher_bg_hover = node.get("background_hover_children").and_then(crate::theme::parse_color_value)
-        .or_else(|| ctx.theme.w_color_opt("Menu", "background_hover_children"));
-    let inher_bg_click = node.get("background_click_children").and_then(crate::theme::parse_color_value)
-        .or_else(|| ctx.theme.w_color_opt("Menu", "background_click_children"));
-    let inher_color_hover = node.get("color_hover_children").and_then(crate::theme::parse_color_value)
-        .or_else(|| ctx.theme.w_color_opt("Menu", "color_hover_children"));
-    let inher_color_click = node.get("color_click_children").and_then(crate::theme::parse_color_value)
-        .or_else(|| ctx.theme.w_color_opt("Menu", "color_click_children"));
-    let inher_margin = node.get("margin_children").and_then(crate::renderer::parse_padding);
-    let inher_padding = node.get("padding_children").and_then(crate::renderer::parse_padding);
-    let inher_border = node.get("border_children").map(|bv| crate::border::get_border(&serde_json::json!({"border": bv}), &ctx.theme, "Menu")).or_else(|| ctx.inherited_border);
-    let inher_border_hover = node.get("border_hover_children").map(|bv| crate::border::get_border(&serde_json::json!({"border": bv}), &ctx.theme, "Menu")).or_else(|| ctx.inherited_border_hover);
-    let inher_border_click = node.get("border_click_children").map(|bv| crate::border::get_border(&serde_json::json!({"border": bv}), &ctx.theme, "Menu")).or_else(|| ctx.inherited_border_click);
-    let inher_border_focus = node.get("border_focus_children").map(|bv| crate::border::get_border(&serde_json::json!({"border": bv}), &ctx.theme, "Menu")).or_else(|| ctx.inherited_border_focus);
+    // Inherit _children for children (save/restore around children rendering)
+    let old = ctx.inherit_children(node);
 
-    // Save/restore ctx
-    let prev = (
-        ctx.inherited_bg.take(), ctx.inherited_color.take(),
-        ctx.inherited_bg_hover.take(), ctx.inherited_bg_click.take(),
-        ctx.inherited_color_hover.take(), ctx.inherited_color_click.take(),
-        ctx.inherited_margin.take(), ctx.inherited_padding.take(),
-        ctx.inherited_border.take(), ctx.inherited_border_hover.take(),
-        ctx.inherited_border_click.take(), ctx.inherited_border_focus.take(),
-    );
-    ctx.inherited_bg = inher_bg; ctx.inherited_color = inher_color;
-    ctx.inherited_bg_hover = inher_bg_hover; ctx.inherited_bg_click = inher_bg_click;
-    ctx.inherited_color_hover = inher_color_hover; ctx.inherited_color_click = inher_color_click;
-    ctx.inherited_margin = inher_margin; ctx.inherited_padding = inher_padding;
-    ctx.inherited_border = inher_border; ctx.inherited_border_hover = inher_border_hover;
-    ctx.inherited_border_click = inher_border_click; ctx.inherited_border_focus = inher_border_focus;
-
+    // Layout (placeholder color — actual color resolved after Response)
+    let placeholder_color = egui::Color32::from_gray(220);
     let font_id = egui::FontId::proportional(14.0);
-    let text_galley = ui.painter().layout_no_wrap(text.clone(), font_id.clone(), color);
-    let icon_galley = has_icon.then(|| ui.painter().layout_no_wrap(icon_glyph.unwrap().to_string(), font_id, color));
+    let text_galley = ui.painter().layout_no_wrap(text.clone(), font_id.clone(), placeholder_color);
+    let icon_galley = has_icon.then(|| ui.painter().layout_no_wrap(icon_glyph.unwrap().to_string(), font_id, placeholder_color));
     let icon_w = icon_galley.as_ref().map_or(0.0, |g| g.size().x);
     let text_w = text_galley.size().x;
-    let gap_w = if has_icon && text_w > 0.0 { icon_gap } else { 0.0 };
-    let content_w = if icon_position == "right" { text_w + gap_w + icon_w } else { icon_w + gap_w + text_w };
+    let gap_w = if has_icon && text_w > 0.0 { icon_gap_base } else { 0.0 };
+    let content_w = if icon_pos_base == "right" { text_w + gap_w + icon_w } else { icon_w + gap_w + text_w };
     let content_h = icon_galley.as_ref().map_or(text_galley.size().y, |g| text_galley.size().y.max(g.size().y));
     let (p_l, p_r, p_t, p_b) = (pad.left as f32, pad.right as f32, pad.top as f32, pad.bottom as f32);
     let (m_l, m_r, m_t, m_b) = (margin.left as f32, margin.right as f32, margin.top as f32, margin.bottom as f32);
@@ -128,10 +63,33 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let (rect, resp) = ui.allocate_exact_size(egui::vec2(total_w, total_h), egui::Sense::click());
     if m_b > 0.0 { ui.add_space(m_b); }
 
-    let bg_actual = if resp.is_pointer_button_down_on() { bg_click }
-        else if resp.hovered() { bg_hover } else { bg };
-    let color_actual = if resp.is_pointer_button_down_on() { color_click }
-        else if resp.hovered() { color_hover } else { color };
+    // State-dependent values with real Response
+    let bg_actual = resolve_state_attr(
+        node, &ctx.inherited, &resp, "background",
+        crate::theme::parse_color_value,
+        |k| ctx.theme.w_color_opt("Menu", k),
+        egui::Color32::from_rgb(0x2A, 0x2A, 0x33),
+    );
+    let color_actual = resolve_state_attr(
+        node, &ctx.inherited, &resp, "color",
+        crate::theme::parse_color_value,
+        |k| ctx.theme.w_color_opt("Menu", k),
+        egui::Color32::from_gray(220),
+    );
+    let icon_pos = resolve_state_attr(
+        node, &ctx.inherited, &resp, "icon_position",
+        |v| Some(v.as_str().unwrap_or(&icon_pos_base).to_string()),
+        |k| None,
+        icon_pos_base.to_string(),
+    );
+    let icon_gap_actual = resolve_state_attr(
+        node, &ctx.inherited, &resp, "icon_gap",
+        |v| v.as_f64().map(|n| n as f32),
+        |k| None,
+        icon_gap_base,
+    );
+    let gap_w_actual = if has_icon && text_w > 0.0 { icon_gap_actual } else { 0.0 };
+
     let content_rect = egui::Rect::from_min_max(
         egui::pos2(rect.min.x + m_l, rect.min.y + m_t),
         egui::pos2(rect.max.x - m_r, rect.max.y - m_b),
@@ -145,10 +103,10 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let text_pos_x = egui::Align::Center.align_size_within_range(content_w, inner_rect.x_range()).min;
     let text_y = egui::Align::Center.align_size_within_range(content_h, inner_rect.y_range()).min;
     if let Some(ig) = &icon_galley {
-        let (ix, tx) = if icon_position == "right" {
-            (text_pos_x + text_w + gap_w, text_pos_x)
+        let (ix, tx) = if icon_pos == "right" {
+            (text_pos_x + text_w + gap_w_actual, text_pos_x)
         } else {
-            (text_pos_x, text_pos_x + icon_w + gap_w)
+            (text_pos_x, text_pos_x + icon_w + gap_w_actual)
         };
         ui.painter().galley_with_override_text_color(egui::pos2(ix, text_y), ig.clone(), color_actual);
         ui.painter().galley_with_override_text_color(egui::pos2(tx, text_y), text_galley, color_actual);
@@ -157,15 +115,24 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     }
 
     // Border (deferred)
-    let base_border = ctx.inherited_border.unwrap_or_else(|| crate::border::get_border(node, &ctx.theme, "Menu"));
-    let p = |s: &str, inh: Option<crate::border::BorderStyle>| {
-        if node.get(&format!("border_{}", s)).is_some() {
-            crate::border::apply_state_border(node, &ctx.theme, "Menu", s, &base_border)
-        } else if let Some(b) = inh { b } else { base_border }
-    };
-    let border = if resp.is_pointer_button_down_on() { p("click", ctx.inherited_border_click) }
-        else if resp.has_focus() { p("focus", ctx.inherited_border_focus) }
-        else if resp.hovered() { p("hover", ctx.inherited_border_hover) } else { base_border };
+    let base_border = crate::border::get_border(node, &ctx.theme, "Menu");
+    let border = resolve_state_attr(
+        node, &ctx.inherited, &resp, "border",
+        |v| Some(crate::border::get_border(
+            &serde_json::json!({"border": v, "border_position": node.get("border_position").cloned().unwrap_or(serde_json::Value::Null)}),
+            &ctx.theme, "Menu",
+        )),
+        |k| {
+            if k == "border" { return Some(base_border); }
+            ctx.theme.widget.get("Menu").and_then(|w| w.get(k)).map(|bv| {
+                crate::border::get_border(
+                    &serde_json::json!({"border": bv, "border_position": node.get("border_position").cloned().unwrap_or(serde_json::Value::Null)}),
+                    &ctx.theme, "Menu",
+                )
+            })
+        },
+        crate::border::BorderStyle::default(),
+    );
     if border.is_visible() {
         ctx.pending_borders.push((content_rect, radius, border));
     }
@@ -211,13 +178,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         }
     }
 
-    // Restore ctx
-    ctx.inherited_bg = prev.0; ctx.inherited_color = prev.1;
-    ctx.inherited_bg_hover = prev.2; ctx.inherited_bg_click = prev.3;
-    ctx.inherited_color_hover = prev.4; ctx.inherited_color_click = prev.5;
-    ctx.inherited_margin = prev.6; ctx.inherited_padding = prev.7;
-    ctx.inherited_border = prev.8; ctx.inherited_border_hover = prev.9;
-    ctx.inherited_border_click = prev.10; ctx.inherited_border_focus = prev.11;
+    ctx.restore_children(old);
 }
 
 #[cfg(test)]

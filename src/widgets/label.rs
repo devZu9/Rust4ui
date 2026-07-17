@@ -31,7 +31,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &RenderCtx) {
     let (r, _) = crate::widgets::base::widget_base_wrap(
         ui, node, &ctx.theme, "Label",
         egui::vec2(200.0, size as f32 + 8.0), egui::Sense::hover(), true,
-        egui::Color32::TRANSPARENT, 4.0, pad, None,
+        egui::Color32::TRANSPARENT, 4.0, pad, &ctx.inherited,
         |ui| {
             if wrap {
                 ui.label(rich);

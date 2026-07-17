@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use crate::actions::ActionRegistry;
 use crate::icons::IconRegistry;
 use crate::locale::LocaleRegistry;
@@ -10,29 +11,9 @@ pub struct RenderCtx {
     pub actions: ActionRegistry,
     pub locale: LocaleRegistry,
     pub icons: IconRegistry,
-    pub inherited_bg: Option<egui::Color32>,
-    pub inherited_color: Option<egui::Color32>,
-    pub inherited_bg_hover: Option<egui::Color32>,
-    pub inherited_bg_click: Option<egui::Color32>,
-    pub inherited_color_hover: Option<egui::Color32>,
-    pub inherited_color_click: Option<egui::Color32>,
-    pub inherited_margin: Option<egui::Margin>,
-    pub inherited_padding: Option<egui::Margin>,
-    pub inherited_rounding: Option<egui::CornerRadius>,
-    pub inherited_border: Option<crate::border::BorderStyle>,
-    pub inherited_border_hover: Option<crate::border::BorderStyle>,
-    pub inherited_border_click: Option<crate::border::BorderStyle>,
-    pub inherited_border_focus: Option<crate::border::BorderStyle>,
+    pub inherited: HashMap<String, serde_json::Value>,
     pub pending_borders: Vec<(egui::Rect, egui::CornerRadius, crate::border::BorderStyle)>,
     pub open_popup_id: Option<String>,
-    pub inherited_icon: Option<crate::renderer::InheritedIcon>,
-}
-
-#[derive(Clone)]
-pub struct InheritedIcon {
-    pub name: String,
-    pub position: String,
-    pub gap: f32,
 }
 
 impl RenderCtx {
@@ -43,22 +24,38 @@ impl RenderCtx {
             actions: ActionRegistry::new(),
             locale: LocaleRegistry::default(),
             icons: IconRegistry::new(),
-            inherited_bg: None,
-            inherited_color: None,
-            inherited_bg_hover: None,
-            inherited_bg_click: None,
-            inherited_color_hover: None,
-            inherited_color_click: None,
-            inherited_margin: None,
-            inherited_padding: None,
-            inherited_rounding: None,
-            inherited_border: None,
-            inherited_border_hover: None,
-            inherited_border_click: None,
-            inherited_border_focus: None,
+            inherited: HashMap::new(),
             pending_borders: Vec::new(),
             open_popup_id: None,
-            inherited_icon: None,
+        }
+    }
+
+    /// Применить все _children-атрибуты из node в self.inherited.
+    /// Возвращает `(prev, guard)`, где prev — старые значения для restore.
+    pub fn inherit_children(&mut self, node: &serde_json::Value) -> Vec<(String, Option<serde_json::Value>)> {
+        let mut old = Vec::new();
+        let obj = match node.as_object() {
+            Some(o) => o,
+            None => return old,
+        };
+        for (key, val) in obj {
+            if let Some(base) = key.strip_suffix("_children") {
+                let prev = self.inherited.get(base).cloned();
+                self.inherited.insert(base.to_string(), val.clone());
+                old.push((base.to_string(), prev));
+            }
+        }
+        old
+    }
+
+    /// Восстановить сохранённые inherit_children значения.
+    pub fn restore_children(&mut self, old: Vec<(String, Option<serde_json::Value>)>) {
+        for (key, val) in old {
+            if let Some(v) = val {
+                self.inherited.insert(key, v);
+            } else {
+                self.inherited.remove(&key);
+            }
         }
     }
 
@@ -79,6 +76,97 @@ impl Default for RenderCtx {
     fn default() -> Self {
         Self::new()
     }
+}
+
+/// Универсальное чтение атрибута с hover/click/focus + inherited + theme fallback.
+///
+/// Цепочка приоритета (первый совпавший возвращается):
+///   1. node[`{key}_{state}`]
+///   2. inherited[`{key}_{state}`]
+///   3. theme_lookup(`{key}_{state}`)
+///   4. node[`{key}`]
+///   5. inherited[`{key}`]
+///   6. theme_lookup(`{key}`)
+///   7. default
+pub fn resolve_state_attr<T>(
+    node: &serde_json::Value,
+    inherited: &HashMap<String, serde_json::Value>,
+    resp: &egui::Response,
+    key: &str,
+    parse: impl Fn(&serde_json::Value) -> Option<T>,
+    theme_lookup: impl Fn(&str) -> Option<T>,
+    default: T,
+) -> T {
+    let state = if resp.is_pointer_button_down_on() { Some("_click") }
+        else if resp.has_focus() { Some("_focus") }
+        else if resp.hovered() { Some("_hover") }
+        else { None };
+
+    if let Some(sfx) = state {
+        let sk = format!("{key}{sfx}");
+        if let Some(v) = node.get(&sk).and_then(&parse) { return v; }
+        if let Some(v) = inherited.get(&sk).and_then(|j| parse(j)) { return v; }
+        if let Some(v) = theme_lookup(&sk) { return v; }
+    }
+
+    node.get(key).and_then(&parse)
+        .or_else(|| inherited.get(key).and_then(|j| parse(j)))
+        .or_else(|| theme_lookup(key))
+        .unwrap_or(default)
+}
+
+fn state_attr_lookup<T: Copy>(
+    n: &serde_json::Value,
+    t: &crate::theme::Theme,
+    w: &str,
+    k: &str,
+    p: fn(&serde_json::Value) -> Option<T>,
+) -> Option<T> {
+    n.get(k).and_then(p)
+        .or_else(|| t.widget.get(w).and_then(|x| x.get(k)).and_then(p))
+}
+
+/// Упрощённая версия resolve_state_attr без inherited (только node + theme).
+/// Сохранена для обратной совместимости виджетов, не использующих _children.
+pub fn get_state_attr<T: Copy>(
+    node: &serde_json::Value,
+    theme: &crate::theme::Theme,
+    widget: &str,
+    key: &str,
+    resp: &egui::Response,
+    enabled: bool,
+    default: T,
+    parse: fn(&serde_json::Value) -> Option<T>,
+) -> T {
+    let base = state_attr_lookup(node, theme, widget, key, parse).unwrap_or(default);
+    if !enabled { return base; }
+    if resp.is_pointer_button_down_on() {
+        let ck = format!("{}_click", key);
+        let fk = format!("{}_focus", key);
+        state_attr_lookup(node, theme, widget, &ck, parse)
+            .or_else(|| state_attr_lookup(node, theme, widget, &fk, parse))
+            .unwrap_or(base)
+    } else if resp.has_focus() {
+        let fk = format!("{}_focus", key);
+        state_attr_lookup(node, theme, widget, &fk, parse).unwrap_or(base)
+    } else if resp.hovered() {
+        let hk = format!("{}_hover", key);
+        state_attr_lookup(node, theme, widget, &hk, parse).unwrap_or(base)
+    } else {
+        base
+    }
+}
+
+pub fn get_state_background(
+    node: &serde_json::Value,
+    theme: &crate::theme::Theme,
+    widget: &str,
+    resp: &egui::Response,
+    enabled: bool,
+    default: egui::Color32,
+) -> egui::Color32 {
+    if !enabled { return egui::Color32::from_gray(60); }
+    get_state_attr(node, theme, widget, "background", resp, true, default, crate::theme::parse_color_value)
 }
 
 pub fn render_node(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
@@ -186,62 +274,6 @@ pub fn get_margin(
                 .and_then(parse_padding)
         })
         .unwrap_or(egui::Margin::ZERO)
-}
-
-fn state_attr_lookup<T: Copy>(
-    n: &serde_json::Value,
-    t: &crate::theme::Theme,
-    w: &str,
-    k: &str,
-    p: fn(&serde_json::Value) -> Option<T>,
-) -> Option<T> {
-    n.get(k).and_then(p)
-        .or_else(|| t.widget.get(w).and_then(|x| x.get(k)).and_then(p))
-}
-
-pub fn get_state_attr<T: Copy>(
-    node: &serde_json::Value,
-    theme: &crate::theme::Theme,
-    widget: &str,
-    key: &str,
-    resp: &egui::Response,
-    enabled: bool,
-    default: T,
-    parse: fn(&serde_json::Value) -> Option<T>,
-) -> T {
-    let base = state_attr_lookup(node, theme, widget, key, parse).unwrap_or(default);
-    if !enabled {
-        return base;
-    }
-    if resp.is_pointer_button_down_on() {
-        let ck = format!("{}_click", key);
-        let fk = format!("{}_focus", key);
-        state_attr_lookup(node, theme, widget, &ck, parse)
-            .or_else(|| state_attr_lookup(node, theme, widget, &fk, parse))
-            .unwrap_or(base)
-    } else if resp.has_focus() {
-        let fk = format!("{}_focus", key);
-        state_attr_lookup(node, theme, widget, &fk, parse).unwrap_or(base)
-    } else if resp.hovered() {
-        let hk = format!("{}_hover", key);
-        state_attr_lookup(node, theme, widget, &hk, parse).unwrap_or(base)
-    } else {
-        base
-    }
-}
-
-pub fn get_state_background(
-    node: &serde_json::Value,
-    theme: &crate::theme::Theme,
-    widget: &str,
-    resp: &egui::Response,
-    enabled: bool,
-    default: egui::Color32,
-) -> egui::Color32 {
-    if !enabled {
-        return egui::Color32::from_gray(60);
-    }
-    get_state_attr(node, theme, widget, "background", resp, true, default, crate::theme::parse_color_value)
 }
 
 pub fn parse_padding(val: &serde_json::Value) -> Option<egui::Margin> {

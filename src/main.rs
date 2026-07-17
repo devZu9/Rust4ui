@@ -191,22 +191,9 @@ impl DemoApp {
             actions: rust4ui::ActionRegistry::new(),
             locale,
             icons: rust4ui::IconRegistry::new(),
-            inherited_bg: None,
-            inherited_color: None,
-            inherited_bg_hover: None,
-            inherited_bg_click: None,
-            inherited_color_hover: None,
-            inherited_color_click: None,
-            inherited_margin: None,
-            inherited_padding: None,
-            inherited_rounding: None,
-            inherited_border: None,
-            inherited_border_hover: None,
-            inherited_border_click: None,
-            inherited_border_focus: None,
+            inherited: std::collections::HashMap::new(),
             pending_borders: Vec::new(),
             open_popup_id: None,
-            inherited_icon: None,
         };
 
         log::info!("Регистрация действий...");

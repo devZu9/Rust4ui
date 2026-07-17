@@ -46,7 +46,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         egui::vec2(content_w, content_h),
         egui::Sense::click_and_drag(), enabled,
         egui::Color32::from_rgb(0x30, 0x30, 0x30), base_rounding,
-        base_pad, None,
+        base_pad, &ctx.inherited,
     );
 
     let actual_text = if enabled {

@@ -11,7 +11,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &RenderCtx) {
     let (_, resp) = crate::widgets::base::widget_base_wrap(
         ui, node, &ctx.theme, "Hyperlink",
         egui::vec2(200.0, 20.0), egui::Sense::click(), true,
-        egui::Color32::TRANSPARENT, 4.0, egui::Margin::ZERO, None,
+        egui::Color32::TRANSPARENT, 4.0, egui::Margin::ZERO, &ctx.inherited,
         |ui| {
             let r = ui.hyperlink_to(text, url);
             if let Some(tip) = &tooltip {

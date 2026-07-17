@@ -1,20 +1,22 @@
 use crate::theme::Theme;
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Default)]
 pub enum BorderType {
+    #[default]
     Solid,
     Dash,
     Dot,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Default)]
 pub enum BorderPosition {
+    #[default]
     Inside,
     Center,
     Outside,
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Default)]
 pub struct BorderStyle {
     pub width: f32,
     pub color: egui::Color32,
