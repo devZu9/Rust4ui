@@ -47,12 +47,13 @@ impl RenderCtx {
     }
 
     /// Восстановить сохранённые inherit_children значения.
+    /// Очищает всё и вставляет только старые значения (снапшот),
+    /// чтобы ключи, добавленные inherit_children, не просочились мимо.
     pub fn restore_children(&mut self, old: Vec<(String, Option<serde_json::Value>)>) {
+        self.inherited.clear();
         for (key, val) in old {
             if let Some(v) = val {
                 self.inherited.insert(key, v);
-            } else {
-                self.inherited.remove(&key);
             }
         }
     }

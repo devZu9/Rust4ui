@@ -53,9 +53,6 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let inherited_pad_val = inherited_pad.unwrap_or(egui::Margin::ZERO);
     let pad = get_padding(node, &ctx.theme, "Menu", inherited_pad_val);
 
-    // Inherit _children for children (save/restore around children rendering)
-    let old = ctx.inherit_children(node);
-
     // Layout (placeholder color — actual color resolved after Response)
     let placeholder_color = egui::Color32::from_gray(220);
     let font_id = egui::FontId::proportional(14.0);
@@ -148,6 +145,9 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     if border.is_visible() {
         ctx.pending_borders.push((content_rect, radius, border));
     }
+
+    // Inherit _children for children (save/restore around children rendering)
+    let old = ctx.inherit_children(node);
 
     // Popup
     let popup_key = format!("__menu_popup_{}", text);
