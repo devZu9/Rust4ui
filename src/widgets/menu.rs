@@ -146,6 +146,38 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         ctx.pending_borders.push((content_rect, radius, border));
     }
 
+    // Popup attrs (читаем ДО inherit_children, чтобы popup_*_children от MenuBar были видны)
+    let popup_bg = crate::renderer::attr_str(node, "popup_background")
+        .or_else(|| ctx.inherited.get("popup_background").and_then(|v| v.as_str()))
+        .and_then(crate::theme::parse_hex_color)
+        .or_else(|| ctx.theme.w_color_opt("Menu", "popup_background"))
+        .unwrap_or_else(|| egui::Color32::from_rgb(0x1C, 0x1E, 0x24));
+    let popup_rounding = crate::renderer::attr_f64(node, "popup_rounding")
+        .or_else(|| ctx.inherited.get("popup_rounding").and_then(|v| v.as_f64()))
+        .or_else(|| Some(ctx.theme.w_f64("Menu", "popup_rounding", 4.0)))
+        .unwrap_or(4.0) as u8;
+    let popup_padding = ctx.inherited.get("popup_padding")
+        .and_then(crate::renderer::parse_padding)
+        .or_else(|| Some(crate::renderer::get_padding(node, &ctx.theme, "Menu", egui::Margin::ZERO)))
+        .unwrap_or(egui::Margin::ZERO);
+    let popup_gap = crate::renderer::attr_f64(node, "popup_gap")
+        .or_else(|| ctx.inherited.get("popup_gap").and_then(|v| v.as_f64()))
+        .unwrap_or(0.0) as f32;
+    let popup_min_width = crate::renderer::attr_f64(node, "popup_min_width")
+        .or_else(|| ctx.inherited.get("popup_min_width").and_then(|v| v.as_f64()))
+        .unwrap_or(0.0) as f32;
+    let popup_max_height = crate::renderer::attr_f64(node, "popup_max_height")
+        .or_else(|| ctx.inherited.get("popup_max_height").and_then(|v| v.as_f64()))
+        .unwrap_or(0.0) as f32;
+    let popup_border = ctx.inherited.get("popup_border")
+        .or_else(|| node.get("popup_border"))
+        .map(|bv| crate::border::get_border(&serde_json::json!({"border": bv}), &ctx.theme, "Menu"))
+        .unwrap_or_default();
+    let popup_shadow = ctx.inherited.get("popup_shadow")
+        .or_else(|| node.get("popup_shadow"))
+        .and_then(crate::border::parse_shadow)
+        .unwrap_or(crate::border::Shadow::transparent());
+
     // Inherit _children for children (save/restore around children rendering)
     let old = ctx.inherit_children(node);
 
@@ -171,22 +203,39 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     let children = node.get("children").and_then(|v| v.as_array()).cloned().unwrap_or_default();
     if is_open && !children.is_empty() {
-        let popup_bg = ctx.theme.w_color("Menu", "background", egui::Color32::from_rgb(0x1C, 0x1E, 0x24));
-        let popup_r = ctx.theme.w_f64("Menu", "rounding", 4.0) as u8;
+        let popup_cr = egui::CornerRadius::same(popup_rounding);
+        let popup_min_w = if popup_min_width > 0.0 { popup_min_width } else { content_rect.width().max(content_w + p_l + p_r) };
 
         let ar: egui::InnerResponse<()> = egui::Area::new(egui::Id::new(&popup_key))
             .fixed_pos(egui::pos2(content_rect.left(), content_rect.bottom()))
             .order(egui::Order::Foreground)
             .show(ui.ctx(), |ui| {
+                crate::border::draw_shadow_bg(ui, ui.available_rect_before_wrap(), popup_cr, &popup_shadow);
+
                 egui::Frame::new()
                     .fill(popup_bg)
-                    .corner_radius(egui::CornerRadius::same(popup_r))
+                    .corner_radius(popup_cr)
+                    .inner_margin(popup_padding)
                     .show(ui, |ui| {
-                        ui.set_min_width(content_rect.width().max(content_w + p_l + p_r));
-                        for child in &children {
-                            super::super::renderer::render_node(ui, child, ctx);
+                        ui.set_min_width(popup_min_w);
+                        ui.style_mut().spacing.item_spacing = egui::vec2(0.0, popup_gap);
+                        if popup_max_height > 0.0 {
+                            egui::ScrollArea::vertical().max_height(popup_max_height).show(ui, |ui| {
+                                for child in &children {
+                                    super::super::renderer::render_node(ui, child, ctx);
+                                }
+                            });
+                        } else {
+                            for child in &children {
+                                super::super::renderer::render_node(ui, child, ctx);
+                            }
                         }
                     });
+
+                if popup_border.is_visible() {
+                    let pr = ui.min_rect();
+                    crate::border::draw_border(ui, pr, popup_cr, &popup_border);
+                }
             });
 
         // clicked_elsewhere — только если не было клика на этой же Menu (toggle уже обработал)
