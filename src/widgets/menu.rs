@@ -10,17 +10,6 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let icon_gap = attr_f64(node, "icon_gap").unwrap_or(6.0) as f32;
     let icon_glyph = icon_name.and_then(|n| ctx.icons.resolve(n));
     let has_icon = icon_glyph.is_some();
-    let label = if has_icon {
-        let g = icon_glyph.unwrap();
-        let gap = std::iter::repeat(" ").take((icon_gap / 3.0).round() as usize).collect::<String>();
-        if icon_position == "right" {
-            format!("{text}{gap}{g}")
-        } else {
-            format!("{g}{gap}{text}")
-        }
-    } else {
-        text.to_string()
-    };
 
     let bg = node
         .get("background")
@@ -110,12 +99,17 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     ctx.inherited_border_click = inher_border_click; ctx.inherited_border_focus = inher_border_focus;
 
     let font_id = egui::FontId::proportional(14.0);
-    let galley = ui.painter().layout_no_wrap(label, font_id, color);
-    let galley_w = galley.size().x;
+    let text_galley = ui.painter().layout_no_wrap(text.clone(), font_id.clone(), color);
+    let icon_galley = has_icon.then(|| ui.painter().layout_no_wrap(icon_glyph.unwrap().to_string(), font_id, color));
+    let icon_w = icon_galley.as_ref().map_or(0.0, |g| g.size().x);
+    let text_w = text_galley.size().x;
+    let gap_w = if has_icon { icon_gap } else { 0.0 };
+    let content_w = if icon_position == "right" { text_w + gap_w + icon_w } else { icon_w + gap_w + text_w };
+    let content_h = icon_galley.as_ref().map_or(text_galley.size().y, |g| text_galley.size().y.max(g.size().y));
     let (p_l, p_r, p_t, p_b) = (pad.left as f32, pad.right as f32, pad.top as f32, pad.bottom as f32);
     let (m_l, m_r, m_t, m_b) = (margin.left as f32, margin.right as f32, margin.top as f32, margin.bottom as f32);
-    let total_w = galley_w + p_l + p_r + m_l + m_r;
-    let total_h = galley.size().y + p_t + p_b + m_t + m_b;
+    let total_w = content_w + p_l + p_r + m_l + m_r;
+    let total_h = content_h + p_t + p_b + m_t + m_b;
 
     if m_t > 0.0 { ui.add_space(m_t); }
     let (rect, resp) = ui.allocate_exact_size(egui::vec2(total_w, total_h), egui::Sense::click());
@@ -135,11 +129,19 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         egui::pos2(content_rect.min.x + p_l, content_rect.min.y + p_t),
         egui::pos2(content_rect.max.x - p_r, content_rect.max.y - p_b),
     );
-    let text_pos = egui::pos2(
-        egui::Align::Center.align_size_within_range(galley.size().x, inner_rect.x_range()).min,
-        egui::Align::Center.align_size_within_range(galley.size().y, inner_rect.y_range()).min,
-    );
-    ui.painter().galley_with_override_text_color(text_pos, galley, color_actual);
+    let text_pos_x = egui::Align::Center.align_size_within_range(content_w, inner_rect.x_range()).min;
+    let text_y = egui::Align::Center.align_size_within_range(content_h, inner_rect.y_range()).min;
+    if let Some(ig) = &icon_galley {
+        let (ix, tx) = if icon_position == "right" {
+            (text_pos_x + text_w + gap_w, text_pos_x)
+        } else {
+            (text_pos_x, text_pos_x + icon_w + gap_w)
+        };
+        ui.painter().galley_with_override_text_color(egui::pos2(ix, text_y), ig.clone(), color_actual);
+        ui.painter().galley_with_override_text_color(egui::pos2(tx, text_y), text_galley, color_actual);
+    } else {
+        ui.painter().galley_with_override_text_color(egui::pos2(text_pos_x, text_y), text_galley, color_actual);
+    }
 
     // Border (deferred)
     let base_border = ctx.inherited_border.unwrap_or_else(|| crate::border::get_border(node, &ctx.theme, "Menu"));
@@ -183,7 +185,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
                     .fill(popup_bg)
                     .corner_radius(egui::CornerRadius::same(popup_r))
                     .show(ui, |ui| {
-                        ui.set_min_width(content_rect.width().max(galley_w + p_l + p_r));
+                        ui.set_min_width(content_rect.width().max(content_w + p_l + p_r));
                         for child in &children {
                             super::super::renderer::render_node(ui, child, ctx);
                         }

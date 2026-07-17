@@ -41,10 +41,11 @@
         "margin": 0,
         "color_children": "#022",
         "color_click_children": "#FFF",
-        "border": [3, "$like", 1, "dot", 2],
+        "border": [3, "$pitch", 1, "dot", 2],
+        "border_hover": [3, "$pitch", 0, "dot", 2],
         "border_position": "center",
-        "border_hover_children": [5, "#F7F", 1, "dot", 2],
-        "border_position_children": "inside",
+        "border_hover_children": [4, "$like", 1, "dash", 8],
+        "border_position_children": "center",
         "gap": 0,
 
               "children": [
