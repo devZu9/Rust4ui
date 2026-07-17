@@ -146,6 +146,7 @@
     "menu.redo": "Redo",
     "menu.auto": "Autosave",
     "menu.export": "Export",
+    "menu.import": "Import",
     "menu.sidebar": "Sidebar",
     "menu.about": "About",
     "label.loading": "Loading...",

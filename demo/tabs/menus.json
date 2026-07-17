@@ -52,6 +52,9 @@
               "padding_hover_children": [15, 23, 15, 25],
               "icon_gap_hover_children": 12,
               "icon_gap_children": 10,
+              "popup_background_children": "$color_bg_dark",
+              "popup_rounding_children": 20,
+              "popup_padding_children": [20, 25],
               "children": [
                 {
                   "type": "Menu",
@@ -59,9 +62,6 @@
                   "icon": "check",
                   "icon_gap": 10,
                   "text": "{{menu.file}}",
-                  "popup_background": "$color_bg_dark",
-                  "popup_rounding": 20,
-                  "popup_padding": [20, 25],
                   "children": [
                     { 
                       "type": "MenuItem", 
@@ -71,6 +71,8 @@
                       "target": "menu_new" 
 		    },
                     { "type": "MenuItem", "icon": "folder-simple", "text": "{{menu.open}}", "action": "click", "target": "menu_open" },
+                    { "type": "Separator" },
+                    { "type": "MenuItem", "icon": "upload-simple", "text": "{{menu.import}}", "action": "click", "target": "menu_import" },
                     { "type": "Separator" },
                     { "type": "MenuItem", "icon": "download-simple", "text": "{{menu.export}}", "action": "click", "target": "menu_export" },
                     { "type": "Separator" },

@@ -146,6 +146,7 @@
     "menu.redo": "Повторить",
     "menu.auto": "Автосохранение",
     "menu.export": "Экспорт",
+    "menu.import": "Импорт",
     "menu.sidebar": "Боковая панель",
     "menu.about": "О программе",
     "label.loading": "Загрузка...",
