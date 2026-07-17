@@ -159,15 +159,24 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let base_border = ctx.inherited_border
         .unwrap_or_else(|| crate::border::get_border(node, &ctx.theme, "Menu"));
     let resp = &menu_resp.response;
+
+    let pick_border = |suffix: &str, inherited: Option<crate::border::BorderStyle>| {
+        let key = format!("border_{}", suffix);
+        if node.get(&key).is_some() {
+            crate::border::apply_state_border(node, &ctx.theme, "Menu", suffix, &base_border)
+        } else if let Some(b) = inherited {
+            b
+        } else {
+            base_border
+        }
+    };
+
     let border = if resp.is_pointer_button_down_on() {
-        ctx.inherited_border_click
-            .unwrap_or_else(|| crate::border::apply_state_border(node, &ctx.theme, "Menu", "click", &base_border))
+        pick_border("click", ctx.inherited_border_click)
     } else if resp.has_focus() {
-        ctx.inherited_border_focus
-            .unwrap_or_else(|| crate::border::apply_state_border(node, &ctx.theme, "Menu", "focus", &base_border))
+        pick_border("focus", ctx.inherited_border_focus)
     } else if resp.hovered() {
-        ctx.inherited_border_hover
-            .unwrap_or_else(|| crate::border::apply_state_border(node, &ctx.theme, "Menu", "hover", &base_border))
+        pick_border("hover", ctx.inherited_border_hover)
     } else {
         base_border
     };

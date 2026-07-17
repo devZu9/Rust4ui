@@ -54,21 +54,22 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .and_then(crate::theme::parse_color_value)
         .or_else(|| ctx.theme.w_color_opt("MenuBar", "color_click_children"));
 
-    let inher_border = node.get("border_children").map(|bv| {
-        crate::border::get_border(&serde_json::json!({"border": bv}), &ctx.theme, "MenuBar")
-    });
+    let mk_border = |key: &str| -> Option<crate::border::BorderStyle> {
+        node.get(key).map(|bv| {
+            let mut temp = serde_json::json!({"border": bv});
+            if let Some(pos) = node.get("border_position_children") {
+                temp["border_position"] = pos.clone();
+            } else if let Some(pos) = node.get("border_position") {
+                temp["border_position"] = pos.clone();
+            }
+            crate::border::get_border(&temp, &ctx.theme, "MenuBar")
+        })
+    };
 
-    let inher_border_hover = node.get("border_hover_children").map(|bv| {
-        crate::border::get_border(&serde_json::json!({"border": bv}), &ctx.theme, "MenuBar")
-    });
-
-    let inher_border_click = node.get("border_click_children").map(|bv| {
-        crate::border::get_border(&serde_json::json!({"border": bv}), &ctx.theme, "MenuBar")
-    });
-
-    let inher_border_focus = node.get("border_focus_children").map(|bv| {
-        crate::border::get_border(&serde_json::json!({"border": bv}), &ctx.theme, "MenuBar")
-    });
+    let inher_border = mk_border("border_children");
+    let inher_border_hover = mk_border("border_hover_children");
+    let inher_border_click = mk_border("border_click_children");
+    let inher_border_focus = mk_border("border_focus_children");
 
     let inher_margin = node
         .get("margin_children")
