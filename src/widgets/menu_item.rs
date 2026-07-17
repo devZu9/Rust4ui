@@ -25,12 +25,14 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let stretch = node.get("stretch")
         .or_else(|| ctx.inherited.get("stretch"))
         .and_then(|v| v.as_bool())
+        .or_else(|| Some(ctx.theme.w_bool("MenuItem", "stretch", false)))
         .unwrap_or(false);
 
-    let align = node.get("align")
-        .or_else(|| ctx.inherited.get("align"))
-        .and_then(|v| v.as_str())
-        .unwrap_or("left");
+    let align = attr_str(node, "align")
+        .or_else(|| ctx.inherited.get("align").and_then(|v| v.as_str()))
+        .map(|s| s.to_string())
+        .or_else(|| Some(ctx.theme.w_str("MenuItem", "align", "left")))
+        .unwrap_or_else(|| "left".to_string());
 
     let inherited_color = ctx.inherited.get("color").and_then(crate::theme::parse_color_value);
     let color = node
@@ -43,6 +45,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let color_icon = node
         .get("color_icon")
         .and_then(crate::theme::parse_color_value)
+        .or_else(|| ctx.inherited.get("color_icon").and_then(crate::theme::parse_color_value))
+        .or_else(|| ctx.theme.w_color_opt("MenuItem", "color_icon"))
         .unwrap_or(color);
 
     let base_rounding = attr_f64(node, "rounding")
@@ -75,7 +79,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         &ctx.inherited,
     );
 
-    let text_x = match align {
+    let text_x = match align.as_str() {
         "center" => egui::Align::Center.align_size_within_range(csize.x, out.inner_rect.x_range()).min,
         "right"  => out.inner_rect.right() - csize.x,
         _        => out.inner_rect.left(),
