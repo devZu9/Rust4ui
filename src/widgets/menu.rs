@@ -182,7 +182,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .unwrap_or(crate::border::Shadow::transparent());
 
     // Inherit _children for children (save/restore around children rendering)
-    let old = ctx.inherit_children(node);
+    let old = ctx.inherit_children(node, Some("Menu"));
 
     // Popup
     let popup_key = format!("__menu_popup_{}", text);

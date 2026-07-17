@@ -1,8 +1,9 @@
 {
   "active_locale": "ru",
   "active_tab": "menus",
-  "window_position_x": 2579.0,
-  "window_position_y": 459.0,
+  "always_on_top": true,
+  "window_position_x": 2234.0,
+  "window_position_y": 518.0,
   "window_size_height": 551.0,
   "window_size_width": 747.0
 }

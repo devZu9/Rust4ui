@@ -59,6 +59,11 @@
               "space": 10
             },
             {
+            "type": "Checkbox",
+            "binding": "always_on_top",
+            "text": "Поверх всех окон"
+            },
+            {
               "type": "Label",
               "text": "{{label.buttons}}",
               "size": 13,

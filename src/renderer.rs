@@ -31,15 +31,30 @@ impl RenderCtx {
     }
 
     /// Применить все _children-атрибуты из node в self.inherited.
+    /// Сначала читает из JSON-узла, потом — из темы (если указан widget).
+    /// Приоритет: JSON-узел переопределяет тему.
     /// Сохраняет полный снапшот всех текущих inherited, затем очищает HashMap
-    /// и заполняет только _children-ключами из node. Гарантирует отсутствие
+    /// и заполняет только _children-ключами. Гарантирует отсутствие
     /// протекания значений на уровень глубже.
-    pub fn inherit_children(&mut self, node: &serde_json::Value) -> Vec<(String, Option<serde_json::Value>)> {
+    pub fn inherit_children(&mut self, node: &serde_json::Value, widget: Option<&str>) -> Vec<(String, Option<serde_json::Value>)> {
         let old: Vec<_> = self.inherited.drain().map(|(k, v)| (k, Some(v))).collect();
+        // 1. Из JSON-узла
         if let Some(obj) = node.as_object() {
             for (key, val) in obj {
                 if let Some(base) = key.strip_suffix("_children") {
                     self.inherited.insert(base.to_string(), val.clone());
+                }
+            }
+        }
+        // 2. Из темы (если не переопределено JSON-узлом)
+        if let Some(widget) = widget {
+            if let Some(tw) = self.theme.widget.get(widget) {
+                if let Some(tobj) = tw.as_object() {
+                    for (key, val) in tobj {
+                        if let Some(base) = key.strip_suffix("_children") {
+                            self.inherited.entry(base.to_string()).or_insert_with(|| val.clone());
+                        }
+                    }
                 }
             }
         }

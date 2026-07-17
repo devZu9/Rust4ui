@@ -52,13 +52,12 @@
               "padding_hover_children": [15, 23, 15, 25],
               "icon_gap_hover_children": 12,
               "icon_gap_children": 10,
-              "popup_background_children": "$color_bg_dark",
-              "popup_rounding_children": 20,
-              "popup_padding_children": [20, 25],
               "children": [
                 {
                   "type": "Menu",
                   "border_position": "outside",
+                  "rounding_children": 10, 
+                  "padding_children": [20, 25],
                   "icon": "check",
                   "icon_gap": 10,
                   "text": "{{menu.file}}",

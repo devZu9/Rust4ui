@@ -184,9 +184,15 @@
   },
   "Menu": {
     "color": "$color_text",
+    "popup_background": "$color_bg_dark",
+    "popup_rounding": 20,
+    "popup_padding": [20],
+    "rounding_children": 10, 
+    "padding_children": [20, 25],
     "rounding": 0
   },
   "MenuItem": {
+    "padding": [15, 25],
     "background": ["#000", 0],
     "background_hover": "#3A3A44",
     "color": "$color_text",
@@ -194,7 +200,7 @@
   },
   "SubMenu": {},
   "Notifications": {
-    "width": 300
+    "width": 200
   },
   "Tray": {},
   "IconBar": {

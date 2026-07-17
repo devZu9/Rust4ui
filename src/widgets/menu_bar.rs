@@ -24,8 +24,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .unwrap_or(0.0) as u8;
     let rounding_cr = egui::CornerRadius::same(rounding);
 
-    // Universal _children inheritance
-    let old = ctx.inherit_children(node);
+    // Universal _children inheritance (JSON → theme)
+    let old = ctx.inherit_children(node, Some("MenuBar"));
 
     let inher_rounding_val = attr_f64(node, "rounding_children")
         .or_else(|| attr_f64(node, "rounding"))
