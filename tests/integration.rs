@@ -36,7 +36,7 @@ fn test_load_demo_tabs() {
         let path = entry.unwrap().path();
         if path.extension().map_or(false, |e| e == "json") {
             let content = std::fs::read_to_string(&path).unwrap();
-            let _: serde_json::Value = serde_json::from_str(&content)
+            let _: serde_json::Value = serde_json::from_str(&strip_json_comments(&content))
                 .unwrap_or_else(|e| panic!("{} должен быть валидным JSON: {e}", path.display()));
         }
     }

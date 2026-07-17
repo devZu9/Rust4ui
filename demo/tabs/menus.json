@@ -40,6 +40,8 @@
 	      "margin_children": [0],
 	      "color_children": "#022",
 	      "color_click_children": "#FFF",
+	      "border_hover_children": [2, "87F", 1, "dot", 2],
+	      "border_position_children": "outside",
  	      "gap": 0,
 
               "children": [

@@ -185,7 +185,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         base_border
     };
     if border.is_visible() {
-        draw_border(ui, menu_resp.response.rect, radius, &border);
+        draw_border(ui, menu_resp.response.rect.shrink(1.0), radius, &border);
     }
 
     {
