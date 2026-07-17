@@ -19,6 +19,7 @@ pub struct RenderCtx {
     pub inherited_margin: Option<egui::Margin>,
     pub inherited_padding: Option<egui::Margin>,
     pub inherited_rounding: Option<egui::CornerRadius>,
+    pub inherited_border: Option<crate::border::BorderStyle>,
 }
 
 impl RenderCtx {
@@ -38,6 +39,7 @@ impl RenderCtx {
             inherited_margin: None,
             inherited_padding: None,
             inherited_rounding: None,
+            inherited_border: None,
         }
     }
 

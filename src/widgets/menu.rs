@@ -1,3 +1,4 @@
+use crate::border::{draw_border, get_state_border};
 use crate::renderer::{attr_f64, attr_str, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
@@ -125,15 +126,19 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         style.visuals.widgets.inactive.weak_bg_fill = bg;
         style.visuals.widgets.inactive.corner_radius = radius;
         style.visuals.widgets.inactive.fg_stroke = egui::Stroke::new(1.0, color);
+        style.visuals.widgets.inactive.bg_stroke = egui::Stroke::NONE;
         style.visuals.widgets.hovered.weak_bg_fill = bg_hover;
         style.visuals.widgets.hovered.corner_radius = radius;
         style.visuals.widgets.hovered.fg_stroke = egui::Stroke::new(1.0, color_hover);
+        style.visuals.widgets.hovered.bg_stroke = egui::Stroke::NONE;
         style.visuals.widgets.active.weak_bg_fill = bg_click;
         style.visuals.widgets.active.corner_radius = radius;
         style.visuals.widgets.active.fg_stroke = egui::Stroke::new(1.0, color_click);
+        style.visuals.widgets.active.bg_stroke = egui::Stroke::NONE;
         style.visuals.widgets.open.weak_bg_fill = bg;
         style.visuals.widgets.open.corner_radius = radius;
         style.visuals.widgets.open.fg_stroke = egui::Stroke::new(1.0, color);
+        style.visuals.widgets.open.bg_stroke = egui::Stroke::NONE;
         style.visuals.window_fill = bg;
         style.spacing.button_padding = egui::vec2(pad.left as f32, pad.top as f32);
         prev
@@ -141,7 +146,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     if margin.top > 0 { ui.add_space(margin.top as f32); }
     if margin.left > 0 { ui.add_space(margin.left as f32); }
-    ui.menu_button(egui::RichText::new(text), |ui| {
+    let menu_resp = ui.menu_button(egui::RichText::new(text), |ui| {
         if let Some(children) = node.get("children").and_then(|v| v.as_array()) {
             for child in children {
                 super::super::renderer::render_node(ui, child, ctx);
@@ -150,6 +155,14 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     });
     if margin.right > 0 { ui.add_space(margin.right as f32); }
     if margin.bottom > 0 { ui.add_space(margin.bottom as f32); }
+
+    let border = ctx.inherited_border
+        .map(|b| get_state_border(node, &ctx.theme, "Menu", &menu_resp.response, true))
+        .unwrap_or_else(|| crate::border::get_border(node, &ctx.theme, "Menu"));
+    if border.is_visible() {
+        let border_rounding = if rounding_val == 0 { egui::CornerRadius::ZERO } else { radius };
+        draw_border(ui, menu_resp.response.rect, border_rounding, &border);
+    }
 
     {
         let style = &mut ui.style_mut();

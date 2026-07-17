@@ -54,6 +54,10 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .and_then(crate::theme::parse_color_value)
         .or_else(|| ctx.theme.w_color_opt("MenuBar", "color_click_children"));
 
+    let inher_border = node.get("border_children").map(|bv| {
+        crate::border::get_border(&serde_json::json!({"border": bv}), &ctx.theme, "MenuBar")
+    });
+
     let inher_margin = node
         .get("margin_children")
         .and_then(crate::renderer::parse_padding);
@@ -73,6 +77,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let prev_bg_click = ctx.inherited_bg_click;
     let prev_color_hover = ctx.inherited_color_hover;
     let prev_color_click = ctx.inherited_color_click;
+    let prev_border = ctx.inherited_border;
     let prev_margin = ctx.inherited_margin;
     let prev_padding = ctx.inherited_padding;
     let prev_rounding = ctx.inherited_rounding;
@@ -82,6 +87,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     ctx.inherited_bg_click = inher_bg_click;
     ctx.inherited_color_hover = inher_color_hover;
     ctx.inherited_color_click = inher_color_click;
+    ctx.inherited_border = inher_border;
     ctx.inherited_margin = inher_margin;
     ctx.inherited_padding = inher_padding;
 
@@ -133,6 +139,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     ctx.inherited_bg_click = prev_bg_click;
     ctx.inherited_color_hover = prev_color_hover;
     ctx.inherited_color_click = prev_color_click;
+    ctx.inherited_border = prev_border;
     ctx.inherited_margin = prev_margin;
     ctx.inherited_padding = prev_padding;
     ctx.inherited_rounding = prev_rounding;

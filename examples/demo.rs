@@ -71,6 +71,7 @@ impl DemoApp {
             inherited_margin: None,
             inherited_padding: None,
             inherited_rounding: None,
+            inherited_border: None,
         };
 
         let actions = &mut ctx.actions;

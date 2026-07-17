@@ -1,8 +1,8 @@
 # Roadmap — Rust4ui
 
-> JSON → UI → Rust. Быстрое прототипирование интерфейсов на egui.
-> 
-> Правила оформления версий — в `.opencode/skills/session-log/SKILL.md`
+> Правила оформления версий всегда перечитать перед работой с этим файлом в `.opencode/skills/session-log/SKILL.md`
+
+#### JSON → UI → Rust. Быстрое прототипирование интерфейсов на egui.
 
 ---
 
@@ -66,12 +66,17 @@
 
 ### v0.5 — Числовое поле, оставшиеся виджеты и полировка *(текущая)*
 
-- [x] **MenuBar** — исправление ошибок (белые кнопки, {{синтаксис}}, hover, state-aware фон, каскад _children) 🟢 *(16.07.2026)*
-  - [x] **Кастомизация фона/цвета через _children** — background, background_hover/click, color, color_hover/click 🟢 *(16.07.2026)*
-  - [x] **padding_children / margin_children / rounding_children** 🟢 *(16.07.2026)*
+- [ ] **MenuBar** — исправление ошибок (белые кнопки, {{синтаксис}}, hover, state-aware фон, каскад _children) 🟢 *(16.07.2026)*
+  - [ ] Состояние _focus на раскрытом меню можно настраивать через постфикс
+  - [ ] Настройка авто-раскрытия после клика (т.е. первый клик раскрывает пункт меню, а дальше мы просто водим и меню раскрывается из-за hover)
   - [ ] **Кастомизация показа иконок в MenuItem** — настройка видимости иконок (всегда/при наведении/скрыть)
   - [ ] **Border _children** — border для children элементов со всеми состояниями (hover/click/focus)
   - [ ] **Shadow на MenuBar** — протестировать и донастроить shadow на MenuBar и его children
+  - [x] **Кастомизация фона/цвета через _children** — background, background_hover/click, color, color_hover/click 🟢 *(16.07.2026)*
+  - [x] padding_children / margin_children / rounding_children** 🟢 *(16.07.2026)
+
+- [x] 
+
 - [ ] **Slider** — доделка внешнего вида
 - [ ] **ComboBox** — доделка дизайна
 - [ ] **Tabs / Tab** — доделка дизайна
