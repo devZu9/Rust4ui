@@ -51,8 +51,10 @@
               "children": [
                 {
                   "type": "Menu",
-                   "text": "{{menu.file}}",
-
+                  "icon": "folder-simple",
+                  "icon_position": "left",
+                  "icon_gap": 5,
+                  "text": "{{menu.file}}",
                   "children": [
                     { 
 		    "type": "MenuItem", 

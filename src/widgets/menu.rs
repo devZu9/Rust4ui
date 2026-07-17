@@ -1,9 +1,15 @@
 use crate::renderer::{attr_f64, attr_str, get_margin, get_padding, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
-    let text = attr_str(node, "text")
-        .map(|t| resolve_text(t, ctx))
-        .unwrap_or_else(|| "{{menu}}".to_string());
+    let raw_text = attr_str(node, "text").unwrap_or("");
+    let icon_name = attr_str(node, "icon");
+    let text = if raw_text.is_empty() && icon_name.is_some() {
+        String::new()
+    } else if raw_text.is_empty() {
+        "{{menu}}".to_string()
+    } else {
+        resolve_text(raw_text, ctx)
+    };
 
     let icon_name = attr_str(node, "icon");
     let icon_position = attr_str(node, "icon_position").unwrap_or("left");
