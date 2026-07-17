@@ -136,7 +136,112 @@ node["bg"]       → inherited["bg"]       → theme["bg"]       → default
 
 ---
 
-## 5. Особенности `rounding_children`
+## 5. Настройка контекстного меню (попап)
+
+Каждый `Menu` состоит из двух частей:
+- **Кнопка** — видимая часть на MenuBar (настраивается через `background`, `border`, `padding`, `icon` и т.д.)
+- **Попап** — контейнер для MenuItem, открывается при клике/ховере (настраивается через `popup_*`)
+
+Попап-атрибуты не влияют на кнопку и наоборот.
+
+### 5.1 Полный список `popup_*` атрибутов
+
+| Атрибут | Формат значения | Дефолт | Описание |
+|---------|----------------|--------|----------|
+| `popup_background` | `"#HEX"` или `["#HEX", opacity]` | `#1C1E24` | Фон площадки (Frame.fill) |
+| `popup_rounding` | число | `4` | Скругление углов площадки |
+| `popup_padding` | `N`, `[V,H]`, `[T,R,B,L]` | `0` | Внутренний отступ площадки (Frame.inner_margin) |
+| `popup_gap` | число | `0` | Расстояние между MenuItem (item_spacing.y) |
+| `popup_min_width` | число | `0` (ширина кнопки) | Минимальная ширина площадки |
+| `popup_max_height` | число | `0` (безлимит) | Максимальная высота с прокруткой (ScrollArea) |
+| `popup_border` | массив `[width, color, ...]` | нет | Бордер площадки |
+| `popup_shadow` | массив `[opacity, z_order?, "color"?, x?, y?]` | нет | Тень площадки |
+
+Все атрибуты читаются по цепочке: **свой узел → `ctx.inherited` (от `_children` родителя) → тема → дефолт**.
+
+Все атрибуты поддерживают `_children` суффикс: `popup_background_children`, `popup_padding_children`, `popup_border_children` и т.д.
+
+Важно: `popup_*` читаются **до** `inherit_children()` на текущем Menu, чтобы `popup_*_children` от MenuBar были видны. Это особенность реализации — кнопка Menu читает свои атрибуты из inherited, а попап читает свои атрибуты ТОЖЕ из inherited, до того как Menu установит собственные `_children` для MenuItem.
+
+### 5.2 Пример: попап на одном Menu
+
+```json
+{
+  "type": "Menu",
+  "text": "{{menu.file}}",
+
+  "popup_background": "#222",
+  "popup_rounding": 12,
+  "popup_padding": [8, 12],
+  "popup_gap": 4,
+  "popup_border": [1, "#555"],
+  "popup_shadow": [0.3],
+  "popup_min_width": 200,
+  "popup_max_height": 400,
+
+  "children": [
+    { "type": "MenuItem", "text": "{{menu.new}}", "icon": "file-plus" },
+    { "type": "MenuItem", "text": "{{menu.open}}", "icon": "folder" },
+    { "type": "Separator" },
+    { "type": "MenuItem", "text": "{{menu.export}}", "icon": "download" }
+  ]
+}
+```
+
+### 5.3 Пример: попап через `_children` на MenuBar (все Menu сразу)
+
+```json
+{
+  "type": "MenuBar",
+  "popup_background_children": "$color_bg_dark",
+  "popup_rounding_children": 15,
+  "popup_padding_children": [10, 15],
+  "popup_gap_children": 2,
+  "popup_border_children": [1, "#666", 1],
+  "children": [
+    {
+      "type": "Menu",
+      "text": "{{menu.file}}",
+      "children": [
+        { "type": "MenuItem", "text": "{{menu.new}}" }
+      ]
+    },
+    {
+      "type": "Menu",
+      "text": "{{menu.help}}",
+      "popup_background": "#111",
+      "children": [
+        { "type": "MenuItem", "text": "{{menu.about}}" }
+      ]
+    }
+  ]
+}
+```
+
+В этом примере:
+- **File** наследует `popup_background` от MenuBar → `$color_bg_dark`
+- **Help** переопределил `popup_background` → `#111` (свой, не наследует)
+
+### 5.4 Попап в теме
+
+Все `popup_*` можно задать в `theme.json` в секции `"Menu"`:
+
+```json
+{
+  "Menu": {
+    "popup_background": "$color_bg_dark",
+    "popup_rounding": 8,
+    "popup_padding": [8, 4],
+    "popup_gap": 2,
+    "popup_border": [1, "#555", 0.5],
+    "popup_shadow": [0.2]
+  }
+}
+```
+
+---
+
+## 6. Особенности `rounding_children`
 
 `rounding_children` распределяется автоматически на **первый** и **последний** дочерний элемент (работает только в `menu_bar.rs`):
 
@@ -150,7 +255,7 @@ node["bg"]       → inherited["bg"]       → theme["bg"]       → default
 
 ---
 
-## 6. Приоритет разрешения атрибутов (полная цепочка)
+## 7. Приоритет разрешения атрибутов (полная цепочка)
 
 ```
 node["key_hover"] → inherited["key_hover"] → theme["key_hover"] →
@@ -168,7 +273,7 @@ node["key"]       → inherited["key"]       → theme["key"]       → default
 
 ---
 
-## 7. Как добавить новый атрибут с поддержкой `_children` и state
+## 8. Как добавить новый атрибут с поддержкой `_children` и state
 
 Достаточно написать `"foobar_children"` / `"foobar_hover_children"` / `"foobar_click_children"` в JSON — больше ничего не нужно. `inherit_children()` подхватит любой ключ с суффиксом `_children`, а `resolve_state_attr()` отработает любой state-постфикс.
 
