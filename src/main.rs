@@ -13,6 +13,7 @@ struct DemoApp {
     base: PathBuf,
     settings_path: PathBuf,
     last_saved_content: String,
+    always_on_top: bool,
 }
 
 fn load_theme(base: &Path) -> Theme {
@@ -160,7 +161,7 @@ impl DemoApp {
         state.set_string("active_tab", "basic".into());
 
         let settings_path = base.join("demo").join("settings.json");
-        if settings_path.exists() {
+        let always_on_top = if settings_path.exists() {
             let settings = StateRegistry::load(&settings_path);
             if let Some(w) = settings.get_f64("window_size_width") { state.set_f64("window_size_width", w); }
             if let Some(h) = settings.get_f64("window_size_height") { state.set_f64("window_size_height", h); }
@@ -172,7 +173,10 @@ impl DemoApp {
                 state.set_usize("active_locale", idx);
             }
             log::info!("Настройки загружены из demo/settings.json");
-        }
+            settings.get_bool("always_on_top").unwrap_or(false)
+        } else {
+            false
+        };
 
         log::info!("Загрузка локалей...");
         let mut locale = LocaleRegistry::new("ru");
@@ -279,6 +283,7 @@ impl DemoApp {
             base,
             settings_path,
             last_saved_content: String::new(),
+            always_on_top,
         }
     }
 }
@@ -326,6 +331,7 @@ impl DemoApp {
         let locale_idx = self.ctx.state.get_usize("active_locale").unwrap_or(0);
         let locale_code = match locale_idx { 1 => "en", _ => "ru" };
         settings.set_string("active_locale", locale_code.to_string());
+        settings.set_bool("always_on_top", self.always_on_top);
 
         let content = settings.to_json();
         if content == self.last_saved_content {
@@ -346,6 +352,15 @@ impl eframe::App for DemoApp {
         }
 
         self.ctx.theme.apply_to_egui(ctx);
+
+        // Runtime toggle always_on_top
+        let want_top = self.ctx.state.get_bool("always_on_top").unwrap_or(self.always_on_top);
+        if want_top != self.always_on_top {
+            self.always_on_top = want_top;
+            ctx.send_viewport_cmd(egui::ViewportCommand::WindowLevel(
+                if want_top { egui::WindowLevel::AlwaysOnTop } else { egui::WindowLevel::Normal }
+            ));
+        }
 
         let vol = self.ctx.state.get_f64("volume").unwrap_or(0.0) as i64;
         let fs = self.ctx.state.get_f64("font_size").unwrap_or(14.0) as i64;
@@ -387,10 +402,18 @@ fn main() -> Result<(), eframe::Error> {
     let sx = saved.get_f64("window_position_x");
     let sy = saved.get_f64("window_position_y");
 
+    let always_on_top = saved.get_bool("always_on_top").unwrap_or(false);
+
     let mut vp = egui::ViewportBuilder::default()
         .with_title("Rust4ui — Demo")
         .with_inner_size([sw, sh])
         .with_min_inner_size([600.0, 400.0]);
+    if let (Some(px), Some(py)) = (sx, sy) {
+        vp = vp.with_position([px as f32, py as f32]);
+    }
+    if always_on_top {
+        vp = vp.with_always_on_top();
+    }
     if let (Some(px), Some(py)) = (sx, sy) {
         vp = vp.with_position([px as f32, py as f32]);
     }
