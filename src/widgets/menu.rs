@@ -158,7 +158,10 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .unwrap_or(4.0) as u8;
     let popup_padding = ctx.inherited.get("popup_padding")
         .and_then(crate::renderer::parse_padding)
-        .or_else(|| Some(crate::renderer::get_padding(node, &ctx.theme, "Menu", egui::Margin::ZERO)))
+        .or_else(|| node.get("popup_padding").and_then(crate::renderer::parse_padding))
+        .or_else(|| ctx.theme.widget.get("Menu")
+            .and_then(|w| w.get("popup_padding"))
+            .and_then(crate::renderer::parse_padding))
         .unwrap_or(egui::Margin::ZERO);
     let popup_gap = crate::renderer::attr_f64(node, "popup_gap")
         .or_else(|| ctx.inherited.get("popup_gap").and_then(|v| v.as_f64()))

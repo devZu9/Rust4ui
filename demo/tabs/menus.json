@@ -59,6 +59,9 @@
                   "icon": "check",
                   "icon_gap": 10,
                   "text": "{{menu.file}}",
+                  "popup_background": "$color_bg_dark",
+                  "popup_rounding": 20,
+                  "popup_padding": [20, 25],
                   "children": [
                     { 
                       "type": "MenuItem", 
