@@ -43,7 +43,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let color = get_attr(
         node, &ctx.inherited, &ctx.theme, "MenuItem",
         "color",
-        crate::theme::parse_color_value,
+        crate::theme::parse_color,
         |k| ctx.theme.w_color_opt("MenuItem", k),
         "color_children",
         egui::Color32::from_gray(220),
@@ -52,7 +52,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let color_icon = get_attr(
         node, &ctx.inherited, &ctx.theme, "MenuItem",
         "color_icon",
-        crate::theme::parse_color_value,
+        crate::theme::parse_color,
         |k| ctx.theme.w_color_opt("MenuItem", k),
         "color_icon_children",
         color,
@@ -121,4 +121,5 @@ mod tests {
         assert_eq!(attr_str(&json, "text"), Some("Copy"));
     }
 }
+
 

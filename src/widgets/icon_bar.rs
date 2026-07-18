@@ -5,7 +5,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let direction = attr_str(node, "direction").unwrap_or("vertical");
 
     let fill = node.get("background")
-        .and_then(crate::theme::parse_color_value)
+        .and_then(crate::theme::parse_color)
         .unwrap_or(egui::Color32::from_rgb(0x1C, 0x1C, 0x22));
 
     let border = get_border(node, &ctx.theme, "IconBar");
@@ -48,3 +48,4 @@ mod tests {
         assert_eq!(attr_str(&json, "direction"), Some("vertical"));
     }
 }
+

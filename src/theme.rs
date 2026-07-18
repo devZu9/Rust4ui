@@ -33,7 +33,7 @@ impl Theme {
     pub fn color(&self, key: &str) -> Option<egui::Color32> {
         self.colors
             .get(key)
-            .and_then(|s| parse_hex_color(s.as_str()))
+            .and_then(|s| parse_color_hex(s.as_str()))
     }
 
     pub fn color_or(&self, key: &str, default: egui::Color32) -> egui::Color32 {
@@ -85,7 +85,7 @@ impl Theme {
         self.widget
             .get(widget)
             .and_then(|v| v.get(key))
-            .and_then(parse_color_value)
+            .and_then(parse_color)
             .unwrap_or(default)
     }
 
@@ -93,7 +93,7 @@ impl Theme {
         self.widget
             .get(widget)
             .and_then(|v| v.get(key))
-            .and_then(parse_color_value)
+            .and_then(parse_color)
     }
 
     pub fn w_str2(&self, node: &serde_json::Value, widget: &str, key: &str) -> Option<String> {
@@ -314,7 +314,7 @@ impl Default for Theme {
     }
 }
 
-pub fn parse_hex_color(hex: &str) -> Option<egui::Color32> {
+pub fn parse_color_hex(hex: &str) -> Option<egui::Color32> {
     let hex = hex.trim_start_matches('#');
     if hex.len() == 6 {
         let r = u8::from_str_radix(&hex[0..2], 16).ok()?;
@@ -344,14 +344,14 @@ pub fn parse_hex_color(hex: &str) -> Option<egui::Color32> {
 }
 
 /// Парсит цвет из JSON-значения: строка "#RRGGBB" / "#RGB" или массив ["#RRGGBB", opacity].
-pub fn parse_color_value(val: &serde_json::Value) -> Option<egui::Color32> {
+pub fn parse_color(val: &serde_json::Value) -> Option<egui::Color32> {
     match val {
-        serde_json::Value::String(s) => parse_hex_color(s),
+        serde_json::Value::String(s) => parse_color_hex(s),
         serde_json::Value::Array(arr) if arr.len() == 1 => {
-            arr[0].as_str().and_then(parse_hex_color)
+            arr[0].as_str().and_then(parse_color_hex)
         }
         serde_json::Value::Array(arr) if arr.len() == 2 => {
-            let c = arr[0].as_str().and_then(parse_hex_color)?;
+            let c = arr[0].as_str().and_then(parse_color_hex)?;
             let opacity = arr[1].as_f64()? as f32;
             let a = (opacity.clamp(0.0, 1.0) * 255.0) as u8;
             Some(egui::Color32::from_rgba_unmultiplied(c.r(), c.g(), c.b(), a))
@@ -403,35 +403,36 @@ mod tests {
     #[test]
     fn test_parse_hex() {
         assert_eq!(
-            parse_hex_color("#FF6600"),
+            parse_color_hex("#FF6600"),
             Some(egui::Color32::from_rgb(0xFF, 0x66, 0x00))
         );
         assert_eq!(
-            parse_hex_color("FF6600"),
+            parse_color_hex("FF6600"),
             Some(egui::Color32::from_rgb(0xFF, 0x66, 0x00))
         );
         assert_eq!(
-            parse_hex_color("#3366CC44"),
+            parse_color_hex("#3366CC44"),
             Some(egui::Color32::from_rgba_unmultiplied(
                 0x33, 0x66, 0xCC, 0x44
             ))
         );
         assert_eq!(
-            parse_hex_color("#FFF"),
+            parse_color_hex("#FFF"),
             Some(egui::Color32::from_rgb(0xFF, 0xFF, 0xFF))
         );
         assert_eq!(
-            parse_hex_color("#F0A"),
+            parse_color_hex("#F0A"),
             Some(egui::Color32::from_rgb(0xFF, 0x00, 0xAA))
         );
-        assert_eq!(parse_hex_color("invalid"), None);
+        assert_eq!(parse_color_hex("invalid"), None);
         assert_eq!(
-            parse_color_value(&serde_json::json!(["#FF6600"])),
+            parse_color(&serde_json::json!(["#FF6600"])),
             Some(egui::Color32::from_rgb(0xFF, 0x66, 0x00))
         );
         assert_eq!(
-            parse_color_value(&serde_json::json!(["#FF6600", 0.5])),
+            parse_color(&serde_json::json!(["#FF6600", 0.5])),
             Some(egui::Color32::from_rgba_unmultiplied(0xFF, 0x66, 0x00, 127))
         );
     }
 }
+

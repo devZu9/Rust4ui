@@ -73,13 +73,13 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     // State-dependent values with real Response
     let bg_actual = resolve_state_attr(
         node, &ctx.inherited, &resp, "background",
-        crate::theme::parse_color_value,
+        crate::theme::parse_color,
         |k| ctx.theme.w_color_opt("Menu", k),
         egui::Color32::from_rgb(0x2A, 0x2A, 0x33),
     );
     let color_actual = resolve_state_attr(
         node, &ctx.inherited, &resp, "color",
-        crate::theme::parse_color_value,
+        crate::theme::parse_color,
         |k| ctx.theme.w_color_opt("Menu", k),
         egui::Color32::from_gray(220),
     );
@@ -147,7 +147,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     // Popup attrs (читаем ДО inherit_children, чтобы popup_*_children от MenuBar были видны)
     let popup_bg = crate::renderer::attr_str(node, "popup_background")
         .or_else(|| ctx.inherited.get("popup_background").and_then(|v| v.as_str()))
-        .and_then(crate::theme::parse_hex_color)
+        .and_then(crate::theme::parse_color_hex)
         .or_else(|| ctx.theme.w_color_opt("Menu", "popup_background"))
         .unwrap_or_else(|| egui::Color32::from_rgb(0x1C, 0x1E, 0x24));
     let popup_rounding = crate::renderer::attr_f64(node, "popup_rounding")
@@ -284,4 +284,5 @@ mod tests {
         assert_eq!(attr_str(&json, "text"), Some("File"));
     }
 }
+
 

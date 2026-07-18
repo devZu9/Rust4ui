@@ -137,7 +137,7 @@ fn render_number(
     let stepper_pad = attr_f64(node, "stepper_padding")
         .unwrap_or_else(|| ctx.theme.w_f64("TextField", "stepper_padding", 2.0)) as f32;
     let stepper_bg = node.get("stepper_background")
-        .and_then(crate::theme::parse_color_value)
+        .and_then(crate::theme::parse_color)
         .unwrap_or_else(|| ctx.theme.w_color("TextField", "stepper_background", egui::Color32::TRANSPARENT));
     let stepper_round = attr_f64(node, "stepper_rounding")
         .unwrap_or_else(|| ctx.theme.w_f64("TextField", "stepper_rounding", 0.0)) as u8;
@@ -333,5 +333,6 @@ mod tests {
         assert_eq!(attr_str(&json, "binding"), Some("name"));
     }
 }
+
 
 

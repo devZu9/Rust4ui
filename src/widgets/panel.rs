@@ -3,7 +3,7 @@ use crate::renderer::{attr_f64, attr_str, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
     let fill = node.get("background")
-        .and_then(crate::theme::parse_color_value)
+        .and_then(crate::theme::parse_color)
         .unwrap_or(egui::Color32::from_rgb(0x1A, 0x1D, 0x23));
 
     let rounding = attr_f64(node, "rounding").unwrap_or(8.0);
@@ -39,3 +39,4 @@ mod tests {
         assert_eq!(attr_str(&json, "background"), Some("#1A1D23"));
     }
 }
+

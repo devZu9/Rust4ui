@@ -88,7 +88,7 @@ fn parse_shadow_impl(val: &serde_json::Value, default_xy: f32) -> Option<Shadow>
             };
 
             let base_color = if arr.len() >= 3 {
-                arr[2].as_str().and_then(crate::theme::parse_hex_color).unwrap_or(egui::Color32::BLACK)
+                arr[2].as_str().and_then(crate::theme::parse_color_hex).unwrap_or(egui::Color32::BLACK)
             } else {
                 egui::Color32::BLACK
             };
@@ -112,7 +112,7 @@ pub fn parse_shadow(val: &serde_json::Value) -> Option<Shadow> {
 }
 
 /// Парсит тень контента/иконки/текста. Default offset (1,1).
-pub fn parse_content_shadow(val: &serde_json::Value) -> Option<Shadow> {
+pub fn parse_shadow_content(val: &serde_json::Value) -> Option<Shadow> {
     parse_shadow_impl(val, 1.0)
 }
 
@@ -156,7 +156,7 @@ pub fn get_border(node: &serde_json::Value, theme: &Theme, widget: &str) -> Bord
         .unwrap_or(0.0) as f32;
 
     let c = node.get("border_color")
-        .and_then(crate::theme::parse_color_value)
+        .and_then(crate::theme::parse_color)
         .or_else(|| shorthand_color(node))
         .or_else(|| theme_widget_color(theme, widget, "border_color"))
         .or_else(|| theme_shorthand_color(theme, widget))
@@ -226,7 +226,7 @@ pub fn apply_state_border(node: &serde_json::Value, theme: &Theme, widget: &str,
 
     let mut r = *base;
     if arr.len() >= 1 { if let Some(n) = arr[0].as_f64() { r.width = n as f32; } }
-    if arr.len() >= 2 { if let Some(c) = crate::theme::parse_color_value(&arr[1]) { r.color = c; } }
+    if arr.len() >= 2 { if let Some(c) = crate::theme::parse_color(&arr[1]) { r.color = c; } }
     let has_op = arr.len() >= 3 && arr[2].as_f64().is_some();
     let off = if has_op { 1 } else { 0 };
     if has_op {
@@ -271,7 +271,7 @@ fn shorthand_width(node: &serde_json::Value) -> Option<f64> {
 fn shorthand_color(node: &serde_json::Value) -> Option<egui::Color32> {
     let arr = node.get("border")?.as_array()?;
     if arr.len() < 2 { return None; }
-    let mut c = crate::theme::parse_color_value(&arr[1])?;
+    let mut c = crate::theme::parse_color(&arr[1])?;
     if arr.len() >= 3 {
         if let Some(o) = arr[2].as_f64() {
             let a = (c.a() as f32 * o.clamp(0.0, 1.0) as f32) as u8;
@@ -295,7 +295,7 @@ fn theme_widget_f64(theme: &Theme, widget: &str, key: &str) -> Option<f64> {
 }
 
 fn theme_widget_color(theme: &Theme, widget: &str, key: &str) -> Option<egui::Color32> {
-    crate::theme::parse_color_value(theme.widget.get(widget)?.get(key)?)
+    crate::theme::parse_color(theme.widget.get(widget)?.get(key)?)
 }
 
 fn theme_shorthand_width(theme: &Theme, widget: &str) -> Option<f64> {
@@ -310,7 +310,7 @@ fn theme_shorthand_width(theme: &Theme, widget: &str) -> Option<f64> {
 fn theme_shorthand_color(theme: &Theme, widget: &str) -> Option<egui::Color32> {
     let arr = theme.widget.get(widget)?.get("border")?.as_array()?;
     if arr.len() < 2 { return None; }
-    let mut c = crate::theme::parse_color_value(&arr[1])?;
+    let mut c = crate::theme::parse_color(&arr[1])?;
     if arr.len() >= 3 {
         if let Some(o) = arr[2].as_f64() {
             let a = (c.a() as f32 * o.clamp(0.0, 1.0) as f32) as u8;
@@ -589,3 +589,4 @@ pub fn widget_border(
     };
     draw_border(ui, rect, rounding, &border);
 }
+

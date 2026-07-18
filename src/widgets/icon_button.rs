@@ -1,4 +1,4 @@
-use crate::border::{parse_content_shadow, Shadow, ShadowZOrder};
+use crate::border::{parse_shadow_content, Shadow, ShadowZOrder};
 use crate::renderer::{attr_bool, attr_f64, attr_str, get_padding, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
@@ -24,7 +24,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     let base_pad = get_padding(node, &ctx.inherited, &ctx.theme, "IconButton", egui::Margin::ZERO);
     let color = node.get("color")
-        .and_then(crate::theme::parse_color_value)
+        .and_then(crate::theme::parse_color)
         .unwrap_or_else(|| ctx.theme.w_color("IconButton", "color", egui::Color32::from_rgb(0xE0, 0xE0, 0xE0)));
 
     let halign = match align {
@@ -49,7 +49,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     );
 
     let actual_text = if enabled {
-        crate::renderer::get_state_attr(node, &ctx.theme, "IconButton", "color", &out.response, true, color, crate::theme::parse_color_value)
+        crate::renderer::get_state_attr(node, &ctx.theme, "IconButton", "color", &out.response, true, color, crate::theme::parse_color)
     } else {
         egui::Color32::from_gray(100)
     };
@@ -62,7 +62,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let text_pos = egui::pos2(text_x, text_y);
 
     let shadow_icon = crate::renderer::get_state_attr(node, &ctx.theme, "IconButton", "shadow_icon", &out.response, true,
-        Shadow { color: egui::Color32::TRANSPARENT, offset: egui::Vec2::ZERO, z_order: ShadowZOrder::Under }, parse_content_shadow);
+        Shadow { color: egui::Color32::TRANSPARENT, offset: egui::Vec2::ZERO, z_order: ShadowZOrder::Under }, parse_shadow_content);
     if shadow_icon.is_visible() {
         ui.painter().galley_with_override_text_color(text_pos + shadow_icon.offset, maket.clone(), shadow_icon.color);
     }
@@ -96,5 +96,6 @@ mod tests {
         assert_eq!(attr_str(&json, "icon"), Some("save"));
     }
 }
+
 
 

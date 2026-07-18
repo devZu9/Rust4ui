@@ -9,7 +9,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     let bg = node
         .get("background")
-        .and_then(crate::theme::parse_color_value)
+        .and_then(crate::theme::parse_color)
         .or_else(|| ctx.theme.w_color_opt("MenuBar", "background"))
         .unwrap_or_else(|| egui::Color32::from_rgb(0x1E, 0x1E, 0x24));
 
@@ -96,5 +96,6 @@ mod tests {
         assert_eq!(json["type"], "MenuBar");
     }
 }
+
 
 

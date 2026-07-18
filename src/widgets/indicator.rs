@@ -6,7 +6,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, _ctx: &mut RenderCtx)
     let tooltip = attr_str(node, "tooltip");
 
     let color = node.get("color")
-        .and_then(crate::theme::parse_color_value)
+        .and_then(crate::theme::parse_color)
         .unwrap_or(egui::Color32::from_rgb(0x88, 0x88, 0x88));
 
     let diameter: f32 = size.parse().unwrap_or(8.0);
@@ -36,3 +36,4 @@ mod tests {
         assert_eq!(attr_str(&json, "color"), Some("#00FF66"));
     }
 }
+

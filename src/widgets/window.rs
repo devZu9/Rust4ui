@@ -20,7 +20,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let min_h = attr_f64(node, "min_height").unwrap_or(80.0);
 
     let fill = node.get("background")
-        .and_then(crate::theme::parse_color_value)
+        .and_then(crate::theme::parse_color)
         .unwrap_or(egui::Color32::from_rgb(0x1E, 0x1E, 0x24));
 
     let border = get_border(node, &ctx.theme, "Window");
@@ -101,3 +101,4 @@ mod tests {
         assert_eq!(attr_str(&json, "id"), Some("test_win"));
     }
 }
+

@@ -18,7 +18,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &RenderCtx) {
 
     let color_str = attr_str(node, "color");
     let color = color_str
-        .and_then(crate::theme::parse_hex_color)
+        .and_then(crate::theme::parse_color_hex)
         .unwrap_or(egui::Color32::from_rgb(0xCC, 0xCC, 0xCC));
 
     let mut rich = egui::RichText::new(text).size(size as f32).color(color);
@@ -56,3 +56,4 @@ mod tests {
         assert!(!attr_bool(&json, "bold").unwrap_or(false));
     }
 }
+

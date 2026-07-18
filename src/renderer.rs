@@ -84,7 +84,7 @@ impl RenderCtx {
     ) -> egui::Color32 {
         attr.get(key)
             .and_then(|v| v.as_str())
-            .and_then(crate::theme::parse_hex_color)
+            .and_then(crate::theme::parse_color_hex)
             .unwrap_or(default)
     }
 }
@@ -183,7 +183,7 @@ pub fn get_state_background(
     default: egui::Color32,
 ) -> egui::Color32 {
     if !enabled { return egui::Color32::from_gray(60); }
-    get_state_attr(node, theme, widget, "background", resp, true, default, crate::theme::parse_color_value)
+    get_state_attr(node, theme, widget, "background", resp, true, default, crate::theme::parse_color)
 }
 
 pub fn render_node(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
@@ -367,3 +367,4 @@ pub fn attr_f64(node: &serde_json::Value, key: &str) -> Option<f64> {
 pub fn attr_bool(node: &serde_json::Value, key: &str) -> Option<bool> {
     node.get(key).and_then(|v| v.as_bool())
 }
+

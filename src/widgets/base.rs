@@ -20,7 +20,7 @@ fn get_bg(
     if !enabled { return egui::Color32::from_gray(60); }
     resolve_state_attr(
         node, inherited, resp, "background",
-        crate::theme::parse_color_value,
+        crate::theme::parse_color,
         |k| theme.w_color_opt(widget, k),
         egui::Color32::TRANSPARENT,
     )
@@ -162,4 +162,5 @@ pub fn widget_paint_egui<R>(
     restore_widget_style(ui, saved);
     (result, out.response)
 }
+
 

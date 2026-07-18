@@ -13,7 +13,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .get_string(&binding)
         .unwrap_or("#FF6633")
         .to_string();
-    let color = crate::theme::parse_hex_color(&color_str)
+    let color = crate::theme::parse_color_hex(&color_str)
         .unwrap_or(egui::Color32::from_rgb(0xFF, 0x66, 0x33));
 
     let (_, _) = crate::widgets::base::widget_paint_egui(
@@ -59,3 +59,4 @@ mod tests {
         assert_eq!(attr_str(&json, "binding"), Some("accent"));
     }
 }
+

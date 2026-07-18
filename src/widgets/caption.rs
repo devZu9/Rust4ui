@@ -7,7 +7,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &RenderCtx) {
 
     let color_str = attr_str(node, "color");
     let color = color_str
-        .and_then(crate::theme::parse_hex_color)
+        .and_then(crate::theme::parse_color_hex)
         .unwrap_or(egui::Color32::from_rgb(0x88, 0x88, 0x88));
 
     let size = attr_f64(node, "size").unwrap_or(11.0);
@@ -35,3 +35,4 @@ mod tests {
         assert_eq!(attr_str(&json, "text"), Some("v1.0"));
     }
 }
+

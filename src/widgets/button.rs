@@ -1,4 +1,4 @@
-use crate::border::{draw_shadow_content, parse_content_shadow, Shadow, ShadowZOrder};
+use crate::border::{draw_shadow_content, parse_shadow_content, Shadow, ShadowZOrder};
 use crate::renderer::{attr_bool, attr_f64, attr_str, get_padding, resolve_text, RenderCtx};
 use crate::theme::Theme;
 
@@ -12,7 +12,7 @@ fn cascade_shadow(node: &serde_json::Value, theme: &Theme, widget: &str, key: &s
         || theme.widget.get(widget).and_then(|w| w.get(&format!("{}_click", key))).is_some()
         || theme.widget.get(widget).and_then(|w| w.get(&format!("{}_focus", key))).is_some();
     if has {
-        crate::renderer::get_state_attr(node, theme, widget, key, resp, enabled, Shadow::transparent(), parse_content_shadow)
+        crate::renderer::get_state_attr(node, theme, widget, key, resp, enabled, Shadow::transparent(), parse_shadow_content)
     } else {
         fallback
     }
@@ -38,11 +38,11 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     let base_pad = get_padding(node, &ctx.inherited, &ctx.theme, "Button", egui::Margin::symmetric(16, 4));
     let color_text = node.get("color_text")
-        .and_then(crate::theme::parse_color_value)
+        .and_then(crate::theme::parse_color)
         .unwrap_or_else(|| ctx.theme.w_color("Button", "color_text", egui::Color32::from_rgb(0xE0, 0xE0, 0xE0)));
 
     let color_icon = node.get("color_icon")
-        .and_then(crate::theme::parse_color_value)
+        .and_then(crate::theme::parse_color)
         .or_else(|| ctx.theme.w_color_opt("Button", "color_icon"))
         .unwrap_or(color_text);
 
@@ -94,13 +94,13 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     };
 
     let actual_text = if enabled {
-        crate::renderer::get_state_attr(node, &ctx.theme, "Button", "color_text", &out.response, true, color_text, crate::theme::parse_color_value)
+        crate::renderer::get_state_attr(node, &ctx.theme, "Button", "color_text", &out.response, true, color_text, crate::theme::parse_color)
     } else {
         egui::Color32::from_gray(100)
     };
 
     let shadow_content = crate::renderer::get_state_attr(node, &ctx.theme, "Button", "shadow_content", &out.response, true,
-        Shadow::transparent(), parse_content_shadow);
+        Shadow::transparent(), parse_shadow_content);
     let shadow_icon = cascade_shadow(node, &ctx.theme, "Button", "shadow_icon", &out.response, enabled, shadow_content);
     let shadow_text = cascade_shadow(node, &ctx.theme, "Button", "shadow_text", &out.response, enabled, shadow_content);
 
@@ -159,5 +159,6 @@ mod tests {
         assert!(attr_bool(&json, "enabled").unwrap_or(true));
     }
 }
+
 
 

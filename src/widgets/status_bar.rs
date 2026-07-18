@@ -6,7 +6,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let padding = attr_f64(node, "padding").unwrap_or(4.0);
 
     let fill = node.get("background")
-        .and_then(crate::theme::parse_color_value)
+        .and_then(crate::theme::parse_color)
         .unwrap_or(egui::Color32::from_rgb(0x18, 0x18, 0x1D));
 
     let border = get_border(node, &ctx.theme, "StatusBar");
@@ -62,3 +62,4 @@ mod tests {
         assert_eq!(attr_f64(&json, "height"), Some(26.0));
     }
 }
+

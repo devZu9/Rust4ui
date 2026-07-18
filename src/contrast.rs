@@ -42,7 +42,7 @@ pub fn check_theme_contrasts(colors: &HashMap<String, String>, logger: &str) {
     for key in &text_keys {
         if let Some(hex) = colors.get(*key) {
             let ratio = wcag_contrast(
-                &crate::theme::parse_hex_color(hex).unwrap_or(default_bg),
+                &crate::theme::parse_color_hex(hex).unwrap_or(default_bg),
                 &default_bg,
             );
             if ratio < 3.0 {
@@ -56,8 +56,8 @@ pub fn check_theme_contrasts(colors: &HashMap<String, String>, logger: &str) {
 
 pub fn check_contrast_pair(fg_hex: &str, bg_hex: &str, label: &str, logger: &str) {
     if let (Some(fg), Some(bg)) = (
-        crate::theme::parse_hex_color(fg_hex),
-        crate::theme::parse_hex_color(bg_hex),
+        crate::theme::parse_color_hex(fg_hex),
+        crate::theme::parse_color_hex(bg_hex),
     ) {
         if fg == bg {
             return;
@@ -72,8 +72,8 @@ pub fn check_contrast_pair(fg_hex: &str, bg_hex: &str, label: &str, logger: &str
 }
 
 fn parse_color_or(hex: Option<&str>, default: &str) -> egui::Color32 {
-    hex.and_then(crate::theme::parse_hex_color)
-        .unwrap_or_else(|| crate::theme::parse_hex_color(default).unwrap())
+    hex.and_then(crate::theme::parse_color_hex)
+        .unwrap_or_else(|| crate::theme::parse_color_hex(default).unwrap())
 }
 
 #[cfg(test)]
@@ -113,3 +113,4 @@ mod tests {
         );
     }
 }
+

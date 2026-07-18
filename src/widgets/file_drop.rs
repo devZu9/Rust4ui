@@ -7,13 +7,13 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let multi = attr_bool(node, "multi").unwrap_or(false);
 
     let highlight_color = attr_str(node, "highlight_color")
-        .and_then(crate::theme::parse_hex_color)
+        .and_then(crate::theme::parse_color_hex)
         .unwrap_or(egui::Color32::from_rgba_unmultiplied(
             0x33, 0x66, 0xCC, 0x44,
         ));
 
     let fill = node.get("background")
-        .and_then(crate::theme::parse_color_value)
+        .and_then(crate::theme::parse_color)
         .unwrap_or(egui::Color32::from_rgb(0x1A, 0x1D, 0x23));
 
     let rounding = attr_f64(node, "rounding").unwrap_or(8.0);
@@ -83,3 +83,4 @@ mod tests {
         assert_eq!(attr_str(&json, "action"), Some("file_dropped"));
     }
 }
+
