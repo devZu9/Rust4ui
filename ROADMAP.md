@@ -77,6 +77,7 @@
   - [x] padding_children / margin_children / rounding_children 🟢 *(16.07.2026)*
   - [x] border _children + border_position_children 🟢 *(17.07.2026)*
   - [x] icon_children / icon_position_children / icon_gap_children 🟢 *(17.07.2026)*
+  - [ ] **Конфликт Menu padding_children и MenuItem padding** — при включённых обоих padding смешивается, должен работать приоритет node → inherited → theme
   - [ ] Состояние _focus на раскрытом меню можно настраивать через постфикс
   - [ ] Настройка авто-раскрытия после клика (т.е. первый клик раскрывает пункт меню, а дальше мы просто водим и меню раскрывается из-за hover)
   - [ ] **Кастомизация показа иконок в MenuItem** — настройка видимости иконок (всегда/при наведении/скрыть)
