@@ -66,7 +66,6 @@
 
 ### v0.5 — Числовое поле, оставшиеся виджеты и полировка *(текущая)*
 
-- [x] **Конфликт Menu padding_children и MenuItem padding** — исправлен: удалён лишний resolve_state_attr("padding") из widget_base 🟢 *(18.07.2026)*
 - [ ] **Отключение сторон бордюра** — возможность отключить любую сторону (top/right/bottom/left) у виджетов с border, чтобы делать уголки или односторонние полоски
 - [ ] **MenuBar**
   - [ ] **Кастомизация показа иконок в MenuItem** — настройка видимости иконок (всегда/при наведении/скрыть)
@@ -87,9 +86,8 @@
 - [ ] **Система иконок** — IconBar anchor (start/center/end), Separator в IconBar
 - [ ] **Микро-анимации иконок** — см. v0.* — Расширяем функционал
 
-
-
 - [x] **MenuBar** — универсальный _children/_hover/_click/_focus механизм, popup_*, исправление ошибок 🟢 *(18.07.2026)*
+  - [x] **Конфликт Menu padding_children и MenuItem padding** — исправлен: удалён лишний resolve_state_attr("padding") из widget_base 🟢 *(18.07.2026)*
   - [x] **popup_* атрибуты** — popup_background/rounding/padding/gap/min_width/max_height/border/shadow 🟢 *(18.07.2026)*
   - [x] **inherit_children: theme fallback** — *_children из theme.json работают (JSON → theme) 🟢 *(18.07.2026)*
   - [x] **popup open/close logic** — clicked_elsewhere, ховер-переключение, очистка open_popup_id 🟢 *(18.07.2026)*
