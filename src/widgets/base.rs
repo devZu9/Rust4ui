@@ -101,6 +101,13 @@ pub fn widget_base(
         egui::pos2(content_rect.right() - pad.right as f32, content_rect.bottom() - pad.bottom as f32),
     );
 
+    log::debug!("[widget_base::{}] pad: [{}, {}, {}, {}] | content_rect.w: {:.0} | inner: {:.0}x{:.0}",
+        widget,
+        pad.top, pad.right, pad.bottom, pad.left,
+        content_rect.width(),
+        inner_rect.width(), inner_rect.height(),
+    );
+
     BaseOut { response: resp, content_rect, inner_rect, rounding_cr }
 }
 
