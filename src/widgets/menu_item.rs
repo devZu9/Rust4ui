@@ -23,38 +23,34 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     };
 
     let stretch = get_attr_ctx(
-        ctx, node, "MenuItem",
+        ctx, node,
         "stretch",
         |v| v.as_bool(),
         |k| ctx.theme.widget.get("MenuItem").and_then(|w| w.get(k)).and_then(|v| v.as_bool()),
-        "stretch_children",
         false,
     );
 
     let align = get_attr_ctx(
-        ctx, node, "MenuItem",
+        ctx, node,
         "align",
         |v| v.as_str().map(|s| s.to_string()),
         |k| Some(ctx.theme.w_str("MenuItem", k, "left")),
-        "align_children",
         "left".to_string(),
     );
 
     let color = get_attr_ctx(
-        ctx, node, "MenuItem",
+        ctx, node,
         "color",
         crate::theme::parse_color,
         |k| ctx.theme.w_color_opt("MenuItem", k),
-        "color_children",
         egui::Color32::from_gray(220),
     );
 
     let color_icon = get_attr_ctx(
-        ctx, node, "MenuItem",
+        ctx, node,
         "color_icon",
         crate::theme::parse_color,
         |k| ctx.theme.w_color_opt("MenuItem", k),
-        "color_icon_children",
         color,
     );
 
@@ -66,8 +62,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let content = ui.painter().layout_no_wrap(label.clone(), font_id, color_icon);
     let content_size = content.size();
 
-    let margin = get_margin(node, &ctx.inherited, &ctx.theme, "MenuItem");
-    let pad = get_padding(node, &ctx.inherited, &ctx.theme, "MenuItem", egui::Margin::ZERO);
+    let margin = get_margin(node, &ctx.inherited, &ctx.theme);
+    let pad = get_padding(node, &ctx.inherited, &ctx.theme, egui::Margin::ZERO);
 
     if margin.top > 0 { ui.add_space(margin.top as f32); }
 

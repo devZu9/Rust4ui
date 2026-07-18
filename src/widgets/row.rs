@@ -29,7 +29,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     }
 
     let layout = egui::Layout::left_to_right(egui::Align::TOP).with_main_wrap(wrap);
-    let pad = get_padding(node, &ctx.inherited, &ctx.theme, "Row", egui::Margin::ZERO);
+    let pad = get_padding(node, &ctx.inherited, &ctx.theme, egui::Margin::ZERO);
 
     let response = if pad == egui::Margin::ZERO {
         ui.scope_builder(
@@ -84,5 +84,6 @@ mod tests {
         assert_eq!(json["children"].as_array().unwrap().len(), 2);
     }
 }
+
 
 

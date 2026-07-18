@@ -266,9 +266,9 @@ pub fn get_padding(
     node: &serde_json::Value,
     inherited: &HashMap<String, serde_json::Value>,
     theme: &crate::theme::Theme,
-    widget: &str,
     default: egui::Margin,
 ) -> egui::Margin {
+    let widget = node.get("type").and_then(|v| v.as_str()).unwrap_or("unknown");
     get_attr(
         node, inherited, theme, widget,
         "padding",
@@ -283,8 +283,8 @@ pub fn get_margin(
     node: &serde_json::Value,
     inherited: &HashMap<String, serde_json::Value>,
     theme: &crate::theme::Theme,
-    widget: &str,
 ) -> egui::Margin {
+    let widget = node.get("type").and_then(|v| v.as_str()).unwrap_or("unknown");
     get_attr(
         node, inherited, theme, widget,
         "margin",
@@ -320,18 +320,18 @@ pub fn get_attr<T: Clone>(
         .unwrap_or(default)
 }
 
-/// Упрощённый вызов get_attr с ctx (чтобы не передавать inherited + theme отдельно).
+/// Упрощённый вызов get_attr с ctx (widget + parent_key из node["type"]).
 pub fn get_attr_ctx<T: Clone>(
     ctx: &RenderCtx,
     node: &serde_json::Value,
-    widget: &str,
     key: &str,
     parse: impl Fn(&serde_json::Value) -> Option<T>,
     theme_lookup: impl Fn(&str) -> Option<T>,
-    parent_key: &str,
     default: T,
 ) -> T {
-    get_attr(node, &ctx.inherited, &ctx.theme, widget, key, parse, theme_lookup, parent_key, default)
+    let widget = node.get("type").and_then(|v| v.as_str()).unwrap_or("unknown");
+    let parent_key = format!("{}_children", key);
+    get_attr(node, &ctx.inherited, &ctx.theme, widget, key, parse, theme_lookup, &parent_key, default)
 }
 
 /// Парсит скругление: число → 4 одинаковых угла, массив [nw, ne, sw, se] → per-corner
