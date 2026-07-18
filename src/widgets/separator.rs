@@ -7,7 +7,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &RenderCtx) {
     let sep_w = ui.available_width().max(50.0);
     let empty_inherited = std::collections::HashMap::new();
 
-    let (_, _) = crate::widgets::base::widget_base_wrap(
+    let (_, _) = crate::widgets::base::widget_paint_egui(
         ui, node, &ctx.theme, "Separator",
         egui::vec2(sep_w, 4.0), egui::Sense::hover(), true,
         egui::Color32::TRANSPARENT, 4.0, egui::Margin::ZERO, &empty_inherited,

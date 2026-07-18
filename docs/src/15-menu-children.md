@@ -321,16 +321,16 @@ node["key"]       → inherited["key"]       → theme["key"]       → default
 Для border дополнительно:
 - `ctx.get_border()` обогащает node из `ctx.inherited` для ВСЕХ border-суб-атрибутов (`border_position`, `border_width`, `border_color`, `border_type`, `border_gap`, `border_seg_len`)
 
-### Важное замечание: `resolve_state_attr` в `widget_base`
+### Важное замечание: `resolve_state_attr` в `widget_paint_custom`
 
-`widget_base` (общая функция отрисовки для всех custom-paint виджетов) использует `resolve_state_attr` для атрибутов `background`, `rounding`, `shadow_background`, `shadow_border`. **Для `padding` — не использует.**
+`widget_paint_custom` (общая функция отрисовки для всех custom-paint виджетов) использует `resolve_state_attr` для атрибутов `background`, `rounding`, `shadow_background`, `shadow_border`. **Для `padding` — не использует.**
 
-`padding` вычисляется вызывающим виджетом (например, `menu_item.rs`) через `get_padding()` и передаётся в `widget_base` как `default_pad`. Если бы `widget_base` перепроверял padding через `resolve_state_attr`, возник бы конфликт:
+`padding` вычисляется вызывающим виджетом (например, `menu_item.rs`) через `get_padding()` и передаётся в `widget_paint_custom` как `default_pad`. Если бы `widget_paint_custom` перепроверял padding через `resolve_state_attr`, возник бы конфликт:
 
 | Уровень | Цепочка | Результат |
 |---------|---------|-----------|
 | `menu_item.rs: get_padding()` | `node → theme → default` | `[15, 80]` из MenuItem ✅ |
-| `widget_base: resolve_state_attr("padding")` | `node → inherited → theme → default` | `[10, 40]` из inherited ❌ |
+| `widget_paint_custom: resolve_state_attr("padding")` | `node → inherited → theme → default` | `[10, 40]` из inherited ❌ |
 
 Из-за того, что `resolve_state_attr` проверяет inherited ДО theme, `padding_children` выигрывал у собственного `padding` MenuItem. **Правило:** если атрибут уже корректно разрешён вызывающим кодом — не запускай для него `resolve_state_attr` повторно.
 

@@ -69,7 +69,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let content_w = (icon_sz.x + gap + text_sz.x).max(min_cw);
     let content_h = (icon_sz.y.max(text_sz.y)).max(min_ch);
 
-    let out = crate::widgets::base::widget_base(
+    let out = crate::widgets::base::widget_paint_custom(
         ui, node, &ctx.theme, "Button",
         egui::vec2(content_w, content_h),
         egui::Sense::click_and_drag(), enabled,

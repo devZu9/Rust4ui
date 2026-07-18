@@ -8,7 +8,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &RenderCtx) {
 
     let tooltip = attr_str(node, "tooltip").map(|t| resolve_text(t, ctx));
 
-    let (_, resp) = crate::widgets::base::widget_base_wrap(
+    let (_, resp) = crate::widgets::base::widget_paint_egui(
         ui, node, &ctx.theme, "Hyperlink",
         egui::vec2(200.0, 20.0), egui::Sense::click(), true,
         egui::Color32::TRANSPARENT, 4.0, egui::Margin::ZERO, &ctx.inherited,

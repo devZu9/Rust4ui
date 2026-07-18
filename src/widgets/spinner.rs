@@ -5,7 +5,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &RenderCtx) {
         .map(|t| resolve_text(t, ctx))
         .unwrap_or_default();
 
-    let (_, _) = crate::widgets::base::widget_base_wrap(
+    let (_, _) = crate::widgets::base::widget_paint_egui(
         ui, node, &ctx.theme, "Spinner",
         egui::vec2(200.0, 24.0), egui::Sense::hover(), true,
         egui::Color32::TRANSPARENT, 4.0, egui::Margin::symmetric(4, 0), &ctx.inherited,

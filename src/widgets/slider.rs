@@ -20,7 +20,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     let mut value = ctx.state.get_f64(&binding).unwrap_or(min);
 
-    let (_, resp) = crate::widgets::base::widget_base_wrap(
+    let (_, resp) = crate::widgets::base::widget_paint_egui(
         ui, node, &ctx.theme, "Slider",
         egui::vec2(width as f32, 20.0), egui::Sense::click(), true,
         egui::Color32::TRANSPARENT, 4.0, egui::Margin::ZERO, &ctx.inherited,

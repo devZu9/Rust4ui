@@ -41,7 +41,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let content_w = (maket.size().x + pad_l + pad_r).max(base_button_size);
     let content_h = (base_icon_size + pad_t + pad_b).max(base_button_size);
 
-    let out = crate::widgets::base::widget_base(
+    let out = crate::widgets::base::widget_paint_custom(
         ui, node, &ctx.theme, "IconButton",
         egui::vec2(content_w, content_h),
         egui::Sense::click_and_drag(), enabled,

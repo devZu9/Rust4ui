@@ -11,8 +11,8 @@
 ### Продолжение (17-18.07)
 
 - [x] **Конфликт padding_children и MenuItem padding — исправлен** — 
-  **Проблема:** `widget_base` перечитывал padding через `resolve_state_attr(node, inherited, &resp, "padding", ...)` с цепочкой `node → inherited → theme → default`. Поскольку inherited проверяется ДО theme, `padding_children: [10,40]` выигрывал у `MenuItem padding: [15,80]`, давая смешанный визуал.
-  **Решение:** удалён `resolve_state_attr("padding")` из `widget_base`. Теперь padding вычисляется один раз — в `menu_item.rs` через `get_padding(node → inherited → theme → default)`. `widget_base` просто использует полученный `pad`, не перепроверяя.
+  **Проблема:** `widget_paint_custom` перечитывал padding через `resolve_state_attr(node, inherited, &resp, "padding", ...)` с цепочкой `node → inherited → theme → default`. Поскольку inherited проверяется ДО theme, `padding_children: [10,40]` выигрывал у `MenuItem padding: [15,80]`, давая смешанный визуал.
+  **Решение:** удалён `resolve_state_attr("padding")` из `widget_paint_custom`. Теперь padding вычисляется один раз — в `menu_item.rs` через `get_padding(node → inherited → theme → default)`. `widget_paint_custom` просто использует полученный `pad`, не перепроверяя.
   **Вывод:** `resolve_state_attr` для атрибутов, которые вызывающий код уже корректно разрешил — источник двойного расхождения. Нужно следить, чтобы атрибут не обрабатывался дважды с разными цепочками.
 - [x] **Попап: измерение детей** — ширина попапа считается по самому широкому MenuItem (text + icon + padding) до inherit_children. Separator и stretch используют `available_width()` от фиксированного alloc.
 - [x] **MenuItem: `stretch`** — растягивает MenuItem на всю ширину попапа. `stretch: true/false`, через node → inherited → theme.
@@ -48,7 +48,7 @@
 - [x] **menu.rs** — bg/bg_hover/bg_click/color/icon_position/icon_gap/border → resolve_state_attr.
 - [x] **menu.rs** — порядок: layout → resolve_state_attr → inherit_children → popup → restore_children. Исправлено протекание и невидимость background_children.
 - [x] **menu_item.rs** — читает inherited через HashMap.
-- [x] **base.rs** — widget_base/widget_base_wrap принимают &HashMap вместо Option<Color32>.
+- [x] **base.rs** — widget_paint_custom/widget_paint_egui принимают &HashMap вместо Option<Color32>.
 - [x] **border.rs** — Default для BorderStyle, BorderType, BorderPosition.
 - [x] **Исправлено: `border_position_children` не работал** — menu.rs захардкодил node.get("border_position"). Исправлено через ctx.get_border().
 - [x] **Исправлено: `inherit_children` протекал глубже одного уровня** — MenuBar's background_children доходил до Label/Button.
@@ -62,8 +62,8 @@
 - [x] **MenuBar: border через draw_border** — solid/dash/dot 🟢 *(16.07.2026)*
 - [x] **Menu: state-aware фон и цвет** — background_hover/click + color_hover/click через fg_stroke 🟢 *(16.07.2026)*
 - [x] **Menu: margin top/bottom** — вертикальные отступы 🟢 *(16.07.2026)*
-- [x] **widget_base** — единая функция отрисовки для custom-paint виджетов. Button -80 строк, IconButton -50 строк, MenuItem переведён на custom-paint 🟢 *(16.07.2026)*
-- [x] **MenuItem: state-aware стили** — background_hover/click/focus работают через widget_base 🟢 *(16.07.2026)*
+- [x] **widget_paint_custom** — единая функция отрисовки для custom-paint виджетов. Button -80 строк, IconButton -50 строк, MenuItem переведён на custom-paint 🟢 *(16.07.2026)*
+- [x] **MenuItem: state-aware стили** — background_hover/click/focus работают через widget_paint_custom 🟢 *(16.07.2026)*
 - [x] **MenuBar: {{syntax}} резолвится** — menu.rs подцепил resolve_text() 🟢 *(16.07.2026)*
 - [x] **MenuBar: каскад наследования** — MenuBar → Menu → MenuItem. background и color наследуются 🟢 *(16.07.2026)*
 - [x] **MenuBar: weak_bg_fill** — bg_fill → weak_bg_fill для всех состояний. Попап наследует фон через window_fill 🟢 *(16.07.2026)*

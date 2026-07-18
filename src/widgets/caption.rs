@@ -13,7 +13,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &RenderCtx) {
     let size = attr_f64(node, "size").unwrap_or(11.0);
     let monospace = attr_bool(node, "monospace").unwrap_or(false);
 
-    let (_, _) = crate::widgets::base::widget_base_wrap(
+    let (_, _) = crate::widgets::base::widget_paint_egui(
         ui, node, &ctx.theme, "Caption",
         egui::vec2(200.0, size as f32 + 4.0), egui::Sense::hover(), true,
         egui::Color32::TRANSPARENT, 4.0, egui::Margin::ZERO, &ctx.inherited,

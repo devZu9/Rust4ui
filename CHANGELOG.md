@@ -3,15 +3,15 @@
 ## [0.4.6] — 2026-07-18
 
 ### Исправлено
-- **Конфликт `padding_children` и `padding` на MenuItem** — `widget_base` перечитывал padding через `resolve_state_attr` с цепочкой `node → inherited → theme → default`, что давало приоритет `padding_children` (inherited) над `padding` на самом MenuItem (node). На самом деле `resolve_state_attr` для padding в `widget_base` был лишним — `menu_item.rs` уже корректно разрешил padding через `get_padding(node → inherited → theme → default)`. Удалён `resolve_state_attr("padding")` из `widget_base`.
+- **Конфликт `padding_children` и `padding` на MenuItem** — `widget_paint_custom` перечитывал padding через `resolve_state_attr` с цепочкой `node → inherited → theme → default`, что давало приоритет `padding_children` (inherited) над `padding` на самом MenuItem (node). На самом деле `resolve_state_attr` для padding в `widget_paint_custom` был лишним — `menu_item.rs` уже корректно разрешил padding через `get_padding(node → inherited → theme → default)`. Удалён `resolve_state_attr("padding")` из `widget_paint_custom`.
   ```
-  Было: widget_base переопределял pad = inherited → padding_children ❌
-  Стало: widget_base использует pad = node → inherited → theme → default ✅
+  Было: widget_paint_custom переопределял pad = inherited → padding_children ❌
+  Стало: widget_paint_custom использует pad = node → inherited → theme → default ✅
   ```
 
 ### Изменено
 - **base.rs** — удалён неиспользуемый импорт `parse_padding`
-- **Удалены временные debug-логи** — `widget_base` логировал каждый виджет каждый кадр. Теперь только MenuItem при клике (оба лога: menu_item + widget_base).
+- **Удалены временные debug-логи** — `widget_paint_custom` логировал каждый виджет каждый кадр. Теперь только MenuItem при клике (оба лога: menu_item + widget_paint_custom).
 
 ## [0.4.5] — 2026-07-18
 
@@ -60,7 +60,7 @@
 - **`menu.rs`** — порядок: layout → resolve_state_attr (читает ctx.inherited от родителя) → inherit_children (свои _children) → popup → restore_children.
 - **`menu_bar.rs`** — `rounding_children` сохраняется как `[nw, ne, sw, se]` (массив 4 угла), а не одно число.
 - **`menu_bar.rs`** — вся ручная обработка `_children` (30+ строк) заменена на `inherit_children(node)` / `restore_children(old)`.
-- **`widget_base()` / `widget_base_wrap()`** — принимают `&HashMap<String, Value>` (вместо `Option<Color32>`), что даёт универсальное наследование любых атрибутов через `ctx.inherited`.
+- **`widget_paint_custom()` / `widget_paint_egui()`** — принимают `&HashMap<String, Value>` (вместо `Option<Color32>`), что даёт универсальное наследование любых атрибутов через `ctx.inherited`.
 - **`base.rs`** — `get_bg()` переведён на `resolve_state_attr()`.
 - **`main.rs`, `examples/demo.rs`** — обновлены под новую структуру RenderCtx.
 
@@ -96,11 +96,11 @@
 ## [0.4.2] — 2026-07-16
 
 ### Добавлено
-- **`widget_base`** — единый слой отрисовки для всех custom-paint виджетов (`src/widgets/base.rs`). Устраняет копипасту фона, обводки, теней, padding/margin, state-атрибутов между виджетами.
-  - `widget_base()` — alloc, фон (state-aware), обводка (state-aware), shadow_background/shadow_border, padding/margin, rounding
+- **`widget_paint_custom`** — единый слой отрисовки для всех custom-paint виджетов (`src/widgets/base.rs`). Устраняет копипасту фона, обводки, теней, padding/margin, state-атрибутов между виджетами.
+  - `widget_paint_custom()` — alloc, фон (state-aware), обводка (state-aware), shadow_background/shadow_border, padding/margin, rounding
   - `inherited_bg` — каскадное наследование фона от родителя (MenuBar → Menu → MenuItem)
   - `BaseOut` — возвращает response, content_rect, inner_rect, rounding_cr
-- **MenuItem** — переведён с egui-обёртки на custom-paint через `widget_base`. Теперь поддерживает `background_hover`, `background_click`, `background_focus`.
+- **MenuItem** — переведён с egui-обёртки на custom-paint через `widget_paint_custom`. Теперь поддерживает `background_hover`, `background_click`, `background_focus`.
 - **MenuBar** — каскадное наследование `background`/`color` от MenuBar → Menu → MenuItem. Поддержка всех состояний (inactive/hovered/active/open) через `visuals.widgets.*.weak_bg_fill`.
 
 ### Изменено

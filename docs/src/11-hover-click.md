@@ -145,7 +145,7 @@ State-атрибуты работают с наследованием `_children
 
 ### Другие виджеты
 
-Все виджеты, проходящие через `widget_base()` (TextField, Checkbox, RadioGroup, Label, Slider, ComboBox, Separator, Spacer и т.д.), поддерживают те же базовые state-атрибуты:
+Все виджеты, проходящие через `widget_paint_custom()` (TextField, Checkbox, RadioGroup, Label, Slider, ComboBox, Separator, Spacer и т.д.), поддерживают те же базовые state-атрибуты:
 
 | Атрибут | Описание |
 |---------|----------|

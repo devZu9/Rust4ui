@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use crate::border::{draw_border, draw_shadow_bg, draw_shadow_border, get_state_border, parse_shadow, Shadow};
 use crate::renderer::{get_margin, get_padding, resolve_state_attr};
 
-pub struct BaseOut {
+pub struct PaintOut {
     pub response: egui::Response,
     pub content_rect: egui::Rect,
     pub inner_rect: egui::Rect,
@@ -27,7 +27,7 @@ fn get_bg(
     )
 }
 
-pub fn widget_base(
+pub fn widget_paint_custom(
     ui: &mut egui::Ui,
     node: &serde_json::Value,
     theme: &crate::theme::Theme,
@@ -39,7 +39,7 @@ pub fn widget_base(
     default_rounding: f64,
     default_pad: egui::Margin,
     inherited: &HashMap<String, serde_json::Value>,
-) -> BaseOut {
+) -> PaintOut {
     let pad = get_padding(node, theme, widget, default_pad);
     let margin = get_margin(node, theme, widget);
 
@@ -95,7 +95,7 @@ pub fn widget_base(
         egui::pos2(content_rect.right() - pad.right as f32, content_rect.bottom() - pad.bottom as f32),
     );
 
-    BaseOut { response: resp, content_rect, inner_rect, rounding_cr }
+    PaintOut { response: resp, content_rect, inner_rect, rounding_cr }
 }
 
 struct PrevWidgetStyle {
@@ -126,8 +126,8 @@ fn restore_widget_style(ui: &mut egui::Ui, saved: PrevWidgetStyle) {
     v.window_fill = saved.window_fill;
 }
 
-/// Wrap-режим: alloc + bg/border от widget_base + стилизованный child_ui для egui-виджета.
-pub fn widget_base_wrap<R>(
+/// Wrap-режим: alloc + bg/border от widget_paint_custom + стилизованный child_ui для egui-виджета.
+pub fn widget_paint_egui<R>(
     ui: &mut egui::Ui,
     node: &serde_json::Value,
     theme: &crate::theme::Theme,
@@ -141,7 +141,7 @@ pub fn widget_base_wrap<R>(
     inherited: &HashMap<String, serde_json::Value>,
     add_contents: impl FnOnce(&mut egui::Ui) -> R,
 ) -> (R, egui::Response) {
-    let out = widget_base(ui, node, theme, widget, content_size, sense, enabled,
+    let out = widget_paint_custom(ui, node, theme, widget, content_size, sense, enabled,
         default_bg, default_rounding, default_pad, inherited);
 
     let saved = save_widget_style(ui);

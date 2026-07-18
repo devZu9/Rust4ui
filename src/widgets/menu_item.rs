@@ -77,7 +77,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         text_size
     };
 
-    let out = crate::widgets::base::widget_base(
+    let out = crate::widgets::base::widget_paint_custom(
         ui, node, &ctx.theme, "MenuItem",
         content_size, egui::Sense::click(), enabled,
         egui::Color32::TRANSPARENT, base_rounding,
