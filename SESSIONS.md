@@ -10,6 +10,7 @@
 
 ### Продолжение (17-18.07)
 
+- [x] **Нейминг-рефакторинг отрисовки** — `widget_base` → `widget_paint_custom`, `widget_base_wrap` → `widget_paint_egui`, `BaseOut` → `PaintOut`. Сигнатура сокращена с 12 до 8 параметров: убраны `default_bg`, `default_rounding`, `default_pad` — читаются внутри из `theme`. Добавлена обёртка `reserve_exact_size` вместо `allocate_exact_size`.
 - [x] **Конфликт padding_children и MenuItem padding — исправлен** — 
   **Проблема:** `widget_paint_custom` перечитывал padding через `resolve_state_attr(node, inherited, &resp, "padding", ...)` с цепочкой `node → inherited → theme → default`. Поскольку inherited проверяется ДО theme, `padding_children: [10,40]` выигрывал у `MenuItem padding: [15,80]`, давая смешанный визуал.
   **Решение:** удалён `resolve_state_attr("padding")` из `widget_paint_custom`. Теперь padding вычисляется один раз — в `menu_item.rs` через `get_padding(node → inherited → theme → default)`. `widget_paint_custom` просто использует полученный `pad`, не перепроверяя.

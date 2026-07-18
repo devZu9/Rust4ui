@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.5.0] — 2026-07-18
+
+### Изменено
+- **`widget_base` → `widget_paint_custom`** — прозрачный нейминг: «виджет рисует кастомно».
+- **`widget_base_wrap` → `widget_paint_egui`** — прозрачный нейминг: «виджет рисует через egui-виджет».
+- **`BaseOut` → `PaintOut`** — возвращаемая структура результата отрисовки.
+- **`allocate_exact_size` → `reserve_exact_size`** — обёртка с понятным названием.
+- **Убраны параметры `default_bg`, `default_rounding`, `default_pad`** из `widget_paint_custom` и `widget_paint_egui`. Теперь читаются внутри из `theme` (фон, скругление) и `inherited` (padding).
+- **Сигнатура `widget_paint_custom`**: 8 параметров вместо 12. `(ui, node, theme, widget, reserved_size, sense, enabled, inherited)`.
+- **`render_node` в `renderer.rs`** — обновлён под новую сигнатуру.
+
+### Технический долг
+- Исправлены все предупреждения `unused_imports` и `unused_variables` (кроме `dead_code`).
+- `base.rs`, `renderer.rs` — удалены неиспользуемые импорты.
+
 ## [0.4.6] — 2026-07-18
 
 ### Исправлено
