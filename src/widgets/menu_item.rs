@@ -1,4 +1,4 @@
-use crate::renderer::{attr_f64, attr_str, get_attr, get_margin, get_padding, resolve_text, RenderCtx};
+use crate::renderer::{attr_f64, attr_str, get_attr_ctx, get_margin, get_padding, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
     let action = attr_str(node, "action");
@@ -22,8 +22,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         format!("{prefix} {text}")
     };
 
-    let stretch = get_attr(
-        node, &ctx.inherited, &ctx.theme, "MenuItem",
+    let stretch = get_attr_ctx(
+        ctx, node, "MenuItem",
         "stretch",
         |v| v.as_bool(),
         |k| ctx.theme.widget.get("MenuItem").and_then(|w| w.get(k)).and_then(|v| v.as_bool()),
@@ -31,8 +31,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         false,
     );
 
-    let align = get_attr(
-        node, &ctx.inherited, &ctx.theme, "MenuItem",
+    let align = get_attr_ctx(
+        ctx, node, "MenuItem",
         "align",
         |v| v.as_str().map(|s| s.to_string()),
         |k| Some(ctx.theme.w_str("MenuItem", k, "left")),
@@ -40,8 +40,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         "left".to_string(),
     );
 
-    let color = get_attr(
-        node, &ctx.inherited, &ctx.theme, "MenuItem",
+    let color = get_attr_ctx(
+        ctx, node, "MenuItem",
         "color",
         crate::theme::parse_color,
         |k| ctx.theme.w_color_opt("MenuItem", k),
@@ -49,8 +49,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         egui::Color32::from_gray(220),
     );
 
-    let color_icon = get_attr(
-        node, &ctx.inherited, &ctx.theme, "MenuItem",
+    let color_icon = get_attr_ctx(
+        ctx, node, "MenuItem",
         "color_icon",
         crate::theme::parse_color,
         |k| ctx.theme.w_color_opt("MenuItem", k),

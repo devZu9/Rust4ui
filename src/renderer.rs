@@ -320,6 +320,20 @@ pub fn get_attr<T: Clone>(
         .unwrap_or(default)
 }
 
+/// Упрощённый вызов get_attr с ctx (чтобы не передавать inherited + theme отдельно).
+pub fn get_attr_ctx<T: Clone>(
+    ctx: &RenderCtx,
+    node: &serde_json::Value,
+    widget: &str,
+    key: &str,
+    parse: impl Fn(&serde_json::Value) -> Option<T>,
+    theme_lookup: impl Fn(&str) -> Option<T>,
+    parent_key: &str,
+    default: T,
+) -> T {
+    get_attr(node, &ctx.inherited, &ctx.theme, widget, key, parse, theme_lookup, parent_key, default)
+}
+
 /// Парсит скругление: число → 4 одинаковых угла, массив [nw, ne, sw, se] → per-corner
 pub fn parse_rounding(val: &serde_json::Value) -> Option<egui::CornerRadius> {
     match val {
