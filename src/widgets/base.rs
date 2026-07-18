@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use crate::border::{draw_border, draw_shadow_bg, draw_shadow_border, get_state_border, parse_shadow, Shadow};
-use crate::renderer::{get_margin, get_padding, parse_padding, resolve_state_attr};
+use crate::renderer::{get_margin, get_padding, resolve_state_attr};
 
 pub struct BaseOut {
     pub response: egui::Response,
@@ -90,12 +90,6 @@ pub fn widget_base(
         draw_shadow_border(ui, content_rect, rounding_cr, &border, &shadow_border);
     }
 
-    let pad = resolve_state_attr(
-        node, inherited, &resp, "padding",
-        parse_padding,
-        |k| theme.widget.get(widget).and_then(|w| w.get(k)).and_then(|v| parse_padding(v)),
-        pad,
-    );
     let inner_rect = egui::Rect::from_min_max(
         egui::pos2(content_rect.left() + pad.left as f32, content_rect.top() + pad.top as f32),
         egui::pos2(content_rect.right() - pad.right as f32, content_rect.bottom() - pad.bottom as f32),
