@@ -29,9 +29,9 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     }
 
     let layout = egui::Layout::left_to_right(egui::Align::TOP).with_main_wrap(wrap);
-    let pad = get_padding(node, &ctx.inherited, &ctx.theme, egui::Margin::ZERO);
+    let padding = get_padding(node, &ctx.inherited, &ctx.theme, egui::Margin::ZERO);
 
-    let response = if pad == egui::Margin::ZERO {
+    let response = if padding == egui::Margin::ZERO {
         ui.scope_builder(
             egui::UiBuilder::new().layout(layout),
             |ui| {
@@ -42,7 +42,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         None
     } else {
         Some(egui::Frame::new()
-            .inner_margin(pad)
+            .inner_margin(padding)
             .show(ui, |ui| {
                 ui.scope_builder(
                     egui::UiBuilder::new().layout(layout),
@@ -84,6 +84,7 @@ mod tests {
         assert_eq!(json["children"].as_array().unwrap().len(), 2);
     }
 }
+
 
 
 

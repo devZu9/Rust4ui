@@ -39,8 +39,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let popup_bg = ctx.theme.w_color("ComboBox", "popup_bg", egui::Color32::from_rgb(0x1C, 0x1E, 0x24));
     let height = ctx.theme.w_f64("ComboBox", "height", 32.0) as f32;
     let rounding = ctx.theme.w_f64("ComboBox", "rounding", 4.0) as u8;
-    let inner_pad = get_padding(node, &ctx.inherited, &ctx.theme, egui::Margin::symmetric(10, 0));
-    let (pad_l, pad_r, pad_t, pad_b) = (inner_pad.left as f32, inner_pad.right as f32, inner_pad.top as f32, inner_pad.bottom as f32);
+    let inner_padding = get_padding(node, &ctx.inherited, &ctx.theme, egui::Margin::symmetric(10, 0));
+    let (pad_l, pad_r, pad_t, pad_b) = (inner_padding.left as f32, inner_padding.right as f32, inner_padding.top as f32, inner_padding.bottom as f32);
     let border = get_border(node, &ctx.theme, "ComboBox");
 
     let font_h = ui
@@ -152,6 +152,7 @@ mod tests {
         assert_eq!(attr_str(&json, "binding"), Some("mic_idx"));
     }
 }
+
 
 
 

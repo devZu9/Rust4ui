@@ -36,11 +36,11 @@ pub fn widget_paint_custom(
     enabled: bool,
     inherited: &HashMap<String, serde_json::Value>,
 ) -> PaintOut {
-    let pad = get_padding(node, inherited, theme, egui::Margin::ZERO);
+    let padding = get_padding(node, inherited, theme, egui::Margin::ZERO);
     let margin = get_margin(node, inherited, theme);
 
-    let content_width = reserved_size.x + pad.left as f32 + pad.right as f32;
-    let content_height = reserved_size.y + pad.top as f32 + pad.bottom as f32;
+    let content_width = reserved_size.x + padding.left as f32 + padding.right as f32;
+    let content_height = reserved_size.y + padding.top as f32 + padding.bottom as f32;
     let total_width = content_width + margin.left as f32 + margin.right as f32;
     let total_height = content_height + margin.top as f32 + margin.bottom as f32;
 
@@ -86,8 +86,8 @@ pub fn widget_paint_custom(
     }
 
     let inner_rect = egui::Rect::from_min_max(
-        egui::pos2(content_rect.left() + pad.left as f32, content_rect.top() + pad.top as f32),
-        egui::pos2(content_rect.right() - pad.right as f32, content_rect.bottom() - pad.bottom as f32),
+        egui::pos2(content_rect.left() + padding.left as f32, content_rect.top() + padding.top as f32),
+        egui::pos2(content_rect.right() - padding.right as f32, content_rect.bottom() - padding.bottom as f32),
     );
 
     PaintOut { response: resp, content_rect, inner_rect, rounding_cr }
@@ -161,5 +161,6 @@ pub fn widget_paint_egui<R>(
     restore_widget_style(ui, saved);
     (result, out.response)
 }
+
 
 

@@ -22,7 +22,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let tooltip_text = attr_str(node, "tooltip").map(|t| resolve_text(t, ctx));
     let align = attr_str(node, "align").unwrap_or("center");
 
-    let base_pad = get_padding(node, &ctx.inherited, &ctx.theme, egui::Margin::ZERO);
+    let base_padding = get_padding(node, &ctx.inherited, &ctx.theme, egui::Margin::ZERO);
     let color = node.get("color")
         .and_then(crate::theme::parse_color)
         .unwrap_or_else(|| ctx.theme.w_color("IconButton", "color", egui::Color32::from_rgb(0xE0, 0xE0, 0xE0)));
@@ -37,7 +37,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .unwrap_or_else(|| ctx.theme.w_f64("IconButton", "icon_size", 14.0)) as f32;
     let maket = ui.painter().layout_no_wrap(text.clone(), egui::FontId::proportional(base_icon_size), color);
 
-    let (pad_l, pad_r, pad_t, pad_b) = (base_pad.left as f32, base_pad.right as f32, base_pad.top as f32, base_pad.bottom as f32);
+    let (pad_l, pad_r, pad_t, pad_b) = (base_padding.left as f32, base_padding.right as f32, base_padding.top as f32, base_padding.bottom as f32);
     let content_w = (maket.size().x + pad_l + pad_r).max(base_button_size);
     let content_h = (base_icon_size + pad_t + pad_b).max(base_button_size);
 
@@ -96,6 +96,7 @@ mod tests {
         assert_eq!(attr_str(&json, "icon"), Some("save"));
     }
 }
+
 
 
 

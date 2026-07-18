@@ -28,11 +28,11 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let min_height = ctx.theme.w_f64("TextField", "height", 28.0) as f32;
     let base_bg = ctx.theme.w_color("TextField", "background", egui::Color32::from_rgb(0x1C, 0x1E, 0x24));
     let rounding = ctx.theme.w_f64("TextField", "rounding", 4.0) as u8;
-    let base_pad = get_padding(node, &ctx.inherited, &ctx.theme, egui::Margin::symmetric(0, 2));
+    let base_padding = get_padding(node, &ctx.inherited, &ctx.theme, egui::Margin::symmetric(0, 2));
     let _valign = ctx.theme.w_str2(node, "TextField", "valign")
         .unwrap_or_else(|| "center".to_string());
 
-    let (base_pad_l, base_pad_r, base_pad_t, base_pad_b) = (base_pad.left as f32, base_pad.right as f32, base_pad.top as f32, base_pad.bottom as f32);
+    let (base_pad_l, base_pad_r, base_pad_t, base_pad_b) = (base_padding.left as f32, base_padding.right as f32, base_padding.top as f32, base_padding.bottom as f32);
 
     let font_h = ui
         .painter()
@@ -88,13 +88,13 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
                 .max_height(field_h)
                 .auto_shrink([false; 2])
                 .show(ui, |ui| {
-                    ui.add(text_edit.frame(false).margin(base_pad).desired_width(field_w))
+                    ui.add(text_edit.frame(false).margin(base_padding).desired_width(field_w))
                 })
                 .inner
         }).inner;
         (inner_resp, rect)
     } else {
-        let te = text_edit.frame(true).background_color(base_bg).margin(base_pad);
+        let te = text_edit.frame(true).background_color(base_bg).margin(base_padding);
         let r = ui.add_sized(egui::vec2(field_w, field_h), te);
         let rr = r.rect;
         (r, rr)
@@ -144,12 +144,12 @@ fn render_number(
     let stepper_show = attr_str(node, "stepper_show").unwrap_or("always");
     let min_height = ctx.theme.w_f64("TextField", "height", 28.0) as f32;
     let base_bg = ctx.theme.w_color("TextField", "background", egui::Color32::from_rgb(0x1C, 0x1E, 0x24));
-    let base_pad = get_padding(node, &ctx.inherited, &ctx.theme, egui::Margin::symmetric(0, 2));
+    let base_padding = get_padding(node, &ctx.inherited, &ctx.theme, egui::Margin::symmetric(0, 2));
     let rounding = ctx.theme.w_f64("TextField", "rounding", 4.0) as u8;
     let valign = ctx.theme.w_str2(node, "TextField", "valign")
         .unwrap_or_else(|| "center".to_string());
 
-    let (base_pad_l, base_pad_r, base_pad_t, base_pad_b) = (base_pad.left as f32, base_pad.right as f32, base_pad.top as f32, base_pad.bottom as f32);
+    let (base_pad_l, base_pad_r, base_pad_t, base_pad_b) = (base_padding.left as f32, base_padding.right as f32, base_padding.top as f32, base_padding.bottom as f32);
 
     let font_h = ui
         .painter()
@@ -333,6 +333,7 @@ mod tests {
         assert_eq!(attr_str(&json, "binding"), Some("name"));
     }
 }
+
 
 
 

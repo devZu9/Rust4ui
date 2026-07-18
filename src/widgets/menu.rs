@@ -39,7 +39,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         });
 
     let margin = get_margin(node, &ctx.inherited, &ctx.theme);
-    let pad = get_padding(node, &ctx.inherited, &ctx.theme, egui::Margin::ZERO);
+    let padding = get_padding(node, &ctx.inherited, &ctx.theme, egui::Margin::ZERO);
 
     // Layout (placeholder color — actual color resolved after Response)
     let placeholder_color = egui::Color32::from_gray(220);
@@ -51,7 +51,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let gap_w = if has_icon && text_w > 0.0 { icon_gap_base } else { 0.0 };
     let content_w = if icon_pos_base == "right" { text_w + gap_w + icon_w } else { icon_w + gap_w + text_w };
     let content_h = icon_galley.as_ref().map_or(text_galley.size().y, |g| text_galley.size().y.max(g.size().y));
-    let (p_l, p_r, p_t, p_b) = (pad.left as f32, pad.right as f32, pad.top as f32, pad.bottom as f32);
+    let (p_l, p_r, p_t, p_b) = (padding.left as f32, padding.right as f32, padding.top as f32, padding.bottom as f32);
     let (m_l, m_r, m_t, m_b) = (margin.left as f32, margin.right as f32, margin.top as f32, margin.bottom as f32);
     let total_w = content_w + p_l + p_r + m_l + m_r;
     let total_h = content_h + p_t + p_b + m_t + m_b;
@@ -274,6 +274,7 @@ mod tests {
         assert_eq!(attr_str(&json, "text"), Some("File"));
     }
 }
+
 
 
 

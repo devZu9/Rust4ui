@@ -63,12 +63,12 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let content_size = content.size();
 
     let margin = get_margin(node, &ctx.inherited, &ctx.theme);
-    let pad = get_padding(node, &ctx.inherited, &ctx.theme, egui::Margin::ZERO);
+    let padding = get_padding(node, &ctx.inherited, &ctx.theme, egui::Margin::ZERO);
 
     if margin.top > 0 { ui.add_space(margin.top as f32); }
 
     let reserved_size = if stretch {
-        let pad_sum = pad.left as f32 + pad.right as f32 + margin.left as f32 + margin.right as f32;
+        let pad_sum = padding.left as f32 + padding.right as f32 + margin.left as f32 + margin.right as f32;
         let stretch_w = ctx.inherited.get("popup_content_w").and_then(|v| v.as_f64().map(|f| f as f32));
         let inner_w = if let Some(w) = stretch_w {
             (w - pad_sum).max(1.0)
@@ -117,5 +117,6 @@ mod tests {
         assert_eq!(attr_str(&json, "text"), Some("Copy"));
     }
 }
+
 
 

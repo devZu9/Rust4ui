@@ -36,7 +36,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let tooltip_text = attr_str(node, "tooltip").map(|t| resolve_text(t, ctx));
     let base_align = attr_str(node, "align").unwrap_or("center");
 
-    let base_pad = get_padding(node, &ctx.inherited, &ctx.theme, egui::Margin::symmetric(16, 4));
+    let base_padding = get_padding(node, &ctx.inherited, &ctx.theme, egui::Margin::symmetric(16, 4));
     let color_text = node.get("color_text")
         .and_then(crate::theme::parse_color)
         .unwrap_or_else(|| ctx.theme.w_color("Button", "color_text", egui::Color32::from_rgb(0xE0, 0xE0, 0xE0)));
@@ -63,7 +63,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let text_sz = text_galley.as_ref().map_or(egui::Vec2::ZERO, |g| g.size());
     let gap = if has_icon && has_text { 6.0 } else { 0.0 };
 
-    let (pad_l, pad_r, pad_t, pad_b) = (base_pad.left as f32, base_pad.right as f32, base_pad.top as f32, base_pad.bottom as f32);
+    let (pad_l, pad_r, pad_t, pad_b) = (base_padding.left as f32, base_padding.right as f32, base_padding.top as f32, base_padding.bottom as f32);
     let min_cw = (base_min_width - pad_l - pad_r).max(0.0);
     let min_ch = (base_min_height - pad_t - pad_b).max(0.0);
     let content_w = (icon_sz.x + gap + text_sz.x).max(min_cw);
@@ -159,6 +159,7 @@ mod tests {
         assert!(attr_bool(&json, "enabled").unwrap_or(true));
     }
 }
+
 
 
 
