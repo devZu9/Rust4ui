@@ -87,7 +87,7 @@
 - [ ] **Система иконок** — IconBar anchor (start/center/end), Separator в IconBar
 - [ ] **Микро-анимации иконок** — см. v0.* — Расширяем функционал
 
----
+
 
 - [x] **MenuBar** — универсальный _children/_hover/_click/_focus механизм, popup_*, исправление ошибок 🟢 *(18.07.2026)*
   - [x] **popup_* атрибуты** — popup_background/rounding/padding/gap/min_width/max_height/border/shadow 🟢 *(18.07.2026)*

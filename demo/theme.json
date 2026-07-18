@@ -188,11 +188,11 @@
     "popup_rounding": 20,
     "popup_padding": [20],
     "rounding_children": 10, 
- //   "padding_children": [20, 25],
+//    "padding_children": [15, 20],
     "rounding": 0
   },
   "MenuItem": {
-    "stretch": true,
+    "stretch": false,
     "padding": [15, 15],
 //    "background": ["#000", 0],
     "background": "#3A3A44",
