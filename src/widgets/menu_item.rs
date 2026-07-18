@@ -54,8 +54,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .unwrap_or(4.0);
 
     let font_id = egui::FontId::proportional(size);
-    let galley = ui.painter().layout_no_wrap(label.clone(), font_id, color_icon);
-    let csize = galley.size();
+    let content = ui.painter().layout_no_wrap(label.clone(), font_id, color_icon);
+    let text_size = content.size();
 
     let inherited_margin = ctx.inherited.get("margin").and_then(crate::renderer::parse_padding);
     let margin = inherited_margin.unwrap_or_else(|| get_margin(node, &ctx.theme, "MenuItem"));
@@ -72,9 +72,9 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         } else {
             (ui.available_width() - pad_sum).max(1.0)
         };
-        egui::vec2(inner_w, csize.y)
+        egui::vec2(inner_w, text_size.y)
     } else {
-        csize
+        text_size
     };
 
     let out = crate::widgets::base::widget_base(
@@ -86,12 +86,12 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     );
 
     let text_x = match align.as_str() {
-        "center" => egui::Align::Center.align_size_within_range(csize.x, out.inner_rect.x_range()).min,
-        "right"  => out.inner_rect.right() - csize.x,
+        "center" => egui::Align::Center.align_size_within_range(text_size.x, out.inner_rect.x_range()).min,
+        "right"  => out.inner_rect.right() - text_size.x,
         _        => out.inner_rect.left(),
     };
-    let text_y = egui::Align::Center.align_size_within_range(csize.y, out.inner_rect.y_range()).min;
-    ui.painter().galley_with_override_text_color(egui::pos2(text_x, text_y), galley, color_icon);
+    let text_y = egui::Align::Center.align_size_within_range(text_size.y, out.inner_rect.y_range()).min;
+    ui.painter().galley_with_override_text_color(egui::pos2(text_x, text_y), content, color_icon);
 
     if out.response.clicked() && enabled {
         if let Some(action_name) = action {
