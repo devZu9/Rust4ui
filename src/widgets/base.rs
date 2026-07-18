@@ -43,12 +43,12 @@ pub fn widget_base(
     let pad = get_padding(node, theme, widget, default_pad);
     let margin = get_margin(node, theme, widget);
 
-    let cw = content_size.x + pad.left as f32 + pad.right as f32;
-    let ch = content_size.y + pad.top as f32 + pad.bottom as f32;
-    let tw = cw + margin.left as f32 + margin.right as f32;
-    let th = ch + margin.top as f32 + margin.bottom as f32;
+    let content_width = content_size.x + pad.left as f32 + pad.right as f32;
+    let content_height = content_size.y + pad.top as f32 + pad.bottom as f32;
+    let total_width = content_width + margin.left as f32 + margin.right as f32;
+    let total_height = content_height + margin.top as f32 + margin.bottom as f32;
 
-    let size = egui::vec2(tw.max(0.0), th.max(0.0));
+    let size = egui::vec2(total_width.max(0.0), total_height.max(0.0));
     let (rect, resp) = ui.allocate_exact_size(size, sense);
 
     let content_rect = egui::Rect::from_min_max(
