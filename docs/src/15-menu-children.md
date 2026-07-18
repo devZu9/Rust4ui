@@ -179,6 +179,40 @@ node["bg"]       → inherited["bg"]       → theme["bg"]       → default
 
 Важно: `popup_*` читаются **до** `inherit_children()` на текущем Menu, чтобы `popup_*_children` от MenuBar были видны. Это особенность реализации — кнопка Menu читает свои атрибуты из inherited, а попап читает свои атрибуты ТОЖЕ из inherited, до того как Menu установит собственные `_children` для MenuItem.
 
+Ширина попапа вычисляется автоматически: измеряется каждый MenuItem (текст + иконка + padding), берётся максимальная ширина. Если задан `popup_min_width` — используется он.
+
+### Stretch и Align в MenuItem
+
+MenuItem внутри попапа поддерживает два дополнительных атрибута:
+
+| Атрибут | Тип | Дефолт | Описание |
+|---------|-----|--------|----------|
+| `stretch` | bool | `false` | Растянуть MenuItem на всю ширину попапа |
+| `align` | string | `"left"` | Выравнивание контента (`"left"`, `"center"`, `"right"`) |
+
+Оба через `_children` наследование:
+
+```json
+{
+  "type": "MenuBar",
+  "stretch_children": true,
+  "align_children": "center",
+  "children": [
+    {
+      "type": "Menu",
+      "text": "{{menu.file}}",
+      "children": [
+        { "type": "MenuItem", "text": "{{menu.new}}" },
+        { "type": "Separator" },
+        { "type": "MenuItem", "text": "{{menu.export}}" }
+      ]
+    }
+  ]
+}
+```
+
+Если `stretch: true`, то все MenuItem в попапе будут одинаковой ширины, даже если текст разной длины. Separator также растягивается на всю ширину попапа.
+
 ### 5.2 Пример: попап на одном Menu
 
 ```json

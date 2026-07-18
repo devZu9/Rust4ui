@@ -1,5 +1,34 @@
 # Changelog
 
+## [0.4.5] — 2026-07-18
+
+### Добавлено
+- **popup_* атрибуты** — контекстное меню настраивается отдельно от кнопки Menu:
+  `popup_background`, `popup_rounding`, `popup_padding`, `popup_gap`,
+  `popup_min_width`, `popup_max_height`, `popup_border`, `popup_shadow`.
+  Все через `_children` наследование.
+- **MenuItem: `stretch`** — атрибут `"stretch": true` растягивает MenuItem на всю ширину попапа.
+- **MenuItem: `align`** — атрибут `"align": "left"/"center"/"right"` выравнивает контент.
+- **Separator: динамическая ширина** — `available_width()` вместо хардкода 200px.
+- **Попап: измерение детей** — ширина попапа вычисляется по самому широкому MenuItem (text + icon + padding).
+- **`inherit_children`: theme fallback** — `*_children` из `theme.json` работают как глобальные defaults.
+- **`always_on_top`** — в `settings.json`, читается на старте и сохраняется. Runtime-тогл через `ViewportCommand::WindowLevel`.
+
+### Изменено
+- **popup rendering** — заменён гибрид (Area + Frame + set_min_width) на Area + Frame + `allocate_exact_size` + `allocate_ui_at_rect`. Ширина фиксирована явно, `available_width()` одинакова для всех детей.
+- **Separator: дефолт min_width** — 50px (было 200px), не раздувает попап.
+- **menu_item.rs** — `stretch` читает `available_width()` (попап сам фиксирует ширину).
+- **menu_item.rs** — `stretch`, `align`, `color_icon` теперь с theme fallback.
+- **menu.rs** — измерение детей ДО `inherit_children`, чтобы padding из inherited был доступен.
+
+### Исправлено
+- **popup open/close logic** — три проблемы:
+  1. clicked_elsewhere() срабатывал на свой же клик (добавлено `!resp.clicked()`)
+  2. Ховер-переключение не закрывало предыдущий попап (добавлено `ctx.state.set_bool(prev, false)`)
+  3. open_popup_id очищался для чужого ключа (добавлена проверка ключа)
+- **stretch + Separator вызывали «лесенку»** — из-за разного `available_width()` внутри Area. Исправлено явной фиксацией ширины через allocate_exact_size.
+- **popup_padding** — читал `"padding"` вместо `"popup_padding"`.
+
 ## [0.4.4] — 2026-07-17
 
 ### Добавлено

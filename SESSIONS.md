@@ -10,6 +10,11 @@
 
 ### Продолжение (17-18.07)
 
+- [x] **Попап: измерение детей** — ширина попапа считается по самому широкому MenuItem (text + icon + padding) до inherit_children. Separator и stretch используют `available_width()` от фиксированного alloc.
+- [x] **MenuItem: `stretch`** — растягивает MenuItem на всю ширину попапа. `stretch: true/false`, через node → inherited → theme.
+- [x] **MenuItem: `align`** — выравнивание контента `"left"/"center"/"right"`. Через node → inherited → theme.
+- [x] **MenuItem: `color_icon`** — добавлен theme fallback.
+- [x] **Separator: динамическая ширина** — `available_width()` вместо хардкода 200px. Дефолт min_width 50.
 - [x] **popup_* атрибуты** — контекстное меню настраивается отдельно от кнопки Menu:
   `popup_background`, `popup_rounding`, `popup_padding`, `popup_gap`,
   `popup_min_width`, `popup_max_height`, `popup_border`, `popup_shadow`
