@@ -80,6 +80,13 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         &ctx.inherited,
     );
 
+    log::debug!("MenuItem '{}' | pad: [{}, {}, {}, {}] | size: {:.0}x{:.0} (inner: {:.0}x{:.0})",
+        text,
+        pad.top, pad.right, pad.bottom, pad.left,
+        out.response.rect.width(), out.response.rect.height(),
+        out.inner_rect.width(), out.inner_rect.height(),
+    );
+
     let text_x = match align.as_str() {
         "center" => egui::Align::Center.align_size_within_range(csize.x, out.inner_rect.x_range()).min,
         "right"  => out.inner_rect.right() - csize.x,
