@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use crate::border::{draw_border, draw_shadow_bg, draw_shadow_border, get_state_border, parse_shadow, Shadow};
-use crate::renderer::{get_margin, get_padding, parse_padding, resolve_state_attr, RenderCtx};
+use crate::renderer::{get_margin, get_padding, resolve_state_attr, RenderCtx};
 
 pub struct PaintOut {
     pub response: egui::Response,
@@ -36,10 +36,7 @@ pub fn widget_paint_custom(
     enabled: bool,
     inherited: &HashMap<String, serde_json::Value>,
 ) -> PaintOut {
-    let default_pad = inherited.get("padding")
-        .and_then(parse_padding)
-        .unwrap_or(egui::Margin::ZERO);
-    let pad = get_padding(node, theme, widget, default_pad);
+    let pad = get_padding(node, inherited, theme, widget, None, egui::Margin::ZERO);
     let margin = get_margin(node, theme, widget);
 
     let content_width = reserved_size.x + pad.left as f32 + pad.right as f32;

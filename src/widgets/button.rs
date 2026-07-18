@@ -36,7 +36,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let tooltip_text = attr_str(node, "tooltip").map(|t| resolve_text(t, ctx));
     let base_align = attr_str(node, "align").unwrap_or("center");
 
-    let base_pad = get_padding(node, &ctx.theme, "Button", egui::Margin::symmetric(16, 4));
+    let base_pad = get_padding(node, &ctx.inherited, &ctx.theme, "Button", None, egui::Margin::symmetric(16, 4));
     let color_text = node.get("color_text")
         .and_then(crate::theme::parse_color_value)
         .unwrap_or_else(|| ctx.theme.w_color("Button", "color_text", egui::Color32::from_rgb(0xE0, 0xE0, 0xE0)));
@@ -159,3 +159,4 @@ mod tests {
         assert!(attr_bool(&json, "enabled").unwrap_or(true));
     }
 }
+
