@@ -2,7 +2,7 @@ use chrono::Local;
 use std::io::Write;
 
 pub fn init_logger() {
-    let env = env_logger::Env::default().default_filter_or("info");
+    let env = env_logger::Env::default().default_filter_or("debug");
     env_logger::Builder::from_env(env)
         .format(|buf, record| {
             let ts = Local::now().format("%Y-%m-%dT%H:%M:%S%.3f");
