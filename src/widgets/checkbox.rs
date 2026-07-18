@@ -17,7 +17,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let (_, resp) = crate::widgets::base::widget_paint_egui(
         ui, node, &ctx.theme, "Checkbox",
         egui::vec2(200.0, 24.0), egui::Sense::click(), true,
-        egui::Color32::TRANSPARENT, 4.0, egui::Margin::ZERO, &ctx.inherited,
+        &ctx.inherited,
         |ui| {
             let r = ui.checkbox(&mut checked, text);
             if r.changed() {

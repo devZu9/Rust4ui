@@ -64,7 +64,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     if margin.top > 0 { ui.add_space(margin.top as f32); }
 
-    let content_size = if stretch {
+    let reserved_size = if stretch {
         let pad_sum = pad.left as f32 + pad.right as f32 + margin.left as f32 + margin.right as f32;
         let stretch_w = ctx.inherited.get("popup_content_w").and_then(|v| v.as_f64().map(|f| f as f32));
         let inner_w = if let Some(w) = stretch_w {
@@ -79,9 +79,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     let out = crate::widgets::base::widget_paint_custom(
         ui, node, &ctx.theme, "MenuItem",
-        content_size, egui::Sense::click(), enabled,
-        egui::Color32::TRANSPARENT, base_rounding,
-        pad,
+        reserved_size, egui::Sense::click(), enabled,
         &ctx.inherited,
     );
 

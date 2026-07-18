@@ -1,5 +1,5 @@
 use crate::border::widget_border;
-use crate::renderer::{attr_bool, attr_f64, attr_str, get_padding, resolve_text, RenderCtx};
+use crate::renderer::{attr_bool, attr_f64, attr_str, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &RenderCtx) {
     let raw_text = attr_str(node, "text").unwrap_or("");
@@ -26,12 +26,10 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &RenderCtx) {
     if italic { rich = rich.italics(); }
     if monospace { rich = rich.monospace(); }
 
-    let pad = get_padding(node, &ctx.theme, "Label", egui::Margin::ZERO);
-
     let (r, _) = crate::widgets::base::widget_paint_egui(
         ui, node, &ctx.theme, "Label",
         egui::vec2(200.0, size as f32 + 8.0), egui::Sense::hover(), true,
-        egui::Color32::TRANSPARENT, 4.0, pad, &ctx.inherited,
+        &ctx.inherited,
         |ui| {
             if wrap {
                 ui.label(rich);

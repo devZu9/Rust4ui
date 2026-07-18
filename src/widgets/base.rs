@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use crate::border::{draw_border, draw_shadow_bg, draw_shadow_border, get_state_border, parse_shadow, Shadow};
-use crate::renderer::{get_margin, get_padding, resolve_state_attr};
+use crate::renderer::{get_margin, get_padding, parse_padding, resolve_state_attr, RenderCtx};
 
 pub struct PaintOut {
     pub response: egui::Response,
@@ -16,14 +16,13 @@ fn get_bg(
     widget: &str,
     resp: &egui::Response,
     enabled: bool,
-    default: egui::Color32,
 ) -> egui::Color32 {
     if !enabled { return egui::Color32::from_gray(60); }
     resolve_state_attr(
         node, inherited, resp, "background",
         crate::theme::parse_color_value,
         |k| theme.w_color_opt(widget, k),
-        default,
+        egui::Color32::TRANSPARENT,
     )
 }
 
@@ -32,19 +31,19 @@ pub fn widget_paint_custom(
     node: &serde_json::Value,
     theme: &crate::theme::Theme,
     widget: &str,
-    content_size: egui::Vec2,
+    reserved_size: egui::Vec2,
     sense: egui::Sense,
     enabled: bool,
-    default_bg: egui::Color32,
-    default_rounding: f64,
-    default_pad: egui::Margin,
     inherited: &HashMap<String, serde_json::Value>,
 ) -> PaintOut {
+    let default_pad = inherited.get("padding")
+        .and_then(parse_padding)
+        .unwrap_or(egui::Margin::ZERO);
     let pad = get_padding(node, theme, widget, default_pad);
     let margin = get_margin(node, theme, widget);
 
-    let content_width = content_size.x + pad.left as f32 + pad.right as f32;
-    let content_height = content_size.y + pad.top as f32 + pad.bottom as f32;
+    let content_width = reserved_size.x + pad.left as f32 + pad.right as f32;
+    let content_height = reserved_size.y + pad.top as f32 + pad.bottom as f32;
     let total_width = content_width + margin.left as f32 + margin.right as f32;
     let total_height = content_height + margin.top as f32 + margin.bottom as f32;
 
@@ -60,7 +59,7 @@ pub fn widget_paint_custom(
         node, inherited, &resp, "rounding",
         |v| v.as_f64(),
         |k| theme.widget.get(widget).and_then(|w| w.get(k)).and_then(|v| v.as_f64()),
-        default_rounding,
+        theme.w_f64(widget, "rounding", 4.0),
     );
     let rounding_cr = egui::CornerRadius::same(rounding as u8);
 
@@ -72,7 +71,7 @@ pub fn widget_paint_custom(
     );
     draw_shadow_bg(ui, content_rect, rounding_cr, &shadow_bg);
 
-    let bg = get_bg(node, inherited, theme, widget, &resp, enabled, default_bg);
+    let bg = get_bg(node, inherited, theme, widget, &resp, enabled);
     ui.painter().rect_filled(content_rect, rounding_cr, bg);
 
     let border = get_state_border(node, theme, widget, &resp, enabled);
@@ -137,17 +136,13 @@ pub fn widget_paint_egui<R>(
     node: &serde_json::Value,
     theme: &crate::theme::Theme,
     widget: &str,
-    content_size: egui::Vec2,
+    reserved_size: egui::Vec2,
     sense: egui::Sense,
     enabled: bool,
-    default_bg: egui::Color32,
-    default_rounding: f64,
-    default_pad: egui::Margin,
     inherited: &HashMap<String, serde_json::Value>,
     add_contents: impl FnOnce(&mut egui::Ui) -> R,
 ) -> (R, egui::Response) {
-    let out = widget_paint_custom(ui, node, theme, widget, content_size, sense, enabled,
-        default_bg, default_rounding, default_pad, inherited);
+    let out = widget_paint_custom(ui, node, theme, widget, reserved_size, sense, enabled, inherited);
 
     let saved = save_widget_style(ui);
     let v = &mut ui.style_mut().visuals;
