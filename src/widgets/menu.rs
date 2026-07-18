@@ -181,6 +181,27 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .and_then(crate::border::parse_shadow)
         .unwrap_or(crate::border::Shadow::transparent());
 
+    // Измеряем детей заранее — определяем ширину попапа по самому широкому
+    let children = node.get("children").and_then(|v| v.as_array()).cloned().unwrap_or_default();
+    let mut max_child_outer_w = content_w + p_l + p_r; // как минимум ширина кнопки
+    let meas_font = egui::FontId::proportional(14.0);
+    for child in &children {
+        let is_sep = child.get("type").and_then(|v| v.as_str()) == Some("Separator");
+        if is_sep { continue; }
+        let child_icon = crate::renderer::attr_str(child, "icon").and_then(|n| ctx.icons.resolve(n));
+        let child_raw = crate::renderer::attr_str(child, "text").unwrap_or("");
+        let child_text = crate::renderer::resolve_text(child_raw, ctx);
+        let cw = ui.painter().layout_no_wrap(child_text, meas_font.clone(), egui::Color32::WHITE).size().x;
+        let iw = if child_icon.is_some() { 16.0 } else { 0.0 };
+        // padding из своего узла → inherited → темы
+        let cp = crate::renderer::get_padding(child, &ctx.theme, "MenuItem",
+            ctx.inherited.get("padding").and_then(crate::renderer::parse_padding).unwrap_or(egui::Margin::ZERO));
+        let total = cw + iw + cp.left as f32 + cp.right as f32;
+        max_child_outer_w = max_child_outer_w.max(total);
+    }
+    let popup_w = if popup_min_width > 0.0 { popup_min_width } else { max_child_outer_w };
+    let popup_w_full = popup_w + popup_padding.left as f32 + popup_padding.right as f32;
+
     // Inherit _children for children (save/restore around children rendering)
     let old = ctx.inherit_children(node, Some("Menu"));
 
@@ -204,10 +225,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     ctx.state.set_bool(&popup_key, is_open);
 
-    let children = node.get("children").and_then(|v| v.as_array()).cloned().unwrap_or_default();
     if is_open && !children.is_empty() {
         let popup_cr = egui::CornerRadius::same(popup_rounding);
-        let popup_min_w = if popup_min_width > 0.0 { popup_min_width } else { content_rect.width().max(content_w + p_l + p_r) };
 
         let ar: egui::InnerResponse<()> = egui::Area::new(egui::Id::new(&popup_key))
             .fixed_pos(egui::pos2(content_rect.left(), content_rect.bottom()))
@@ -218,16 +237,14 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
                     .corner_radius(popup_cr)
                     .inner_margin(popup_padding)
                     .show(ui, |ui| {
-                        let aw = ui.available_width().max(1.0);
-
                         let (content_rect, _) = ui.allocate_exact_size(
-                            egui::vec2(aw, 0.0),
+                            egui::vec2(popup_w, 0.0),
                             egui::Sense::hover(),
                         );
 
                         ui.allocate_ui_at_rect(content_rect, |ui| {
-                            ui.set_min_width(aw);
-                            ui.set_max_width(aw);
+                            ui.set_min_width(popup_w);
+                            ui.set_max_width(popup_w);
                             ui.style_mut().spacing.item_spacing = egui::vec2(0.0, popup_gap);
                             if popup_max_height > 0.0 {
                                 egui::ScrollArea::vertical().max_height(popup_max_height).show(ui, |ui| {
