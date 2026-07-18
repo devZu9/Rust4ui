@@ -188,12 +188,13 @@
     "popup_rounding": 20,
     "popup_padding": [20],
     "rounding_children": 10, 
-    "padding_children": [15, 80],
+    "padding_children": [15, 50],
+    "stretch_children": true,
     "rounding": 0
   },
   "MenuItem": {
-    "stretch": false,
-    "padding": [15, 80],
+//    "stretch": true,
+//    "padding": [15, 40],
 //    "background": ["#000", 0],
     "background": "#3A3A44",
     "border_hover": [3, "$pitch", 1, "dot", 2],
