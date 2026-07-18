@@ -320,6 +320,20 @@ pub fn get_attr<T: Clone>(
         .unwrap_or(default)
 }
 
+/// Парсит скругление: число → 4 одинаковых угла, массив [nw, ne, sw, se] → per-corner
+pub fn parse_rounding(val: &serde_json::Value) -> Option<egui::CornerRadius> {
+    match val {
+        serde_json::Value::Number(n) => Some(egui::CornerRadius::same(n.as_f64()? as u8)),
+        serde_json::Value::Array(a) if a.len() >= 4 => Some(egui::CornerRadius {
+            nw: a[0].as_f64()? as u8,
+            ne: a[1].as_f64()? as u8,
+            sw: a[2].as_f64()? as u8,
+            se: a[3].as_f64()? as u8,
+        }),
+        _ => None,
+    }
+}
+
 pub fn parse_padding(val: &serde_json::Value) -> Option<egui::Margin> {
     match val {
         serde_json::Value::Number(n) => {

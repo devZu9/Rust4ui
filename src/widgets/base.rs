@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use crate::border::{draw_border, draw_shadow_bg, draw_shadow_border, get_state_border, parse_shadow, Shadow};
-use crate::renderer::{get_margin, get_padding, resolve_state_attr, RenderCtx};
+use crate::renderer::{get_margin, get_padding, parse_rounding, resolve_state_attr, RenderCtx};
 
 pub struct PaintOut {
     pub response: egui::Response,
@@ -52,13 +52,12 @@ pub fn widget_paint_custom(
         egui::pos2(rect.max.x - margin.right as f32, rect.max.y - margin.bottom as f32),
     );
 
-    let rounding = resolve_state_attr(
+    let rounding_cr = resolve_state_attr(
         node, inherited, &resp, "rounding",
-        |v| v.as_f64(),
-        |k| theme.widget.get(widget).and_then(|w| w.get(k)).and_then(|v| v.as_f64()),
-        theme.w_f64(widget, "rounding", 4.0),
+        parse_rounding,
+        |k| theme.widget.get(widget).and_then(|w| w.get(k)).and_then(parse_rounding),
+        egui::CornerRadius::same(theme.w_f64(widget, "rounding", 4.0) as u8),
     );
-    let rounding_cr = egui::CornerRadius::same(rounding as u8);
 
     let shadow_bg = resolve_state_attr(
         node, inherited, &resp, "shadow_background",

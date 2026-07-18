@@ -1,4 +1,4 @@
-use crate::renderer::{attr_f64, attr_str, get_margin, get_padding, resolve_state_attr, resolve_text, RenderCtx};
+use crate::renderer::{attr_f64, attr_str, get_margin, get_padding, parse_rounding, resolve_state_attr, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
     let raw_text = attr_str(node, "text").unwrap_or("");
@@ -29,24 +29,14 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .map(|s| s.to_string());
     let has_icon = icon_glyph.is_some();
 
-    let rounding_val = attr_f64(node, "rounding")
-        .or_else(|| Some(ctx.theme.w_f64("Menu", "rounding", 4.0)))
-        .unwrap_or(4.0) as u8;
     let radius = ctx.inherited.get("rounding")
-        .and_then(|v| {
-            v.as_f64().map(|f| egui::CornerRadius::same(f as u8))
-                .or_else(|| v.as_array().and_then(|a| {
-                    if a.len() >= 4 {
-                        Some(egui::CornerRadius {
-                            nw: a[0].as_f64()? as u8,
-                            ne: a[1].as_f64()? as u8,
-                            sw: a[2].as_f64()? as u8,
-                            se: a[3].as_f64()? as u8,
-                        })
-                    } else { None }
-                }))
-        })
-        .unwrap_or_else(|| egui::CornerRadius::same(rounding_val));
+        .and_then(parse_rounding)
+        .unwrap_or_else(|| {
+            let r = attr_f64(node, "rounding")
+                .or_else(|| Some(ctx.theme.w_f64("Menu", "rounding", 4.0)))
+                .unwrap_or(4.0) as u8;
+            egui::CornerRadius::same(r)
+        });
 
     let margin = get_margin(node, &ctx.inherited, &ctx.theme, "Menu");
     let pad = get_padding(node, &ctx.inherited, &ctx.theme, "Menu", egui::Margin::ZERO);
