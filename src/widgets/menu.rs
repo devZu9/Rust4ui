@@ -203,6 +203,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     // Inherit _children for children (save/restore around children rendering)
     let old = ctx.inherit_children(node, Some("Menu"));
+    ctx.inherited.insert("popup_content_w".to_string(), serde_json::json!(max_child_outer_w));
 
     // Popup
     let popup_key = format!("__menu_popup_{}", text);
