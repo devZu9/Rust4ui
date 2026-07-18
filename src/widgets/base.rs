@@ -49,7 +49,7 @@ pub fn widget_paint_custom(
     let total_height = content_height + margin.top as f32 + margin.bottom as f32;
 
     let size = egui::vec2(total_width.max(0.0), total_height.max(0.0));
-    let (rect, resp) = ui.allocate_exact_size(size, sense);
+    let (rect, resp) = reserve_exact_size(ui, size, sense);
 
     let content_rect = egui::Rect::from_min_max(
         egui::pos2(rect.min.x + margin.left as f32, rect.min.y + margin.top as f32),
@@ -96,6 +96,11 @@ pub fn widget_paint_custom(
     );
 
     PaintOut { response: resp, content_rect, inner_rect, rounding_cr }
+}
+
+/// Зарезервировать ровно size.x × size.y места в ui.
+fn reserve_exact_size(ui: &mut egui::Ui, size: egui::Vec2, sense: egui::Sense) -> (egui::Rect, egui::Response) {
+    ui.allocate_exact_size(size, sense)
 }
 
 struct PrevWidgetStyle {
