@@ -89,8 +89,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     ui.painter().galley_with_override_text_color(egui::pos2(text_x, text_y), galley, color_icon);
 
     if out.response.clicked() && enabled {
-        log::debug!("MenuItem '{}' | pad: [{}, {}, {}, {}] | size: {:.0}x{:.0} (inner: {:.0}x{:.0})",
-            text,
+        log::debug!("MenuItem '{}' | align: {} | pad: [{}, {}, {}, {}] | size: {:.0}x{:.0} (inner: {:.0}x{:.0})",
+            text, align,
             pad.top, pad.right, pad.bottom, pad.left,
             out.response.rect.width(), out.response.rect.height(),
             out.inner_rect.width(), out.inner_rect.height(),
