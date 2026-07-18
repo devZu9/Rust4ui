@@ -66,7 +66,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     ui.separator();
 
-    let pad = get_padding(node, &ctx.inherited, &ctx.theme, "Tabs", None, egui::Margin::symmetric(0, 4));
+    let pad = get_padding(node, &ctx.inherited, &ctx.theme, "Tabs", egui::Margin::symmetric(0, 4));
 
     let mut render_content = |ui: &mut egui::Ui| {
         for (tab, id, _, _) in &tabs {
@@ -109,4 +109,5 @@ mod tests {
         assert_eq!(attr_str(&json, "active"), Some("basic"));
     }
 }
+
 

@@ -49,7 +49,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .unwrap_or_else(|| egui::CornerRadius::same(rounding_val));
 
     let margin = get_margin(node, &ctx.theme, "Menu");
-    let pad = get_padding(node, &ctx.inherited, &ctx.theme, "Menu", Some("MenuBar"), egui::Margin::ZERO);
+    let pad = get_padding(node, &ctx.inherited, &ctx.theme, "Menu", egui::Margin::ZERO);
 
     // Layout (placeholder color — actual color resolved after Response)
     let placeholder_color = egui::Color32::from_gray(220);
@@ -192,14 +192,14 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         let cw = ui.painter().layout_no_wrap(child_text, meas_font.clone(), egui::Color32::WHITE).size().x;
         let iw = if child_icon.is_some() { 16.0 } else { 0.0 };
         // padding из своего узла → inherited → темы
-        let cp = crate::renderer::get_padding(child, &ctx.inherited, &ctx.theme, "MenuItem", Some("Menu"), egui::Margin::ZERO);
+        let cp = crate::renderer::get_padding(child, &ctx.inherited, &ctx.theme, "MenuItem", egui::Margin::ZERO);
         let total = cw + iw + cp.left as f32 + cp.right as f32;
         max_child_outer_w = max_child_outer_w.max(total);
     }
     let popup_w = if popup_min_width > 0.0 { popup_min_width } else { max_child_outer_w };
 
     // Inherit _children for children (save/restore around children rendering)
-    let old = ctx.inherit_children(node);
+    let old = ctx.inherit_children(node, Some("Menu"));
     ctx.inherited.insert("popup_content_w".to_string(), serde_json::json!(max_child_outer_w));
 
     // Popup
@@ -284,3 +284,4 @@ mod tests {
         assert_eq!(attr_str(&json, "text"), Some("File"));
     }
 }
+

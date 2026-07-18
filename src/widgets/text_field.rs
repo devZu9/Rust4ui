@@ -28,7 +28,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let min_height = ctx.theme.w_f64("TextField", "height", 28.0) as f32;
     let base_bg = ctx.theme.w_color("TextField", "background", egui::Color32::from_rgb(0x1C, 0x1E, 0x24));
     let rounding = ctx.theme.w_f64("TextField", "rounding", 4.0) as u8;
-    let base_pad = get_padding(node, &ctx.inherited, &ctx.theme, "TextField", None, egui::Margin::symmetric(0, 2));
+    let base_pad = get_padding(node, &ctx.inherited, &ctx.theme, "TextField", egui::Margin::symmetric(0, 2));
     let _valign = ctx.theme.w_str2(node, "TextField", "valign")
         .unwrap_or_else(|| "center".to_string());
 
@@ -144,7 +144,7 @@ fn render_number(
     let stepper_show = attr_str(node, "stepper_show").unwrap_or("always");
     let min_height = ctx.theme.w_f64("TextField", "height", 28.0) as f32;
     let base_bg = ctx.theme.w_color("TextField", "background", egui::Color32::from_rgb(0x1C, 0x1E, 0x24));
-    let base_pad = get_padding(node, &ctx.inherited, &ctx.theme, "TextField", None, egui::Margin::symmetric(0, 2));
+    let base_pad = get_padding(node, &ctx.inherited, &ctx.theme, "TextField", egui::Margin::symmetric(0, 2));
     let rounding = ctx.theme.w_f64("TextField", "rounding", 4.0) as u8;
     let valign = ctx.theme.w_str2(node, "TextField", "valign")
         .unwrap_or_else(|| "center".to_string());
@@ -333,4 +333,5 @@ mod tests {
         assert_eq!(attr_str(&json, "binding"), Some("name"));
     }
 }
+
 

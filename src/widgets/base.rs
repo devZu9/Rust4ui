@@ -36,7 +36,7 @@ pub fn widget_paint_custom(
     enabled: bool,
     inherited: &HashMap<String, serde_json::Value>,
 ) -> PaintOut {
-    let pad = get_padding(node, inherited, theme, widget, None, egui::Margin::ZERO);
+    let pad = get_padding(node, inherited, theme, widget, egui::Margin::ZERO);
     let margin = get_margin(node, theme, widget);
 
     let content_width = reserved_size.x + pad.left as f32 + pad.right as f32;
@@ -162,3 +162,4 @@ pub fn widget_paint_egui<R>(
     restore_widget_style(ui, saved);
     (result, out.response)
 }
+

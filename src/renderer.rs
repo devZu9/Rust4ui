@@ -34,9 +34,8 @@ impl RenderCtx {
     /// Сохраняет полный снапшот всех текущих inherited, затем очищает HashMap
     /// и заполняет только _children-ключами из node. Гарантирует отсутствие
     /// протекания значений на уровень глубже.
-    /// Theme _children не читаются здесь — они обрабатываются отдельно
-    /// в get_padding / get_margin через parent_widget параметр.
-    pub fn inherit_children(&mut self, node: &serde_json::Value) -> Vec<(String, Option<serde_json::Value>)> {
+    /// Сохраняет имя родителя как "_parent" для get_padding / get_margin (шаг 4).
+    pub fn inherit_children(&mut self, node: &serde_json::Value, parent_name: Option<&str>) -> Vec<(String, Option<serde_json::Value>)> {
         let old: Vec<_> = self.inherited.drain().map(|(k, v)| (k, Some(v))).collect();
         if let Some(obj) = node.as_object() {
             for (key, val) in obj {
@@ -44,6 +43,9 @@ impl RenderCtx {
                     self.inherited.insert(base.to_string(), val.clone());
                 }
             }
+        }
+        if let Some(name) = parent_name {
+            self.inherited.insert("_parent".to_string(), serde_json::json!(name));
         }
         old
     }
@@ -265,24 +267,23 @@ pub fn get_padding(
     inherited: &HashMap<String, serde_json::Value>,
     theme: &crate::theme::Theme,
     widget: &str,
-    parent_widget: Option<&str>,
     default: egui::Margin,
 ) -> egui::Margin {
     node.get("padding")
-        .and_then(parse_padding)
-        .or_else(|| inherited.get("padding").and_then(parse_padding))
-        .or_else(|| {
+        .and_then(parse_padding)                                    // шаг 1: node
+        .or_else(|| inherited.get("padding").and_then(parse_padding)) // шаг 2: inherited
+        .or_else(|| {                                                // шаг 3: theme[widget]
             theme.widget.get(widget)
                 .and_then(|w| w.get("padding"))
                 .and_then(parse_padding)
         })
-        .or_else(|| {
-            parent_widget
-                .and_then(|pw| theme.widget.get(pw))
+        .or_else(|| {                                                // шаг 4: theme[parent]["padding_children"]
+            let parent_name = inherited.get("_parent").and_then(|v| v.as_str())?;
+            theme.widget.get(parent_name)
                 .and_then(|w| w.get("padding_children"))
                 .and_then(parse_padding)
         })
-        .unwrap_or(default)
+        .unwrap_or(default)                                          // шаг 5: дефолт
 }
 
 pub fn get_margin(
