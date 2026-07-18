@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use crate::border::{draw_border, draw_shadow_bg, draw_shadow_border, get_state_border, parse_shadow, Shadow};
-use crate::renderer::{get_margin, get_padding, parse_rounding, resolve_state_attr, RenderCtx};
+use crate::renderer::{get_margin, get_padding, parse_padding, parse_rounding, resolve_state_attr, RenderCtx};
 
 pub struct PaintOut {
     pub response: egui::Response,
@@ -36,16 +36,27 @@ pub fn widget_paint_custom(
     enabled: bool,
     inherited: &HashMap<String, serde_json::Value>,
 ) -> PaintOut {
-    let padding = get_padding(node, inherited, theme, egui::Margin::ZERO);
-    let margin = get_margin(node, inherited, theme);
+    let base_padding = get_padding(node, inherited, theme, egui::Margin::ZERO);
+    let base_margin = get_margin(node, inherited, theme);
 
-    let content_width = reserved_size.x + padding.left as f32 + padding.right as f32;
-    let content_height = reserved_size.y + padding.top as f32 + padding.bottom as f32;
-    let total_width = content_width + margin.left as f32 + margin.right as f32;
-    let total_height = content_height + margin.top as f32 + margin.bottom as f32;
+    let content_width = reserved_size.x + base_padding.left as f32 + base_padding.right as f32;
+    let content_height = reserved_size.y + base_padding.top as f32 + base_padding.bottom as f32;
+    let total_width = content_width + base_margin.left as f32 + base_margin.right as f32;
+    let total_height = content_height + base_margin.top as f32 + base_margin.bottom as f32;
 
     let size = egui::vec2(total_width.max(0.0), total_height.max(0.0));
     let (rect, resp) = reserve_exact_size(ui, size, sense);
+
+    // State-зависимые padding/margin (padding_hover, margin_click и т.д.)
+    let theme_lookup = |k: &str| theme.widget.get(widget).and_then(|w| w.get(k)).and_then(parse_padding);
+    let padding = resolve_state_attr(
+        node, inherited, &resp, "padding",
+        parse_padding, &theme_lookup, base_padding,
+    );
+    let margin = resolve_state_attr(
+        node, inherited, &resp, "margin",
+        parse_padding, &theme_lookup, base_margin,
+    );
 
     let content_rect = egui::Rect::from_min_max(
         egui::pos2(rect.min.x + margin.left as f32, rect.min.y + margin.top as f32),
