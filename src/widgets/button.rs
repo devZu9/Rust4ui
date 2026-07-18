@@ -27,14 +27,14 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     }
 
     let enabled = attr_bool(node, "enabled").unwrap_or(true);
-    let base_min_width = attr_f64(node, "min_width")
+    let min_width = attr_f64(node, "min_width")
         .unwrap_or_else(|| ctx.theme.w_f64("Button", "min_width", 100.0)) as f32;
-    let base_min_height = ctx.theme.w_f64("Button", "height", 28.0) as f32;
-    let base_rounding = attr_f64(node, "rounding")
+    let min_height = ctx.theme.w_f64("Button", "height", 28.0) as f32;
+    let rounding = attr_f64(node, "rounding")
         .unwrap_or_else(|| ctx.theme.w_f64("Button", "rounding", 6.0));
 
     let tooltip_text = attr_str(node, "tooltip").map(|t| resolve_text(t, ctx));
-    let base_align = attr_str(node, "align").unwrap_or("center");
+    let align_default = attr_str(node, "align").unwrap_or("center");
 
     let padding = get_padding(node, &ctx.inherited, &ctx.theme, egui::Margin::symmetric(16, 4));
     let color_text = node.get("color_text")
@@ -59,33 +59,33 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         None
     };
 
-    let icon_sz = icon_galley.as_ref().map_or(egui::Vec2::ZERO, |g| g.size());
-    let text_sz = text_galley.as_ref().map_or(egui::Vec2::ZERO, |g| g.size());
+    let icon_size = icon_galley.as_ref().map_or(egui::Vec2::ZERO, |g| g.size());
+    let text_size = text_galley.as_ref().map_or(egui::Vec2::ZERO, |g| g.size());
     let gap = if has_icon && has_text { 6.0 } else { 0.0 };
 
     let (padding_left, padding_right, padding_top, padding_bottom) = (padding.left as f32, padding.right as f32, padding.top as f32, padding.bottom as f32);
-    let min_cw = (base_min_width - padding_left - padding_right).max(0.0);
-    let min_ch = (base_min_height - padding_top - padding_bottom).max(0.0);
-    let content_w = (icon_sz.x + gap + text_sz.x).max(min_cw);
-    let content_h = (icon_sz.y.max(text_sz.y)).max(min_ch);
+    let min_width_content = (min_width - padding_left - padding_right).max(0.0);
+    let min_height_content = (min_height - padding_top - padding_bottom).max(0.0);
+    let content_width = (icon_size.x + gap + text_size.x).max(min_width_content);
+    let content_height = (icon_size.y.max(text_size.y)).max(min_height_content);
 
     let out = crate::widgets::base::widget_paint_custom(
         ui, node, &ctx.theme, "Button",
-        egui::vec2(content_w, content_h),
+        egui::vec2(content_width, content_height),
         egui::Sense::click_and_drag(), enabled,
         &ctx.inherited,
     );
 
     let align = if enabled {
         if out.response.is_pointer_button_down_on() {
-            attr_str(node, "align_click").unwrap_or(base_align)
+            attr_str(node, "align_click").unwrap_or(align_default)
         } else if out.response.hovered() {
-            attr_str(node, "align_hover").unwrap_or(base_align)
+            attr_str(node, "align_hover").unwrap_or(align_default)
         } else {
-            base_align
+            align_default
         }
     } else {
-        base_align
+        align_default
     };
     let halign = match align {
         "left" => egui::Align::LEFT,
@@ -104,9 +104,9 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let shadow_icon = cascade_shadow(node, &ctx.theme, "Button", "shadow_icon", &out.response, enabled, shadow_content);
     let shadow_text = cascade_shadow(node, &ctx.theme, "Button", "shadow_text", &out.response, enabled, shadow_content);
 
-    let start_x = halign.align_size_within_range(icon_sz.x + gap + text_sz.x, out.inner_rect.x_range()).min;
+    let start_x = halign.align_size_within_range(icon_size.x + gap + text_size.x, out.inner_rect.x_range()).min;
     if let Some(ig) = &icon_galley {
-        let y = egui::Align::Center.align_size_within_range(icon_sz.y, out.inner_rect.y_range()).min;
+        let y = egui::Align::Center.align_size_within_range(icon_size.y, out.inner_rect.y_range()).min;
         let pos = egui::pos2(start_x, y);
         if shadow_icon.z_order == ShadowZOrder::Under {
             draw_shadow_content(ui, pos, ig.clone(), &shadow_icon);
@@ -117,8 +117,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         }
     }
     if let Some(tg) = &text_galley {
-        let y = egui::Align::Center.align_size_within_range(text_sz.y, out.inner_rect.y_range()).min;
-        let pos = egui::pos2(start_x + icon_sz.x + gap, y);
+        let y = egui::Align::Center.align_size_within_range(text_size.y, out.inner_rect.y_range()).min;
+        let pos = egui::pos2(start_x + icon_size.x + gap, y);
         if shadow_text.z_order == ShadowZOrder::Under {
             draw_shadow_content(ui, pos, tg.clone(), &shadow_text);
             ui.painter().galley_with_override_text_color(pos, tg.clone(), actual_text);
