@@ -48,7 +48,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         })
         .unwrap_or_else(|| egui::CornerRadius::same(rounding_val));
 
-    let margin = get_margin(node, &ctx.theme, "Menu");
+    let margin = get_margin(node, &ctx.inherited, &ctx.theme, "Menu");
     let pad = get_padding(node, &ctx.inherited, &ctx.theme, "Menu", egui::Margin::ZERO);
 
     // Layout (placeholder color — actual color resolved after Response)

@@ -17,7 +17,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         .or_else(|| Some(ctx.theme.w_f64("MenuBar", "gap", 0.0)))
         .unwrap_or(0.0) as f32;
 
-    let margin = get_margin(node, &ctx.theme, "MenuBar");
+    let margin = get_margin(node, &ctx.inherited, &ctx.theme, "MenuBar");
     let padding = get_padding(node, &ctx.inherited, &ctx.theme, "MenuBar", egui::Margin::ZERO);
     let rounding = attr_f64(node, "rounding")
         .or_else(|| Some(ctx.theme.w_f64("MenuBar", "rounding", 0.0)))

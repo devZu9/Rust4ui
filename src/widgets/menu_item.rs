@@ -1,4 +1,4 @@
-use crate::renderer::{attr_f64, attr_str, get_margin, get_padding, resolve_text, RenderCtx};
+use crate::renderer::{attr_f64, attr_str, get_attr, get_margin, get_padding, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
     let action = attr_str(node, "action");
@@ -22,32 +22,41 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         format!("{prefix} {text}")
     };
 
-    let stretch = node.get("stretch")
-        .or_else(|| ctx.inherited.get("stretch"))
-        .and_then(|v| v.as_bool())
-        .or_else(|| Some(ctx.theme.w_bool("MenuItem", "stretch", false)))
-        .unwrap_or(false);
+    let stretch = get_attr(
+        node, &ctx.inherited, &ctx.theme, "MenuItem",
+        "stretch",
+        |v| v.as_bool(),
+        |k| ctx.theme.widget.get("MenuItem").and_then(|w| w.get(k)).and_then(|v| v.as_bool()),
+        "stretch_children",
+        false,
+    );
 
-    let align = attr_str(node, "align")
-        .or_else(|| ctx.inherited.get("align").and_then(|v| v.as_str()))
-        .map(|s| s.to_string())
-        .or_else(|| Some(ctx.theme.w_str("MenuItem", "align", "left")))
-        .unwrap_or_else(|| "left".to_string());
+    let align = get_attr(
+        node, &ctx.inherited, &ctx.theme, "MenuItem",
+        "align",
+        |v| v.as_str().map(|s| s.to_string()),
+        |k| Some(ctx.theme.w_str("MenuItem", k, "left")),
+        "align_children",
+        "left".to_string(),
+    );
 
-    let inherited_color = ctx.inherited.get("color").and_then(crate::theme::parse_color_value);
-    let color = node
-        .get("color")
-        .and_then(crate::theme::parse_color_value)
-        .or_else(|| inherited_color)
-        .or_else(|| ctx.theme.w_color_opt("MenuItem", "color"))
-        .unwrap_or_else(|| egui::Color32::from_gray(220));
+    let color = get_attr(
+        node, &ctx.inherited, &ctx.theme, "MenuItem",
+        "color",
+        crate::theme::parse_color_value,
+        |k| ctx.theme.w_color_opt("MenuItem", k),
+        "color_children",
+        egui::Color32::from_gray(220),
+    );
 
-    let color_icon = node
-        .get("color_icon")
-        .and_then(crate::theme::parse_color_value)
-        .or_else(|| ctx.inherited.get("color_icon").and_then(crate::theme::parse_color_value))
-        .or_else(|| ctx.theme.w_color_opt("MenuItem", "color_icon"))
-        .unwrap_or(color);
+    let color_icon = get_attr(
+        node, &ctx.inherited, &ctx.theme, "MenuItem",
+        "color_icon",
+        crate::theme::parse_color_value,
+        |k| ctx.theme.w_color_opt("MenuItem", k),
+        "color_icon_children",
+        color,
+    );
 
     let base_rounding = attr_f64(node, "rounding")
         .or_else(|| Some(ctx.theme.w_f64("MenuItem", "rounding", 4.0)))
@@ -57,8 +66,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let content = ui.painter().layout_no_wrap(label.clone(), font_id, color_icon);
     let content_size = content.size();
 
-    let inherited_margin = ctx.inherited.get("margin").and_then(crate::renderer::parse_padding);
-    let margin = inherited_margin.unwrap_or_else(|| get_margin(node, &ctx.theme, "MenuItem"));
+    let margin = get_margin(node, &ctx.inherited, &ctx.theme, "MenuItem");
     let pad = get_padding(node, &ctx.inherited, &ctx.theme, "MenuItem", egui::Margin::ZERO);
 
     if margin.top > 0 { ui.add_space(margin.top as f32); }

@@ -288,17 +288,50 @@ pub fn get_padding(
 
 pub fn get_margin(
     node: &serde_json::Value,
+    inherited: &HashMap<String, serde_json::Value>,
     theme: &crate::theme::Theme,
     widget: &str,
 ) -> egui::Margin {
     node.get("margin")
         .and_then(parse_padding)
+        .or_else(|| inherited.get("margin").and_then(parse_padding))
         .or_else(|| {
             theme.widget.get(widget)
                 .and_then(|w| w.get("margin"))
                 .and_then(parse_padding)
         })
+        .or_else(|| {
+            let parent_name = inherited.get("_parent").and_then(|v| v.as_str())?;
+            theme.widget.get(parent_name)
+                .and_then(|w| w.get("margin_children"))
+                .and_then(parse_padding)
+        })
         .unwrap_or(egui::Margin::ZERO)
+}
+
+/// Универсальное чтение атрибута с полной цепочкой:
+///   node → inherited → theme[widget][key] → theme[_parent][parent_key] → default
+pub fn get_attr<T: Clone>(
+    node: &serde_json::Value,
+    inherited: &HashMap<String, serde_json::Value>,
+    theme: &crate::theme::Theme,
+    widget: &str,
+    key: &str,
+    parse: impl Fn(&serde_json::Value) -> Option<T>,
+    theme_lookup: impl Fn(&str) -> Option<T>,
+    parent_key: &str,
+    default: T,
+) -> T {
+    node.get(key).and_then(&parse)
+        .or_else(|| inherited.get(key).and_then(|j| parse(j)))
+        .or_else(|| theme_lookup(key))
+        .or_else(|| {
+            let parent_name = inherited.get("_parent").and_then(|v| v.as_str())?;
+            theme.widget.get(parent_name)
+                .and_then(|w| w.get(parent_key))
+                .and_then(&parse)
+        })
+        .unwrap_or(default)
 }
 
 pub fn parse_padding(val: &serde_json::Value) -> Option<egui::Margin> {

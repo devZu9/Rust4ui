@@ -37,7 +37,7 @@ pub fn widget_paint_custom(
     inherited: &HashMap<String, serde_json::Value>,
 ) -> PaintOut {
     let pad = get_padding(node, inherited, theme, widget, egui::Margin::ZERO);
-    let margin = get_margin(node, theme, widget);
+    let margin = get_margin(node, inherited, theme, widget);
 
     let content_width = reserved_size.x + pad.left as f32 + pad.right as f32;
     let content_height = reserved_size.y + pad.top as f32 + pad.bottom as f32;
