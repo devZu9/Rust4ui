@@ -188,7 +188,7 @@
     "popup_rounding": 20,
     "popup_padding": [20],
     "rounding_children": 10, 
-    "padding_children": [10, 40],
+    "padding_children": [15, 80],
     "rounding": 0
   },
   "MenuItem": {

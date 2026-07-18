@@ -200,7 +200,6 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         max_child_outer_w = max_child_outer_w.max(total);
     }
     let popup_w = if popup_min_width > 0.0 { popup_min_width } else { max_child_outer_w };
-    let popup_w_full = popup_w + popup_padding.left as f32 + popup_padding.right as f32;
 
     // Inherit _children for children (save/restore around children rendering)
     let old = ctx.inherit_children(node, Some("Menu"));

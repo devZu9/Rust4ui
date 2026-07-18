@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.4.6] — 2026-07-18
+
+### Исправлено
+- **Конфликт `padding_children` и `padding` на MenuItem** — `widget_base` перечитывал padding через `resolve_state_attr` с цепочкой `node → inherited → theme → default`, что давало приоритет `padding_children` (inherited) над `padding` на самом MenuItem (node). На самом деле `resolve_state_attr` для padding в `widget_base` был лишним — `menu_item.rs` уже корректно разрешил padding через `get_padding(node → inherited → theme → default)`. Удалён `resolve_state_attr("padding")` из `widget_base`.
+  ```
+  Было: widget_base переопределял pad = inherited → padding_children ❌
+  Стало: widget_base использует pad = node → inherited → theme → default ✅
+  ```
+
+### Изменено
+- **base.rs** — удалён неиспользуемый импорт `parse_padding`
+- **Удалены временные debug-логи** — `widget_base` логировал каждый виджет каждый кадр. Теперь только MenuItem при клике (оба лога: menu_item + widget_base).
+
 ## [0.4.5] — 2026-07-18
 
 ### Добавлено

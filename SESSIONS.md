@@ -10,6 +10,10 @@
 
 ### Продолжение (17-18.07)
 
+- [x] **Конфликт padding_children и MenuItem padding — исправлен** — 
+  **Проблема:** `widget_base` перечитывал padding через `resolve_state_attr(node, inherited, &resp, "padding", ...)` с цепочкой `node → inherited → theme → default`. Поскольку inherited проверяется ДО theme, `padding_children: [10,40]` выигрывал у `MenuItem padding: [15,80]`, давая смешанный визуал.
+  **Решение:** удалён `resolve_state_attr("padding")` из `widget_base`. Теперь padding вычисляется один раз — в `menu_item.rs` через `get_padding(node → inherited → theme → default)`. `widget_base` просто использует полученный `pad`, не перепроверяя.
+  **Вывод:** `resolve_state_attr` для атрибутов, которые вызывающий код уже корректно разрешил — источник двойного расхождения. Нужно следить, чтобы атрибут не обрабатывался дважды с разными цепочками.
 - [x] **Попап: измерение детей** — ширина попапа считается по самому широкому MenuItem (text + icon + padding) до inherit_children. Separator и stretch используют `available_width()` от фиксированного alloc.
 - [x] **MenuItem: `stretch`** — растягивает MenuItem на всю ширину попапа. `stretch: true/false`, через node → inherited → theme.
 - [x] **MenuItem: `align`** — выравнивание контента `"left"/"center"/"right"`. Через node → inherited → theme.
