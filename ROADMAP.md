@@ -1,6 +1,6 @@
 # Roadmap — Rust4ui
 
-> Правила оформления версий всегда перечитать перед работой с этим файлом в `.opencode/skills/session-log/SKILL.md`
+> Правила оформления версий всегда перечитать перед каждым обращением с этим файлом в `.opencode/skills/session-log/SKILL.md`
 
 #### JSON → UI → Rust. Быстрое прототипирование интерфейсов на egui.
 
@@ -66,25 +66,13 @@
 
 ### v0.5 — Числовое поле, оставшиеся виджеты и полировка *(текущая)*
 
+- [ ] **Конфликт Menu padding_children и MenuItem padding** — при включённых обоих padding смешивается, должен работать приоритет node → inherited → theme
 - [ ] **Отключение сторон бордюра** — возможность отключить любую сторону (top/right/bottom/left) у виджетов с border, чтобы делать уголки или односторонние полоски
-
-- [x] **MenuBar** — универсальный _children/_hover/_click/_focus механизм, popup_*, исправление ошибок 🟢 *(18.07.2026)*
-  - [x] **popup_* атрибуты** — popup_background/rounding/padding/gap/min_width/max_height/border/shadow 🟢 *(18.07.2026)*
-  - [x] **inherit_children: theme fallback** — *_children из theme.json работают (JSON → theme) 🟢 *(18.07.2026)*
-  - [x] **popup open/close logic** — clicked_elsewhere, ховер-переключение, очистка open_popup_id 🟢 *(18.07.2026)*
-  - [x] **Универсальный _children механизм** — inherit_children / restore_children / resolve_state_attr 🟢 *(17.07.2026)*
-  - [x] **Кастомизация фона/цвета через _children** — background, background_hover/click, color, color_hover/click 🟢 *(16.07.2026)*
-  - [x] padding_children / margin_children / rounding_children 🟢 *(16.07.2026)*
-  - [x] border _children + border_position_children 🟢 *(17.07.2026)*
-  - [x] icon_children / icon_position_children / icon_gap_children 🟢 *(17.07.2026)*
-  - [ ] **Конфликт Menu padding_children и MenuItem padding** — при включённых обоих padding смешивается, должен работать приоритет node → inherited → theme
+- [ ] **MenuBar**
+  - [ ] **Кастомизация показа иконок в MenuItem** — настройка видимости иконок (всегда/при наведении/скрыть)
   - [ ] Состояние _focus на раскрытом меню можно настраивать через постфикс
   - [ ] Настройка авто-раскрытия после клика (т.е. первый клик раскрывает пункт меню, а дальше мы просто водим и меню раскрывается из-за hover)
-  - [ ] **Кастомизация показа иконок в MenuItem** — настройка видимости иконок (всегда/при наведении/скрыть)
   - [ ] **Shadow на MenuBar** — протестировать и донастроить shadow на MenuBar и его children
-
-- [x] 
-
 - [ ] **Slider** — доделка внешнего вида
 - [ ] **ComboBox** — доделка дизайна
 - [ ] **Tabs / Tab** — доделка дизайна
@@ -98,6 +86,18 @@
 - [ ] **Шаблоны / `examples/simple`**
 - [ ] **Система иконок** — IconBar anchor (start/center/end), Separator в IconBar
 - [ ] **Микро-анимации иконок** — см. v0.* — Расширяем функционал
+
+---
+
+- [x] **MenuBar** — универсальный _children/_hover/_click/_focus механизм, popup_*, исправление ошибок 🟢 *(18.07.2026)*
+  - [x] **popup_* атрибуты** — popup_background/rounding/padding/gap/min_width/max_height/border/shadow 🟢 *(18.07.2026)*
+  - [x] **inherit_children: theme fallback** — *_children из theme.json работают (JSON → theme) 🟢 *(18.07.2026)*
+  - [x] **popup open/close logic** — clicked_elsewhere, ховер-переключение, очистка open_popup_id 🟢 *(18.07.2026)*
+  - [x] **Универсальный _children механизм** — inherit_children / restore_children / resolve_state_attr 🟢 *(17.07.2026)*
+  - [x] border _children + border_position_children 🟢 *(17.07.2026)*
+  - [x] icon_children / icon_position_children / icon_gap_children 🟢 *(17.07.2026)*
+  - [x] **Кастомизация фона/цвета через _children** — background, background_hover/click, color, color_hover/click 🟢 *(16.07.2026)*
+  - [x] padding_children / margin_children / rounding_children 🟢 *(16.07.2026)*
 - [x] **Числовое поле (mode=number)** — дизайн, точность, степпер, тесты 🟢 *(15.07.2026)*
 
 ### v0.4 — Тени, Button shadow, плавное развитие *(завершена)*
