@@ -269,21 +269,14 @@ pub fn get_padding(
     widget: &str,
     default: egui::Margin,
 ) -> egui::Margin {
-    node.get("padding")
-        .and_then(parse_padding)                                    // шаг 1: node
-        .or_else(|| inherited.get("padding").and_then(parse_padding)) // шаг 2: inherited
-        .or_else(|| {                                                // шаг 3: theme[widget]
-            theme.widget.get(widget)
-                .and_then(|w| w.get("padding"))
-                .and_then(parse_padding)
-        })
-        .or_else(|| {                                                // шаг 4: theme[parent]["padding_children"]
-            let parent_name = inherited.get("_parent").and_then(|v| v.as_str())?;
-            theme.widget.get(parent_name)
-                .and_then(|w| w.get("padding_children"))
-                .and_then(parse_padding)
-        })
-        .unwrap_or(default)                                          // шаг 5: дефолт
+    get_attr(
+        node, inherited, theme, widget,
+        "padding",
+        parse_padding,
+        |k| theme.widget.get(widget).and_then(|w| w.get(k)).and_then(parse_padding),
+        "padding_children",
+        default,
+    )
 }
 
 pub fn get_margin(
@@ -292,21 +285,14 @@ pub fn get_margin(
     theme: &crate::theme::Theme,
     widget: &str,
 ) -> egui::Margin {
-    node.get("margin")
-        .and_then(parse_padding)
-        .or_else(|| inherited.get("margin").and_then(parse_padding))
-        .or_else(|| {
-            theme.widget.get(widget)
-                .and_then(|w| w.get("margin"))
-                .and_then(parse_padding)
-        })
-        .or_else(|| {
-            let parent_name = inherited.get("_parent").and_then(|v| v.as_str())?;
-            theme.widget.get(parent_name)
-                .and_then(|w| w.get("margin_children"))
-                .and_then(parse_padding)
-        })
-        .unwrap_or(egui::Margin::ZERO)
+    get_attr(
+        node, inherited, theme, widget,
+        "margin",
+        parse_padding,
+        |k| theme.widget.get(widget).and_then(|w| w.get(k)).and_then(parse_padding),
+        "margin_children",
+        egui::Margin::ZERO,
+    )
 }
 
 /// Универсальное чтение атрибута с полной цепочкой:
