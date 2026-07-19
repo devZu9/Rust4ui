@@ -95,52 +95,16 @@ impl Default for RenderCtx {
     }
 }
 
-/// Универсальное чтение атрибута с hover/click/focus + inherited + theme fallback.
-///
-/// Цепочка приоритета (первый совпавший возвращается):
-///   1. node[`{key}_{state}`]
-///   2. inherited[`{key}_{state}`]
-///   3. theme_lookup(`{key}_{state}`)
-///   4. node[`{key}`]
-///   5. inherited[`{key}`]
-///   6. theme_lookup(`{key}`)
-///   7. default
-pub fn resolve_state_attr<T>(
-    node: &serde_json::Value,
-    inherited: &HashMap<String, serde_json::Value>,
-    resp: &egui::Response,
-    key: &str,
-    parse: impl Fn(&serde_json::Value) -> Option<T>,
-    theme_lookup: impl Fn(&str) -> Option<T>,
-    default: T,
-) -> T {
-    let state = if resp.is_pointer_button_down_on() { Some("_click") }
-        else if resp.has_focus() { Some("_focus") }
-        else if resp.hovered() { Some("_hover") }
-        else { None };
-
-    if let Some(sfx) = state {
-        let sk = format!("{key}{sfx}");
-        if let Some(v) = node.get(&sk).and_then(&parse) { return v; }
-        if let Some(v) = inherited.get(&sk).and_then(|j| parse(j)) { return v; }
-        if let Some(v) = theme_lookup(&sk) { return v; }
-    }
-
-    node.get(key).and_then(&parse)
-        .or_else(|| inherited.get(key).and_then(|j| parse(j)))
-        .or_else(|| theme_lookup(key))
-        .unwrap_or(default)
-}
 
 fn state_attr_lookup<T: Copy>(
-    n: &serde_json::Value,
-    t: &crate::theme::Theme,
-    w: &str,
-    k: &str,
-    p: fn(&serde_json::Value) -> Option<T>,
+    node: &serde_json::Value,
+    theme: &crate::theme::Theme,
+    widget_name: &str,
+    key: &str,
+    parse: fn(&serde_json::Value) -> Option<T>,
 ) -> Option<T> {
-    n.get(k).and_then(p)
-        .or_else(|| t.widget.get(w).and_then(|x| x.get(k)).and_then(p))
+    node.get(key).and_then(parse)
+        .or_else(|| theme.widget.get(widget_name).and_then(|w| w.get(key)).and_then(parse))
 }
 
 /// Упрощённая версия resolve_state_attr без inherited (только node + theme).
@@ -158,17 +122,17 @@ pub fn get_state_attr<T: Copy>(
     let base = state_attr_lookup(node, theme, widget, key, parse).unwrap_or(default);
     if !enabled { return base; }
     if resp.is_pointer_button_down_on() {
-        let ck = format!("{}_click", key);
-        let fk = format!("{}_focus", key);
-        state_attr_lookup(node, theme, widget, &ck, parse)
-            .or_else(|| state_attr_lookup(node, theme, widget, &fk, parse))
+        let click_key = format!("{}_click", key);
+        let focus_key = format!("{}_focus", key);
+        state_attr_lookup(node, theme, widget, &click_key, parse)
+            .or_else(|| state_attr_lookup(node, theme, widget, &focus_key, parse))
             .unwrap_or(base)
     } else if resp.has_focus() {
-        let fk = format!("{}_focus", key);
-        state_attr_lookup(node, theme, widget, &fk, parse).unwrap_or(base)
+        let focus_key = format!("{}_focus", key);
+        state_attr_lookup(node, theme, widget, &focus_key, parse).unwrap_or(base)
     } else if resp.hovered() {
-        let hk = format!("{}_hover", key);
-        state_attr_lookup(node, theme, widget, &hk, parse).unwrap_or(base)
+        let hover_key = format!("{}_hover", key);
+        state_attr_lookup(node, theme, widget, &hover_key, parse).unwrap_or(base)
     } else {
         base
     }
@@ -270,7 +234,7 @@ pub fn get_padding(
 ) -> egui::Margin {
     let widget = node.get("type").and_then(|v| v.as_str()).unwrap_or("unknown");
     get_attr(
-        node, inherited, theme, widget,
+        node, inherited, theme,
         "padding",
         parse_padding,
         |k| theme.widget.get(widget).and_then(|w| w.get(k)).and_then(parse_padding),
@@ -286,7 +250,7 @@ pub fn get_margin(
 ) -> egui::Margin {
     let widget = node.get("type").and_then(|v| v.as_str()).unwrap_or("unknown");
     get_attr(
-        node, inherited, theme, widget,
+        node, inherited, theme,
         "margin",
         parse_padding,
         |k| theme.widget.get(widget).and_then(|w| w.get(k)).and_then(parse_padding),
@@ -301,7 +265,6 @@ pub fn get_attr<T: Clone>(
     node: &serde_json::Value,
     inherited: &HashMap<String, serde_json::Value>,
     theme: &crate::theme::Theme,
-    widget: &str,
     key: &str,
     parse: impl Fn(&serde_json::Value) -> Option<T>,
     theme_lookup: impl Fn(&str) -> Option<T>,
@@ -320,18 +283,35 @@ pub fn get_attr<T: Clone>(
         .unwrap_or(default)
 }
 
-/// Упрощённый вызов get_attr с ctx (widget + parent_key из node["type"]).
+/// Универсальное чтение атрибута с state (hover/click/focus), inherited, theme и _parent fallback.
+/// Цепочка приоритета:
+///   1–3: node/inherited/theme[ключ_click/focus/hover]
+///   4–7: node → inherited → theme[widget][key] → theme[_parent][key_children] → default
 pub fn get_attr_ctx<T: Clone>(
     ctx: &RenderCtx,
     node: &serde_json::Value,
+    resp: Option<&egui::Response>,
     key: &str,
     parse: impl Fn(&serde_json::Value) -> Option<T>,
     theme_lookup: impl Fn(&str) -> Option<T>,
     default: T,
 ) -> T {
-    let widget = node.get("type").and_then(|v| v.as_str()).unwrap_or("unknown");
+    if let Some(resp) = resp {
+        let state = if resp.is_pointer_button_down_on() { Some("_click") }
+            else if resp.has_focus() { Some("_focus") }
+            else if resp.hovered() { Some("_hover") }
+            else { None };
+
+        if let Some(suffix) = state {
+            let state_key = format!("{key}{suffix}");
+            if let Some(v) = node.get(&state_key).and_then(&parse) { return v; }
+            if let Some(v) = ctx.inherited.get(&state_key).and_then(|j| parse(j)) { return v; }
+            if let Some(v) = theme_lookup(&state_key) { return v; }
+        }
+    }
+
     let parent_key = format!("{}_children", key);
-    get_attr(node, &ctx.inherited, &ctx.theme, widget, key, parse, theme_lookup, &parent_key, default)
+    get_attr(node, &ctx.inherited, &ctx.theme, key, parse, theme_lookup, &parent_key, default)
 }
 
 /// Парсит скругление: число → 4 одинаковых угла, массив [nw, ne, sw, se] → per-corner

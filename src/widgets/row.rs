@@ -71,7 +71,6 @@ fn render_row_children(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut Re
 
 #[cfg(test)]
 mod tests {
-    use super::*;
 
     #[test]
     fn test_smoke_row() {

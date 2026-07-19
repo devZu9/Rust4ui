@@ -12,7 +12,6 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, _ctx: &RenderCtx) {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
 
     #[test]
     fn test_smoke_spacer() {

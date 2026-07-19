@@ -1,5 +1,5 @@
 use crate::border::get_border;
-use crate::renderer::{attr_f64, attr_str, RenderCtx};
+use crate::renderer::{attr_f64, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
     let fill = node.get("background")
@@ -27,7 +27,6 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
 #[cfg(test)]
 mod tests {
-    use super::*;
 
     #[test]
     fn test_smoke_panel() {
@@ -36,7 +35,7 @@ mod tests {
             "background": "#1A1D23",
             "padding": 12
         });
-        assert_eq!(attr_str(&json, "background"), Some("#1A1D23"));
+        assert_eq!(crate::renderer::attr_str(&json, "background"), Some("#1A1D23"));
     }
 }
 

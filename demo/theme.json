@@ -53,14 +53,12 @@
   "IconButton": {
     "button_size": 0,
     "rounding": 12,
-    "padding": [10],
-    "padding_hover": [5, 7, 6, 5],
- //   "padding_click": [8, 20, 20, 8],
+    "padding": [11],
+    "padding_click": [8, 20, 20, 8],
     "margin": [3],
-    "margin_hover": [10],
+   // "margin_hover": [0],
     "margin_click": [5],
     "rounding_click": 25,
- //   "rounding_hover": 10,
     "icon_size": 25,
     "icon_size_click": 20,
     "background": ["#000", 0],
@@ -73,11 +71,8 @@
     "color": "$color_accent",
     "color_hover": "$rust",
     "color_click": "#0FF",
-    /*
-          #C74 - pitch
-    */
     "border": [5, "#88F", 1, "dot", 3, 2],
-    "border_hover": [3, "$rust", 1, "dot", 3, 2],
+    "border_hover": [3, "$rust", 0.2, "dot", 3, 2],
     "border_click": [4, "#0FF", 1, "dash", 5, 6]
   },
   "TextField": {
@@ -189,17 +184,17 @@
     "popup_padding": [20],
     "rounding_children": 10, 
     "padding_children": [15, 50],
- // "stretch_children": true,
+    "stretch_children": true,
     "rounding": 0
   },
   "MenuItem": {
-//    "stretch": true,
+ //   "stretch": true,
 //    "padding": [15, 40],
 //    "background": ["#000", 0],
     "background": "#3A3A44",
     "border_hover": [3, "$pitch", 1, "dot", 2],
-    "color": "$color_text",
-    "rounding": 0
+    "color": "$color_text"
+ //   "rounding": 20
   },
   "SubMenu": {},
   "Notifications": {

@@ -35,7 +35,6 @@ fn render_with_gap(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut Render
 
 #[cfg(test)]
 mod tests {
-    use super::*;
 
     #[test]
     fn test_smoke_column() {

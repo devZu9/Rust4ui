@@ -8,10 +8,9 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &RenderCtx) {
 
     let tooltip = attr_str(node, "tooltip").map(|t| resolve_text(t, ctx));
 
-    let (_, resp) = crate::widgets::base::widget_paint_egui(
-        ui, node, &ctx.theme, "Hyperlink",
+    let (_, _resp) = crate::widgets::base::widget_paint_egui(
+        ui, node, ctx,
         egui::vec2(200.0, 20.0), egui::Sense::click(), true,
-        &ctx.inherited,
         |ui| {
             let r = ui.hyperlink_to(text, url);
             if let Some(tip) = &tooltip {

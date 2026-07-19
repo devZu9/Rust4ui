@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.5.1] — 2026-07-20
+
+### Изменено
+- **`get_attr_ctx` объединяет `resolve_state_attr`** — единая универсальная функция с state (hover/click/focus) + _parent theme fallback. `resolve_state_attr` удалён. `get_attr_ctx` принимает `Option<&egui::Response>` — `None` для базовых атрибутов, `Some(&resp)` для state-зависимых. Все вызовы `resolve_state_attr` заменены на `get_attr_ctx`.
+- **Сигнатура `widget_paint_custom`** — принимает `ctx: &RenderCtx` вместо раздельных `(theme, inherited)`. 5 callers обновлены. Параметр `widget: &str` удалён — читается из `node["type"]` внутри.
+- **Сигнатура `widget_paint_egui`** — аналогично: `ctx: &RenderCtx` вместо `(theme, inherited)`. Параметр `widget: &str` удалён. 9 callers обновлены.
+- **Separator: не наследует `_children`** — `std::mem::take(ctx.inherited)` перед рендером, восстановление после. Separator всегда рисуется с пустым inherited — не подхватывает padding/margin/цвет от родителя.
+- **Измерение детей после `inherit_children`** — в menu.rs замер MenuItem перенесён после `inherit_children`, чтобы `get_padding` использовал тот же inherited, что и при рендере. Предотвращает расхождение замера и реального рендера.
+- **Нейминг без сокращений** — menu.rs, renderer.rs: все переменные переименованы в полные имена (`icon_w→icon_width`, `cw→child_text_width`, `cp→child_padding`, `sfx→suffix`, `sk→state_key`, `ck→click_key`, `hk→hover_key`, `fk→focus_key`, `n/t/w/k/p→node/theme/widget_name/key/parse`, и т.д.).
+- **`ctx.state` borrow conflict** — slider.rs, checkbox.rs, color_picker.rs: closure в `widget_paint_egui` не может захватывать `ctx.state` мутабельно пока `ctx` заимствован. Исправлено: клонирование `state` перед вызовом, запись обратно после.
+
+### Удалено
+- **`resolve_state_attr`** — заменён на `get_attr_ctx`.
+- **`empty_inherited` из separator.rs** — больше не нужен, inherited зануляется через `std::mem::take`.
+- **`HashMap` импорт из base.rs** — больше не используется в signal.
+
+### Исправлено
+- **Popup width зависел от количества Separator** — каждый Separator наследовал padding от Menu, `widget_paint_custom` добавлял его, rect расширялся, следующий Separator видел больший `available_width()`. Исправлено: Separator не наследует padding.
+- **`get_attr_ctx` требовал `resp`** — для stretch/align/color в menu_item.rs (до получения out.response). Исправлено: `Option<&egui::Response>` → `None` для базовых атрибутов.
+- **`theme_lookup` closure получал `&Value` вместо `&str`** — после переименования `k` в closure и изменения сигнатуры `get_attr_ctx`. Исправлено добавлением `None` third param.
+
 ## [0.5.0] — 2026-07-18
 
 ### Изменено

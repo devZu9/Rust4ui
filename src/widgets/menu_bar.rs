@@ -85,7 +85,6 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
 #[cfg(test)]
 mod tests {
-    use super::*;
 
     #[test]
     fn test_smoke_menubar() {

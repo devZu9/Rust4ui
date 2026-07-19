@@ -23,7 +23,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     };
 
     let stretch = get_attr_ctx(
-        ctx, node,
+        ctx, node, None,
         "stretch",
         |v| v.as_bool(),
         |k| ctx.theme.widget.get("MenuItem").and_then(|w| w.get(k)).and_then(|v| v.as_bool()),
@@ -31,7 +31,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     );
 
     let align = get_attr_ctx(
-        ctx, node,
+        ctx, node, None,
         "align",
         |v| v.as_str().map(|s| s.to_string()),
         |k| Some(ctx.theme.w_str("MenuItem", k, "left")),
@@ -39,7 +39,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     );
 
     let color = get_attr_ctx(
-        ctx, node,
+        ctx, node, None,
         "color",
         crate::theme::parse_color,
         |k| ctx.theme.w_color_opt("MenuItem", k),
@@ -47,14 +47,14 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     );
 
     let color_icon = get_attr_ctx(
-        ctx, node,
+        ctx, node, None,
         "color_icon",
         crate::theme::parse_color,
         |k| ctx.theme.w_color_opt("MenuItem", k),
         color,
     );
 
-    let base_rounding = attr_f64(node, "rounding")
+    let _base_rounding = attr_f64(node, "rounding")
         .or_else(|| Some(ctx.theme.w_f64("MenuItem", "rounding", 4.0)))
         .unwrap_or(4.0);
 
@@ -69,7 +69,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     let reserved_size = if stretch {
         let pad_sum = padding.left as f32 + padding.right as f32 + margin.left as f32 + margin.right as f32;
-        let stretch_w = ctx.inherited.get("popup_content_w").and_then(|v| v.as_f64().map(|f| f as f32));
+        let stretch_w = ctx.inherited.get("popup_content_width").and_then(|v| v.as_f64().map(|f| f as f32));
         let inner_w = if let Some(w) = stretch_w {
             (w - pad_sum).max(1.0)
         } else {
@@ -81,9 +81,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     };
 
     let out = crate::widgets::base::widget_paint_custom(
-        ui, node, &ctx.theme, "MenuItem",
+        ui, node, ctx,
         reserved_size, egui::Sense::click(), enabled,
-        &ctx.inherited,
     );
 
     let text_x = match align.as_str() {

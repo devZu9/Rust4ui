@@ -1,4 +1,3 @@
-use crate::border::widget_border;
 use crate::renderer::{attr_bool, attr_f64, attr_str, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &RenderCtx) {
@@ -26,10 +25,9 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &RenderCtx) {
     if italic { rich = rich.italics(); }
     if monospace { rich = rich.monospace(); }
 
-    let (r, _) = crate::widgets::base::widget_paint_egui(
-        ui, node, &ctx.theme, "Label",
+    let (_r, _) = crate::widgets::base::widget_paint_egui(
+        ui, node, ctx,
         egui::vec2(200.0, size as f32 + 8.0), egui::Sense::hover(), true,
-        &ctx.inherited,
         |ui| {
             if wrap {
                 ui.label(rich);
@@ -45,12 +43,10 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &RenderCtx) {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::renderer::RenderCtx;
 
     #[test]
     fn test_smoke_label() {
         let json = serde_json::json!({"type": "Label", "text": "Hello"});
-        let ctx = RenderCtx::new();
         assert_eq!(attr_str(&json, "text"), Some("Hello"));
         assert_eq!(attr_f64(&json, "size"), None);
         assert!(!attr_bool(&json, "bold").unwrap_or(false));

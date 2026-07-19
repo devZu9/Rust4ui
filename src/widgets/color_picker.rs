@@ -16,10 +16,11 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let color = crate::theme::parse_color_hex(&color_str)
         .unwrap_or(egui::Color32::from_rgb(0xFF, 0x66, 0x33));
 
+    let mut state = ctx.state.clone();
+
     let (_, _) = crate::widgets::base::widget_paint_egui(
-        ui, node, &ctx.theme, "ColorPicker",
+        ui, node, ctx,
         egui::vec2(200.0, 24.0), egui::Sense::hover(), true,
-        &ctx.inherited,
         |ui| {
             let new_color = if alpha {
                 let mut rgba = [
@@ -43,10 +44,11 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
             if new_color != color {
                 let hex = format!("#{:02X}{:02X}{:02X}", new_color.r(), new_color.g(), new_color.b());
-                ctx.state.set_string(&binding, hex);
+                state.set_string(&binding, hex);
             }
         },
     );
+    ctx.state = state;
 }
 
 #[cfg(test)]

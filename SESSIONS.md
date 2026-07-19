@@ -8,7 +8,14 @@
 
 ---
 
-### Продолжение (17-18.07)
+### Продолжение (17-20.07)
+
+- [x] **`get_attr_ctx` объединяет `resolve_state_attr`** — единая функция с state (hover/click/focus) + _parent theme fallback. `resolve_state_attr` удалён. `get_attr_ctx` принимает `Option<&egui::Response>` — `None` для базовых атрибутов, `Some(&resp)` для state-зависимых 🟢 *(20.07.2026)*
+- [x] **`widget_paint_custom`/`widget_paint_egui` принимают `ctx: &RenderCtx`** — вместо раздельных `(theme, inherited)`. Сигнатура сокращена. `HashMap` импорт удалён из base.rs 🟢 *(20.07.2026)*
+- [x] **Separator: не наследует `_children`** — `std::mem::take(ctx.inherited)` перед рендером, восстановление после. Separator всегда рисуется с пустым inherited, не подхватывает padding/margin/цвет от parent 🟢 *(20.07.2026)*
+- [x] **Измерение детей — после `inherit_children`** — в menu.rs замер MenuItem перенесён после `inherit_children`, чтобы `get_padding` использовал тот же inherited, что и при рендере 🟢 *(20.07.2026)*
+- [x] **Нейминг без сокращений** — menu.rs, renderer.rs: все переменные переименованы в полные имена (icon_w→icon_width, cw→child_text_width, cp→child_padding, sfx→suffix, sk→state_key и т.д.) 🟢 *(20.07.2026)*
+- [x] **`ctx.state` borrow conflict** — slider.rs, checkbox.rs, color_picker.rs: клонирование state перед `widget_paint_egui`, запись обратно после 🟢 *(20.07.2026)*
 
 - [x] **Нейминг-рефакторинг отрисовки** — `widget_base` → `widget_paint_custom`, `widget_base_wrap` → `widget_paint_egui`, `BaseOut` → `PaintOut`. Сигнатура сокращена с 12 до 8 параметров: убраны `default_bg`, `default_rounding`, `default_pad` — читаются внутри из `theme`. Добавлена обёртка `reserve_exact_size` вместо `allocate_exact_size`.
 - [x] **Конфликт padding_children и MenuItem padding — исправлен** — 

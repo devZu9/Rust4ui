@@ -86,6 +86,12 @@
 - [ ] **Система иконок** — IconBar anchor (start/center/end), Separator в IconBar
 - [ ] **Микро-анимации иконок** — см. v0.* — Расширяем функционал
 
+- [x] **`get_attr_ctx` объединяет `resolve_state_attr`** — единая функция state + _parent fallback. `resolve_state_attr` удалён 🟢 *(20.07.2026)*
+- [x] **`widget_paint_custom`/`widget_paint_egui` принимают `ctx: &RenderCtx`** — убраны раздельные `theme, inherited` 🟢 *(20.07.2026)*
+- [x] **Separator: не наследует `_children`** — `std::mem::take` перед рендером 🟢 *(20.07.2026)*
+- [x] **Измерение детей после `inherit_children`** — корректный padding при замере 🟢 *(20.07.2026)*
+- [x] **Нейминг без сокращений** — menu.rs, renderer.rs 🟢 *(20.07.2026)*
+
 - [x] **MenuBar** — универсальный _children/_hover/_click/_focus механизм, popup_*, исправление ошибок 🟢 *(18.07.2026)*
   - [x] **Конфликт Menu padding_children и MenuItem padding** — исправлен: удалён лишний resolve_state_attr("padding") из widget_paint_custom 🟢 *(18.07.2026)*
   - [x] **popup_* атрибуты** — popup_background/rounding/padding/gap/min_width/max_height/border/shadow 🟢 *(18.07.2026)*

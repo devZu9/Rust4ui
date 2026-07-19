@@ -17,7 +17,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let enabled = attr_bool(node, "enabled").unwrap_or(true);
     let base_button_size = attr_f64(node, "button_size")
         .unwrap_or_else(|| ctx.theme.w_f64("IconButton", "button_size", 24.0)) as f32;
-    let base_rounding = attr_f64(node, "rounding")
+    let _base_rounding = attr_f64(node, "rounding")
         .unwrap_or_else(|| ctx.theme.w_f64("IconButton", "rounding", 6.0));
     let tooltip_text = attr_str(node, "tooltip").map(|t| resolve_text(t, ctx));
     let align = attr_str(node, "align").unwrap_or("center");
@@ -42,10 +42,9 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let content_h = (base_icon_size + pad_t + pad_b).max(base_button_size);
 
     let out = crate::widgets::base::widget_paint_custom(
-        ui, node, &ctx.theme, "IconButton",
+        ui, node, ctx,
         egui::vec2(content_w, content_h),
         egui::Sense::click_and_drag(), enabled,
-        &ctx.inherited,
     );
 
     let actual_text = if enabled {

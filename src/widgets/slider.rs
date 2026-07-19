@@ -19,11 +19,11 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let width = attr_f64(node, "width").unwrap_or(250.0);
 
     let mut value = ctx.state.get_f64(&binding).unwrap_or(min);
+    let mut state = ctx.state.clone();
 
-    let (_, resp) = crate::widgets::base::widget_paint_egui(
-        ui, node, &ctx.theme, "Slider",
+    let (_, _resp) = crate::widgets::base::widget_paint_egui(
+        ui, node, ctx,
         egui::vec2(width as f32, 20.0), egui::Sense::click(), true,
-        &ctx.inherited,
         |ui| {
             let slider = egui::Slider::new(&mut value, min..=max)
                 .step_by(step)
@@ -31,7 +31,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
                 .trailing_fill(false);
             let r = ui.add_sized(egui::vec2(width as f32, 20.0), slider);
             if r.changed() {
-                ctx.state.set_f64(&binding, value);
+                state.set_f64(&binding, value);
             }
         },
     );

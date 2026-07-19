@@ -1,17 +1,15 @@
-use rust4ui::{render_node, RenderCtx, StateRegistry};
+use rust4ui::RenderCtx;
 use serde_json::json;
 
 #[test]
 fn test_smoke_label() {
     let node = json!({"type": "Label", "text": "Test"});
-    let mut ctx = RenderCtx::new();
     assert_eq!(node["type"], "Label");
 }
 
 #[test]
 fn test_smoke_button() {
     let node = json!({"type": "Button", "text": "OK", "action": "test"});
-    let mut ctx = RenderCtx::new();
     assert_eq!(node["type"], "Button");
 }
 
@@ -25,7 +23,7 @@ fn test_smoke_textfield() {
 
 #[test]
 fn test_smoke_checkbox() {
-    let node = json!({"type": "Checkbox", "binding": "flag"});
+    let _node = json!({"type": "Checkbox", "binding": "flag"});
     let mut ctx = RenderCtx::new();
     ctx.state.set_bool("flag", true);
     assert!(ctx.state.get_bool("flag").unwrap());

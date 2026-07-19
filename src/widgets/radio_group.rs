@@ -26,9 +26,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     };
 
     let (_, _) = crate::widgets::base::widget_paint_egui(
-        ui, node, &ctx.theme, "RadioGroup",
+        ui, node, ctx,
         egui::vec2(200.0, 24.0), egui::Sense::hover(), true,
-        &ctx.inherited,
         |ui| {
             for (val, label) in &options {
                 let is_current = selected == *val;

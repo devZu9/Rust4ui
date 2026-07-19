@@ -1,27 +1,26 @@
 use crate::renderer::{attr_f64, RenderCtx};
 
-pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &RenderCtx) {
+pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
     let space = attr_f64(node, "space").unwrap_or(6.0);
     ui.add_space(space as f32);
 
     let sep_w = ui.available_width().max(50.0);
-    let empty_inherited = std::collections::HashMap::new();
+
+    // Separator не наследует _children (padding, margin, цвет — только свои настройки)
+    let saved_inherited = std::mem::take(&mut ctx.inherited);
 
     let (_, _) = crate::widgets::base::widget_paint_egui(
-        ui, node, &ctx.theme, "Separator",
+        ui, node, ctx,
         egui::vec2(sep_w, 4.0), egui::Sense::hover(), true,
-        &empty_inherited,
-        |ui| {
-            ui.separator();
-        },
+        |ui| { ui.separator(); },
     );
 
+    ctx.inherited = saved_inherited;
     ui.add_space(space as f32);
 }
 
 #[cfg(test)]
 mod tests {
-    use super::*;
 
     #[test]
     fn test_smoke_separator() {

@@ -3,33 +3,27 @@ use crate::renderer::{attr_f64, attr_str, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {
     let height = attr_f64(node, "height").unwrap_or(26.0);
-    let padding = attr_f64(node, "padding").unwrap_or(4.0);
-
-    let fill = node.get("background")
-        .and_then(crate::theme::parse_color)
-        .unwrap_or(egui::Color32::from_rgb(0x18, 0x18, 0x1D));
-
     let border = get_border(node, &ctx.theme, "StatusBar");
+    let available = ui.available_size();
+
+    let out = crate::widgets::base::widget_paint_custom(
+        ui, node, ctx,
+        egui::vec2(available.x, height as f32),
+        egui::Sense::hover(), true,
+    );
+
+    // StatusBar имеет только верхнюю линию, не полную рамку
+    if border.is_visible() {
+        ui.painter().line_segment(
+            [out.content_rect.left_top(), out.content_rect.right_top()],
+            (border.width, border.color),
+        );
+    }
 
     let children = match node.get("children").and_then(|v| v.as_array()) {
         Some(c) => c,
         None => return,
     };
-
-    let available = ui.available_size();
-
-    let (rect, _) =
-        ui.allocate_exact_size(egui::vec2(available.x, height as f32), egui::Sense::hover());
-
-    ui.painter().rect_filled(rect, 0.0, fill);
-    if border.is_visible() {
-        ui.painter().line_segment(
-            [rect.left_top(), rect.right_top()],
-            (border.width, border.color),
-        );
-    }
-
-    let inner = rect.shrink(padding as f32);
 
     let mut start_items = Vec::new();
     let mut _center_items = Vec::new();
@@ -44,7 +38,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         }
     }
 
-    ui.scope_builder(egui::UiBuilder::new().max_rect(inner), |ui| {
+    ui.scope_builder(egui::UiBuilder::new().max_rect(out.inner_rect), |ui| {
         for child in &start_items {
             super::super::renderer::render_node(ui, child, ctx);
             ui.add_space(8.0);
@@ -62,4 +56,3 @@ mod tests {
         assert_eq!(attr_f64(&json, "height"), Some(26.0));
     }
 }
-

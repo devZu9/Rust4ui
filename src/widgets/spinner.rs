@@ -1,4 +1,4 @@
-use crate::renderer::{attr_f64, attr_str, resolve_text, RenderCtx};
+use crate::renderer::{attr_str, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &RenderCtx) {
     let text = attr_str(node, "text")
@@ -6,9 +6,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &RenderCtx) {
         .unwrap_or_default();
 
     let (_, _) = crate::widgets::base::widget_paint_egui(
-        ui, node, &ctx.theme, "Spinner",
+        ui, node, ctx,
         egui::vec2(200.0, 24.0), egui::Sense::hover(), true,
-        &ctx.inherited,
         |ui| {
             ui.horizontal(|ui| {
                 ui.spinner();
@@ -23,11 +22,10 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &RenderCtx) {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
 
     #[test]
     fn test_smoke_spinner() {
         let json = serde_json::json!({"type": "Spinner", "size": 24});
-        assert_eq!(attr_f64(&json, "size"), Some(24.0));
+        assert_eq!(crate::renderer::attr_f64(&json, "size"), Some(24.0));
     }
 }

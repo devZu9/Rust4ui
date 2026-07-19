@@ -14,9 +14,8 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &RenderCtx) {
     let monospace = attr_bool(node, "monospace").unwrap_or(false);
 
     let (_, _) = crate::widgets::base::widget_paint_egui(
-        ui, node, &ctx.theme, "Caption",
+        ui, node, ctx,
         egui::vec2(200.0, size as f32 + 4.0), egui::Sense::hover(), true,
-        &ctx.inherited,
         |ui| {
             let mut rich = egui::RichText::new(text).size(size as f32).color(color);
             if monospace { rich = rich.monospace(); }

@@ -27,7 +27,9 @@ UI собирается как конструктор из трёх слоёв:
 - **i18n с первого дня** — `{{key}}` из `locales/*.json`, плюрализация (CLDR), runtime-переключение языка
 - **StateRegistry** — привязка данных к UI (`binding` в JSON → переменная в Rust)
 - **ActionRegistry** — функции по имени из JSON (`action` → Rust-коллбэк)
-- **widget_paint_custom** — единый слой отрисовки для custom-paint виджетов: alloc, фон, обводка, тени, padding/margin, state-атрибуты. **widget_paint_egui** — то же + child_ui для egui-виджетов.
+- **widget_paint_custom** — единый слой отрисовки для custom-paint виджетов: alloc, фон, обводка, тени, padding/margin, state-атрибуты. Принимает `ctx: &RenderCtx`. **widget_paint_egui** — то же + child_ui для egui-виджетов.
+- **`get_attr_ctx`** — универсальная функция чтения атрибута с state (hover/click/focus) + _parent theme fallback. Принимает `Option<&egui::Response>` — `None` для базовых атрибутов, `Some(&resp)` для state-зависимых. Заменяет `resolve_state_attr`.
+- **Separator не наследует `_children`** — разделитель всегда рисуется с пустым inherited, не подхватывает padding/margin/цвет от родителя.
 - **Универсальное наследование `_children`** — любой атрибут с суффиксом `_children` автоматом наследуется на 1 уровень вниз. `background_children`, `icon_position_hover_children`, `border_focus_children` — все без per-виджетного кода. Поддержка `_children` из `theme.json` как глобальных defaults. Документация: `docs/src/15-menu-children.md`.
 - **popup_* атрибуты Menu** — раздельная настройка кнопки на MenuBar и контекстного меню (попап): `popup_background`, `popup_border`, `popup_padding`, `popup_gap`, `popup_min_width`, `popup_max_height`, `popup_shadow`. Все через `_children` наследование.
 - **Padding border-box** — `N`, `[N]`, `[V,H]`, `[T,R,B,L]` — раздвигает элемент, текст внутри

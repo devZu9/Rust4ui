@@ -3,7 +3,6 @@ use rust4ui::StateRegistry;
 #[test]
 fn test_persistence_roundtrip() {
     let mut state = StateRegistry::new();
-    let mut state2 = StateRegistry::new();
 
     state.set_string("name", "Test".into());
     state.set_f64("volume", 42.0);

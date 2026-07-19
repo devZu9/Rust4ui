@@ -30,7 +30,7 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let min_width = attr_f64(node, "min_width")
         .unwrap_or_else(|| ctx.theme.w_f64("Button", "min_width", 100.0)) as f32;
     let min_height = ctx.theme.w_f64("Button", "height", 28.0) as f32;
-    let rounding = attr_f64(node, "rounding")
+    let _rounding = attr_f64(node, "rounding")
         .unwrap_or_else(|| ctx.theme.w_f64("Button", "rounding", 6.0));
 
     let tooltip_text = attr_str(node, "tooltip").map(|t| resolve_text(t, ctx));
@@ -70,10 +70,9 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
     let content_height = (icon_size.y.max(text_size.y)).max(min_height_content);
 
     let out = crate::widgets::base::widget_paint_custom(
-        ui, node, &ctx.theme, "Button",
+        ui, node, ctx,
         egui::vec2(content_width, content_height),
         egui::Sense::click_and_drag(), enabled,
-        &ctx.inherited,
     );
 
     let align = if enabled {
@@ -149,12 +148,10 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::renderer::RenderCtx;
 
     #[test]
     fn test_smoke_button() {
         let json = serde_json::json!({"type": "Button", "text": "OK"});
-        let mut ctx = RenderCtx::new();
         assert_eq!(attr_str(&json, "text"), Some("OK"));
         assert!(attr_bool(&json, "enabled").unwrap_or(true));
     }

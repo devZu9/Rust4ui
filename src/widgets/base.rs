@@ -1,6 +1,5 @@
-use std::collections::HashMap;
 use crate::border::{draw_border, draw_shadow_bg, draw_shadow_border, get_state_border, parse_shadow, Shadow};
-use crate::renderer::{get_margin, get_padding, parse_padding, parse_rounding, resolve_state_attr, RenderCtx};
+use crate::renderer::{get_attr_ctx, get_margin, get_padding, parse_padding, parse_rounding, RenderCtx};
 
 pub struct PaintOut {
     pub response: egui::Response,
@@ -10,18 +9,17 @@ pub struct PaintOut {
 }
 
 fn get_bg(
+    ctx: &RenderCtx,
     node: &serde_json::Value,
-    inherited: &HashMap<String, serde_json::Value>,
-    theme: &crate::theme::Theme,
-    widget: &str,
     resp: &egui::Response,
     enabled: bool,
 ) -> egui::Color32 {
     if !enabled { return egui::Color32::from_gray(60); }
-    resolve_state_attr(
-        node, inherited, resp, "background",
+    let widget = node.get("type").and_then(|v| v.as_str()).unwrap_or("unknown");
+    get_attr_ctx(
+        ctx, node, Some(resp), "background",
         crate::theme::parse_color,
-        |k| theme.w_color_opt(widget, k),
+        |k| ctx.theme.w_color_opt(widget, k),
         egui::Color32::TRANSPARENT,
     )
 }
@@ -29,15 +27,14 @@ fn get_bg(
 pub fn widget_paint_custom(
     ui: &mut egui::Ui,
     node: &serde_json::Value,
-    theme: &crate::theme::Theme,
-    widget: &str,
+    ctx: &RenderCtx,
     reserved_size: egui::Vec2,
     sense: egui::Sense,
     enabled: bool,
-    inherited: &HashMap<String, serde_json::Value>,
 ) -> PaintOut {
-    let base_padding = get_padding(node, inherited, theme, egui::Margin::ZERO);
-    let base_margin = get_margin(node, inherited, theme);
+    let widget = node.get("type").and_then(|v| v.as_str()).unwrap_or("unknown");
+    let base_padding = get_padding(node, &ctx.inherited, &ctx.theme, egui::Margin::ZERO);
+    let base_margin = get_margin(node, &ctx.inherited, &ctx.theme);
 
     let content_width = reserved_size.x + base_padding.left as f32 + base_padding.right as f32;
     let content_height = reserved_size.y + base_padding.top as f32 + base_padding.bottom as f32;
@@ -48,14 +45,14 @@ pub fn widget_paint_custom(
     let (rect, resp) = reserve_exact_size(ui, size, sense);
 
     // State-зависимые padding/margin (padding_hover, margin_click и т.д.)
-    let theme_lookup = |k: &str| theme.widget.get(widget).and_then(|w| w.get(k)).and_then(parse_padding);
-    let padding = resolve_state_attr(
-        node, inherited, &resp, "padding",
-        parse_padding, &theme_lookup, base_padding,
+    let padding_theme_lookup = |k: &str| ctx.theme.widget.get(widget).and_then(|w| w.get(k)).and_then(parse_padding);
+    let padding = get_attr_ctx(
+        ctx, node, Some(&resp), "padding",
+        parse_padding, &padding_theme_lookup, base_padding,
     );
-    let margin = resolve_state_attr(
-        node, inherited, &resp, "margin",
-        parse_padding, &theme_lookup, base_margin,
+    let margin = get_attr_ctx(
+        ctx, node, Some(&resp), "margin",
+        parse_padding, &padding_theme_lookup, base_margin,
     );
 
     let content_rect = egui::Rect::from_min_max(
@@ -63,29 +60,33 @@ pub fn widget_paint_custom(
         egui::pos2(rect.max.x - margin.right as f32, rect.max.y - margin.bottom as f32),
     );
 
-    let rounding_cr = resolve_state_attr(
-        node, inherited, &resp, "rounding",
-        parse_rounding,
-        |k| theme.widget.get(widget).and_then(|w| w.get(k)).and_then(parse_rounding),
-        egui::CornerRadius::same(theme.w_f64(widget, "rounding", 4.0) as u8),
+    let rounding_theme_lookup = |k: &str| ctx.theme.widget.get(widget).and_then(|w| w.get(k)).and_then(parse_rounding);
+    let rounding_cr = get_attr_ctx(
+        ctx, node, Some(&resp), "rounding",
+        parse_rounding, &rounding_theme_lookup,
+        egui::CornerRadius::same(ctx.theme.w_f64(widget, "rounding", 4.0) as u8),
     );
 
-    let shadow_bg = resolve_state_attr(
-        node, inherited, &resp, "shadow_background",
-        parse_shadow,
-        |k| None,
+    let shadow_bg = get_attr_ctx(
+        ctx, node, Some(&resp), "shadow_background",
+        parse_shadow, |_k| None,
         Shadow::transparent(),
     );
+
+    let inner_rect = egui::Rect::from_min_max(
+        egui::pos2(content_rect.left() + padding.left as f32, content_rect.top() + padding.top as f32),
+        egui::pos2(content_rect.right() - padding.right as f32, content_rect.bottom() - padding.bottom as f32),
+    );
+
     draw_shadow_bg(ui, content_rect, rounding_cr, &shadow_bg);
 
-    let bg = get_bg(node, inherited, theme, widget, &resp, enabled);
+    let bg = get_bg(ctx, node, &resp, enabled);
     ui.painter().rect_filled(content_rect, rounding_cr, bg);
 
-    let border = get_state_border(node, theme, widget, &resp, enabled);
-    let shadow_border = resolve_state_attr(
-        node, inherited, &resp, "shadow_border",
-        parse_shadow,
-        |k| None,
+    let border = get_state_border(node, &ctx.theme, widget, &resp, enabled);
+    let shadow_border = get_attr_ctx(
+        ctx, node, Some(&resp), "shadow_border",
+        parse_shadow, |_k| None,
         Shadow::transparent(),
     );
     if shadow_border.z_order == crate::border::ShadowZOrder::Under {
@@ -95,11 +96,6 @@ pub fn widget_paint_custom(
         draw_border(ui, content_rect, rounding_cr, &border);
         draw_shadow_border(ui, content_rect, rounding_cr, &border, &shadow_border);
     }
-
-    let inner_rect = egui::Rect::from_min_max(
-        egui::pos2(content_rect.left() + padding.left as f32, content_rect.top() + padding.top as f32),
-        egui::pos2(content_rect.right() - padding.right as f32, content_rect.bottom() - padding.bottom as f32),
-    );
 
     PaintOut { response: resp, content_rect, inner_rect, rounding_cr }
 }
@@ -141,15 +137,13 @@ fn restore_widget_style(ui: &mut egui::Ui, saved: PrevWidgetStyle) {
 pub fn widget_paint_egui<R>(
     ui: &mut egui::Ui,
     node: &serde_json::Value,
-    theme: &crate::theme::Theme,
-    widget: &str,
+    ctx: &RenderCtx,
     reserved_size: egui::Vec2,
     sense: egui::Sense,
     enabled: bool,
-    inherited: &HashMap<String, serde_json::Value>,
     add_contents: impl FnOnce(&mut egui::Ui) -> R,
 ) -> (R, egui::Response) {
-    let out = widget_paint_custom(ui, node, theme, widget, reserved_size, sense, enabled, inherited);
+    let out = widget_paint_custom(ui, node, ctx, reserved_size, sense, enabled);
 
     let saved = save_widget_style(ui);
     let v = &mut ui.style_mut().visuals;

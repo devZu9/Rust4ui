@@ -14,17 +14,19 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     let mut checked = ctx.state.get_bool(&binding).unwrap_or(false);
 
-    let (_, resp) = crate::widgets::base::widget_paint_egui(
-        ui, node, &ctx.theme, "Checkbox",
+    let mut state = ctx.state.clone();
+
+    let (_, _resp) = crate::widgets::base::widget_paint_egui(
+        ui, node, ctx,
         egui::vec2(200.0, 24.0), egui::Sense::click(), true,
-        &ctx.inherited,
         |ui| {
             let r = ui.checkbox(&mut checked, text);
             if r.changed() {
-                ctx.state.set_bool(&binding, checked);
+                state.set_bool(&binding, checked);
             }
         },
     );
+    ctx.state = state;
 }
 
 #[cfg(test)]
