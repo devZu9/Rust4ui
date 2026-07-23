@@ -202,37 +202,38 @@ node["key"] → inherited["key"] → theme["key"] → theme[_parent]["key_childr
 
 Ширина попапа вычисляется автоматически: измеряется каждый MenuItem (текст + иконка + padding), берётся максимальная ширина. Если задан `popup_min_width` — используется он.
 
-### Stretch и Align в MenuItem
+### Stretch, Align и Width в MenuItem
 
-MenuItem внутри попапа поддерживает два дополнительных атрибута:
+MenuItem внутри попапа поддерживает атрибуты:
 
 | Атрибут | Тип | Дефолт | Описание |
 |---------|-----|--------|----------|
 | `stretch` | bool | `false` | Растянуть MenuItem на всю ширину попапа |
 | `align` | string | `"left"` | Выравнивание контента (`"left"`, `"center"`, `"right"`) |
+| `width` | number | `0` (auto) | Явная ширина пункта. Если шире самого широкого — попап расширяется |
 
-Оба через `_children` наследование:
+Все три поддерживают `_children` наследование. `align_children` и `width_children` задаются на Menu и применяются ко всем его MenuItem:
 
 ```json
 {
-  "type": "MenuBar",
+  "type": "Menu",
+  "text": "{{menu.file}}",
   "stretch_children": true,
   "align_children": "center",
+  "width_children": 250,
   "children": [
-    {
-      "type": "Menu",
-      "text": "{{menu.file}}",
-      "children": [
-        { "type": "MenuItem", "text": "{{menu.new}}" },
-        { "type": "Separator" },
-        { "type": "MenuItem", "text": "{{menu.export}}" }
-      ]
-    }
+    { "type": "MenuItem", "text": "{{menu.new}}" },
+    { "type": "Separator" },
+    { "type": "MenuItem", "text": "{{menu.export}}" }
   ]
 }
 ```
 
-Если `stretch: true`, то все MenuItem в попапе будут одинаковой ширины, даже если текст разной длины. Separator также растягивается на всю ширину попапа.
+При `stretch: true` все MenuItem в попапе одинаковой ширины, даже если текст разной длины. Separator также растягивается на всю ширину попапа.
+
+Если на одном из MenuItem указан `width`, и он больше самого широкого — попап расширяется под него. Если `width` на MenuItem меньше самой широкой кнопки — `stretch` дотягивает до размера попапа.
+
+При `stretch: false` и указанном `width` — только этот пункт шире контента, остальные не меняются.
 
 ### 5.2 Пример: попап на одном Menu
 
