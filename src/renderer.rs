@@ -34,7 +34,7 @@ impl RenderCtx {
     /// Сохраняет полный снапшот всех текущих inherited, затем очищает HashMap
     /// и заполняет только _children-ключами из node. Гарантирует отсутствие
     /// протекания значений на уровень глубже.
-    /// Сохраняет имя родителя как "_parent" для get_padding / get_margin (шаг 4).
+    /// Сохраняет имя родителя как "_parent".
     pub fn inherit_children(&mut self, node: &serde_json::Value, parent_name: Option<&str>) -> Vec<(String, Option<serde_json::Value>)> {
         let old: Vec<_> = self.inherited.drain().map(|(k, v)| (k, Some(v))).collect();
         if let Some(obj) = node.as_object() {

@@ -139,7 +139,14 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         let icon_width = if child_icon.is_some() { 16.0 } else { 0.0 };
         // padding из своего узла → inherited → темы
         let child_padding = crate::renderer::get_padding(child, &ctx.inherited, &ctx.theme, egui::Margin::ZERO);
-        let total_width = child_text_width + icon_width + child_padding.left as f32 + child_padding.right as f32;
+        let child_width = crate::renderer::get_attr_ctx(
+            ctx, child, None, "width",
+            |v| v.as_f64().map(|n| n as f32),
+            |k| ctx.theme.widget.get("MenuItem").and_then(|w| w.get(k)).and_then(|v| v.as_f64()).map(|n| n as f32),
+            0.0_f32,
+        );
+        let measured = child_text_width + icon_width + child_padding.left as f32 + child_padding.right as f32;
+        let total_width = if child_width > 0.0 { measured.max(child_width) } else { measured };
         maximum_child_outer_width = maximum_child_outer_width.max(total_width);
     }
     let popup_width = if popup_minimum_width > 0.0 { popup_minimum_width } else { maximum_child_outer_width };

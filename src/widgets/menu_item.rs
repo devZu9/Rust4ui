@@ -30,11 +30,19 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
         false,
     );
 
+    let width = get_attr_ctx(
+        ctx, node, None,
+        "width",
+        |v| v.as_f64().map(|n| n as f32),
+        |k| ctx.theme.widget.get("MenuItem").and_then(|w| w.get(k)).and_then(|v| v.as_f64()).map(|n| n as f32),
+        0.0_f32,
+    );
+
     let align = get_attr_ctx(
         ctx, node, None,
         "align",
         |v| v.as_str().map(|s| s.to_string()),
-        |k| Some(ctx.theme.w_str("MenuItem", k, "left")),
+        |k| ctx.theme.widget.get("MenuItem").and_then(|w| w.get(k)).and_then(|v| v.as_str()).map(|s| s.to_string()),
         "left".to_string(),
     );
 
@@ -69,15 +77,14 @@ pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) 
 
     let reserved_size = if stretch {
         let pad_sum = padding.left as f32 + padding.right as f32 + margin.left as f32 + margin.right as f32;
-        let stretch_w = ctx.inherited.get("popup_content_width").and_then(|v| v.as_f64().map(|f| f as f32));
-        let inner_w = if let Some(w) = stretch_w {
-            (w - pad_sum).max(1.0)
-        } else {
-            (ui.available_width() - pad_sum).max(1.0)
-        };
+        let popup_w = ctx.inherited.get("popup_content_width").and_then(|v| v.as_f64().map(|f| f as f32));
+        let base_w = popup_w.unwrap_or_else(|| ui.available_width());
+        let effective_w = if width > 0.0 { base_w.max(width) } else { base_w };
+        let inner_w = (effective_w - pad_sum).max(1.0);
         egui::vec2(inner_w, content_size.y)
     } else {
-        content_size
+        let w = if width > 0.0 { content_size.x.max(width) } else { content_size.x };
+        egui::vec2(w, content_size.y)
     };
 
     let out = crate::widgets::base::widget_paint_custom(
