@@ -109,7 +109,7 @@ Done. Edit `ui.json` — UI updates instantly. No `cargo build` between changes.
 
 | File | About |
 |------|-------|
-| **[TECHNICAL_SPECIFICATION.md](TECHNICAL_SPECIFICATION.md)** | Full technical specification: JSON format, theme.json, state, actions, i18n, tests |
+| **[TECH_SPECIFICATION.md](TECH_SPECIFICATION.md)** | Full technical specification: JSON format, theme.json, state, actions, i18n, tests |
 | **[ROADMAP.md](ROADMAP.md)** | Development plan (v0.1 → v1.0) |
 
 ---

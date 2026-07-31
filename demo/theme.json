@@ -184,11 +184,15 @@
     "popup_padding": [20],
     "rounding_children": 10, 
     "padding_children": [15, 50],
-    "stretch_children": true,
+//    "width_children": 300,
+    "align_children": "center",
+ //   "stretch_children": true,
     "rounding": 0
   },
   "MenuItem": {
- //   "stretch": true,
+      "stretch": true,
+      "align": "right",  
+      "width": 300,    
 //    "padding": [15, 40],
 //    "background": ["#000", 0],
     "background": "#3A3A44",

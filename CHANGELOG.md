@@ -1,303 +1,206 @@
 # Changelog
 
+> Формат: сухие итоги по версиям. Подробности (проблема → решение → вывод) — в `SESSIONS.md`, ссылки на сессии указаны. Подробнее о разведении ролей — скилл `session-log`.
+
 ## [0.5.1] — 2026-07-20
 
 ### Изменено
-- **`get_attr_ctx` объединяет `resolve_state_attr`** — единая универсальная функция с state (hover/click/focus) + _parent theme fallback. `resolve_state_attr` удалён. `get_attr_ctx` принимает `Option<&egui::Response>` — `None` для базовых атрибутов, `Some(&resp)` для state-зависимых. Все вызовы `resolve_state_attr` заменены на `get_attr_ctx`.
-- **Сигнатура `widget_paint_custom`** — принимает `ctx: &RenderCtx` вместо раздельных `(theme, inherited)`. 5 callers обновлены. Параметр `widget: &str` удалён — читается из `node["type"]` внутри.
-- **Сигнатура `widget_paint_egui`** — аналогично: `ctx: &RenderCtx` вместо `(theme, inherited)`. Параметр `widget: &str` удалён. 9 callers обновлены.
-- **Separator: не наследует `_children`** — `std::mem::take(ctx.inherited)` перед рендером, восстановление после. Separator всегда рисуется с пустым inherited — не подхватывает padding/margin/цвет от родителя.
-- **Измерение детей после `inherit_children`** — в menu.rs замер MenuItem перенесён после `inherit_children`, чтобы `get_padding` использовал тот же inherited, что и при рендере. Предотвращает расхождение замера и реального рендера.
-- **Нейминг без сокращений** — menu.rs, renderer.rs: все переменные переименованы в полные имена (`icon_w→icon_width`, `cw→child_text_width`, `cp→child_padding`, `sfx→suffix`, `sk→state_key`, `ck→click_key`, `hk→hover_key`, `fk→focus_key`, `n/t/w/k/p→node/theme/widget_name/key/parse`, и т.д.).
-- **`ctx.state` borrow conflict** — slider.rs, checkbox.rs, color_picker.rs: closure в `widget_paint_egui` не может захватывать `ctx.state` мутабельно пока `ctx` заимствован. Исправлено: клонирование `state` перед вызовом, запись обратно после.
+- **`get_attr_ctx` объединяет `resolve_state_attr`** — единая функция с state + theme fallback (подробнее — SESSIONS, сессия 22.07).
+- **Сигнатуры `widget_paint_custom` / `widget_paint_egui`** — принимают `ctx: &RenderCtx`; параметр `widget: &str` удалён.
+- **Separator: не наследует `_children`** — `std::mem::take(ctx.inherited)` перед рендером.
+- **Измерение детей после `inherit_children`** — замер и рендер используют один inherited.
+- **Нейминг без сокращений** — menu.rs, renderer.rs (`icon_w→icon_width`, `cw→child_text_width`, и т.д.).
+- **`ctx.state` borrow conflict** — slider.rs, checkbox.rs, color_picker.rs: клонирование state перед вызовом.
 
 ### Удалено
 - **`resolve_state_attr`** — заменён на `get_attr_ctx`.
-- **`empty_inherited` из separator.rs** — больше не нужен, inherited зануляется через `std::mem::take`.
-- **`HashMap` импорт из base.rs** — больше не используется в signal.
+- **`empty_inherited` из separator.rs** — зануление через `std::mem::take`.
+- **`HashMap` импорт из base.rs** — не используется.
 
 ### Исправлено
-- **Popup width зависел от количества Separator** — каждый Separator наследовал padding от Menu, `widget_paint_custom` добавлял его, rect расширялся, следующий Separator видел больший `available_width()`. Исправлено: Separator не наследует padding.
-- **`get_attr_ctx` требовал `resp`** — для stretch/align/color в menu_item.rs (до получения out.response). Исправлено: `Option<&egui::Response>` → `None` для базовых атрибутов.
-- **`theme_lookup` closure получал `&Value` вместо `&str`** — после переименования `k` в closure и изменения сигнатуры `get_attr_ctx`. Исправлено добавлением `None` third param.
+- **Popup width зависел от количества Separator** — Separator не наследует padding.
+- **`get_attr_ctx` требовал `resp`** — `Option<&egui::Response>` → `None` для базовых атрибутов.
+- **`theme_lookup` closure получал `&Value` вместо `&str`** — добавлен `None` third param.
 
 ## [0.5.0] — 2026-07-18
 
-### Изменено
-- **`widget_base` → `widget_paint_custom`** — прозрачный нейминг: «виджет рисует кастомно».
-- **`widget_base_wrap` → `widget_paint_egui`** — прозрачный нейминг: «виджет рисует через egui-виджет».
-- **`BaseOut` → `PaintOut`** — возвращаемая структура результата отрисовки.
+### Изменено (подробнее — SESSIONS, сессия 22.07)
+- **`widget_base` → `widget_paint_custom`**, **`widget_base_wrap` → `widget_paint_egui`**, **`BaseOut` → `PaintOut`** — прозрачный нейминг.
 - **`allocate_exact_size` → `reserve_exact_size`** — обёртка с понятным названием.
-- **Убраны параметры `default_bg`, `default_rounding`, `default_pad`** из `widget_paint_custom` и `widget_paint_egui`. Теперь читаются внутри из `theme` (фон, скругление) и `inherited` (padding).
-- **Сигнатура `widget_paint_custom`**: 8 параметров вместо 12. `(ui, node, theme, widget, reserved_size, sense, enabled, inherited)`.
-- **`render_node` в `renderer.rs`** — обновлён под новую сигнатуру.
+- **Убраны `default_bg`, `default_rounding`, `default_pad`** — читаются внутри из `theme`/`inherited`; сигнатура 12 → 8 параметров.
 
 ### Технический долг
-- Исправлены все предупреждения `unused_imports` и `unused_variables` (кроме `dead_code`).
-- `base.rs`, `renderer.rs` — удалены неиспользуемые импорты.
+- Исправлены `unused_imports` / `unused_variables` (кроме `dead_code`) в base.rs, renderer.rs.
 
 ## [0.4.6] — 2026-07-18
 
 ### Исправлено
-- **Конфликт `padding_children` и `padding` на MenuItem** — `widget_paint_custom` перечитывал padding через `resolve_state_attr` с цепочкой `node → inherited → theme → default`, что давало приоритет `padding_children` (inherited) над `padding` на самом MenuItem (node). На самом деле `resolve_state_attr` для padding в `widget_paint_custom` был лишним — `menu_item.rs` уже корректно разрешил padding через `get_padding(node → inherited → theme → default)`. Удалён `resolve_state_attr("padding")` из `widget_paint_custom`.
-  ```
-  Было: widget_paint_custom переопределял pad = inherited → padding_children ❌
-  Стало: widget_paint_custom использует pad = node → inherited → theme → default ✅
-  ```
+- **Конфликт `padding_children` и `padding` на MenuItem** — удалён лишний `resolve_state_attr("padding")` из `widget_paint_custom`; padding вычисляется один раз в `menu_item.rs` (подробнее с выводом — SESSIONS, сессия 22.07).
 
 ### Изменено
-- **base.rs** — удалён неиспользуемый импорт `parse_padding`
-- **Удалены временные debug-логи** — `widget_paint_custom` логировал каждый виджет каждый кадр. Теперь только MenuItem при клике (оба лога: menu_item + widget_paint_custom).
+- **base.rs** — удалён неиспользуемый импорт `parse_padding`.
+- **Удалены временные debug-логи** — `widget_paint_custom` логировал каждый виджет каждый кадр; оставлен только MenuItem при клике.
 
 ## [0.4.5] — 2026-07-18
 
-### Добавлено
-- **popup_* атрибуты** — контекстное меню настраивается отдельно от кнопки Menu:
-  `popup_background`, `popup_rounding`, `popup_padding`, `popup_gap`,
-  `popup_min_width`, `popup_max_height`, `popup_border`, `popup_shadow`.
-  Все через `_children` наследование.
-- **MenuItem: `stretch`** — атрибут `"stretch": true` растягивает MenuItem на всю ширину попапа.
-- **MenuItem: `align`** — атрибут `"align": "left"/"center"/"right"` выравнивает контент.
-- **Separator: динамическая ширина** — `available_width()` вместо хардкода 200px.
-- **Попап: измерение детей** — ширина попапа вычисляется по самому широкому MenuItem (text + icon + padding).
-- **`inherit_children`: theme fallback** — `*_children` из `theme.json` работают как глобальные defaults.
-- **`always_on_top`** — в `settings.json`, читается на старте и сохраняется. Runtime-тогл через `ViewportCommand::WindowLevel`.
+### Добавлено (подробнее — SESSIONS, сессия 22.07)
+- **`popup_*` атрибуты** — контекстное меню настраивается отдельно от кнопки Menu (background, rounding, padding, gap, min_width, max_height, border, shadow) через `_children`.
+- **MenuItem: `stretch` / `align`** — растяжение и выравнивание контента.
+- **Separator: динамическая ширина** — `available_width()` вместо хардкода 200px (дефолт min_width 50).
+- **Попап: измерение детей** — ширина по самому широкому MenuItem.
+- **`inherit_children`: theme fallback** — `*_children` из `theme.json` как глобальные defaults.
+- **`always_on_top`** — в `settings.json`, runtime-тогл через `ViewportCommand::WindowLevel`.
 
 ### Изменено
-- **popup rendering** — заменён гибрид (Area + Frame + set_min_width) на Area + Frame + `allocate_exact_size` + `allocate_ui_at_rect`. Ширина фиксирована явно, `available_width()` одинакова для всех детей.
-- **Separator: дефолт min_width** — 50px (было 200px), не раздувает попап.
-- **menu_item.rs** — `stretch` читает `available_width()` (попап сам фиксирует ширину).
-- **menu_item.rs** — `stretch`, `align`, `color_icon` теперь с theme fallback.
-- **menu.rs** — измерение детей ДО `inherit_children`, чтобы padding из inherited был доступен.
+- **popup rendering** — Area + Frame + `allocate_exact_size` + `allocate_ui_at_rect`; ширина фиксирована явно.
+- **menu.rs** — измерение детей ДО `inherit_children`.
 
 ### Исправлено
-- **popup open/close logic** — три проблемы:
-  1. clicked_elsewhere() срабатывал на свой же клик (добавлено `!resp.clicked()`)
-  2. Ховер-переключение не закрывало предыдущий попап (добавлено `ctx.state.set_bool(prev, false)`)
-  3. open_popup_id очищался для чужого ключа (добавлена проверка ключа)
-- **stretch + Separator вызывали «лесенку»** — из-за разного `available_width()` внутри Area. Исправлено явной фиксацией ширины через allocate_exact_size.
+- **popup open/close logic** — три проблемы (свой клик, ховер-переключение, чужой ключ `open_popup_id`).
+- **stretch + Separator «лесенка»** — явная фиксация ширины через `allocate_exact_size`.
 - **popup_padding** — читал `"padding"` вместо `"popup_padding"`.
 
 ## [0.4.4] — 2026-07-17
 
-### Добавлено
-- **Универсальный механизм `_hover/_click/_focus`** — `resolve_state_attr()` в `renderer.rs`. Любой атрибут с постфиксом `_hover`, `_click`, `_focus` обрабатывается автоматом без per-виджетного кода. Цепочка: `node[state] → inherited[state] → theme[state] → node → inherited → theme → default`.
-- **Универсальный механизм `_children`** — `inherit_children()` / `restore_children()` в `RenderCtx`. Любой атрибут с суффиксом `_children` автоматически наследуется на один уровень вниз. Не нужно ручного кода под каждый атрибут.
-- **`RenderCtx.inherited: HashMap<String, Value>`** — единое хранилище вместо 14 отдельных полей `inherited_bg`, `inherited_bg_hover` и т.д.
-- **`border_position_children`** — теперь работает через `ctx.get_border()`, который обогащает node из `ctx.inherited` для всех border-суб-атрибутов.
-- **`border_width_children`, `border_color_children`, `border_type_children`, `border_gap_children`, `border_seg_len_children`** — все border-суб-атрибуты работают с _children.
-- **`icon_children`, `icon_position_children`, `icon_gap_children`** — наследование иконки через `ctx.inherited_icon`.
-- **`icon_position_hover/click/focus`, `icon_gap_hover/click/focus`** — state-зависимая позиция и отступ иконки (через универсальный `resolve_state_attr`).
-- **`Default` impl для `BorderStyle`, `BorderType`, `BorderPosition`** — убран хардкод пустого бордера.
+### Добавлено (подробнее — SESSIONS, сессия 22.07)
+- **Универсальный механизм `_hover/_click/_focus`** — `resolve_state_attr()` в renderer.rs.
+- **Универсальный механизм `_children`** — `inherit_children()` / `restore_children()` в RenderCtx.
+- **`RenderCtx.inherited: HashMap<String, Value>`** — единое хранилище вместо 14 отдельных полей.
+- **border-суб-атрибуты с `_children`** — через `ctx.get_border()`.
+- **`icon_children` и state-позиции иконки** — через `ctx.inherited_icon` и `resolve_state_attr`.
+- **`Default` impl для `BorderStyle`, `BorderType`, `BorderPosition`**.
 
 ### Изменено
-- **`inherit_children()`** — теперь `drain()` всех inherited → `clear()` → вставка только `_children` из текущего узла. Каждый уровень полностью изолирован. Предотвращает протекание значений глубже одного уровня.
-- **`restore_children()`** — `clear()` + вставка только старых значений из снапшота. Ключи, добавленные `inherit_children`, не просачиваются мимо.
-- **`menu.rs`** — порядок: layout → resolve_state_attr (читает ctx.inherited от родителя) → inherit_children (свои _children) → popup → restore_children.
-- **`menu_bar.rs`** — `rounding_children` сохраняется как `[nw, ne, sw, se]` (массив 4 угла), а не одно число.
-- **`menu_bar.rs`** — вся ручная обработка `_children` (30+ строк) заменена на `inherit_children(node)` / `restore_children(old)`.
-- **`widget_paint_custom()` / `widget_paint_egui()`** — принимают `&HashMap<String, Value>` (вместо `Option<Color32>`), что даёт универсальное наследование любых атрибутов через `ctx.inherited`.
-- **`base.rs`** — `get_bg()` переведён на `resolve_state_attr()`.
-- **`main.rs`, `examples/demo.rs`** — обновлены под новую структуру RenderCtx.
+- **`inherit_children()`** — `drain` → `clear` → только `_children` узла; уровни изолированы.
+- **`restore_children()`** — `clear` + снапшот; ключи не протекают.
+- **`menu.rs`** — порядок: layout → resolve_state_attr → inherit_children → popup → restore_children.
+- **`menu_bar.rs`** — `rounding_children` как массив `[nw,ne,sw,se]`; ручная обработка 30+ строк заменена.
+- **`widget_paint_custom/egui`** — принимают `&HashMap<String, Value>`.
+- **`main.rs`, `examples/demo.rs`** — под новую структуру RenderCtx.
 
 ### Исправлено
-- **`border_position_children` не работал** — `menu.rs` захардкодил `node.get("border_position")` без fallback на `ctx.inherited`. Исправлено через `ctx.get_border()`, который обогащает node из inherited.
-- **`inherit_children` протекал глубже одного уровня** — `restore_children()` не чистил лишние ключи. Исправлено: полный `clear()` + вставка только снапшота.
-- **Menu не видел `background_children` от MenuBar** — `inherit_children(node)` вызывался ДО `resolve_state_attr`. Исправлено: порядок переставлен.
-- **`rounding_children` делал все 4 угла одинаковыми** — хранилось одно число, читалось как `CornerRadius::same()`. Исправлено: хранится массив `[nw, ne, sw, se]`.
+- **`border_position_children` не работал** — через `ctx.get_border()`.
+- **`inherit_children` протекал глубже одного уровня** — полный `clear()` + снапшот.
+- **Menu не видел `background_children` от MenuBar** — порядок вызовов.
+- **`rounding_children` делал углы одинаковыми** — массив вместо f64.
 
 ### Технический долг
-- `label.rs` — неиспользуемый `widget_border`
-- `panel.rs` — неиспользуемый `attr_str`
-- `spinner.rs` — неиспользуемый `attr_f64`
-- `checkbox.rs`, `hyperlink.rs`, `slider.rs` — неиспользуемые `resp`
+- label.rs, panel.rs, spinner.rs, checkbox.rs, hyperlink.rs, slider.rs — неиспользуемые импорты/параметры.
 
 ## [0.4.3] — 2026-07-16
 
-### Добавлено
-- **MenuBar: система `_children`** — наследование атрибутов на 1 уровень:
-  - `background_children`, `background_hover_children`, `background_click_children`
-  - `color_children`, `color_hover_children`, `color_click_children`
-  - `padding_children`, `margin_children`, `rounding_children`
-- **MenuBar: state-aware фон** — `background_hover`, `background_click` на полосе
-- **Menu: state-aware цвет текста** — `color_hover`, `color_click` через `fg_stroke`
-- **Menu: margin top/bottom** — вертикальные отступы для пунктов меню
-- **RenderCtx** — `inherited_bg_hover`, `inherited_bg_click`, `inherited_color_hover`, `inherited_color_click`, `inherited_rounding`
-- **`border.rs: rounded_rect_perimeter`** — публичная функция для кастомной отрисовки
+### Добавлено (подробнее — SESSIONS, сессия 16.07)
+- **MenuBar: система `_children`** — background/color/padding/margin/rounding + hover/click для детей.
+- **MenuBar: state-aware фон**; **Menu: state-aware цвет текста** через `fg_stroke`; **Menu: margin top/bottom**.
+- **RenderCtx** — `inherited_*` поля для state-атрибутов.
+- **`border.rs: rounded_rect_perimeter`** — публичная функция.
 
 ### Исправлено
-- **border.rs: draw_pattern** — замыкание периметра (последняя точка → первую). Левая сторона dash/dot бордюра не рисовалась при `rounding=0`.
-- **border.rs: point_at_dist** — выход за границы `pts` при `dists.len() > pts.len()` (паника при `rounding=0` с dash/dot).
+- **border.rs: draw_pattern** — замыкание периметра; левая сторона dash/dot при `rounding=0`.
+- **border.rs: point_at_dist** — выход за границы (паника при `rounding=0`).
 
 ## [0.4.2] — 2026-07-16
 
-### Добавлено
-- **`widget_paint_custom`** — единый слой отрисовки для всех custom-paint виджетов (`src/widgets/base.rs`). Устраняет копипасту фона, обводки, теней, padding/margin, state-атрибутов между виджетами.
-  - `widget_paint_custom()` — alloc, фон (state-aware), обводка (state-aware), shadow_background/shadow_border, padding/margin, rounding
-  - `inherited_bg` — каскадное наследование фона от родителя (MenuBar → Menu → MenuItem)
-  - `BaseOut` — возвращает response, content_rect, inner_rect, rounding_cr
-- **MenuItem** — переведён с egui-обёртки на custom-paint через `widget_paint_custom`. Теперь поддерживает `background_hover`, `background_click`, `background_focus`.
-- **MenuBar** — каскадное наследование `background`/`color` от MenuBar → Menu → MenuItem. Поддержка всех состояний (inactive/hovered/active/open) через `visuals.widgets.*.weak_bg_fill`.
+### Добавлено (подробнее — SESSIONS, сессия 16.07)
+- **`widget_paint_custom`** — единый слой отрисовки custom-paint виджетов (alloc, фон, обводка, тени, padding/margin, rounding, state).
+- **MenuItem** — переведён на custom-paint; state-aware стили.
+- **MenuBar** — каскад `background`/`color` → Menu → MenuItem через `weak_bg_fill`.
 
 ### Изменено
-- **RenderCtx** — добавлены `inherited_bg` и `inherited_color` для каскадного наследования
-- **menu.rs** — фон кнопок меню теперь читает `weak_bg_fill` (вместо `bg_fill`), задаётся для всех состояний + `window_fill` для попапа
-- **menu_item.rs** — убран style-override (egui-обёртка), теперь рисуется как Button через custom-paint
-- **Темы** — `color_text` → `color` для Menu/MenuItem/MenuBar, добавлены секции `Menu` и `MenuItem` с `background`/`background_hover`/`color`
+- **RenderCtx** — `inherited_bg`, `inherited_color`; **menu.rs** — `weak_bg_fill` + `window_fill` для попапа.
+- **Темы** — `color_text` → `color` для Menu/MenuItem/MenuBar + секции с state-фонами.
 
 ### Удалено
-- **`fg_stroke`** — больше не используется для цвета текста (заменён на `RichText::color()`)
+- **`fg_stroke`** — цвет текста через `RichText::color()`.
 
 ## [0.4.1] — 2026-07-15
 
-### Добавлено
-- **NumberField** — алиас `"type": "NumberField"` для TextField с `mode: "number"`. Работает без указания `mode`.
-- **Stepper overlay** — степпер вынесен из layout'а в overlay поверх поля. Не привязан к высоте текста.
-- **`stepper_padding`** — атрибут, расширяющий каждую кнопку степпера равномерно (ширина + высота). Формула: `btn_dim = icon_size + 2 * pad`.
-- **`stepper_background`** — атрибут, цвет/альфа фона кнопок степпера. Поддерживает `"#HEX"` и `["#HEX", opacity]`.
-- **`stepper_rounding`** — атрибут скругления углов кнопок степпера.
+### Добавлено (подробнее — SESSIONS, сессия 16.07)
+- **NumberField** — алиас TextField с `mode: "number"`.
+- **Stepper overlay** — степпер поверх поля (не привязан к высоте текста).
+- **`stepper_padding` / `stepper_background` / `stepper_rounding`** — атрибуты степпера.
 
 ### Изменено
-- **Числовое поле (mode=number)**: иконки `▲/▼` заменены на Phosphor-глифы `caret-up`/`caret-down` (через IconRegistry).
-- **Stepper button**: egui::Button заменён на `ui.interact()` + painter. Нет фона/тени/обводки по умолчанию.
-- **TextEdit в number-поле**: занимает всю ширину контента (без резервации 20px под степпер).
+- Иконки `▲/▼` → Phosphor-глифы `caret-up`/`caret-down`.
+- Stepper button — `ui.interact()` + painter (без фона/тени по умолчанию).
+- TextEdit — вся ширина контента.
 
 ### Удалено
-- **`stepper_bg`** из темы — больше не читается (заменён на `stepper_background`).
+- **`stepper_bg`** — заменён на `stepper_background`.
 
 ## [0.4.0] — 2026-07-14
 
-### Добавлено
-- **Button: каскад теней** — `shadow_content` как шорткат, `shadow_icon` и `shadow_text` как переопределения. Приоритет: `shadow_icon ?? shadow_content`, `shadow_text ?? shadow_content`.
-- **`parse_content_shadow()`** — парсер с default offset (1,1) для shadow_content/shadow_icon/shadow_text.
-- **`ShadowZOrder` enum** — `Under` / `Over` в `border.rs`.
-- **`draw_shadow_content()`** — утилита отрисовки тени для galley.
-- **`Shadow::from_rgba()` / `Shadow::transparent()`** — удобные конструкторы.
+### Добавлено (подробнее — SESSIONS, сессия 14.07)
+- **Button: каскад теней** — `shadow_content` (шорткат), `shadow_icon`/`shadow_text` (переопределения).
+- **`parse_content_shadow()`** — парсер с offset (1,1).
+- **`ShadowZOrder` enum** (`Under`/`Over`), **`draw_shadow_content()`**, конструкторы `Shadow::from_rgba()/transparent()`.
 
 ### Изменено
-- **`parse_shadow()`** — строгий формат: `[opacity, "under"/"over"?, "#color"?, x?, y?]`. Позиция 1 — z-order, позиция 2 — цвет. Старые форматы не поддерживаются.
-- **Default offset**: `shadow_background`/`shadow_border` → (2,2); `shadow_content`/`shadow_icon`/`shadow_text` → (1,1).
-- **IconButton**: `shadow_icon` парсится через `parse_content_shadow` (offset 1,1).
-- **Shadow struct** — добавлено поле `z_order: ShadowZOrder`.
-- **Button**: align_hover/click, padding_hover/click, margin_hover/click — state-aware через get_state_attr.
-- **Приоритет state** — `click > focus > hover > base` в `get_state_border` и `get_state_attr`.
-- **TextField: focus state** — `border_focus`, `background_focus`. Убрана синяя рамка egui (active.bg_stroke = NONE, frame(false) для multiline).
-- **Settings persistence** — `StateRegistry::save()/load()`. Сохранение размера/позиции окна, активной вкладки (`active_tab`), языка (`active_locale`). Файл `demo/settings.json` читается при старте, пишется только при изменении. Hot-reload игнорирует settings.json.
-- **Vars в theme.json** — секция `vars` с переменными вида `$имя`. Авторезолв внутри vars и во всех атрибутах темы + UI. `substitute_vars()` в `ref_resolver.rs`. 5 unit-тестов.
+- **`parse_shadow()`** — строгий формат `[opacity, "under"/"over"?, "#color"?, x?, y?]`.
+- Default offset: background/border → (2,2); content/icon/text → (1,1).
+- **Button**: state-aware align/padding/margin; **приоритет state** — click > focus > hover > base.
+- **TextField: focus state** — `border_focus`, `background_focus`, убрана синяя рамка egui.
+- **Settings persistence** — размер/позиция окна, вкладка, язык; `demo/settings.json`; hot-reload игнорит.
+- **Vars в theme.json** — `$имя`, авторезолв, `substitute_vars()` в ref_resolver.rs (5 тестов).
 
 ## [0.3.1] — 2026-07-11
 
-### Добавлено
-- **Shadow система** — `Shadow` struct, `parse_shadow()`, `draw_shadow_bg/border/icon`, state-aware через `get_state_attr`
-- **border opacity** — `[width, color, opacity, type, gap, seg_len]`, обратная совместимость (если третий — строка, старый формат)
-- **`color_icon`** — отдельный цвет иконки на Button (рендер иконки и текста разделён)
-- **`parse_color_value()`** — цвет + opacity как `["#HEX", opacity]` (0.0–1.0)
-- **`get_state_background()`** — универсальная функция выбора фона по hover/click/focus
-- **`border_hover` / `border_click`** — state-зависимые границы на всех виджетах (IconButton, Button, TextField, Column, Row, Label, Checkbox, RadioGroup, Tabs)
-- **`get_margin()`** — универсальная утилита чтения margin (атрибут → тема → 0)
-- **`gap_row`** — вертикальный отступ между wrapped-строками в Row
+### Добавлено (подробнее — SESSIONS, сессия 09.07)
+- **Shadow система** — `Shadow`, `parse_shadow()`, `draw_shadow_bg/border/icon`, state-aware.
+- **border opacity** — `[width, color, opacity, type, gap, seg_len]`, обратная совместимость.
+- **`color_icon`**, **`parse_color_value()`** (`["#HEX", opacity]`), **`get_state_background()`**, **`get_margin()`**, **`gap_row`**.
 
 ### Изменено
-- **`fill` → `background`** — переименован во всех виджетах, темах, UI-файлах и док-ции (`hover_fill` → `background_hover`, `click_fill` → `background_click`)
-- **`Sense::click()` → `Sense::click_and_drag()`** — Button и IconButton (убрано таймаут удержания ~1-2 сек)
-- **`get_state_border()`** — условие: `is_pointer_button_down_on` без `hovered` (зажатая кнопка — всегда click, даже если курсор ушёл)
-- **`theme.json`** — удалены секции Hover/Focus/Disabled (псевдо-виджеты, никем не читались)
-- **`border` → `get_state_border()`** — единая функция выбора hover/click/base border
-- **`widget_border`** — добавлены параметры `resp` и `enabled` (state-зависимые границы на 6 виджетах)
-- **`text_color` → `color_text`** — suffix naming (`color_text_hover`, `color_text_click`)
-- **`hover_color`/`click_color` → `color_hover`/`color_click`** — suffix naming
-- **`parse_hex_color`** — добавлена поддержка `#RGB` / `#RGBA`
-- **Button** — добавлен `margin` (по аналогии с IconButton)
-- **Row** — `item_spacing = ZERO` (только явный gap), добавлен `gap_row`
-- **`galley()` → `galley_with_override_text_color()`** — починен цвет иконки при hover/click
-- **ZhukMax → devZu9** — git config, Cargo.toml, docs, история git переписана
+- **`fill` → `background`**; `hover_fill` → `background_hover` и т.д.
+- **`Sense::click()` → `click_and_drag()`** — без таймаута удержания.
+- **`get_state_border()`** — чистый click без `hovered`.
+- **`theme.json`** — удалены псевдо-виджеты Hover/Focus/Disabled.
+- **suffix naming** — `text_color`→`color_text`, `hover_color`→`color_hover`; `parse_hex_color` поддерживает #RGB/#RGBA.
+- **`galley()` → `galley_with_override_text_color()`** — цвет иконки при hover/click.
+- **ZhukMax → devZu9** — git config, Cargo.toml, docs, история переписана.
 
 ### Исправлено
-- **Button: удержание клика** — egui-таймаут ~1-2 сек на Sense::click, заменён на click_and_drag (держи сколько хочешь)
-- **`border_hover` / `border_click` не работали** — теперь задействуют `get_state_border()` на всех виджетах
-- **`hover_color`/`click_color` из темы** — не работали из-за `galley()` (заменял только placeholder-цвета вместо всех)
-- **Высота IconButton** — `maket.size().y` → `icon_size` (убран line-height бонус от шрифта)
-- **Дефолтный padding IconButton** — `symmetric(16, 4)` → `symmetric(0, 0)`
+- Button: удержание клика; border_hover/click на всех виджетах; высота IconButton от `icon_size`; дефолтный padding `symmetric(0,0)`.
 
 ## [0.3.0] — 2026-07-09
-- **IconRegistry** — 1512 иконок Phosphor, `resolve()` / `resolve_glyph()`, вкомпилирован в бинарь
-- **icon_size** — атрибут для IconButton, size для MenuItem (+ тема)
-- **Hover/Click-стейты** — `hover_fill`, `click_fill`, `hover_text_color`, `click_text_color` на Button и IconButton
-- **Тени** — `shadow_offset_x/y`, `shadow_blur`, `shadow_color` на Button
-- **Галерея иконок** — отдельная вкладка со всеми 1512 иконками (через Label, без тормозов)
-- **Документация mdBook** — 14 глав, `___docs.bat`, поиск, навигация
+
+### Добавлено (подробнее — SESSIONS, сессия 09.07)
+- **IconRegistry** — 1512 иконок Phosphor, вкомпилирован в бинарь.
+- **icon_size**, Hover/Click-стейты, тени на Button, галерея иконок, документация mdBook (14 глав).
 
 ### Изменено
-- `icons/phosphor.ttf` заменён на официальный из коллекции Phosphor Icons (2024)
-- `icons/icons.json` перегенерирован — все 1512 Codepoint'ов соответствуют TTF
-- `icons/phosphor-icons/` добавлен в `.gitignore`
-- IconButton — упрощён рендер, hover/click-фон рисуется поверх кнопки
+- Официальный Phosphor TTF; icons.json перегенерирован; `icons/phosphor-icons/` в `.gitignore`.
 
 ### Исправлено
-- Ключ локали `tab.icons` отсутствовал в `en.json`
-- `AGENTS.md` — добавлено правило «Локали-ключи — во все файлы»
+- Ключ локали `tab.icons` в en.json; AGENTS.md — правило «Локали-ключи — во все файлы».
 
 ## [0.2.1]
 
 ### Исправлено
-- **Multiline TextField с фиксированной высотой (fixed=true)** — долгая проблема, на решение которой ушло почти два дня многочисленных итераций. Поле multiline расширялось вниз при добавлении строк, не имея возможности зафиксировать высоту и включить прокрутку. Каждая попытка внедрить ScrollArea ломала визуал: фон и рамка «ехали» отдельно от текста, hover/focus переставали работать, ширина поля растягивалась на всё окно.
-
-  **Как решили:**
-  1. `allocate_exact_size(rect)` — резервирует ровно `field_w × field_h`, родитель не даёт больше
-  2. `rect_filled(rect)` — фон рисуется ДО ScrollArea, строго внутри rect
-  3. `allocate_ui_at_rect(rect, |ui| ScrollArea::vertical().max_height(field_h).show(...))` — ScrollArea привязан к тому же rect, не может вылезти
-  4. TextEdit внутри с `frame(false).desired_width(field_w)` — без своей рамки, ширина фиксирована
-  5. `draw_border(rect)` — кастомная рамка по внешнему rect, фон и бордюр едины
-  6. Фокус — синяя рамка рисуется вручную через `inner_resp.has_focus()`
-
-  Ключевое отличие от неудачных попыток: ScrollArea обёрнут в `allocate_ui_at_rect`, а не напрямую вызван после `allocate_exact_size`, что исключает разрыв между фоном и областью прокрутки.
+- **Multiline TextField с фиксированной высотой (fixed=true)** — решение: `allocate_exact_size` + фон до ScrollArea + `allocate_ui_at_rect` + TextEdit `frame(false)` + кастомная рамка + ручной фокус (подробно, 6 шагов — SESSIONS, сессия 06.07).
 
 ## [0.2.0]
 
 ### Добавлено
-- **Border-система** — единый модуль `border.rs` с solid/dash/dot, gap, seg_len, border_seg_cap, border_position, shorthand-массивы, theme-поддержка
-- **JSON-комментарии** — поддержка `//` и `/* */` во всех загрузчиках (`node.rs`, `main.rs`, `locale.rs`, `state.rs`, `ref_resolver.rs`, `tests/`)
-- **valign для TextField** — top / center (дефолт) / bottom, читается из узла и темы
-- **Вкладка «Меню и иконки»** — демо MenuBar, IconBar, IconButton в `demo/tabs/menus.json`
-- **`background`** — переименован из `bg_fill` во всех файлах
-- **`border_position`** — inside / center / outside (дефолт inside)
+- **Border-система** — `border.rs` (solid/dash/dot, gap, seg_len, border_seg_cap, border_position, shorthand-массивы).
+- **JSON-комментарии** — `//` и `/* */` во всех загрузчиках.
+- **valign для TextField** — top/center/bottom; вкладка «Меню и иконки»; `background` из `bg_fill`; `border_position` inside/center/outside.
 
 ### Исправлено
-- **`find_index`** — возвращала индекс вставки вместо индекса предыдущей точки → seg_max=324.6. Исправлено: `i.saturating_sub(1)`
-- **Phosphor-шрифт** — перенесён из `insert(0)` в `push` (конец стека), латиница и пробел отображаются корректно
-- **TextField rounding** — восстановлен override `style_mut().visuals.widgets.{inactive,hovered,active}.corner_radius` для singleline и multiline
-- **Multiline TextField** — единый код с singleline, hover/focus работают
-- **Dash/dot rounded corners** — `draw_pattern` использует `rounded_rect_perimeter` с 24 шагами на дугу
-- **Равномерное распределение dash** — `floor()` вместо `round()` для `n`, фиксированный шаг
+- **`find_index`** — индекс вставки вместо предыдущей точки (seg_max=324.6).
+- Phosphor-шрифт — `push` вместо `insert(0)`.
+- TextField rounding/override; multiline — единый код с singleline; dash/dot скругления; равномерное распределение dash (`floor()`).
 
 ### Изменено
-- **`bg_fill` → `background`** — во всех темах, конфигах и коде
-- **`stroke_width` / `stroke_color` → `border` / `border_width` / `border_color`** — удалены полностью
-- **Phosphor-шрифт** — отключён как основной (конец стека), только для PUA-иконок
+- `bg_fill` → `background`; `stroke_width`/`stroke_color` → `border`/`border_width`/`border_color`; Phosphor не основной шрифт.
 
 ## [0.1.0]
 
 ### Исправлено
-- **Button: устранён stair-step эффект** — переписан рендер с `egui::Button` на кастомный `painter().rect_filled()` + `galley`.
-- **Row: убран лишний вертикальный отступ у первого элемента** — всегда `Align::TOP`.
-- **TextField: padding не раздвигал поле** — `TextEdit::margin(pad).frame(true)`.
-- **TextField: `rounding` не применялся** — переопределяются все три состояния.
-- **TextField: `height` не влиял на поле** — формула `field_h = max(height, font_h + padding)`.
-- **Button: padding не раздвигал кнопку** — размер вычисляется из `text + padding`.
-- **Hot-reload не работал для табов/окон** — watcher на всю `demo/` директорию.
-- **`[N]` не парсился** — добавлен match arm `1 => Margin::same(n)`.
-- **margin работал только как `add_space(N)`** — переписан через `parse_padding`.
-- **Spacer widget** — добавлен виджет для заполнения свободного места.
+- Button stair-step — кастомный рендер `rect_filled()` + galley; Row Align::TOP; TextField padding/rounding/height; Button padding; hot-reload на `demo/`; `[N]`-парсинг margin; Spacer.
 
 ### Изменено
-- **`parse_margin` → `parse_padding`** — переименовано.
-- **`padding_h`/`padding_v` удалены** — единый формат `padding: N | [N] | [V,H] | [T,R,B,L]`.
-- **Button height — динамическая** — height трактуется как минимальная.
-- **TextField рендер** — упрощён с 70 строк до 1 строки.
-- **Тема: bg_fill больше не теряется** — явные дефолты.
+- `parse_margin` → `parse_padding`; `padding_h/v` удалены (единый формат); высота Button динамическая; рендер TextField 70 → 1 строка.
 
 ### Добавлено
-- **`text_align` для TextField** — left / center / right.
-- **Контур TextField** — 1px `#444455`.
-- **Hover-подсветка TextField** — `bg.linear_multiply(1.2)`.
-- **CHANGELOG.md** — этот файл.
+- `text_align` для TextField; контур 1px `#444455`; hover-подсветка.

@@ -162,6 +162,14 @@
 
 ---
 
-- [x] ScrollArea + allocate_ui_at_rect работает
-- [x] Фон и рамка едины
-- [x] Hover/focus работают
+- [x] **Multiline TextField с фиксированной высотой (fixed=true)** — долгая проблема (~2 дня итераций): поле расширялось вниз, нельзя было зафиксировать высоту и включить прокрутку; каждая попытка ScrollArea ломала визуал (фон и рамка «ехали» отдельно от текста, hover/focus ломались, ширина растягивалась).
+
+  **Как решили (6 шагов):**
+  1. `allocate_exact_size(rect)` — резервирует ровно `field_w × field_h`, родитель не даёт больше
+  2. `rect_filled(rect)` — фон рисуется ДО ScrollArea, строго внутри rect
+  3. `allocate_ui_at_rect(rect, |ui| ScrollArea::vertical().max_height(field_h).show(...))` — ScrollArea привязан к тому же rect
+  4. TextEdit внутри с `frame(false).desired_width(field_w)` — без своей рамки
+  5. `draw_border(rect)` — кастомная рамка по внешнему rect, фон и бордюр едины
+  6. Фокус — синяя рамка вручную через `inner_resp.has_focus()`
+
+  **Вывод:** ключевое отличие от неудачных попыток — ScrollArea обёрнут в `allocate_ui_at_rect`, а не вызван напрямую после `allocate_exact_size`; это исключает разрыв между фоном и областью прокрутки. (Итог — в CHANGELOG [0.2.1].)

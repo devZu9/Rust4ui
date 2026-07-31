@@ -56,7 +56,7 @@ Column, Row, Label, Button, TextField (text/password/number/multiline), Checkbox
 | `CHANGELOG.md` | История изменений по версиям |
 | `SESSIONS.md` | Логи сессий с описанием попыток и решений |
 | `AGENTS.md` | Инструкции для ИИ-ассистентов |
-| `TECHNICAL_SPECIFICATION.md` | Полная техническая спецификация |
+| `TECH_SPECIFICATION.md` | Полная техническая спецификация |
 | `.opencode/skills/session-log/SKILL.md` | Скилл ведения сессий |
 
 ## Лицензия

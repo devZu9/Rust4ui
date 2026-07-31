@@ -109,7 +109,7 @@ fn main() -> eframe::Result<()> {
 
 | Файл | О чём |
 |------|-------|
-| **[TECHNICAL_SPECIFICATION.md](TECHNICAL_SPECIFICATION.md)** | Полная техническая спецификация: формат JSON, theme.json, state, actions, i18n, тесты |
+| **[TECH_SPECIFICATION.md](TECH_SPECIFICATION.md)** | Полная техническая спецификация: формат JSON, theme.json, state, actions, i18n, тесты |
 | **[ROADMAP.md](ROADMAP.md)** | План развития (v0.1 → v1.0) |
 | **[CHANGELOG.md](CHANGELOG.md)** | История изменений по версиям |
 | **[SESSIONS.md](SESSIONS.md)** | Логи сессий разработки |
