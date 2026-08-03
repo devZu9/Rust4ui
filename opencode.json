@@ -3,7 +3,7 @@
   "instructions": ["AGENTS.md"],
   "skills": {
     "paths": [".opencode/skills"],
-    "auto": ["rust-encoding", "rust-github", "rust-single-source", "rust-api-first", "rust-file-sizes", "rust-autosave", "rust-localization", "rust-versioning", "rust-project-structure", "session-log"]
+    "auto": ["rust-encoding", "skill-github", "rust-single-source", "rust-api-first", "rust-file-sizes", "rust-autosave", "rust-localization", "rust-versioning", "rust-project-structure", "session-log"]
   },
   "lsp": true
 }
