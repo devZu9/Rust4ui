@@ -1,3 +1,4 @@
+// v1.0.0 (2026-08-04) icons.rs 
 use std::collections::HashMap;
 
 /// Реестр иконок Phosphor.

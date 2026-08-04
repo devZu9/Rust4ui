@@ -1,3 +1,4 @@
+// v1.0.0 (2026-08-04) label.rs 
 use crate::renderer::{attr_bool, attr_f64, attr_str, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &RenderCtx) {

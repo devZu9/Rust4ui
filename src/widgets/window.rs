@@ -1,3 +1,4 @@
+// v1.0.0 (2026-08-04) window.rs 
 use crate::border::get_border;
 use crate::renderer::{attr_bool, attr_f64, attr_str, resolve_text, RenderCtx};
 

@@ -1,3 +1,4 @@
+// v1.0.0 (2026-08-04) row.rs 
 use crate::border::widget_border;
 use crate::renderer::{attr_bool, attr_f64, get_padding, RenderCtx};
 

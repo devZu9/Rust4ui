@@ -1,4 +1,6 @@
 {
+  "_version": "v1.0.0 (2026-08-04) autopilot_state.json",
+
   "current": "done",
   "steps": {
     "1.1": { "status": "done", "test": true },

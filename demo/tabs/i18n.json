@@ -1,4 +1,6 @@
 {
+  "_version": "v1.0.0 (2026-08-04) i18n.json",
+
   "type": "Tab",
   "id": "i18n",
   "title": "{{tab.i18n}}",

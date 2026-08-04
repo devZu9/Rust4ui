@@ -1,3 +1,4 @@
+// v1.0.0 (2026-08-04) radio_group.rs 
 use crate::renderer::{attr_str, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {

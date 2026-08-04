@@ -1,3 +1,4 @@
+<!-- v1.0.0 (2026-08-04) AGENTS.md -->
 # AGENTS.md — инструкции для ИИ-ассистентов
 
 ## Основные правила работы
@@ -114,7 +115,7 @@
 
 ## GitHub
 
-- Перед выполнением любой Git/GitHub операции — перечитать `.opencode/skills/rust-github/SKILL.md` и следовать ему.
+- Перед выполнением любой Git/GitHub операции — перечитать скилл `skill-github` (универсальный, глобальный линк) и следовать ему.
 
 ## При описании структуры проекта
 
@@ -126,3 +127,15 @@
 4. Обычные файлы — алфавитный порядок
 5. Для вложенных папок/файлов — тот же принцип рекурсивно
 6. Содержимое скрытых папок не расписывать — указать только саму папку
+
+## Аудит проекта
+
+- Канон-файл аудита: `C:\_dev\_for_OpenCode\audits\Rust4ui.md` (на macOS — `~/dev/_for_OpenCode/audits/Rust4ui.md`). Обновление внедрения — командой `/update-canon` (алиас `/apply-audit`) из этого проекта; полный аудит — `/audit C:\_dev\Rust4ui` из `_for_OpenCode`.
+- Статусы заданий аудита ведутся по платформам (`Windows: [x] ДД.ММ.ГГГГ` / `macOS: [ ]`) — каждая машина отмечает только свою платформу.
+
+## Инструменты opencode
+
+- Скиллы (линки на канон, `.opencode/skills/`): `rust-api-first`, `rust-autosave`, `rust-encoding`, `rust-file-sizes`, `rust-localization`, `rust-naming`, `rust-quick-launch`, `rust-single-source`, `rust-testing`, `rust-ui-testing` (egui_kittest + insta: клики, hover, скриншоты без окна), `rust-versioning`; универсальные (`skill-github`, `encoding`, `logs-md-files` и др.) — глобальные линки на машинах.
+- Команды (`.opencode/command/`): `new-session`, `end-session`, `commit`, `apply-audit` (+ алиас `update-canon`), `remember`, `help`, `get-id-session`, `review`, `test`; агент `reviewer` (`.opencode/agent/`).
+- Тесты UI: `cargo test` (включает `tests/ui_render.rs` — рендер без окна; эталоны скриншотов в `tests/snapshots/`). При изменении внешнего вида: тест упадёт с `.new.png`/`.diff.png` — обновлять эталон только при осознанном изменении стиля.
+- Покрытие: `cargo llvm-cov --workspace` (точка отсчёта 04.08.2026 — 49.33%).

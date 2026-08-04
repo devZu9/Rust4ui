@@ -1,3 +1,4 @@
+// v1.0.0 (2026-08-04) text_field.rs 
 use crate::border::{draw_border, get_state_border};
 use crate::renderer::{attr_bool, attr_f64, attr_str, get_padding, resolve_text, RenderCtx};
 

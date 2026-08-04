@@ -1,3 +1,4 @@
+// v1.0.0 (2026-08-04) demo.rs 
 use rust4ui::{render_node, LocaleRegistry, RefResolver, RenderCtx, StateRegistry, Theme};
 use std::path::Path;
 

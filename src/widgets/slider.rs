@@ -1,3 +1,4 @@
+// v1.0.0 (2026-08-04) slider.rs 
 use crate::renderer::{attr_f64, attr_str, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {

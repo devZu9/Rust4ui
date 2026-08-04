@@ -1,3 +1,4 @@
+// v1.0.0 (2026-08-04) menu_bar.rs 
 use crate::border::{draw_border, get_border};
 use crate::renderer::{attr_f64, get_margin, get_padding, RenderCtx};
 

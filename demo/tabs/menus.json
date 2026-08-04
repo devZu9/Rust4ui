@@ -1,4 +1,6 @@
 {
+  "_version": "v1.0.0 (2026-08-04) menus.json",
+
   "type": "Tab",
   "id": "menus",
   "title": "{{tab.menus}}",

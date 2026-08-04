@@ -1,3 +1,4 @@
+// v1.0.0 (2026-08-04) validator.rs 
 use serde_json::Value;
 
 #[derive(Debug, Clone)]

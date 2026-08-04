@@ -1,3 +1,4 @@
+// v1.0.0 (2026-08-04) file_drop.rs 
 use crate::border::{draw_border, get_border};
 use crate::renderer::{attr_bool, attr_f64, attr_str, RenderCtx};
 

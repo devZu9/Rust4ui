@@ -1,3 +1,4 @@
+// v1.0.0 (2026-08-04) smoke.rs 
 use rust4ui::RenderCtx;
 use serde_json::json;
 

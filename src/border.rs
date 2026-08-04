@@ -1,3 +1,4 @@
+// v1.0.0 (2026-08-04) border.rs 
 use crate::theme::Theme;
 
 #[derive(Debug, Clone, Copy, PartialEq, Default)]

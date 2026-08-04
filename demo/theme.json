@@ -1,4 +1,6 @@
 {
+  "_version": "v1.0.0 (2026-08-04) theme.json",
+
   "vars": {
     "color_primary": "#3366CC",
     "color_accent": "#66CCFF",

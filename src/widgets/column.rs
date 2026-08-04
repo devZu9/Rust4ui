@@ -1,3 +1,4 @@
+// v1.0.0 (2026-08-04) column.rs 
 use crate::border::widget_border;
 use crate::renderer::{attr_f64, attr_str, RenderCtx};
 

@@ -1,3 +1,4 @@
+// v1.0.0 (2026-08-04) mod.rs 
 pub mod base;
 pub mod button;
 pub mod caption;

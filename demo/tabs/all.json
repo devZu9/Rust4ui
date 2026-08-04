@@ -1,4 +1,6 @@
 {
+  "_version": "v1.0.0 (2026-08-04) all.json",
+
   "type": "Tabs",
   "active": "active_tab",
   "children": [

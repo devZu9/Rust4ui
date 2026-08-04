@@ -1,3 +1,4 @@
+// v1.0.0 (2026-08-04) tabs.rs 
 use crate::border::widget_border;
 use crate::renderer::{attr_bool, attr_f64, attr_str, get_padding, resolve_text, RenderCtx};
 

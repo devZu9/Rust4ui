@@ -1,3 +1,4 @@
+// v1.0.0 (2026-08-04) encoding.rs 
 use std::path::Path;
 
 fn check_utf8_no_bom(path: &Path) {

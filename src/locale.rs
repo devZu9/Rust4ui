@@ -1,3 +1,4 @@
+// v1.0.0 (2026-08-04) locale.rs 
 use crate::strip_json_comments;
 use std::collections::HashMap;
 use std::fs;

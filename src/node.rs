@@ -1,3 +1,4 @@
+// v1.0.0 (2026-08-04) node.rs 
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 

@@ -1,3 +1,4 @@
+// v1.0.0 (2026-08-04) renderer.rs 
 use std::collections::HashMap;
 use crate::actions::ActionRegistry;
 use crate::icons::IconRegistry;

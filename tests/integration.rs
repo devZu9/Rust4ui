@@ -1,3 +1,4 @@
+// v1.0.0 (2026-08-04) integration.rs 
 use rust4ui::{strip_json_comments, LocaleRegistry, RefResolver, Validator};
 use std::path::Path;
 

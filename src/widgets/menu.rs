@@ -1,3 +1,4 @@
+// v1.0.0 (2026-08-04) menu.rs 
 use crate::renderer::{attr_f64, attr_str, get_attr_ctx, get_margin, get_padding, resolve_text, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, ctx: &mut RenderCtx) {

@@ -1,3 +1,4 @@
+<!-- v1.0.0 (2026-08-04) README.md -->
 # Rust4ui
 
 > 🌐 [English version](README_EN.md)

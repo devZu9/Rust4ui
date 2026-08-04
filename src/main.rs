@@ -1,3 +1,4 @@
+// v1.0.0 (2026-08-04) main.rs 
 use rust4ui::{render_node, strip_json_comments, substitute_vars, LocaleRegistry, RefResolver, RenderCtx, StateRegistry, Theme};
 use std::path::Path;
 use std::path::PathBuf;

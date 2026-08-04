@@ -1,3 +1,4 @@
+// v1.0.0 (2026-08-04) ref_resolver.rs 
 use crate::strip_json_comments;
 use serde_json::Value;
 use std::collections::HashMap;

@@ -1,3 +1,4 @@
+// v1.0.0 (2026-08-04) state.rs 
 use crate::strip_json_comments;
 use std::collections::HashMap;
 

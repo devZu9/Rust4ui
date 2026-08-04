@@ -1,3 +1,4 @@
+// v1.0.0 (2026-08-04) icon_bar.rs 
 use crate::border::{draw_border, get_border};
 use crate::renderer::{attr_f64, attr_str, render_children, RenderCtx};
 

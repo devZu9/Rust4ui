@@ -1,3 +1,4 @@
+<!-- v1.0.0 (2026-08-04) 08-state.md -->
 # Состояние (state) и binding
 
 ## StateRegistry

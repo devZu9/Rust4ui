@@ -1,3 +1,4 @@
+<!-- v1.0.0 (2026-08-04) 10-border.md -->
 # Border — рамки и обводки
 
 ## BorderStyle

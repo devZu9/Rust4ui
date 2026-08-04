@@ -1,3 +1,4 @@
+// v1.0.0 (2026-08-04) indicator.rs 
 use crate::renderer::{attr_str, RenderCtx};
 
 pub fn render(ui: &mut egui::Ui, node: &serde_json::Value, _ctx: &mut RenderCtx) {

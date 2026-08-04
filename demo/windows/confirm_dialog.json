@@ -1,4 +1,6 @@
 {
+  "_version": "v1.0.0 (2026-08-04) confirm_dialog.json",
+
   "type": "Window",
   "id": "confirm_dialog",
   "title": "{{dialog.confirm}}",

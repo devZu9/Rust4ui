@@ -1,3 +1,4 @@
+<!-- v1.0.0 (2026-08-04) SUMMARY.md -->
 [Введение](01-intro.md)
 [Быстрый старт](02-quickstart.md)
 [Архитектура](03-architecture.md)

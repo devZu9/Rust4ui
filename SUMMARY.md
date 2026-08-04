@@ -1,3 +1,4 @@
+<!-- v1.0.0 (2026-08-04) SUMMARY.md -->
 # Rust4ui — Summary
 
 **Rust4ui** (Rust for UI) — комбайн для быстрого прототипирования и сборки UI на Rust/egui.

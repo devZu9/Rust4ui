@@ -1,6 +1,7 @@
+# v1.0.1 (2026-08-04) Cargo.toml 
 [package]
 name = "rust4ui"
-version = "0.5.0"
+version = "0.5.1"
 edition = "2021"
 description = "JSON to UI — rapid prototyping and UI assembly on egui"
 license = "MIT"
@@ -20,3 +21,5 @@ regex-lite = "0.1"
 
 [dev-dependencies]
 walkdir = "2"
+egui_kittest = { version = "0.32", features = ["snapshot", "wgpu"] }
+insta = "1"

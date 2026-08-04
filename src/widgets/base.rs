@@ -1,3 +1,4 @@
+// v1.0.0 (2026-08-04) base.rs 
 use crate::border::{draw_border, draw_shadow_bg, draw_shadow_border, get_state_border, parse_shadow, Shadow};
 use crate::renderer::{get_attr_ctx, get_margin, get_padding, parse_padding, parse_rounding, RenderCtx};
 
@@ -43,6 +44,16 @@ pub fn widget_paint_custom(
 
     let size = egui::vec2(total_width.max(0.0), total_height.max(0.0));
     let (rect, resp) = reserve_exact_size(ui, size, sense);
+
+    // AccessKit: метка виджета (для поиска в UI-тестах и экранных читалок).
+    resp.widget_info(|| {
+        let label = node
+            .get("text")
+            .or_else(|| node.get("title"))
+            .and_then(|v| v.as_str())
+            .unwrap_or_default();
+        egui::WidgetInfo::labeled(egui::WidgetType::Button, enabled, label.to_owned())
+    });
 
     // State-зависимые padding/margin (padding_hover, margin_click и т.д.)
     let padding_theme_lookup = |k: &str| ctx.theme.widget.get(widget).and_then(|w| w.get(k)).and_then(parse_padding);
