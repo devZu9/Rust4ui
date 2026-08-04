@@ -12,8 +12,8 @@
 - Основная цель — краткий и максимально читаемый код с хорошим форматированием
 - Старайся не просто показать решение, а объяснить, почему именно это решение выбрано и в чём его преимущество перед альтернативами
 - После завершения фичи (фразы «готово», «заработало», «всё», «молодец») — спросить, не пора ли обновить SUMMARY.md
-- Если возникла проблема, потребовавшая 3+ итераций исправления — зафиксировать причину и решение в AUTOPILOT.md (Фаза 8) и CHANGELOG.md
-- Если в проекте есть `AUTOPILOT.md` — следуй ему автономно. Один запрос разрешений в Фазе 0, дальше без подтверждений. Цикл: реализация → тесты → исправление → тесты → обновление autopilot_state.json → следующий пункт
+- Если возникла проблема, потребовавшая 3+ итераций исправления — зафиксировать причину и решение в CHANGELOG.md
+- Автопилот-система на паузе: `_archive/AUTOPILOT.md` (чек-лист автономной сборки + Lessons Learned). Возродить по явному запросу пользователя
 
 ## Особенности (ключевые правила)
 
@@ -136,6 +136,6 @@
 ## Инструменты opencode
 
 - Скиллы (линки на канон, `.opencode/skills/`): `rust-api-first`, `rust-autosave`, `rust-encoding`, `rust-file-sizes`, `rust-localization`, `rust-naming`, `rust-quick-launch`, `rust-single-source`, `rust-testing`, `rust-ui-testing` (egui_kittest + insta: клики, hover, скриншоты без окна), `rust-versioning`; универсальные (`skill-github`, `encoding`, `logs-md-files` и др.) — глобальные линки на машинах.
-- Команды (`.opencode/command/`): `new-session`, `end-session`, `commit`, `apply-audit` (+ алиас `update-canon`), `remember`, `help`, `get-id-session`, `review`, `test`; агент `reviewer` (`.opencode/agent/`).
+- Команды (`.opencode/command/`): только языковые `review`, `test` (hard links на канон); универсальные (`new-session`, `end-session`, `commit`, `apply-audit`, `update-canon`, `remember`, `help`, `get-id-session`, `audit`, `version`) — глобальные линки `~/.config/opencode/command/` (устанавливает `install-commands.bat/.sh` в каноне); агент `reviewer` (`.opencode/agent/`).
 - Тесты UI: `cargo test` (включает `tests/ui_render.rs` — рендер без окна; эталоны скриншотов в `tests/snapshots/`). При изменении внешнего вида: тест упадёт с `.new.png`/`.diff.png` — обновлять эталон только при осознанном изменении стиля.
 - Покрытие: `cargo llvm-cov --workspace` (точка отсчёта 04.08.2026 — 49.33%).
