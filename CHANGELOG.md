@@ -5,10 +5,10 @@
 
 ## v0.5.1 (2026-07-20 00:14)
 
-- Добавлено: Внедрена версионность файлов (`project-versioning`): все 110 текстовых git-файлов получили заголовки `v1.0.0` по формату скилла; создан `VERSION` (0.5.1) — единый источник правды; `Cargo.toml` выровнен 0.5.0 → 0.5.1 (журналы говорили 0.5.1) (подробнее — SESSIONS, сессия 04.08).
-- Изменено: Унификация команд opencode: `.opencode/command/` проекта — только языковые команды (review, test); универсальные команды — глобальные линки `~/.config/opencode/command/` (канон `_for_OpenCode` — единый источник, двухсторонний sync) (подробнее — SESSIONS, сессия 04.08).
+- Добавлено: Внедрена версионность файлов (`project-versioning`): все 110 текстовых git-файлов получили заголовки `v1.0.0` по формату скилла; создан `VERSION` (0.5.1) — единый источник правды; `Cargo.toml` выровнен 0.5.0 → 0.5.1 (журналы говорили 0.5.1).
+- Изменено: Унификация команд opencode: `.opencode/command/` проекта — только языковые команды (review, test); универсальные команды — глобальные линки `~/.config/opencode/command/` (канон `_for_OpenCode` — единый источник, двухсторонний sync).
 
-- Изменено: `get_attr_ctx` объединяет `resolve_state_attr` — единая функция с state + theme fallback (подробнее — SESSIONS, сессия 22.07).
+- Изменено: `get_attr_ctx` объединяет `resolve_state_attr` — единая функция с state + theme fallback.
 - Изменено: Сигнатуры `widget_paint_custom` / `widget_paint_egui` — принимают `ctx: &RenderCtx`; параметр `widget: &str` удалён.
 - Изменено: Separator: не наследует `_children` — `std::mem::take(ctx.inherited)` перед рендером.
 - Изменено: Измерение детей после `inherit_children` — замер и рендер используют один inherited.
@@ -25,7 +25,7 @@
 
 ## v0.5.0 (2026-07-18 17:36)
 
-- Изменено: `widget_base` → `widget_paint_custom`, `widget_base_wrap` → `widget_paint_egui`, `BaseOut` → `PaintOut` — прозрачный нейминг (подробнее — SESSIONS, сессия 22.07)
+- Изменено: `widget_base` → `widget_paint_custom`, `widget_base_wrap` → `widget_paint_egui`, `BaseOut` → `PaintOut` — прозрачный нейминг
 - Изменено: `allocate_exact_size` → `reserve_exact_size` — обёртка с понятным названием.
 - Изменено: Убраны `default_bg`, `default_rounding`, `default_pad` — читаются внутри из `theme`/`inherited`; сигнатура 12 → 8 параметров.
 
@@ -33,14 +33,14 @@
 
 ## v0.4.6 (2026-07-18 13:30)
 
-- Исправлено: Конфликт `padding_children` и `padding` на MenuItem — удалён лишний `resolve_state_attr("padding")` из `widget_paint_custom`; padding вычисляется один раз в `menu_item.rs` (подробнее с выводом — SESSIONS, сессия 22.07).
+- Исправлено: Конфликт `padding_children` и `padding` на MenuItem — удалён лишний `resolve_state_attr("padding")` из `widget_paint_custom`; padding вычисляется один раз в `menu_item.rs`.
 
 - Изменено: base.rs — удалён неиспользуемый импорт `parse_padding`.
 - Изменено: Удалены временные debug-логи — `widget_paint_custom` логировал каждый виджет каждый кадр; оставлен только MenuItem при клике.
 
 ## v0.4.5 (2026-07-18 03:13)
 
-- Добавлено: `popup_*` атрибуты — контекстное меню настраивается отдельно от кнопки Menu (background, rounding, padding, gap, min_width, max_height, border, shadow) через `_children` (подробнее — SESSIONS, сессия 22.07)
+- Добавлено: `popup_*` атрибуты — контекстное меню настраивается отдельно от кнопки Menu (background, rounding, padding, gap, min_width, max_height, border, shadow) через `_children`
 - Добавлено: MenuItem: `stretch` / `align` — растяжение и выравнивание контента.
 - Добавлено: Separator: динамическая ширина — `available_width()` вместо хардкода 200px (дефолт min_width 50).
 - Добавлено: Попап: измерение детей — ширина по самому широкому MenuItem.
@@ -56,7 +56,7 @@
 
 ## v0.4.4 (2026-07-17 20:27)
 
-- Добавлено: Универсальный механизм `_hover/_click/_focus` — `resolve_state_attr()` в renderer.rs (подробнее — SESSIONS, сессия 22.07)
+- Добавлено: Универсальный механизм `_hover/_click/_focus` — `resolve_state_attr()` в renderer.rs
 - Добавлено: Универсальный механизм `_children` — `inherit_children()` / `restore_children()` в RenderCtx.
 - Добавлено: `RenderCtx.inherited: HashMap<String, Value>` — единое хранилище вместо 14 отдельных полей.
 - Добавлено: border-суб-атрибуты с `_children` — через `ctx.get_border()`.
@@ -79,7 +79,7 @@
 
 ## v0.4.3 (2026-07-17 02:13)
 
-- Добавлено: MenuBar: система `_children` — background/color/padding/margin/rounding + hover/click для детей (подробнее — SESSIONS, сессия 16.07)
+- Добавлено: MenuBar: система `_children` — background/color/padding/margin/rounding + hover/click для детей
 - Добавлено: MenuBar: state-aware фон; Menu: state-aware цвет текста через `fg_stroke`; Menu: margin top/bottom.
 - Добавлено: RenderCtx — `inherited_*` поля для state-атрибутов.
 - Добавлено: `border.rs: rounded_rect_perimeter` — публичная функция.
@@ -89,7 +89,7 @@
 
 ## v0.4.2 (2026-07-16 16:18)
 
-- Добавлено: `widget_paint_custom` — единый слой отрисовки custom-paint виджетов (alloc, фон, обводка, тени, padding/margin, rounding, state) (подробнее — SESSIONS, сессия 16.07)
+- Добавлено: `widget_paint_custom` — единый слой отрисовки custom-paint виджетов (alloc, фон, обводка, тени, padding/margin, rounding, state)
 - Добавлено: MenuItem — переведён на custom-paint; state-aware стили.
 - Добавлено: MenuBar — каскад `background`/`color` → Menu → MenuItem через `weak_bg_fill`.
 
@@ -100,7 +100,7 @@
 
 ## v0.4.1 (2026-07-16 03:36)
 
-- Добавлено: NumberField — алиас TextField с `mode: "number"` (подробнее — SESSIONS, сессия 16.07)
+- Добавлено: NumberField — алиас TextField с `mode: "number"`
 - Добавлено: Stepper overlay — степпер поверх поля (не привязан к высоте текста).
 - Добавлено: `stepper_padding` / `stepper_background` / `stepper_rounding` — атрибуты степпера.
 
@@ -112,7 +112,7 @@
 
 ## v0.4.0 (2026-07-14 20:45)
 
-- Добавлено: Button: каскад теней — `shadow_content` (шорткат), `shadow_icon`/`shadow_text` (переопределения) (подробнее — SESSIONS, сессия 14.07)
+- Добавлено: Button: каскад теней — `shadow_content` (шорткат), `shadow_icon`/`shadow_text` (переопределения)
 - Добавлено: `parse_content_shadow()` — парсер с offset (1,1).
 - Добавлено: `ShadowZOrder` enum (`Under`/`Over`), `draw_shadow_content()`, конструкторы `Shadow::from_rgba()/transparent()`.
 
@@ -125,7 +125,7 @@
 
 ## v0.3.1 (2026-07-12 01:12)
 
-- Добавлено: Shadow система — `Shadow`, `parse_shadow()`, `draw_shadow_bg/border/icon`, state-aware (подробнее — SESSIONS, сессия 09.07)
+- Добавлено: Shadow система — `Shadow`, `parse_shadow()`, `draw_shadow_bg/border/icon`, state-aware
 - Добавлено: border opacity — `[width, color, opacity, type, gap, seg_len]`, обратная совместимость.
 - Добавлено: `color_icon`, `parse_color_value()` (`["#HEX", opacity]`), `get_state_background()`, `get_margin()`, `gap_row`.
 
@@ -141,7 +141,7 @@
 
 ## v0.3.0 (2026-07-10 01:07)
 
-- Добавлено: IconRegistry — 1512 иконок Phosphor, вкомпилирован в бинарь (подробнее — SESSIONS, сессия 09.07)
+- Добавлено: IconRegistry — 1512 иконок Phosphor, вкомпилирован в бинарь
 - Добавлено: icon_size, Hover/Click-стейты, тени на Button, галерея иконок, документация mdBook (14 глав).
 
 - Изменено: Официальный Phosphor TTF; icons.json перегенерирован; `icons/phosphor-icons/` в `.gitignore`.
@@ -171,4 +171,5 @@
 - Изменено: `parse_margin` → `parse_padding`; `padding_h/v` удалены (единый формат); высота Button динамическая; рендер TextField 70 → 1 строка.
 
 - Добавлено: `text_align` для TextField; контур 1px `#444455`; hover-подсветка.
+
 
